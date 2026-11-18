@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creative Engineering — Claude Handoff</title>
+<style>
+  :root{
+    --bg:#1d1612; --panel:#2a1f17; --edge:#4f3218; --text:#efe3c8; --muted:#bfa98a;
+    --brass:#e4b763; --brass-hi:#ffeb8c; --brass-lo:#9e6947; --zinc:#aab59d; --copper:#d67b5b; --andesite:#8f9691;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 60px}
+  header{border:2px solid var(--brass-lo);background:linear-gradient(180deg,#3a2411,#291a0c);padding:18px 20px;border-radius:6px;box-shadow:inset 0 0 0 2px #592424}
+  h1{margin:0;font-size:24px;color:var(--brass-hi);letter-spacing:.3px}
+  header p{margin:6px 0 0;color:var(--muted)}
+  h2{color:var(--brass);font-size:17px;margin:26px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--edge)}
+  section{background:var(--panel);border:1px solid var(--edge);border-radius:6px;padding:14px 18px;margin-top:14px}
+  code,pre{font-family:ui-monospace,"JetBrains Mono",Consolas,monospace;font-size:13px}
+  code{background:#3a2411;color:var(--brass-hi);padding:1px 5px;border-radius:3px}
+  pre{background:#120d0a;border:1px solid var(--edge);border-left:3px solid var(--brass);padding:10px 12px;overflow:auto;border-radius:4px;margin:8px 0}
+  .copy{float:right;background:var(--brass-lo);color:#fff;border:0;border-radius:3px;padding:3px 8px;font-size:12px;cursor:pointer}
+  .copy:hover{background:var(--brass)}
+  a{color:var(--zinc)}
+  ul,ol{padding-left:22px;margin:6px 0}
+  li{margin:3px 0}
+  .tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;margin-right:6px;vertical-align:1px}
+  .done{background:#3b4a35;color:#cfe8c4}.next{background:#5a3e1e;color:var(--brass-hi)}.ask{background:#5a2a24;color:#ffd0c4}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  td,th{border-bottom:1px solid var(--edge);padding:6px 8px;text-align:left;vertical-align:top}
+  th{color:var(--brass);font-weight:600}
+  .muted{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body><div class="wrap">
+
+<header>
+  <h1>Creative Engineering: Claude handoff</h1>
+  <p>Create 6.0.10 addon (NeoForge 1.21.1) bringing Immersive Engineering and Immersive Petroleum style industry into Create, the Create way. By Kragnoth. Last updated 2026-11-18.</p>
+</header>
+
+<h2>0 · Start here (any Claude session)</h2>
+<section>
+  <button class="copy" data-copy="boot">Copy</button>
+  <p>Attach and clone the repo, then read <code>HANDOFF.md</code>. That file is the source of truth; this page mirrors it.</p>
+<pre id="boot">add_repo kragnoth/Creative-Engineering   (push access)
+git clone --depth 1 https://github.com/kragnoth/creative-engineering ~/creative-engineering
+cd ~/creative-engineering && cat HANDOFF.md
+bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jars → ~/ref</pre>
+  <p class="muted">Repo: <a href="https://github.com/kragnoth/Creative-Engineering">github.com/kragnoth/Creative-Engineering</a> · Gap worksheet (live Sheet): <a href="https://claude.ai/artifact/48UN6NEtpD5XpK1GaNhsWt">IE + IP vs Create 6, Gap Worksheet</a></p>
+</section>
+
+<h2>1 · Where we left off</h2>
+<section>
+  <ul>
+    <li><span class="tag done">done</span><b>Reference workspace and tools.</b> Pinned sources and jars come from <code>tools/setup_refs.sh</code>. <code>tools/setup_server.sh</code> boots a headless NeoForge 21.1.267 server with Create, IE and IP and dumps the registries.</li>
+    <li><span class="tag done">done</span><b>Create art-style study</b> (<code>docs/create-art-style.md</code>):
+      <ul>
+        <li>exact palette ramps for brass, zinc, copper and andesite</li>
+        <li>model rules: median 3 elements, rotations only ±22.5° and ±45°</li>
+        <li>Flywheel partial-model conventions</li>
+      </ul></li>
+    <li><span class="tag done">done</span><b>Clean-room IE 12.4.2 + IP 4.5.0 inventory vs Create</b> (<code>docs/ie-ip-gap/</code>):
+      <ul>
+        <li>92 features: 35 Missing, 22 Partial, 21 Covered, 14 Skip</li>
+        <li>gaps grouped into 10 proposed modules</li>
+      </ul></li>
+  </ul>
+</section>
+
+<h2>2 · Next goal</h2>
+<section>
+  <p><span class="tag next">next</span><b>Scaffold the addon and build the first module: Steelworks.</b> That means the coking oven, the blast furnace, slag and <code>c:ingots/steel</code>. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.</p>
+  <p><span class="tag ask">ask first</span>Get Kragnoth's answer on these before writing mod code:</p>
+  <ol>
+    <li><b>Electricity:</b> stay pure rotation (SU), which is recommended because every module works without it, or add an FE wire layer? See Features <code>IE-44</code>.</li>
+    <li><b>Mod id / package:</b> proposal is <code>creativeengineering</code> / <code>com.kragnoth.creativeengineering</code>.</li>
+    <li><b>First module:</b> confirm Steelworks, or start with Fuels &amp; Engines (the diesel engine) instead.</li>
+  </ol>
+</section>
+
+<h2>3 · How to get there</h2>
+<section>
+  <table>
+    <tr><th>#</th><th>Step</th><th>Repo tools / refs</th></tr>
+    <tr><td>1</td><td>Set up the reference sources. Get NeoForge and decompiled MC from Kragnoth's zips or from ModDevGradle if you need to check signatures.</td><td><code>tools/setup_refs.sh</code></td></tr>
+    <tr><td>2</td><td>Create a ModDevGradle project in <code>mod/</code>: NeoForge 21.1.267, Create 6.0.10 as a hard dependency (with Flywheel and Ponder), Parchment, datagen.</td><td><code>~/ref/create</code> for API usage</td></tr>
+    <tr><td>3</td><td>Style kit in <code>tools/stylekit/</code>: palette <code>.gpl</code> files, a PIL texture generator for new parts, a preview renderer.</td><td><code>docs/create-art-style.md</code>, <code>tools/analyze_palette.py</code></td></tr>
+    <tr><td>4</td><td>Coking Oven (<code>IE-59</code>): placement-formed brick chamber heated by a blaze burner; coal → coke plus creosote.</td><td>Features tab of the Sheet</td></tr>
+    <tr><td>5</td><td>Blast Furnace (<code>IE-61</code>): fed by funnels, heated by superheated burners, encased fans as preheaters; steel out the front, slag out the back.</td><td><code>tools/rows.py</code> (designs)</td></tr>
+    <tr><td>6</td><td>Recipe types <code>coking</code> and <code>blast_smelting</code>; heated-mixing alloys for electrum and constantan; <code>c:</code> tags.</td><td>Recipe types tab</td></tr>
+    <tr><td>7</td><td>Ponder scenes and goggle tooltips, then <code>./gradlew build</code>.</td><td>—</td></tr>
+    <tr><td>8</td><td>Update <code>HANDOFF.md</code> (and this page) before ending the session; commit as Kragnoth.</td><td>—</td></tr>
+  </table>
+</section>
+
+<h2>4 · Rules for every session</h2>
+<section>
+  <ul>
+    <li>Commit and credit as <b>Kragnoth</b>, never his real name.</li>
+    <li><b>Never commit third-party material:</b> Create's assets (All Rights Reserved), Mojang/decompiled code, IE or IP code and manual text, or any jars. Commit scripts that fetch them.</li>
+    <li>Models reference <code>create:</code> textures. New art uses Create's exact ramps.</li>
+    <li>Commands for Kragnoth's PC use <b>fish</b> syntax (CachyOS, Prism Launcher, RX 570 with 4 GB).</li>
+    <li><b>No client or server launches</b> unless he asks for a full compile and load-up.</li>
+    <li>"Can you do X?" means a brief feasibility answer. Simple asks mean just deliver.</li>
+  </ul>
+</section>
+
+<h2>5 · Changing the gap worksheet</h2>
+<section>
+  <button class="copy" data-copy="ws">Copy</button>
+<pre id="ws">$EDITOR tools/rows.py                          # edit rows here, not in the CSVs
+python3 tools/export.py docs/ie-ip-gap
+python3 tools/build_xlsx.py docs/ie-ip-gap docs/ie-ip-gap/ie_ip_create_gap_worksheet.xlsx
+# then re-import the xlsx into the live Sheet if needed</pre>
+</section>
+
+</div>
+<script>
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+  const t=document.getElementById(b.dataset.copy).innerText;
+  try{await navigator.clipboard.writeText(t);b.textContent='Copied';}catch(e){b.textContent='Select & copy';}
+  setTimeout(()=>b.textContent='Copy',1500);
+}));
+</script>
+</body>
+</html>

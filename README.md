@@ -6,7 +6,7 @@ By Kragnoth.
 
 | Path | What |
 |---|---|
-| `HANDOFF.md` | Current status, next goal, open decisions: **start here** |
+| `HANDOFF.md` | Current status, next goal, open decisions: **start here** (also published as a [Claude page](https://claude.ai/artifact/8m4JNJxdnfpEGVC6iW5PYN)) |
 | `docs/ie-ip-gap/` | IE + IP vs Create gap worksheet (xlsx + CSV), method and versions |
 | `docs/create-art-style.md` | Create's palettes, model and code conventions, asset-license rule |
 | `docs/registry-dumps/` | Registry IDs from a headless server running Create + IE + IP |

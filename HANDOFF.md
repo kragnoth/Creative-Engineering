@@ -1,6 +1,6 @@
 # Handoff — where we left off
 
-_Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file at the end of every session.
+_Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file at the end of every session, and republish the handoff page (`docs/handoff-page.html`) at https://claude.ai/artifact/8m4JNJxdnfpEGVC6iW5PYN (slug `3ed6bad7-81ab-4f34-ab16-efd5596dc303`).
 
 ## The project
 **Creative Engineering**: a NeoForge 1.21.1 addon for **Create 6.0.10**. It brings Immersive Engineering and Immersive Petroleum style industry (furnaces, the arc furnace, oil and refining, fuels) into Create the Create way:
