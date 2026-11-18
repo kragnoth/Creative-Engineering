@@ -40,7 +40,7 @@ def classify(c):
     return 'metal'
 
 def recolour(src, metal='M', wood='T', lift=1.08):
-    im = Image.open(src).convert('RGBA')
+    im = src if isinstance(src, Image.Image) else Image.open(src).convert('RGBA')
     out = Image.new('RGBA', im.size, (0, 0, 0, 0))
     kinds = {}
     for y in range(im.height):
@@ -109,6 +109,48 @@ def carbon_packed():
         out.putpixel(q, coal_px[(q[0] * 7 + q[1] * 13) % len(coal_px)])
     return out
 
+def sheet_plate():
+    """Our own sheet, drawn on the rules Create's sheets follow (no Create pixels used): a square plate lying flat,
+    seen from above and turned ~45 degrees, so a wide squashed diamond; a 1 px darker thickness rim along its lower
+    edges; light from the top-left with a highlight along the upper-left edge and a soft dent in the middle.
+    Then recoloured at Excalibur's values like the ingot, plus two IE-style rivets."""
+    face = [
+        '................', '................', '................', '................',
+        '.......###......',
+        '....########....',
+        '..############..',
+        '.##############.',
+        '..#############.',
+        '...###########..',
+        '....#########...',
+        '......#####.....',
+        '................', '................', '................', '................']
+    face = [list(r) for r in face]
+    mask = [['.'] * 16 for _ in range(16)]
+    for y in range(16):
+        for x in range(16):
+            if face[y][x] == '#':
+                mask[y][x] = 'M'
+    for y in range(15, -1, -1):                          # thickness rim: one row under every lower edge
+        for x in range(16):
+            if face[y][x] == '#' and (y + 1 > 15 or face[y + 1][x] != '#'):
+                if y + 1 <= 15:
+                    mask[y + 1][x] = 'm'
+    mask = [''.join(r) for r in mask]
+    from make_textures import shade
+    img = shade(mask, gradient=True)
+    steel = [hexrgb(h) for h in RAMPS['M']]
+    for x, y in [(5, 5), (6, 5), (4, 6), (3, 7)]:          # highlight along the upper-left edge
+        img.putpixel((x, y), steel[7])
+    for x, y in [(8, 8), (9, 8), (8, 9)]:                  # soft dent in the middle
+        img.putpixel((x, y), steel[3])
+    img, kinds = recolour(img, lift=0.85)
+    img.putpixel((7, 5), steel[8]); img.putpixel((8, 6), steel[2])   # rivet top
+    img.putpixel((11, 9), steel[8]); img.putpixel((12, 10), steel[2])  # rivet right
+    img.putpixel((5, 9), TEMPER[0])
+    img.putpixel((10, 7), steel[7])                      # a blister
+    return img
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -135,9 +177,7 @@ if __name__ == '__main__':
     flecks(img, kinds, n_temper=3, n_blister=4)
     made.append(save(img, 'block/blister_steel_block'))
     # Sheet: Excalibur has no Create sheet; keep the hand-drawn one from make_textures.py (same blister-steel ramp).
-    # Re-run the hand-drawn sheet through the same recolour at a lower lift so it sits at Excalibur's values.
-    sheet, kinds = recolour('%s/item/blister_steel_sheet.png' % TEX, lift=0.78)
-    made.append(save(sheet, 'item/blister_steel_sheet'))
+    made.append(save(sheet_plate(), 'item/blister_steel_sheet'))
     layers = []
     for n in (1, 2):
         img, kinds = recolour(ARMOR + 'iron_layer_%d.png' % n)
