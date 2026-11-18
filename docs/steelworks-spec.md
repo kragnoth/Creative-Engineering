@@ -13,6 +13,14 @@ A full setup must be buildable from base Create logistics plus vanilla hoppers a
 - **Information:** registers a `DisplaySource` (display links) and implements `IHaveGoggleInformation`. Comparator output is proportional to output-slot fill.
 - **Wrench:** implements `IWrenchable` (rotate where it makes sense; sneak-wrench picks up a brick).
 - **Multiblocks:** form through Create's `ConnectivityHandler` (vault- or tank-style), so they grow and shrink like Create's own.
+- **Autocrafter-friendly** (generic, and also what Tarbound needs; see `tarbound-compat.md` T1–T7):
+  - The **side-less** view is the machine's "screen" view.
+  - The automation slots are **compact buffers** (input / fuel / output / slag), not the internal processing slots.
+  - `isItemValid` is strict.
+  - `LIT` is true while heated.
+  - Every brick exposes the controller.
+  - JEI and EMI categories list our bricks as catalysts, with byproducts as outputs.
+  - A public `automationBlocker(expectedOutputs)` method gives "No heat", "No air blast" or "Output full".
 
 ## 1. The ladder at a glance
 Three real-world materials. Each one is useful the moment you have it, and each later tier improves the earlier ones rather than replacing them.

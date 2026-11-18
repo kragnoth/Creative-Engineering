@@ -62,6 +62,8 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
         <li>Flywheel partial-model conventions</li>
       </ul></li>
     <li><span class="tag done">done</span><b>Create core-concept summary and design rules:</b> <code>docs/create-core-concepts.md</code>.</li>
+    <li><span class="tag done">done</span><b>Tarbound compat plan</b> (<code>docs/tarbound-compat.md</code>). Creative Engineering stays a standard machine (T1–T7). Tarbound adapters (A1–A4) live in Tarbound. No dependencies either way.</li>
+    <li><span class="tag done">done</span><b>Dev tools from Tarbound</b> (<code>dev/</code>): Ponder schematic and lang generators, game-test floor, <code>SAVE_FORMAT.md</code>, <code>TODO.md</code>.</li>
     <li><span class="tag done">done</span><b>Clean-room IE 12.4.2 + IP 4.5.0 inventory vs Create</b> (<code>docs/ie-ip-gap/</code>):
       <ul>
         <li>92 features: 35 Missing, 22 Partial, 21 Covered, 14 Skip</li>
@@ -109,6 +111,7 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
     <li>Commands for Kragnoth's PC use <b>fish</b> syntax (CachyOS, Prism Launcher, RX 570 with 4 GB).</li>
     <li><b>No client or server launches</b> unless he asks for a full compile and load-up.</li>
     <li>"Can you do X?" means a brief feasibility answer. Simple asks mean just deliver.</li>
+    <li>Every change is a release: bump the version, update <code>dev/SAVE_FORMAT.md</code> and <code>dev/TODO.md</code>, and hand Kragnoth a source zip (no <code>build/</code>, <code>.gradle/</code>, <code>run/</code>, <code>.git/</code>).</li>
   </ul>
 </section>
 

@@ -12,6 +12,8 @@ By Kragnoth.
 | `docs/steelworks-spec.md` | Module 1 design: blister steel → coke oven → blast furnace (cast iron / steel) |
 | `docs/create-art-style.md` | Create's palettes, model and code conventions, asset-license rule |
 | `docs/registry-dumps/` | Registry IDs from a headless server running Create + IE + IP |
+| `docs/tarbound-compat.md` | How CE stays compatible with Kragnoth's Tarbound autocrafting, without design concessions |
+| `dev/` | Ponder / game-test generators, `SAVE_FORMAT.md`, `TODO.md` (release test lists) |
 | `tools/` | Reference setup, headless server, palette/model/recipe/config analysis, worksheet build |
 
 ## Quick start (bash; from fish run `bash tools/...`)

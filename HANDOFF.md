@@ -61,6 +61,17 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 5. Ponder scenes and goggle info for both machines.
 6. Build: `./gradlew build`. **Do not launch a client or server unless Kragnoth asks for a full compile and load-up.**
 
+## Compat and dev tools
+- **Tarbound compat:** `docs/tarbound-compat.md`. CE stays a standard machine (T1–T7, generic). Tarbound-specific adapters (A1–A4) belong in the Tarbound repo, done by soft compat. Neither mod depends on the other.
+- **Dev tools** (adapted from Tarbound, MIT):
+  - `dev/ponder_nbt.py`: Ponder schematics, no game needed.
+  - `dev/gen_ponder_lang.py`: Ponder lang keys from the scene source.
+  - `dev/make_gametest_template.py`: game-test floor (needs `nbtlib`).
+- **Release conventions:**
+  - `dev/SAVE_FORMAT.md` (reserved, then frozen, IDs) and `dev/TODO.md` (an in-game test list per release, newest at the top).
+  - Every change is a version bump.
+  - Releases go to Kragnoth as a source zip without `build/`, `.gradle/`, `run/` and `.git/`. He builds and tests.
+
 ## Rules for every session
 - Publish as **Kragnoth**, never his real name.
 - Shell commands for his PC are **fish** syntax: CachyOS, Prism Launcher, RX 570 with 4 GB.
