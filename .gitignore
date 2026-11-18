@@ -14,3 +14,6 @@ run/
 out/
 .idea/
 *.iml
+
+# Excalibur pack (licensed to Kragnoth by waiver; never commit)
+excalibur/

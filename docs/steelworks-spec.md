@@ -222,7 +222,13 @@ The later rail module will register a Create `TrackMaterial` that uses that tag.
 6. Blast furnace: air blast with fans → steel; extra fans add speed.
 7. Steel casing and the material tags (what substitutes for what).
 
-## 9. Art list (Create palette rules: `create-art-style.md`)
+## 9. Art list
+**Art direction (Kragnoth, 2026-11-18):**
+- Excalibur first: Excalibur's shapes and value structure are the base for items, tools, armour and resource shapes (ingots, nuggets, blocks).
+- Immersive Engineering as loan styling: reddish treated-wood handles, steel collars and butt caps, rivets.
+- Create's palette discipline for the metals: exact ramps in `tools/stylekit`.
+- Generator: `tools/stylekit/make_textures_excalibur.py`. It needs an unpacked Excalibur via `EXCALIBUR_DIR`, which is never committed. Credit Maffhew (see `CREDITS.md`).
+
 **New textures:**
 - **Ingots, nuggets, sheets:**
   - blister steel: warm grey with a faint temper sheen

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    },
+    {
+      "item": "creativeengineering:blister_steel_nugget"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:blister_steel_ingot",
+    "count": 1
+  }
+}

@@ -1,6 +1,6 @@
 # Creative Engineering: save-format freeze
 
-**Status: pre-release.** Nothing is frozen yet. These are the IDs **reserved** by `docs/steelworks-spec.md`.
+**Status: 0.1.0-alpha (alpha, not yet public).** IDs in use since 0.1.0: `carbon_packed_iron`, the `blister_steel_*` items and block, and the tags `steel_grade`, `cast_grade` and `creosoted_sleepers`. Nothing is frozen until the first public release. These are the IDs **reserved** by `docs/steelworks-spec.md`.
 From the first public release, everything listed here is permanent:
 - **Never rename or remove** a listed ID.
 - Adding is fine. Display names, models, textures and recipes may change.

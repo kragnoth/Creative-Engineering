@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "creativeengineering:blister_steel_helmet",
+    "creativeengineering:blister_steel_chestplate",
+    "creativeengineering:blister_steel_leggings",
+    "creativeengineering:blister_steel_boots"
+  ]
+}

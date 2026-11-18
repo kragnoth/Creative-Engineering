@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "creativeengineering:blister_steel_block"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:blister_steel_ingot",
+    "count": 9
+  }
+}

@@ -20,8 +20,19 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
    - Result: 35 Missing, 22 Partial, 21 Covered, 14 Skip. The Modules tab groups the gaps into 10 addon modules.
 4. **Create core-concept summary + design rules** in `docs/create-core-concepts.md`: stated pillars, SU/heat/processing mechanics confirmed in source, and 8 rules for this addon.
 
+## Released
+- **0.1.0-alpha: Steelworks tier 1 (blister steel).**
+  - Content: `mod/`, built with `cd mod; ./gradlew build` (compiles only). Items, gear, recipes, tags, advancements and the cementation Ponder scene.
+  - Data comes from `dev/gen_data.py`; edit that, not the JSON.
+  - Art comes from `tools/stylekit/make_textures_excalibur.py` (Excalibur-based, IE loan styling).
+  - Test list: `dev/TODO.md`.
+
 ## Next goal
-**Scaffold the addon and build the first module: Steelworks.** That means a coking oven, a blast furnace, slag and steel. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.
+**Steelworks tier 2: the coke oven** (spec §3, and §0's integration contract).
+- This needs Create compiled in as a dependency (`compileOnly`), so the multiblock can use `ConnectivityHandler`, `BoilerHeater`, `DirectBeltInputBehaviour`, `IHaveGoggleInformation` and the arm-point registry.
+- Note: the Registrate Maven (`maven.ithundxr.dev`) is blocked from Claude's sandbox. Use Create's jar with `transitive = false` and avoid Registrate types.
+
+(Tier 1, blister steel, was released as 0.1.0-alpha.)
 
 ### Decisions (settled 2026-11-18 by Kragnoth)
 - [x] **Power:** pure rotation (SU) only. No FE, no wires, no internal batteries.
@@ -74,6 +85,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 ## Rules for every session
 - Publish as **Kragnoth**, never his real name.
+- **Art:** Excalibur first, IE loan styling, Create palette discipline (spec §9). The Excalibur pack is never committed; credit Maffhew.
 - Shell commands for his PC are **fish** syntax: CachyOS, Prism Launcher, RX 570 with 4 GB.
 - Never commit third-party code or assets (Create assets are All Rights Reserved; Mojang code; IE/IP manual text). Commit only scripts that fetch them.
 - "Can you do X?" means answer feasibility briefly. Simple requests mean just deliver.

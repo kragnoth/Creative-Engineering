@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:blister_steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.blister_steel.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.blister_steel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "blister": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:blister_steel_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "blister"
+    ]
+  ],
+  "parent": "creativeengineering:carbon_packed_iron"
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": {
+    "item": "creativeengineering:carbon_packed_iron"
+  },
+  "result": {
+    "id": "creativeengineering:blister_steel_ingot",
+    "count": 1
+  }
+}

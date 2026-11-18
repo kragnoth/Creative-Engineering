@@ -1,0 +1,13 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "tag": "c:ingots/blister_steel"
+    }
+  ],
+  "results": [
+    {
+      "id": "creativeengineering:blister_steel_sheet"
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+package com.kragnoth.creativeengineering.registry;
+
+import com.kragnoth.creativeengineering.CreativeEngineering;
+import java.util.List;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PickaxeItem;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+/** Items. IDs are save-facing: see dev/SAVE_FORMAT.md before renaming anything. */
+public final class ModItems {
+    private ModItems() {}
+
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreativeEngineering.MODID);
+
+    // Tier 1: cementation (press iron + carbon in a basin, then bulk-blast it)
+    public static final DeferredItem<Item> CARBON_PACKED_IRON = ITEMS.registerSimpleItem("carbon_packed_iron");
+    public static final DeferredItem<Item> BLISTER_STEEL_INGOT = ITEMS.registerSimpleItem("blister_steel_ingot");
+    public static final DeferredItem<Item> BLISTER_STEEL_NUGGET = ITEMS.registerSimpleItem("blister_steel_nugget");
+    public static final DeferredItem<Item> BLISTER_STEEL_SHEET = ITEMS.registerSimpleItem("blister_steel_sheet");
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BLISTER_STEEL_BLOCK =
+            ITEMS.registerSimpleBlockItem(ModBlocks.BLISTER_STEEL_BLOCK);
+
+    // Blister steel gear: iron < blister steel < diamond. Attack values follow vanilla's iron set.
+    public static final DeferredItem<SwordItem> BLISTER_STEEL_SWORD = ITEMS.register("blister_steel_sword",
+            () -> new ShearForged.Sword(new Item.Properties().attributes(SwordItem.createAttributes(ModTiers.BLISTER_STEEL, 3, -2.4F))));
+    public static final DeferredItem<PickaxeItem> BLISTER_STEEL_PICKAXE = ITEMS.register("blister_steel_pickaxe",
+            () -> new ShearForged.Pickaxe(new Item.Properties().attributes(PickaxeItem.createAttributes(ModTiers.BLISTER_STEEL, 1.0F, -2.8F))));
+    public static final DeferredItem<AxeItem> BLISTER_STEEL_AXE = ITEMS.register("blister_steel_axe",
+            () -> new ShearForged.Axe(new Item.Properties().attributes(AxeItem.createAttributes(ModTiers.BLISTER_STEEL, 6.0F, -3.1F))));
+    public static final DeferredItem<ShovelItem> BLISTER_STEEL_SHOVEL = ITEMS.register("blister_steel_shovel",
+            () -> new ShearForged.Shovel(new Item.Properties().attributes(ShovelItem.createAttributes(ModTiers.BLISTER_STEEL, 1.5F, -3.0F))));
+    public static final DeferredItem<HoeItem> BLISTER_STEEL_HOE = ITEMS.register("blister_steel_hoe",
+            () -> new ShearForged.Hoe(new Item.Properties().attributes(HoeItem.createAttributes(ModTiers.BLISTER_STEEL, -2.0F, -1.0F))));
+
+    public static final DeferredItem<ArmorItem> BLISTER_STEEL_HELMET = armor("blister_steel_helmet", ArmorItem.Type.HELMET);
+    public static final DeferredItem<ArmorItem> BLISTER_STEEL_CHESTPLATE = armor("blister_steel_chestplate", ArmorItem.Type.CHESTPLATE);
+    public static final DeferredItem<ArmorItem> BLISTER_STEEL_LEGGINGS = armor("blister_steel_leggings", ArmorItem.Type.LEGGINGS);
+    public static final DeferredItem<ArmorItem> BLISTER_STEEL_BOOTS = armor("blister_steel_boots", ArmorItem.Type.BOOTS);
+
+    private static DeferredItem<ArmorItem> armor(String name, ArmorItem.Type type) {
+        return ITEMS.register(name, () -> new ShearForged.Armor(ModArmorMaterials.BLISTER_STEEL, type,
+                new Item.Properties().durability(type.getDurability(ModArmorMaterials.BLISTER_STEEL_DURABILITY))));
+    }
+
+    /** Every item, in creative-tab order. */
+    public static List<DeferredItem<? extends Item>> tabOrder() {
+        return List.of(CARBON_PACKED_IRON, BLISTER_STEEL_NUGGET, BLISTER_STEEL_INGOT, BLISTER_STEEL_SHEET, BLISTER_STEEL_BLOCK,
+                BLISTER_STEEL_SWORD, BLISTER_STEEL_PICKAXE, BLISTER_STEEL_AXE, BLISTER_STEEL_SHOVEL, BLISTER_STEEL_HOE,
+                BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS);
+    }
+
+    /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */
+    static final class ShearForged {
+        private ShearForged() {}
+
+        static void flavour(List<Component> tooltip) {
+            tooltip.add(Component.translatable("tooltip.creativeengineering.shear_forged").withStyle(ChatFormatting.GRAY));
+        }
+
+        static final class Sword extends SwordItem {
+            Sword(Properties p) { super(ModTiers.BLISTER_STEEL, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+        static final class Pickaxe extends PickaxeItem {
+            Pickaxe(Properties p) { super(ModTiers.BLISTER_STEEL, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+        static final class Axe extends AxeItem {
+            Axe(Properties p) { super(ModTiers.BLISTER_STEEL, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+        static final class Shovel extends ShovelItem {
+            Shovel(Properties p) { super(ModTiers.BLISTER_STEEL, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+        static final class Hoe extends HoeItem {
+            Hoe(Properties p) { super(ModTiers.BLISTER_STEEL, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+        static final class Armor extends ArmorItem {
+            Armor(net.minecraft.core.Holder<net.minecraft.world.item.ArmorMaterial> m, Type type, Properties p) { super(m, type, p); }
+            @Override public void appendHoverText(ItemStack s, TooltipContext c, List<Component> t, TooltipFlag f) { flavour(t); }
+        }
+    }
+}

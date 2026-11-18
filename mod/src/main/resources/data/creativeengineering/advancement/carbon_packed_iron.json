@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:carbon_packed_iron"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.carbon_packed_iron.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.carbon_packed_iron.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "packed": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:carbon_packed_iron"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "packed"
+    ]
+  ],
+  "parent": "creativeengineering:root"
+}
