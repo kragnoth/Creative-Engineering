@@ -1,6 +1,18 @@
-# Steelworks — design spec (draft for Kragnoth's approval)
+# Steelworks — design spec (approved 2026-11-18)
 
 Module 1 of Creative Engineering. Read `create-core-concepts.md` first; rules 1–15 apply. Mod id `creativeengineering`, rotation (SU) only.
+
+## 0. Create integration contract (applies to every Creative Engineering machine)
+A full setup must be buildable from base Create logistics plus vanilla hoppers alone. Each machine block entity:
+- **Items:** exposes a NeoForge `Capabilities.ItemHandler.BLOCK` on every face, with an *insert-only* input view and an *extract-only* output view. That covers:
+  - Create: funnels, chutes and smart chutes, brass tunnels, portable storage interfaces, packagers, stockpile/threshold switches
+  - vanilla: hoppers and droppers, through NeoForge's item-handler hooks
+- **Belts:** adds Create's `DirectBeltInputBehaviour`, so a belt ending at the machine inserts directly, the way basins and millstones accept.
+- **Mechanical arm:** registers an `ArmInteractionPointType` for the block. Create's arm has **no** generic inventory target; every supported block is listed in `AllArmInteractionPointTypes`.
+- **Fluids:** exposes `Capabilities.FluidHandler.BLOCK` on every face, *extract-only* for byproducts like creosote. Works with pipes, pumps, smart pipes and item drains.
+- **Information:** registers a `DisplaySource` (display links) and implements `IHaveGoggleInformation`. Comparator output is proportional to output-slot fill.
+- **Wrench:** implements `IWrenchable` (rotate where it makes sense; sneak-wrench picks up a brick).
+- **Multiblocks:** form through Create's `ConnectivityHandler` (vault- or tank-style), so they grow and shrink like Create's own.
 
 ## 1. The ladder at a glance
 Three real-world materials. Each one is useful the moment you have it, and each later tier improves the earlier ones rather than replacing them.
@@ -68,7 +80,7 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 **Heat:** at least one **heated** blaze burner under the bottom layer. Passive heat isn't enough, but plain heated is.
 - Speed: each heated burner = ×1, each superheated burner = ×2, capped by footprint (one burner per bottom column counts).
 
-**Charge:** insert from the top face (funnel, chute, arm):
+**Charge:** insert from **any face** (funnel, chute, belt, hopper, arm). The top hatch is just where it looks best:
 - **Iron:** iron ingot, raw iron, crushed raw iron, or nuggets (9 = 1 unit).
 - **Fuel:**
 
@@ -76,9 +88,9 @@ Three real-world materials. Each one is useful the moment you have it, and each 
   |---|---|
   | Coke | 2 |
   | Charcoal | 1 |
-  | Coal | not accepted (sulfur, flavour) |
+  | Coal | 0.5 (2 coal per iron, the poor rate) |
 
-  So the coke oven is an efficiency upgrade, not a gate (rule 11).
+  Coal works from day one; charcoal is 2× better and coke 4× better. So the coke oven is an efficiency upgrade, not a gate (rule 11).
 
 **Product, decided by the air blast:**
 
@@ -104,8 +116,8 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 - `base_time`: 200 ticks per unit at ×1
 
 **Item I/O:**
-- Metal and slag come out of any face. Funnel filters can split them onto separate belts.
-- Inputs only go in through the top. That keeps "load the top, unload the bottom" readable.
+- Metal and slag come out of any face. Funnel or tunnel filters can split them onto separate belts.
+- Inputs can't be extracted: the output view only shows metal and slag.
 
 **Info:** goggles show heat, the air-blast state (*"Cast iron: no air blast"* / *"Steel: 2 fans, +25%"*), fuel units, queue and slag. A display-link source too.
 
@@ -126,7 +138,7 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 - **Blister steel:**
   - Steelworks bricks.
   - Light-steel parts used by later modules.
-  - *Optional:* blister steel tools, between iron and diamond. **See question A.**
+  - **Blister steel tools and armour** (decided, see §6a).
 - **Cast iron:**
   - Cast iron block, grate, pillar and plate (decor).
   - Later modules: heavy cogs, flywheel, engine block for the Fuels & Engines module.
@@ -134,13 +146,46 @@ Three real-world materials. Each one is useful the moment you have it, and each 
   - Steel casing (encasing, like Create's casings).
   - Steel block, girder and sheet.
   - Later modules: arc crucible, derrick, pumpjack.
-- **Creosote:** treated timber set. *Stretch:* creosoted track sleepers for Create trains. **See question B.**
+- **Creosote:** treated timber set. Creosoted track sleepers are **deferred** to a later rail & timber module, but the framework ships now (§6b).
 - **Slag:** slag gravel, slag bricks.
+
+## 6a. Blister steel tools and armour
+**Historical basis.** Cementation (blister) steel is carburised bar iron, "suitable for manufacture into a variety of metal wares" (Sheffield steel-industry glossary). Uses:
+- Forged into **shear steel** for edge tools: knives, shears, razors.
+- Melted into **crucible steel**.
+- Huntsman (1740s) went looking for something better because blister steel springs weren't uniform enough for clocks.
+
+It is therefore an authentic 17th–18th-century, early-industrial, steampunk material: good enough for tools, blades and rough springs, not for precision work. That is exactly its role here.
+
+**Stats (vanilla reference):**
+- Tools:
+
+  | Tier | Durability | Speed | Attack bonus | Enchantability |
+  |---|---|---|---|---|
+  | Iron | 250 | 6 | 2 | 14 |
+  | **Blister steel** | **500** | **6.5** | **2.5** | **12** |
+  | Diamond | 1,561 | 8 | 3 | 10 |
+
+  Blister steel mines at **iron level** (`incorrect_for_iron_tool`). Repair material: blister steel ingot.
+- Armour: **17 total defence** (iron 15, diamond 20), **toughness 1**, durability multiplier 22, enchantability 12.
+
+**Flavour:** the tooltip calls them "shear-forged".
+
+**Not included:** full steel tools/armour. That waits for a later module, or other mods' `c:ingots/steel` sets.
+
+## 6b. Creosoted track framework (deferred content)
+Ships in Steelworks:
+- the creosote fluid
+- the treated timber items/blocks
+- an empty tag `#creativeengineering:creosoted_sleepers`
+
+The later rail module will register a Create `TrackMaterial` that uses that tag. Nothing in Steelworks depends on it.
 
 ## 7. Content list
 **Items:**
 - carbon_packed_iron
 - blister_steel_ingot / nugget / sheet
+- blister steel sword, pickaxe, axe, shovel, hoe, plus helmet, chestplate, leggings and boots
 - cast_iron_ingot / nugget / sheet
 - steel_ingot / nugget / sheet
 - coal_coke, coke_dust
@@ -175,6 +220,7 @@ Three real-world materials. Each one is useful the moment you have it, and each 
   - blister steel: warm grey with a faint temper sheen
   - cast iron: dark, matte
   - steel: cool blue-grey
+- Blister steel tools (5) and armour (4 items + the armour-layer textures), in the blister steel ramp.
 - coke (porous dark grey), coke dust, slag (glassy dark green-grey), carbon-packed iron.
 - **Coke oven bricks:** brick + a blister-steel door frame; active/idle glow overlay.
 - **Blast furnace bricks:** dark refractory brick with a steel band; heat-glow overlay.
@@ -190,7 +236,9 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 - Creosote per coal.
 - The heat-multiplier table.
 
-## 11. Questions for Kragnoth
-- **A.** Blister steel tools/armour (iron < blister < diamond)? Or keep it components-only?
-- **B.** Creosoted train-track sleepers in Steelworks, or save them for a later "Rail & Timber" module?
-- **C.** Should coal be allowed as blast-furnace fuel at a poor ratio (for example 1 coal per 0.5 iron), or stay excluded?
+## 11. Decisions log
+- 2026-11-18: Cementation by fan blasting (no new block).
+- 2026-11-18: Blister steel tools and armour **yes** (historically grounded).
+- 2026-11-18: Creosoted track **deferred**; framework included.
+- 2026-11-18: Coal allowed as blast fuel at a poor rate (0.5 iron/coal).
+- 2026-11-18: All machines are fully compatible with base Create logistics and vanilla hoppers (§0).

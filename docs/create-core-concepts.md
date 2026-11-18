@@ -108,6 +108,7 @@ The addon stays fun and functional. These rules sit beside the eight above and w
 13. **Use machines the player already has.** Each tier adds at most one new block, and early tiers add none.
 14. **Forgiving multiblocks.** Any reasonable size works and bigger is faster. No exact patterns, no reinforcement checks, no new worldgen ore just for the building blocks.
 15. **Steel arrives around brass time** (early–mid game), not as a late-game wall.
+16. **Base Create logistics run everything.** Belts, funnels, chutes, tunnels, arms, pipes, pumps and vanilla hoppers can build a complete setup for every machine. The integration contract is in `steelworks-spec.md` §0.
 
 ## 5. Steelworks route
 For contrast, TFMG (1.21.1 @ e8fefaf) makes steel like this:
