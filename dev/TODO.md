@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.1-alpha: beam placement helper (2026-11-18) - test in game
+- [ ] Holding a Treated Beam and looking at a placed beam shows Create's ghost preview; right-click extends the run in the direction you're facing (along X/Z for joists, up/down for posts), same reach and feel as Create's Metal Girders.
+- [ ] Doesn't affect Create's own girders; a shaft still can't go into a treated beam.
+
 ## 0.6.0-alpha: treated timber (2026-11-18) - test in game
 - [ ] Spout + creosote (from the coke oven): planks on a belt/depot → Treated Planks (125 mB); stripped logs → Treated Log, stripped wood → Treated Wood (250 mB). JEI shows them under Create's Filling.
 - [ ] Early game: 8 planks / stripped logs / stripped wood around a Creosote Bucket → 8 treated (empty bucket returned).
