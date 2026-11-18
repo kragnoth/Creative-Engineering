@@ -35,6 +35,7 @@ public final class CreativeEngineering {
         ModCreativeTabs.TABS.register(modBus);
         modBus.addListener(ModBlockEntities::registerCapabilities);
         modBus.addListener(com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel::register);
+        com.kragnoth.creativeengineering.compat.create.CEDisplaySources.register(modBus);
     }
 
     public static ResourceLocation id(String path) {

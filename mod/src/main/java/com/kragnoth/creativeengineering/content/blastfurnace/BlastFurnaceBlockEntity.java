@@ -46,7 +46,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  *   <li>Slag: a bonus. When its slot is full, new slag is voided; it never stops the furnace.</li>
  * </ul>
  */
-public class BlastFurnaceBlockEntity extends SmartBlockEntity implements IMultiBlockEntityContainer.Inventory, IHaveGoggleInformation {
+public class BlastFurnaceBlockEntity extends SmartBlockEntity implements IMultiBlockEntityContainer.Inventory, IHaveGoggleInformation,
+        com.kragnoth.creativeengineering.content.shared.MachineReadout {
     public static final int MAX_WIDTH = 3;
     public static final int MAX_HEIGHT = 6;
     public static final int WORK_SLOTS = 2;
@@ -367,6 +368,21 @@ public class BlastFurnaceBlockEntity extends SmartBlockEntity implements IMultiB
             tooltip.add(Component.literal("     ").append(b).withStyle(ChatFormatting.RED));
         }
         return true;
+    }
+
+    @Override
+    public Component readoutStatus() {
+        return com.kragnoth.creativeengineering.content.shared.MachineReadout.status(automationBlocker(List.of()), slotUse()[0] > 0);
+    }
+
+    @Override
+    public Float readoutProgress() {
+        return slotUse()[0] > 0 ? averageProgress() : null;
+    }
+
+    @Override
+    public int readoutOutput() {
+        return automation.getStackInSlot(METAL).getCount();
     }
 
     // ------------------------------------------------------------------------------------------------ multiblock

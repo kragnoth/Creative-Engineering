@@ -12,10 +12,11 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
  * The formed furnace as 19 slots, the same on every face and the side-less query (spec section 0, tarbound T1-T3):
- * 0-8 ingredients (insert only; each kind keeps to one slot so one metal can't crowd out the other), 9 fuel
+ * 0-8 ingredients (insert only; one kind takes at most 3 slots so one metal can't crowd out the rest), 9 fuel
  * (insert only), 10-18 output (extract only). Always the controller's storage.
  */
 final class AlloyFurnaceAutomation implements IItemHandler {
+    static final int MAX_SLOTS_PER_KIND = 3;
     private final AlloyFurnaceBlockEntity be;
 
     AlloyFurnaceAutomation(AlloyFurnaceBlockEntity be) {
@@ -56,12 +57,13 @@ final class AlloyFurnaceAutomation implements IItemHandler {
         if (!here.isEmpty()) {
             return ItemStack.isSameItemSameComponents(here, stack);
         }
-        for (int i = 0; i < INPUTS; i++) { // one slot per kind
+        int same = 0; // up to 3 slots per kind: room for a Create package of several stacks, but never crowding out
+        for (int i = 0; i < INPUTS; i++) {
             if (ItemStack.isSameItemSameComponents(inv.getStackInSlot(i), stack)) {
-                return false;
+                same++;
             }
         }
-        return true;
+        return same < MAX_SLOTS_PER_KIND;
     }
 
     @Override

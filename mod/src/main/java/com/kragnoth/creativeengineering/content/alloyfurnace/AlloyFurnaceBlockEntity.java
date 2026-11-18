@@ -51,7 +51,8 @@ import net.neoforged.neoforge.items.wrapper.RangedWrapper;
  *   <li>Bulk: volume / 2 batches at once (4 for 2x2x2, 32 for 4x4x4).</li>
  * </ul>
  */
-public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation,
+        com.kragnoth.creativeengineering.content.shared.MachineReadout {
     public static final int MIN = 2, MAX = 4, MAX_BRICKS = MAX * MAX * MAX;
     public static final int INPUTS = 9, FUEL = 9, OUT_START = 10, SLOTS = 19;
     private static final int CHECK_TICKS = 20;
@@ -537,6 +538,26 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
             tooltip.add(Component.literal("     ").append(b).withStyle(ChatFormatting.RED));
         }
         return true;
+    }
+
+    @Override
+    public Component readoutStatus() {
+        return com.kragnoth.creativeengineering.content.shared.MachineReadout.status(automationBlocker(List.of()), batchUse()[0] > 0);
+    }
+
+    @Override
+    public Float readoutProgress() {
+        return batchUse()[0] > 0 ? averageProgress() : null;
+    }
+
+    @Override
+    public int readoutOutput() {
+        int n = 0;
+        IItemHandler view = automationItems();
+        for (int i = OUT_START; i < view.getSlots(); i++) {
+            n += view.getStackInSlot(i).getCount();
+        }
+        return n;
     }
 
     // ------------------------------------------------------------------------------------------------ save / sync

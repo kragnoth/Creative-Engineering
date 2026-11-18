@@ -46,9 +46,11 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 - **0.4.0-alpha: Steelworks tier 4 (alloy furnace).** `content/alloyfurnace/`: own forming (flood fill, any solid box 2–4 per side, min corner = controller holding all items; not ConnectivityHandler). Heated burner under every column; weakest burner = recipe tier, average = speed; fans optional +25% each. volume/2 parallel batches. Jobs from `alloying` JSON (Ender IO flat ingredient form), Create heated mixing → ingots, and `enderio:alloy_smelting` → ingots read through Ender IO's own codec (covers Ender IO: Evolution, no compile dep). JEI, Jade, Ponder, CT, wrench ports.
 
+- **0.4.1-alpha: Create 6 integration.** `compat/create/CEDisplaySources`: Display Link sources (status, progress %/bar, output count, creosote level) via `CreateRegistries.DISPLAY_SOURCE` + `DisplaySource.BY_BLOCK`. Machines implement `content/shared/MachineReadout`. Packagers, Stock Links, Threshold Switch, Smart Observer and Frogports work through the item/fluid capabilities; alloy furnace ingredients may use up to 3 slots so multi-stack packages unpack.
+
 ## Next goal
-0. **Now:** display-link sources for all three machines and the rest of Create 6.0.10 automation integration (Kragnoth, 2026-11-18).
-1. Kragnoth tests 0.4.0. Fix feedback as 0.3.x.
+1. Kragnoth tests 0.4.0 + 0.4.1.
+2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
 3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).
 

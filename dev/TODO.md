@@ -5,6 +5,13 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.4.1-alpha: Display Links + Create 6 logistics (2026-11-18) - test in game
+- [ ] Display Link on any brick of a coke oven, blast furnace or alloy furnace offers: Machine Status (Working / Idle / the stop reason), Machine Progress (percent or progress bar, like Create's fill level), Finished Output (count). The coke oven also offers Creosote Level. Try a Display Board and a sign.
+- [ ] Threshold Switch on a furnace reads its items (outputs and inputs) and the coke oven's creosote.
+- [ ] Create 6 packager on a furnace: packages finished output. Packages unpacked into the alloy furnace: a package of 3 stacks of copper fits (one ingredient may now use up to 3 of the 9 slots).
+- [ ] Stock Link / Factory Gauge / Frogport chains that feed or empty a furnace through a packager.
+- [ ] Smart Observer and Smart Chute filters see furnace contents.
+
 ## 0.4.0-alpha: Steelworks tier 4, alloy furnace (2026-11-18) - test in game
 - [ ] Recipe: 4 steel sheets + 4 blast furnace bricks + a vanilla blast furnace → 4 Alloy Furnace Bricks.
 - [ ] Forming: any SOLID box, 2–4 on each side (2x2x2, 2x3x4, 4x4x4…) forms with an anvil clunk; the strap frame wraps the whole box. 1-thick walls, holes, L-shapes or anything over 4 stay loose bricks (each framed alone; goggles "Not formed"). Breaking a brick unforms it; replacing it reforms with items intact.

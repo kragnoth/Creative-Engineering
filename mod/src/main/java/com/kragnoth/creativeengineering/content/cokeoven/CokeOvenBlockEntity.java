@@ -48,7 +48,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  * <p>Automation (spec section 0 / tarbound-compat T1-T5): every face and the side-less query expose the same compact
  * two-slot view of the whole oven: slot 0 = input (insert only), slot 1 = output (extract only).
  */
-public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlockEntityContainer.Fluid, IHaveGoggleInformation {
+public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlockEntityContainer.Fluid, IHaveGoggleInformation,
+        com.kragnoth.creativeengineering.content.shared.MachineReadout {
     public static final int MAX_SIZE = 3;
     public static final int WORK_SLOTS = 4;
     public static final int CREOSOTE_PER_BLOCK = 1000;
@@ -322,6 +323,27 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
     public FluidTank creosoteTank() {
         CokeOvenBlockEntity c = getControllerBE();
         return c == null ? creosote : c.creosote;
+    }
+
+    @Override
+    public Component readoutStatus() {
+        return com.kragnoth.creativeengineering.content.shared.MachineReadout.status(automationBlocker(List.of()), slotUse()[0] > 0);
+    }
+
+    @Override
+    public Float readoutProgress() {
+        return slotUse()[0] > 0 ? averageProgress() : null;
+    }
+
+    @Override
+    public int readoutOutput() {
+        return automationItems().getStackInSlot(1).getCount();
+    }
+
+    @Override
+    public Float readoutTank() {
+        FluidTank t = creosoteTank();
+        return t.getCapacity() <= 0 ? 0F : t.getFluidAmount() / (float) t.getCapacity();
     }
 
     /** Clears this brick's coking progress (used when a player takes mid-coking items out by hand). */
