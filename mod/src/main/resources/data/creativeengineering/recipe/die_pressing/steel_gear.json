@@ -1,0 +1,15 @@
+{
+  "type": "creativeengineering:die_pressing",
+  "die": {
+    "item": "creativeengineering:gear_die"
+  },
+  "ingredient": {
+    "tag": "c:plates/steel"
+  },
+  "results": [
+    {
+      "id": "creativeengineering:steel_gear",
+      "count": 1
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "creativeengineering:rod_die",
+    "creativeengineering:gear_die",
+    "creativeengineering:wire_die"
+  ]
+}

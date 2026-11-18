@@ -25,7 +25,8 @@ public class CEJeiPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new CokingCategory(registration.getJeiHelpers().getGuiHelper()),
                 new BlastSmeltingCategory(registration.getJeiHelpers().getGuiHelper()),
-                new AlloyingCategory(registration.getJeiHelpers().getGuiHelper()));
+                new AlloyingCategory(registration.getJeiHelpers().getGuiHelper()),
+                new DiePressingCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -38,6 +39,8 @@ public class CEJeiPlugin implements IModPlugin {
                 .getAllRecipesFor(ModRecipes.COKING_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(BlastSmeltingCategory.TYPE, level.getRecipeManager()
                 .getAllRecipesFor(ModRecipes.BLAST_SMELTING_TYPE.get()).stream().map(RecipeHolder::value).toList());
+        registration.addRecipes(DiePressingCategory.TYPE, level.getRecipeManager()
+                .getAllRecipesFor(ModRecipes.DIE_PRESSING_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(AlloyingCategory.TYPE, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyRecipes.all(level));
     }
 
@@ -50,5 +53,6 @@ public class CEJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(CokingCategory.createItem("encased_fan"), BlastSmeltingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.ALLOY_FURNACE_BRICKS.get()), AlloyingCategory.TYPE);
         registration.addRecipeCatalyst(CokingCategory.createItem("blaze_burner"), AlloyingCategory.TYPE);
+        registration.addRecipeCatalyst(CokingCategory.createItem("mechanical_press"), DiePressingCategory.TYPE);
     }
 }

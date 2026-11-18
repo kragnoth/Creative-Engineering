@@ -102,7 +102,16 @@ def alloy_furnace():
     put(b, (4, 2, 3), funnel('east', True))
     return structure((6, 5, 6), b)
 
-SCENES = [cementation, coke_oven, blast_furnace, alloy_furnace]
+def press_dies():
+    """Metalworking: a Mechanical Press over a Depot, driven by a shaft from the south."""
+    b = plate(5)
+    put(b, (2, 1, 2), ('create:depot', {}))
+    put(b, (2, 3, 2), ('create:mechanical_press', {'facing': 'north'}))
+    for z in (3, 4):
+        put(b, (2, 3, z), ('create:shaft', {'axis': 'z', 'waterlogged': 'false'}))
+    return structure((5, 4, 5), b)
+
+SCENES = [cementation, coke_oven, blast_furnace, alloy_furnace, press_dies]
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)

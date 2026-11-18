@@ -16,6 +16,7 @@ public class CEJadePlugin implements IWailaPlugin {
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(CokeOvenJadeProvider.INSTANCE, CokeOvenBlockEntity.class);
         registration.registerBlockDataProvider(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlockEntity.class);
+        registration.registerBlockDataProvider(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity.class);
         registration.registerBlockDataProvider(AlloyFurnaceJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.class);
     }
 
@@ -23,6 +24,7 @@ public class CEJadePlugin implements IWailaPlugin {
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(CokeOvenJadeProvider.INSTANCE, CokeOvenBlock.class);
         registration.registerBlockComponent(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlock.class);
+        registration.registerBlockComponent(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlock.class);
         registration.registerBlockComponent(AlloyFurnaceJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlock.class);
     }
 }

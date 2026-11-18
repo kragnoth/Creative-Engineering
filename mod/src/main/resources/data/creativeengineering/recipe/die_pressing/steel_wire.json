@@ -1,0 +1,15 @@
+{
+  "type": "creativeengineering:die_pressing",
+  "die": {
+    "item": "creativeengineering:wire_die"
+  },
+  "ingredient": {
+    "tag": "c:ingots/steel"
+  },
+  "results": [
+    {
+      "id": "creativeengineering:steel_wire",
+      "count": 2
+    }
+  ]
+}

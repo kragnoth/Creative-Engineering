@@ -1,5 +1,8 @@
 package com.kragnoth.creativeengineering.compat.ponder;
 
+import net.minecraft.world.phys.Vec3;
+import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.kragnoth.creativeengineering.registry.ModItems;
 import net.createmod.catnip.math.Pointing;
 import net.createmod.ponder.api.PonderPalette;
@@ -271,6 +274,41 @@ public final class CEScenes {
                 .text("When alloys share ingredients, wrench a brick to an output hatch and set its filter: only matching alloys are made")
                 .pointAt(util.vector().blockSurface(new BlockPos(3, 2, 3), Direction.EAST)).placeNearTarget().attachKeyFrame();
         scene.idle(110);
+        scene.markAsFinished();
+    }
+
+    /** "press_dies" (5x5): depot (2,1,2), press (2,3,2) facing north, shafts (2,3,3..4). */
+    public static void pressDies(SceneBuilder builder, SceneBuildingUtil util) {
+        com.simibubi.create.foundation.ponder.CreateSceneBuilder scene = new com.simibubi.create.foundation.ponder.CreateSceneBuilder(builder);
+        scene.title("press_dies", "Shaping Metal with Press Dies");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.idle(10);
+        BlockPos depot = new BlockPos(2, 1, 2), press = new BlockPos(2, 3, 2);
+        scene.world().showSection(util.select().position(depot), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(2, 3, 2, 2, 3, 4), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().fromTo(2, 3, 2, 2, 3, 4), 32);
+        scene.idle(15);
+        Vec3 side = util.vector().blockSurface(press, Direction.WEST);
+        scene.overlay().showControls(side, Pointing.LEFT, 50).rightClick().withItem(new ItemStack(ModItems.ROD_DIE.get()));
+        scene.overlay().showText(90).text("Right-click a Mechanical Press with a die to fit it. Sneak-right-click with an empty hand takes it out")
+                .pointAt(side).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        ItemStack in = new ItemStack(ModItems.STEEL_INGOT.get());
+        scene.world().createItemOnBeltLike(depot, Direction.NORTH, in);
+        scene.idle(10);
+        scene.world().modifyBlockEntity(press, MechanicalPressBlockEntity.class, p -> p.getPressingBehaviour().start(PressingBehaviour.Mode.BELT));
+        scene.idle(30);
+        scene.world().removeItemsFromBelt(depot);
+        ItemStack out = new ItemStack(ModItems.STEEL_ROD.get(), 2);
+        scene.world().createItemOnBeltLike(depot, Direction.UP, out);
+        scene.overlay().showControls(util.vector().topOf(depot), Pointing.UP, 50).withItem(out);
+        scene.overlay().showText(90).text("With a die fitted, the press only shapes what that die makes: rods, gears or wire. It works on belts and depots as usual")
+                .pointAt(util.vector().topOf(depot)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showText(80).text("Dies never wear out. Without a die the press is an ordinary press again")
+                .pointAt(side).placeNearTarget();
+        scene.idle(90);
         scene.markAsFinished();
     }
 }

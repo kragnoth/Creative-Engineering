@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:rod_die"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.press_die.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.press_die.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "rod_die": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:rod_die"
+          }
+        ]
+      }
+    },
+    "gear_die": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:gear_die"
+          }
+        ]
+      }
+    },
+    "wire_die": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:wire_die"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "rod_die",
+      "gear_die",
+      "wire_die"
+    ]
+  ],
+  "parent": "creativeengineering:steel"
+}

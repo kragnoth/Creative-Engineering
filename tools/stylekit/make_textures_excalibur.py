@@ -350,6 +350,80 @@ def connected(made):
     alloy = recolour_all(BLOCK + 'polished_blackstone_bricks.png', 'R', lift=1.3)
     ct_set(made, 'alloy_furnace_bricks', alloy, recolour_all(alloy, 'R', lift=0.8), 'S')
 
+# ---------------------------------------------------------------------------------------- metalworking
+RAMPS['U'] = ['#1d0d07', '#33160b', '#4d2410', '#6a3416', '#87451c', '#a35a26', '#bb7034', '#d08a48', '#e3a866']
+RAMPS['I'] = RAMPS.get('I', ['#18181a', '#26272a', '#36383b', '#484a4e', '#5b5e62', '#707377', '#878a8e', '#a0a3a6', '#c2c4c6'])
+
+def outline(img, ramp):
+    k = hexrgb(RAMPS[ramp][0])
+    solid = {(x, y) for y in range(16) for x in range(16) if img.getpixel((x, y))[3]}
+    for y in range(16):
+        for x in range(16):
+            if (x, y) not in solid and any(q in solid for q in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))):
+                img.putpixel((x, y), k)
+
+def die_item(symbol):
+    """A squat steel die block seen at 3/4: lit top face, darker front, the engraved shape on top."""
+    st = [hexrgb(h) for h in RAMPS['S']]
+    img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+    for y in range(4, 10):                                  # top face
+        for x in range(2, 14):
+            img.putpixel((x, y), st[6] if (x + y) % 7 else st[7])
+    for y in range(10, 14):                                 # front face
+        for x in range(2, 14):
+            img.putpixel((x, y), st[4] if y < 12 else st[3])
+    for x in range(2, 14):
+        img.putpixel((x, 10), st[5])
+    groove = {'rod': [(x, 7) for x in range(4, 12)],
+              'gear': [(6, 5), (7, 5), (8, 5), (9, 5), (5, 6), (10, 6), (5, 7), (10, 7), (6, 8), (7, 8), (8, 8), (9, 8),
+                       (4, 6), (11, 7), (7, 4), (8, 9)],
+              'wire': [(4, 7), (5, 6), (6, 7), (7, 8), (8, 7), (9, 6), (10, 7), (11, 8)]}[symbol]
+    for p in groove:
+        img.putpixel(p, st[1])
+    img.putpixel((3, 12), st[7]); img.putpixel((12, 12), st[7])   # two bolts on the front
+    outline(img, 'S')
+    return img
+
+def gear_item(ramp):
+    import math
+    r = [hexrgb(h) for h in RAMPS[ramp]]
+    img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+    for y in range(16):
+        for x in range(16):
+            dx, dy = x - 7.5, y - 7.5
+            d = math.hypot(dx, dy)
+            a = math.atan2(dy, dx)
+            tooth = math.cos(a * 8) > 0.35
+            if d < 1.8:
+                continue                                    # axle hole
+            if d <= 4.9 or (tooth and d <= 7.3):
+                lit = (-dx - dy) / 10.6
+                img.putpixel((x, y), r[max(1, min(7, int(4.5 + lit * 3 - (d > 5.2) * 0.5)))])
+    outline(img, ramp)
+    return img
+
+def rod_item(ramp):
+    """A round bar lying diagonally (bottom-left to top-right), 2 px thick: lit upper edge, dark lower edge, end caps."""
+    r = [hexrgb(h) for h in RAMPS[ramp]]
+    img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+    for i in range(2, 13):
+        x, y = i, 15 - i
+        img.putpixel((x, y - 1), r[7] if i % 4 else r[6])   # upper (lit) row
+        img.putpixel((x, y), r[5])
+        img.putpixel((x + 1, y), r[3])                      # lower (shadow) row
+    img.putpixel((2, 12), r[4]); img.putpixel((13, 2), r[7])
+    outline(img, ramp)
+    return img
+
+def metalworking(made):
+    for d in ('rod', 'gear', 'wire'):
+        made.append(save(die_item(d), 'item/%s_die' % d))
+    for metal, ramp in (('iron', 'I'), ('steel', 'S')):
+        made.append(save(rod_item(ramp), 'item/%s_rod' % metal))
+        made.append(save(gear_item(ramp), 'item/%s_gear' % metal))
+    for metal, ramp in (('copper', 'U'), ('steel', 'S')):
+        made.append(save(recolour_all(ITEM + 'string.png', ramp, lift=1.1), 'item/%s_wire' % metal))
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -380,6 +454,7 @@ if __name__ == '__main__':
     tier2(made)
     tier3(made)
     connected(made)
+    metalworking(made)
     made = [m for m in made if m]
     layers = []
     for n in (1, 2):

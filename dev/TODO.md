@@ -5,6 +5,15 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.5.0-alpha: Metalworking, press dies (2026-11-18) - test in game
+- [ ] Dies: 8 steel sheets around a stick / cogwheel / string → Rod / Gear / Wire Die.
+- [ ] Right-click a Mechanical Press with a die: "Rod Die fitted", a click sound; right-click with another die swaps (old one back to you). Sneak-right-click with an empty hand removes it. A Deployer can fit dies too. Breaking the press drops the die.
+- [ ] With a Rod Die: iron/steel ingot → 2 rods. Gear Die: iron/steel sheet → gear. Wire Die: copper/steel ingot → 2 wire. Works on a Depot, on a belt, and on items dropped under the press.
+- [ ] With a die fitted, plain pressing stops (a steel ingot under a Rod Die does NOT become a sheet). Without a die the press is normal again (sheets, sequenced assembly).
+- [ ] Jade on the press shows "Die: …". JEI "Die Pressing" page; checking a die's uses shows its recipes.
+- [ ] Ponder "press_dies" from any die. Advancement "Die Cast".
+- [ ] Mixin check: the log has no Mixin errors for `creativeengineering.mixins.json`. Test alongside any other press addon in your pack.
+
 ## 0.4.2-alpha: alloy furnace recipe filter (2026-11-18) - test in game
 - [ ] Wrench an alloy furnace brick to the output-hatch look: a Create filter slot appears over the hatch on its sides (other looks show none).
 - [ ] Set it to an ingot: only alloys with that result start (e.g. brass vs another copper+zinc alloy). A List or Attribute Filter works too. Two hatches with different filters allow either.

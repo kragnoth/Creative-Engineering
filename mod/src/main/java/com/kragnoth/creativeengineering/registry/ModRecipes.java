@@ -29,4 +29,9 @@ public final class ModRecipes {
             TYPES.register("alloying", () -> RecipeType.simple(CreativeEngineering.id("alloying")));
     public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyingRecipe.Serializer> ALLOYING_SERIALIZER =
             SERIALIZERS.register("alloying", com.kragnoth.creativeengineering.content.alloyfurnace.AlloyingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<com.kragnoth.creativeengineering.content.metalworking.DiePressingRecipe>> DIE_PRESSING_TYPE =
+            TYPES.register("die_pressing", () -> RecipeType.simple(CreativeEngineering.id("die_pressing")));
+    public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.metalworking.DiePressingRecipe.Serializer> DIE_PRESSING_SERIALIZER =
+            SERIALIZERS.register("die_pressing", com.kragnoth.creativeengineering.content.metalworking.DiePressingRecipe.Serializer::new);
 }

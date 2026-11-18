@@ -50,8 +50,11 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 - **0.4.2-alpha:** alloy furnace recipe filter: Create `FilteringBehaviour` on output-hatch bricks (Basin-style, tests the job's result); the controller gathers the filters every 20 ticks.
 
+- **0.5.0-alpha: Metalworking (gap module 4).** `content/metalworking/`: `DieBehaviour` attached to Create's press via `BlockEntityBehaviourEvent` (saved + synced, drops on break); `PressDies` handles fitting (RightClickBlock, so deployers work) and the recipe override; `mixin/MechanicalPressRecipeMixin` is one MixinExtras `@ModifyReturnValue` on `MechanicalPressBlockEntity.getRecipe` (require=0, config not required). With a die fitted only `die_pressing` recipes run. JEI, Jade, Ponder.
+
 ## Next goal
-1. Kragnoth tests 0.4.0–0.4.2.
+1. Kragnoth tests 0.4.0–0.5.0.
+2. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks petroleum.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
 3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).

@@ -24,7 +24,8 @@ def tag(t): return {'tag': t}
 # ---------------------------------------------------------------------------------------- content
 SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet',
                 'coal_coke', 'coke_dust', 'cast_iron_ingot', 'cast_iron_nugget', 'cast_iron_sheet',
-                'steel_ingot', 'steel_nugget', 'steel_sheet', 'slag']
+                'steel_ingot', 'steel_nugget', 'steel_sheet', 'slag',
+                'rod_die', 'gear_die', 'wire_die', 'iron_rod', 'steel_rod', 'iron_gear', 'steel_gear', 'copper_wire', 'steel_wire']
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOR = ['helmet', 'chestplate', 'leggings', 'boots']
 BLOCKS = ['blister_steel_block', 'coke_block', 'cast_iron_block', 'steel_block']
@@ -80,6 +81,25 @@ LANG = collections.OrderedDict([
     ('advancements.%s.blast_furnace.description' % MODID, 'Cast iron in a Blast Furnace'),
     ('advancements.%s.steel.title' % MODID, 'Proper Steel'),
     ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
+    ('item.%s.rod_die' % MODID, 'Rod Die'),
+    ('item.%s.gear_die' % MODID, 'Gear Die'),
+    ('item.%s.wire_die' % MODID, 'Wire Die'),
+    ('item.%s.iron_rod' % MODID, 'Iron Rod'),
+    ('item.%s.steel_rod' % MODID, 'Steel Rod'),
+    ('item.%s.iron_gear' % MODID, 'Iron Gear'),
+    ('item.%s.steel_gear' % MODID, 'Steel Gear'),
+    ('item.%s.copper_wire' % MODID, 'Copper Wire'),
+    ('item.%s.steel_wire' % MODID, 'Steel Wire'),
+    ('%s.die.fitted' % MODID, '%s fitted'),
+    ('%s.die.removed' % MODID, 'Die removed'),
+    ('%s.jade.die' % MODID, 'Die: %s'),
+    ('%s.jei.die_pressing' % MODID, 'Die Pressing'),
+    ('%s.jei.die.kept' % MODID, 'Fitted in the press; never used up'),
+    ('%s.jei.die.fit' % MODID, 'Right-click a Mechanical Press with the die'),
+    ('%s.jei.chance' % MODID, '%s%% chance'),
+    ('config.jade.plugin_%s.press_die' % MODID, 'Press Die'),
+    ('advancements.%s.press_die.title' % MODID, 'Die Cast'),
+    ('advancements.%s.press_die.description' % MODID, 'Make a press die'),
     ('%s.alloy_furnace.heat.0' % MODID, 'Heat: not every column (needs a heated Blaze Burner under each)'),
     ('%s.alloy_furnace.heat.1' % MODID, 'Heat: heated'),
     ('%s.alloy_furnace.heat.2' % MODID, 'Heat: superheated'),
@@ -286,6 +306,19 @@ alloy('ie_constantan', [(tag('c:ingots/copper'), 1), (tag('c:ingots/nickel'), 1)
 shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'), 'B': item(ce('blast_furnace_bricks')),
        'F': item('minecraft:blast_furnace')}, ce('alloy_furnace_bricks'), count=4, category='building')
 
+# Metalworking: press dies. A die fitted in a Mechanical Press makes it run only these recipes (results in Create's
+# output format). Dies are one-time steel work and never wear out.
+def die_press(name, die, ingredient, result, count):
+    put(R + '/die_pressing/%s.json' % name, {'type': ce('die_pressing'), 'die': item(ce(die)), 'ingredient': ingredient,
+        'results': [{'id': ce(result), 'count': count}]})
+for metal in ('iron', 'steel'):
+    die_press(metal + '_rod', 'rod_die', tag('c:ingots/' + metal), metal + '_rod', 2)
+    die_press(metal + '_gear', 'gear_die', tag('c:plates/' + metal), metal + '_gear', 1)
+die_press('copper_wire', 'wire_die', tag('c:ingots/copper'), 'copper_wire', 2)
+die_press('steel_wire', 'wire_die', tag('c:ingots/steel'), 'steel_wire', 2)
+for d, core in (('rod_die', item('minecraft:stick')), ('gear_die', item('create:cogwheel')), ('wire_die', item('minecraft:string'))):
+    shaped(d, ['SSS', 'S#S', 'SSS'], {'S': tag('c:plates/steel'), '#': core}, ce(d), category='equipment')
+
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
     put('%s/data/%s/tags/%s/%s.json' % (RES, ns, kind, path), {'replace': replace, 'values': values})
@@ -319,6 +352,11 @@ tagfile('c', 'item', 'ingots', ['#c:ingots/blister_steel', '#c:ingots/cast_iron'
 tagfile('c', 'item', 'nuggets', ['#c:nuggets/blister_steel', '#c:nuggets/cast_iron', '#c:nuggets/steel'])
 tagfile('c', 'item', 'plates', ['#c:plates/blister_steel', '#c:plates/cast_iron', '#c:plates/steel'])
 tagfile('c', 'item', 'slag', [ce('slag')])
+tagfile(MODID, 'item', 'dies', [ce('rod_die'), ce('gear_die'), ce('wire_die')])
+for kind, metals in (('rods', ('iron', 'steel')), ('gears', ('iron', 'steel')), ('wires', ('copper', 'steel'))):
+    for m in metals:
+        tagfile('c', 'item', '%s/%s' % (kind, m), [ce('%s_%s' % (m, kind[:-1]))])
+    tagfile('c', 'item', kind, ['#c:%s/%s' % (kind, m) for m in metals])
 tagfile(MODID, 'item', 'steel_grade', ['#c:ingots/blister_steel', '#c:ingots/steel'])
 tagfile(MODID, 'item', 'cast_grade', ['#c:ingots/cast_iron', '#c:ingots/steel'])
 tagfile(MODID, 'item', 'creosoted_sleepers', [])  # rail & timber module, later
@@ -357,6 +395,7 @@ adv('coke_oven', 'blister_steel', ce('coal_coke'), {'coke': has(ce('coal_coke'))
 adv('blast_furnace', 'coke_oven', ce('cast_iron_ingot'), {'cast': has(ce('cast_iron_ingot'))})
 adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot'))}, 'goal')
 adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
+adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die', 'wire_die')})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

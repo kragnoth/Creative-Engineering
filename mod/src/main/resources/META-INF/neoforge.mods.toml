@@ -52,3 +52,7 @@ credits="Item, armour and block textures are based on Excalibur by Maffhew, used
     versionRange="[15.0,)"
     ordering="NONE"
     side="BOTH"
+
+# Press dies (content/metalworking): one @ModifyReturnValue on Create's press recipe lookup. Optional (require=0).
+[[mixins]]
+config = "creativeengineering.mixins.json"

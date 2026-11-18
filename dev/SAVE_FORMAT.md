@@ -38,3 +38,6 @@ Block/item `alloy_furnace_bricks`; block entity `alloy_furnace`; recipe type/ser
 `Controller` (absent = loose brick), `Size` (int[3] x,y,z), `Items` (19 slots: 0–8 ingredients, 9 fuel, 10–18 output), `FuelCredit`, `Work` (list of {`Recipe` id, `Progress`, `Consumed` item list}), `HeatAvg`, `HeatMin`, `Fans`. Only the controller (min corner) works; others keep leftovers until absorbed on the next forming.
 
 - 0.4.2: each `alloy_furnace` brick also saves Create's `Filter` tag (FilteringBehaviour); only used while its `port` is `output`.
+
+## Metalworking (0.5.0)
+Items `rod_die`, `gear_die`, `wire_die`, `iron_rod`, `steel_rod`, `iron_gear`, `steel_gear`, `copper_wire`, `steel_wire`; recipe type/serializer `die_pressing`; item tag `creativeengineering:dies`. On Create's `mechanical_press` block entity our behaviour saves `CreativeEngineeringDie` (item stack). Removing the mod leaves that tag unread (harmless) and the die is lost.

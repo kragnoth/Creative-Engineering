@@ -49,6 +49,16 @@ public final class ModItems {
     public static final DeferredItem<Item> STEEL_SHEET = ITEMS.registerSimpleItem("steel_sheet");
     public static final DeferredItem<net.minecraft.world.item.BlockItem> STEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_BLOCK);
     public static final DeferredItem<Item> SLAG = ITEMS.registerSimpleItem("slag");
+    // Metalworking: press dies and what they make
+    public static final DeferredItem<Item> ROD_DIE = ITEMS.registerSimpleItem("rod_die", new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> GEAR_DIE = ITEMS.registerSimpleItem("gear_die", new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> WIRE_DIE = ITEMS.registerSimpleItem("wire_die", new Item.Properties().stacksTo(16));
+    public static final DeferredItem<Item> IRON_ROD = ITEMS.registerSimpleItem("iron_rod");
+    public static final DeferredItem<Item> STEEL_ROD = ITEMS.registerSimpleItem("steel_rod");
+    public static final DeferredItem<Item> IRON_GEAR = ITEMS.registerSimpleItem("iron_gear");
+    public static final DeferredItem<Item> STEEL_GEAR = ITEMS.registerSimpleItem("steel_gear");
+    public static final DeferredItem<Item> COPPER_WIRE = ITEMS.registerSimpleItem("copper_wire");
+    public static final DeferredItem<Item> STEEL_WIRE = ITEMS.registerSimpleItem("steel_wire");
     // Tier 4: alloy furnace
     public static final DeferredItem<net.minecraft.world.item.BlockItem> ALLOY_FURNACE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.ALLOY_FURNACE_BRICKS);
 
@@ -81,7 +91,8 @@ public final class ModItems {
                 BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
                 COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
-                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS);
+                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
+                ROD_DIE, GEAR_DIE, WIRE_DIE, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

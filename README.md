@@ -62,3 +62,12 @@ Everything is data-driven, so datapacks or KubeJS (`event.custom({...})`) can ad
  "heat": 1, "time": 200, "fuel": 1}
 ```
 Up to 6 ingredients, in the same flat `{tag/item, count}` form Ender IO uses. `heat` 1 = heated, 2 = superheated (every burner); `fuel` = blast-furnace fuel units per batch (coke = 2); `time` = ticks per batch at x1. Create's heated mixing recipes that make ingots, and Ender IO `alloy_smelting` ingot recipes, are picked up automatically; remove them with KubeJS if you don't want them.
+
+### Die pressing (`creativeengineering:die_pressing`, 0.5.0)
+```json
+{"type": "creativeengineering:die_pressing",
+ "die": {"item": "creativeengineering:rod_die"},
+ "ingredient": {"tag": "c:ingots/aluminum"},
+ "results": [{"id": "somemod:aluminum_rod", "count": 2}]}
+```
+While a die is fitted in a Mechanical Press, only these recipes run for it. `results` use Create's output format (optional `chance`). New dies: any item in `#creativeengineering:dies`.
