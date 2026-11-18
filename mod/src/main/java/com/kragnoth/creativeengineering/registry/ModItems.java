@@ -52,7 +52,6 @@ public final class ModItems {
     // Metalworking: press dies and what they make
     public static final DeferredItem<Item> ROD_DIE = ITEMS.registerSimpleItem("rod_die", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> GEAR_DIE = ITEMS.registerSimpleItem("gear_die", new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> EXTRUSION_DIE = ITEMS.registerSimpleItem("extrusion_die", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> COPPER_ROD = ITEMS.registerSimpleItem("copper_rod");
     public static final DeferredItem<Item> IRON_ROD = ITEMS.registerSimpleItem("iron_rod");
     public static final DeferredItem<Item> STEEL_ROD = ITEMS.registerSimpleItem("steel_rod");
@@ -93,7 +92,7 @@ public final class ModItems {
                 COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
-                ROD_DIE, GEAR_DIE, EXTRUSION_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE);
+                ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

@@ -466,31 +466,6 @@ def die_mold(product, size=10, sample=Image.BOX):
     outline(img, 'S')
     return img
 
-def extrusion_die():
-    """A steel die with a tapered round hole through it and a strand of wire coming out of it: rod pushed in,
-    wire comes out. Light from the top-left: the hole's top/left wall is in shadow, its bottom/right wall lit."""
-    import math
-    st = [hexrgb(h) for h in RAMPS['S']]
-    img = die_mold(Image.new('RGBA', (16, 16), (0, 0, 0, 0)), 1)   # plain bevelled die block
-    cx, cy = 7.5, 6.5
-    for y in range(16):
-        for x in range(16):
-            dx, dy = x - cx, y - cy
-            d = math.hypot(dx, dy)
-            if d <= 3.6:
-                if d <= 1.4:
-                    c = st[0]                               # the hole itself
-                elif d <= 2.6:
-                    c = st[1] if dx + dy < 0 else st[4]     # tapered wall
-                else:
-                    c = st[3] if dx + dy < 0 else st[7]     # countersink rim
-                img.putpixel((x, y), c)
-    u = [hexrgb(h) for h in RAMPS['U']]                     # copper strand curling out of the hole, over the face
-    for (x, y) in ((8, 7), (9, 8), (10, 9), (11, 9), (12, 10), (12, 11), (11, 12)):
-        img.putpixel((x, y), u[6] if (x + y) % 2 else u[4])
-    img.putpixel((7, 6), u[7])
-    return img
-
 def metalworking(made):
     rod = Image.new('RGBA', (16, 16), (0, 0, 0, 0))         # the groove: a clean 2 px diagonal bar
     for i in range(3, 12):
@@ -505,7 +480,6 @@ def metalworking(made):
                 gear.putpixel((x, y), (255, 255, 255, 255))
     for d, product, size, sample in (('rod', rod, 10, Image.NEAREST), ('gear', gear, 10, Image.NEAREST)):
         made.append(save(die_mold(product, size, sample), 'item/%s_die' % d))
-    made.append(save(extrusion_die(), 'item/extrusion_die'))
     made.append(save(rod_item('U'), 'item/copper_rod'))
     for metal, ramp in (('iron', 'I'), ('steel', 'S')):
         made.append(save(rod_item(ramp), 'item/%s_rod' % metal))

@@ -34,23 +34,12 @@
           }
         ]
       }
-    },
-    "extrusion_die": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": "creativeengineering:extrusion_die"
-          }
-        ]
-      }
     }
   },
   "requirements": [
     [
       "rod_die",
-      "gear_die",
-      "extrusion_die"
+      "gear_die"
     ]
   ],
   "parent": "creativeengineering:steel"

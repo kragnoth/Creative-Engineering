@@ -292,3 +292,4 @@ The later rail module will register a Create `TrackMaterial` that uses that tag.
 - 2026-11-18 (0.4.0, Kragnoth): alloy furnace is any solid box 2x2x2 to 4x4x4; fans are extra speed only; three-ingredient recipes supported; Ender IO (and Ender IO: Evolution) alloy-smelter ingot recipes inherited when installed; JSON `alloying` for anything else; Create's heated mixing alloys inherited.
 - 2026-11-18 (0.5.0, Kragnoth): press dies go IN the Mechanical Press (option 1): one MixinExtras @ModifyReturnValue on getRecipe, stacking with other mods; die stored as a Create behaviour; dies never wear.
 - 2026-11-18 (0.5.2, Kragnoth): wire is not stamped: the Wire Die became the Extrusion Die (rod pushed through a hole into wire, 1:1). Copper rods added. A rotation-driven draw bench stays an option if wire rope grows important.
+- 2026-11-18 (0.5.3, Kragnoth): no wire die at all. Wire items and art stay, without recipes, for later (wire rope for the petroleum rigs).

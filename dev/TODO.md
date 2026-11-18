@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.5.3-alpha: wire die removed (2026-11-18) - test in game
+- [ ] No Extrusion/Wire Die anywhere (JEI, creative tab, recipes). Copper and Steel Wire items still exist (creative tab) with no recipe: kept for later (wire rope).
+- [ ] Rod Die still makes copper, iron and steel rods; Gear Die unchanged.
+
 ## 0.5.2-alpha: Extrusion Die (2026-11-18) - test in game
 - [ ] The Wire Die is now the Extrusion Die (8 steel sheets around string): a die block with a round hole and wire coming out. Old `wire_die` items from 0.5.0 are gone.
 - [ ] Rod Die now also makes Copper Rods (copper ingot → 2).

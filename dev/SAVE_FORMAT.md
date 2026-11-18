@@ -40,4 +40,4 @@ Block/item `alloy_furnace_bricks`; block entity `alloy_furnace`; recipe type/ser
 - 0.4.2: each `alloy_furnace` brick also saves Create's `Filter` tag (FilteringBehaviour); only used while its `port` is `output`.
 
 ## Metalworking (0.5.0)
-Items `rod_die`, `gear_die`, `extrusion_die` (was `wire_die` in 0.5.0–0.5.1), `copper_rod`, `iron_rod`, `steel_rod`, `iron_gear`, `steel_gear`, `copper_wire`, `steel_wire`; recipe type/serializer `die_pressing`; item tag `creativeengineering:dies`. On Create's `mechanical_press` block entity our behaviour saves `CreativeEngineeringDie` (item stack). Removing the mod leaves that tag unread (harmless) and the die is lost.
+Items `rod_die`, `gear_die`, (`wire_die` 0.5.0–0.5.1 and `extrusion_die` 0.5.2 were removed in 0.5.3), `copper_rod`, `iron_rod`, `steel_rod`, `iron_gear`, `steel_gear`, `copper_wire`, `steel_wire`; recipe type/serializer `die_pressing`; item tag `creativeengineering:dies`. On Create's `mechanical_press` block entity our behaviour saves `CreativeEngineeringDie` (item stack). Removing the mod leaves that tag unread (harmless) and the die is lost.

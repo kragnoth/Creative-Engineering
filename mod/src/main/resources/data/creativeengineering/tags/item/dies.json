@@ -2,7 +2,6 @@
   "replace": false,
   "values": [
     "creativeengineering:rod_die",
-    "creativeengineering:gear_die",
-    "creativeengineering:extrusion_die"
+    "creativeengineering:gear_die"
   ]
 }
