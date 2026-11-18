@@ -17,3 +17,6 @@ out/
 
 # Excalibur pack (licensed to Kragnoth by waiver; never commit)
 excalibur/
+
+# Gradle wrapper must be committed (overrides *.jar above)
+!mod/gradle/wrapper/gradle-wrapper.jar
