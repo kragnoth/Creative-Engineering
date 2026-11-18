@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.5.1-alpha: die art (2026-11-18) - look in game
+- [ ] Dies are steel molds with the product's shape sunk into the face (rod groove, gear pocket with a centre pin, wire coil channel). Check they read at inventory size and in hand.
+
 ## 0.5.0-alpha: Metalworking, press dies (2026-11-18) - test in game
 - [ ] Dies: 8 steel sheets around a stick / cogwheel / string → Rod / Gear / Wire Die.
 - [ ] Right-click a Mechanical Press with a die: "Rod Die fitted", a click sound; right-click with another die swaps (old one back to you). Sneak-right-click with an empty hand removes it. A Deployer can fit dies too. Breaking the press drops the die.
