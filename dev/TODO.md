@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.2-alpha: beam bolts no longer stretch (2026-11-18) - look in game
+- [ ] Joists along X and Z: bolts are square 2x2 heads on every face (no smeared streaks on tops or sides); grain runs along the beam. Posts unchanged.
+
 ## 0.6.1-alpha: beam placement helper (2026-11-18) - test in game
 - [ ] Holding a Treated Beam and looking at a placed beam shows Create's ghost preview; right-click extends the run in the direction you're facing (along X/Z for joists, up/down for posts), same reach and feel as Create's Metal Girders.
 - [ ] Doesn't affect Create's own girders; a shaft still can't go into a treated beam.

@@ -374,24 +374,28 @@ for n, side, end in (('treated_log', 'treated_log', 'treated_log_top'), ('treate
         'axis=x': {'model': ce('block/%s_horizontal' % n), 'x': 90, 'y': 90}}})
 # Beam models (our own geometry): a heavy 8x8 post, 6x10 joists along X / Z, stubs up and down, a bolster at crossings.
 B, BE = ce('block/treated_beam'), ce('block/treated_beam_end')
-def faces(rot_sides=0, rot_tb=0, end_axis='y'):
+def faces(end_axis='y', along=None):
+    """Ends get the end grain; sides get grain running along the beam: '#side' (vertical grain) or '#side_h'
+    (grain turned on its side). Pre-rotated textures, never face rotation: these faces aren't square, so rotating
+    the UV squeezes the texture."""
     f = {}
     for d in ('north', 'south', 'east', 'west', 'up', 'down'):
         axis = 'z' if d in ('north', 'south') else 'x' if d in ('east', 'west') else 'y'
         if axis == end_axis:
             f[d] = {'texture': '#end'}
+        elif along == 'x':
+            f[d] = {'texture': '#side_h'}                        # every side face runs left-right
+        elif along == 'z':
+            f[d] = {'texture': '#side' if axis == 'y' else '#side_h'}   # top/bottom: grain along v = z
         else:
             f[d] = {'texture': '#side'}
-            r = rot_tb if axis == 'y' else rot_sides
-            if r:
-                f[d]['rotation'] = r
     return f
 def beam_model(name, elements):
     put('%s/models/block/treated_beam_%s.json' % (A, name), {'parent': 'minecraft:block/block',
-        'textures': {'side': B, 'end': BE, 'particle': B}, 'elements': elements})
+        'textures': {'side': B, 'side_h': ce('block/treated_beam_horizontal'), 'end': BE, 'particle': B}, 'elements': elements})
 beam_model('pole', [{'from': [4, 0, 4], 'to': [12, 16, 12], 'faces': faces(end_axis='y')}])
-beam_model('x', [{'from': [0, 3, 5], 'to': [16, 13, 11], 'faces': faces(rot_sides=90, rot_tb=90, end_axis='x')}])
-beam_model('z', [{'from': [5, 3, 0], 'to': [11, 13, 16], 'faces': faces(rot_sides=90, rot_tb=0, end_axis='z')}])
+beam_model('x', [{'from': [0, 3, 5], 'to': [16, 13, 11], 'faces': faces(end_axis='x', along='x')}])
+beam_model('z', [{'from': [5, 3, 0], 'to': [11, 13, 16], 'faces': faces(end_axis='z', along='z')}])
 beam_model('top', [{'from': [5, 13, 5], 'to': [11, 16, 11], 'faces': faces(end_axis='y')}])
 beam_model('bottom', [{'from': [5, 0, 5], 'to': [11, 3, 11], 'faces': faces(end_axis='y')}])
 beam_model('cross', [{'from': [4, 2, 4], 'to': [12, 14, 12], 'faces': faces(end_axis='y')}])

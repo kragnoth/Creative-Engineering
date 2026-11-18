@@ -2,6 +2,7 @@
   "parent": "minecraft:block/block",
   "textures": {
     "side": "creativeengineering:block/treated_beam",
+    "side_h": "creativeengineering:block/treated_beam_horizontal",
     "end": "creativeengineering:block/treated_beam_end",
     "particle": "creativeengineering:block/treated_beam"
   },
@@ -25,12 +26,10 @@
           "texture": "#end"
         },
         "east": {
-          "texture": "#side",
-          "rotation": 90
+          "texture": "#side_h"
         },
         "west": {
-          "texture": "#side",
-          "rotation": 90
+          "texture": "#side_h"
         },
         "up": {
           "texture": "#side"

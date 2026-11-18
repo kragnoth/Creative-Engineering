@@ -518,6 +518,8 @@ def timber(made):
     for (x, y) in ((5, 7), (9, 7)):   # one through-bolt pair per block, inside the faces the beam models show
         bolt(beam, x, y)
     made.append(save(beam, 'block/treated_beam'))
+    # the same timber turned on its side, for joist faces (faces aren't square, so rotating in the model stretches)
+    made.append(save(beam.rotate(90), 'block/treated_beam_horizontal'))
     made.append(save(soot_ends(top, 0.75), 'block/treated_beam_end'))
 
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
