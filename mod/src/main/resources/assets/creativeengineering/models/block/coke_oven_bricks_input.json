@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "creativeengineering:block/coke_oven_bricks_top",
+    "side": "creativeengineering:block/coke_oven_bricks_input"
+  }
+}

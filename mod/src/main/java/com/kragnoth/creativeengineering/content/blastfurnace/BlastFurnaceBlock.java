@@ -2,7 +2,10 @@ package com.kragnoth.creativeengineering.content.blastfurnace;
 
 import com.kragnoth.creativeengineering.registry.ModBlockEntities;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
+import com.kragnoth.creativeengineering.content.shared.Port;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.context.UseOnContext;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -32,14 +35,26 @@ public class BlastFurnaceBlock extends Block implements IBE<BlastFurnaceBlockEnt
     /** True while something is actually coking (heated AND busy). Drives the smoke and crackle; no texture change. */
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
+    /** Wrench: cycle the look of this brick (bricks, input hatch, output hatch). Sneak-wrench still picks it up. */
+    @Override
+    public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+        Level level = context.getLevel();
+        if (!level.isClientSide) {
+            level.setBlock(context.getClickedPos(), state.setValue(Port.PROPERTY, state.getValue(Port.PROPERTY).next()), Block.UPDATE_ALL);
+            IWrenchable.playRotateSound(level, context.getClickedPos());
+        }
+        return InteractionResult.SUCCESS;
+    }
+
     public BlastFurnaceBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(LIT, false).setValue(WORKING, false));
+        registerDefaultState(defaultBlockState().setValue(LIT, false).setValue(WORKING, false)
+                .setValue(Port.PROPERTY, Port.BRICKS));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LIT, WORKING);
+        builder.add(LIT, WORKING, Port.PROPERTY);
         super.createBlockStateDefinition(builder);
     }
 

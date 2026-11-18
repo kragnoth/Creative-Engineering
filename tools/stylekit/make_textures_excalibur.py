@@ -252,6 +252,100 @@ def tier3(made):
         made.append(save(sheet_plate(metal, fleck=False), 'item/%s_sheet' % name))
     made.append(save(recolour_all(ITEM + 'flint.png', 'G', lift=1.2), 'item/slag'))
 
+# ---------------------------------------------------------------------------------------- connected textures
+# Create's RECTANGLE layout (AllCTTypes): a 64x64 sheet of 4x4 tiles. Column = left/right neighbours
+# (0 none, 1 right only, 2 both, 3 left only); row = up/down neighbours (0 down only, 1 both, 2 up only, 3 none).
+# Tile (3,3) is the lone block, saved as the plain texture the model and item use.
+# Look: brick infill, framed by a riveted metal strap only along the OUTER edge of the formed furnace, so a 1x1
+# and a 3x6 read as the same object (same idea as Create's tanks and vaults). Rivets fall every 16 px, so the
+# rhythm is the same at any size. Ports (wrench) are an 8x8 hatch in the middle of the tile, clear of the strap.
+def _darker(c, f):
+    return (int(c[0] * f), int(c[1] * f), int(c[2] * f), 255)
+
+def ct_tile(base, band, L, R, T, B, port=None):
+    b = [hexrgb(h) for h in RAMPS[band]]
+    img = base.copy()
+    edge = lambda x, y: (L and x < 3) or (R and x > 12) or (T and y < 3) or (B and y > 12)
+    for y in range(16):                                   # 1 px soot shadow on the bricks inside the strap
+        for x in range(16):
+            if edge(x, y):
+                continue
+            if (L and x == 3) or (T and y == 3) or (R and x == 12) or (B and y == 12):
+                img.putpixel((x, y), _darker(img.getpixel((x, y)), 0.72))
+    for y in range(16):
+        for x in range(16):
+            if not edge(x, y):
+                continue
+            # distance into the strap from the outside, and whether this strap faces the light (top/left)
+            d = min([v for v, on in ((x, L), (15 - x, R), (y, T), (15 - y, B)) if on])
+            lit = (L and x == d) or (T and y == d)
+            img.putpixel((x, y), b[1] if d == 0 else (b[6] if lit and d == 1 else b[4] if d == 1 else b[3]))
+    def rivet(x, y):
+        img.putpixel((x, y), b[7]); img.putpixel((x + 1, y), b[5])
+        img.putpixel((x, y + 1), b[5]); img.putpixel((x + 1, y + 1), b[2])
+    if L: rivet(1, 7)
+    if R: rivet(13, 7)
+    if T: rivet(7, 1)
+    if B: rivet(7, 13)
+    for cx, cy, on in ((0, 0, L and T), (11, 0, R and T), (0, 11, L and B), (11, 11, R and B)):
+        if not on:                                        # corner plate where two straps meet
+            continue
+        for y in range(5):
+            for x in range(5):
+                outer = (cx == 0 and x == 0) or (cx == 11 and x == 4) or (cy == 0 and y == 0) or (cy == 11 and y == 4)
+                img.putpixel((cx + x, cy + y), b[1] if outer else b[5])
+        rivet(cx + 2 - (cx == 11), cy + 2 - (cy == 11))
+    if port:
+        hatch(img, b, port)
+    return img
+
+def hatch(img, b, port):
+    """8x8 hatch at (4..11): input = barred charging grate, output = tap hole glowing inside with a spout lip."""
+    void = b[0]
+    for y in range(3, 13):
+        for x in range(3, 13):
+            if x in (3, 12) or y in (3, 12):
+                img.putpixel((x, y), b[1])                 # dark seat around the hatch
+            elif x in (4, 11) or y in (4, 11):
+                img.putpixel((x, y), b[6] if (x == 4 or y == 4) else b[3])
+            else:
+                img.putpixel((x, y), void)
+    if port == 'input':
+        for x in (6, 9):
+            for y in range(5, 11):
+                img.putpixel((x, y), b[5] if y > 5 else b[7])
+        img.putpixel((7, 4), b[2]); img.putpixel((8, 4), b[2])
+    else:
+        for x in range(5, 11):
+            img.putpixel((x, 10), EMBER[(x) % 3])
+            if 6 <= x <= 9:
+                img.putpixel((x, 9), EMBER[2])
+        img.putpixel((7, 8), EMBER[2])
+        for x in range(2, 14):                             # spout lip under the hole
+            img.putpixel((x, 13), b[6] if x < 13 else b[3])
+            img.putpixel((x, 14), b[2])
+
+def ct_sheet(base, band, port=None):
+    sheet = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
+    for ty in range(4):
+        for tx in range(4):
+            L, R = tx in (0, 1), tx in (0, 3)
+            T, B = ty in (0, 3), ty in (2, 3)
+            sheet.alpha_composite(ct_tile(base, band, L, R, T, B, port), (tx * 16, ty * 16))
+    return sheet
+
+def ct_set(made, name, base, top_base, band):
+    for suffix, b, port in (('', base, None), ('_input', base, 'input'), ('_output', base, 'output'), ('_top', top_base, None)):
+        sheet = ct_sheet(b, band, port)
+        save(sheet, 'block/%s%s_connected' % (name, suffix))
+        made.append(save(sheet.crop((48, 48, 64, 64)), 'block/%s%s' % (name, suffix)))
+
+def connected(made):
+    coke = coke_oven_bricks(False)
+    ct_set(made, 'coke_oven_bricks', coke, recolour_all(coke, 'B', lift=0.75), 'M')
+    blast = recolour_all(BLOCK + 'deepslate_bricks.png', 'F', lift=1.25)
+    ct_set(made, 'blast_furnace_bricks', blast, recolour_all(blast, 'F', lift=0.8), 'S')
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -281,6 +375,7 @@ if __name__ == '__main__':
     made.append(save(sheet_plate(), 'item/blister_steel_sheet'))
     tier2(made)
     tier3(made)
+    connected(made)
     made = [m for m in made if m]
     layers = []
     for n in (1, 2):

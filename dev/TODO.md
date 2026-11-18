@@ -5,6 +5,13 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.3.1-alpha: connected textures + wrench ports (2026-11-18) - test in game
+- [ ] Coke ovens and blast furnaces draw a riveted metal strap only around the OUTER edge of each formed multiblock (Create tank/vault style). Check 1x1, 2x2x3 and 3x3x6: interior bricks are seamless, corners get corner plates, top face is framed too.
+- [ ] Two separate furnaces touching stay two framed boxes (connections only within one formed multiblock). Breaking a brick reframes the pieces.
+- [ ] Wrench (right-click) a brick: bricks → input hatch (barred grate) → output hatch (glowing tap hole with lip) → bricks, with Create's wrench sound. Sneak-wrench still picks it up. Look only: every brick still takes input/gives output on every face.
+- [ ] Item in hand / JEI shows the framed single block. Ponder scenes still render (CT in Ponder).
+- [ ] Existing 0.3.0 worlds load (new `port` blockstate defaults to bricks).
+
 ## 0.3.0-alpha: Steelworks tier 3, blast furnace (2026-11-18) - test in game
 - [ ] Recipe: bricks + nether brick + blister steel sheet → 2 Blast Furnace Bricks. Stack them 1–3 wide, up to 6 tall; goggles show the size.
 - [ ] Heat: a **heated** Blaze Burner under the bottom layer (magma/campfire don't count). Superheated = x2 (averaged over the footprint). No heat → goggles/Jade "No heat".

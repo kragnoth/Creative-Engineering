@@ -288,3 +288,4 @@ The later rail module will register a Create `TrackMaterial` that uses that tag.
 - 2026-11-18: Coal allowed as blast fuel at a poor rate (0.5 iron/coal).
 - 2026-11-18: All machines are fully compatible with base Create logistics and vanilla hoppers (§0).
 - 2026-11-18 (0.3.0 as built): blast furnace 1–3 wide, up to 6 tall; heated Blaze Burner required (passive heat doesn't count), speed averaged over the footprint; any fan blowing into the bottom layer switches to steel, +25% per extra fan (max 4); fuel paid per item in iron units (coke 2, charcoal 1, coal 0.5); blister steel → steel at half fuel either way; slag voided when full.
+- 2026-11-18 (0.3.1): furnaces use Create-style connected textures (strap frame on the outer edge of each formed multiblock). Wrench cycles a brick's look between bricks, input hatch and output hatch; cosmetic only, all faces stay full I/O.

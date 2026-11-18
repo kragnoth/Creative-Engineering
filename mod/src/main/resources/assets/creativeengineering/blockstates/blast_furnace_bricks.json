@@ -1,8 +1,27 @@
 {
   "multipart": [
     {
+      "when": {
+        "port": "bricks"
+      },
       "apply": {
         "model": "creativeengineering:block/blast_furnace_bricks"
+      }
+    },
+    {
+      "when": {
+        "port": "input"
+      },
+      "apply": {
+        "model": "creativeengineering:block/blast_furnace_bricks_input"
+      }
+    },
+    {
+      "when": {
+        "port": "output"
+      },
+      "apply": {
+        "model": "creativeengineering:block/blast_furnace_bricks_output"
       }
     }
   ]

@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "creativeengineering:block/coke_oven_bricks"
+    "end": "creativeengineering:block/coke_oven_bricks_top",
+    "side": "creativeengineering:block/coke_oven_bricks"
   }
 }

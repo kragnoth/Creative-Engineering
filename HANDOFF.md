@@ -42,8 +42,10 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
   - `blast_smelting` recipe JSON: `ingredient`, `result_cast`, `result_blast`, `iron_units`, `slag_chance`, `time`. Fuel data map `creativeengineering:blast_furnace_fuel` (`iron_units`). Slag is voided when full.
   - 4-slot compact view, belt input, arm point, goggles, Jade, JEI category, Ponder scene. Cast iron + steel ingot/nugget/sheet/block, slag, Excalibur-based textures.
 
+- **0.3.1-alpha: connected textures + wrench ports.** `client/ct/`: Create's `CTModel` + `RECTANGLE` sheets wrapped in at `ModelEvent.ModifyBakingResult` (no Registrate). Bricks connect only within one formed multiblock (`ConnectivityHandler.isConnected`). The wrench cycles the `port` blockstate (bricks / input / output); it changes the look only. Sheets come from `connected()` in `make_textures_excalibur.py`.
+
 ## Next goal
-1. Kragnoth tests 0.3.0. Fix feedback as 0.3.x.
+1. Kragnoth tests 0.3.0 + 0.3.1. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
 3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).
 

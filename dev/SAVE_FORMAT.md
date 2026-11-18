@@ -25,6 +25,7 @@ Pattern borrowed from Tarbound's `dev/SAVE_FORMAT.md`.
 ## Blockstate properties
 | Block | Property | Values |
 |---|---|---|
+| `coke_oven_bricks`, `blast_furnace_bricks` | `port` | `bricks` / `input` / `output` (0.3.1; wrench-cycled look, default `bricks`) |
 | `coke_oven_bricks`, `blast_furnace_bricks` | `lit` | `true` / `false` (true while heated; see docs/tarbound-compat.md T4) |
 
 ## Block entity NBT: `blast_furnace` (0.3.0)

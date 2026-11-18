@@ -128,19 +128,24 @@ for b in BLOCKS:
                    'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
         'random_sequence': ce('blocks/' + b)})
 
-# Coke oven bricks: one model for every state (lit / working show as particles and sound, not a texture swap)
-put('%s/models/block/coke_oven_bricks.json' % A, {'parent': 'minecraft:block/cube_all', 'textures': {'all': ce('block/coke_oven_bricks')}})
-put('%s/models/item/coke_oven_bricks.json' % A, {'parent': ce('block/coke_oven_bricks')})
-put('%s/blockstates/coke_oven_bricks.json' % A, {'multipart': [{'apply': {'model': ce('block/coke_oven_bricks')}}]})
+# Furnace bricks: lit / working show as particles and sound, not a texture swap. The wrench cycles `port`
+# (bricks / input / output), a look only. Sides and top are connected textures (client/ct/, Create's RECTANGLE
+# sheets *_connected.png); these models carry the lone-block textures the CT sheets replace.
+def furnace_models(n):
+    for port, suffix in (('bricks', ''), ('input', '_input'), ('output', '_output')):
+        put('%s/models/block/%s%s.json' % (A, n, suffix), {'parent': 'minecraft:block/cube_column',
+            'textures': {'end': ce('block/%s_top' % n), 'side': ce('block/%s%s' % (n, suffix))}})
+    put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
+    put('%s/blockstates/%s.json' % (A, n), {'multipart': [
+        {'when': {'port': p}, 'apply': {'model': ce('block/%s%s' % (n, sfx))}}
+        for p, sfx in (('bricks', ''), ('input', '_input'), ('output', '_output'))]})
+furnace_models('coke_oven_bricks')
+furnace_models('blast_furnace_bricks')
 put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],
                'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
     'random_sequence': ce('blocks/coke_oven_bricks')})
-# Blast furnace bricks: same idea, one model for every state
-put('%s/models/block/blast_furnace_bricks.json' % A, {'parent': 'minecraft:block/cube_all', 'textures': {'all': ce('block/blast_furnace_bricks')}})
-put('%s/models/item/blast_furnace_bricks.json' % A, {'parent': ce('block/blast_furnace_bricks')})
-put('%s/blockstates/blast_furnace_bricks.json' % A, {'multipart': [{'apply': {'model': ce('block/blast_furnace_bricks')}}]})
 put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('blast_furnace_bricks')}],

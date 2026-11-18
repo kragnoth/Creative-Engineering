@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "creativeengineering:block/blast_furnace_bricks_top",
+    "side": "creativeengineering:block/blast_furnace_bricks_output"
+  }
+}
