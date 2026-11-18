@@ -1,0 +1,25 @@
+Recipe type,Mod,Recipes in jar,What it encodes,Create type that can express it,Fit,Notes
+immersiveengineering:crusher,IE,106,"Item → item + chance secondaries, energy",create:crushing / create:milling,Covered,
+immersiveengineering:metal_press,IE,96,Item + mold → item,create:pressing (no mold),Partial,Needs a die/mold condition
+immersiveengineering:arc_furnace,IE,78,"Up to 12 inputs + additives → outputs + slag, energy",—,New,Custom recipe type
+immersiveengineering:sawmill,IE,72,Log → stripped → planks + sawdust,create:cutting,Partial,Add sawdust outputs
+immersiveengineering:blueprint,IE,61,Blueprint category + inputs → item,create:sequenced_assembly / mechanical_crafting,Partial,Redesign as assembly chains
+immersiveengineering:cloche,IE,40,Seed + soil → drops over time,—,New,
+immersiveengineering:hammer_crushing,IE,30,Hand-hammer ore → grit,create:crushing,Covered,Drop the hand step
+immersiveengineering:bottling_machine,IE,28,Item + fluid → item,create:filling,Covered,
+immersiveengineering:mineral_mix,IE,24,Vein composition by dimension/biome,—,New,"Data registry, not a recipe"
+immersiveengineering:alloy,IE,8,Two items → alloy,create:mixing (heated),Covered,
+immersiveengineering:fermenter,IE,8,Item → fluid,"create:mixing (unheated, timed)",Partial,Needs a time/fermentation notion
+immersiveengineering:squeezer,IE,6,Item → fluid (+item),create:compacting,Covered,
+immersiveengineering:refinery,IE+IP,7,1–2 fluids + catalyst → fluid,create:mixing,Partial,Needs a non-consumed catalyst
+immersiveengineering:mixer,IE+IP,4,Fluid + items → fluid,create:mixing,Covered,Concrete/herbicide/napalm are tag-generated; potions generated
+immersiveengineering:coke_oven,IE,3,Item → item + creosote over time,—,New,
+immersiveengineering:blast_furnace,IE,2,Iron → steel + slag over time,—,New,
+immersiveengineering:blast_furnace_fuel,IE+IP,6,Fuel item → burn time,—,New,Or reuse blaze burner fuel
+immersiveengineering:generator_fuel,IE+IP,6,Fluid tag → burn time,—,New,Liquid fuel registry for engines
+immersiveengineering:thermoelectric_source,IE,6,Block/fluid → temperature,—,Skip,
+immersiveengineering:fertilizer,IE,5,Item → cloche growth multiplier,—,New,Only with cloche
+immersivepetroleum:distillation,IP,2,Fluid → several fluids + chance item,—,New,
+immersivepetroleum:coker,IP,1,Item + water → item + fluid,—,New,Or superheated mixing
+immersivepetroleum:hydrotreater,IP,4,Fluid + water → fluid (+item),create:mixing (superheated),Partial,
+immersivepetroleum:reservoirs,IP,3,Reservoir definition,—,New,Data registry

@@ -1,0 +1,11 @@
+Module,Covers (feature IDs),Core blocks,Create integration,Depends on,Priority
+1. Fuels & Engines,"IE-49, IP-87, IP-85, IE-06","Diesel engine (stackable, like the steam engine); small gasoline engine; liquid-fuel registry (c: tags → SU + burn time)",Kinetic sources; fuel via pipes; goggle readouts; Ponder,—,H
+2. Steelworks,"IE-59, IE-61, IE-10, IE-08, IE-05","Coking oven, blast furnace, slag, steel (c:ingots/steel)","Blaze burner heat levels, encased fans as preheaters, funnels/belts for I/O",—,H
+3. Arc Crucible,IE-72,"Arc crucible multiblock, electrodes (or blaze-superheat variant)","High-SU drive, spout/basin pour-out, slag belt",2,H
+4. Metalworking,"IE-62, IE-04","Press dies, rolling mill","Mechanical press, deployer applies dies",—,H
+5. Petrochem extraction,"IP-77, IP-78, IP-79","Reservoir data, seismic charge/survey, drilling rig, pumpjack","Shaft-driven, mB/t scales with RPM; contraption-style drill",1 (fuel use),H
+6. Refining,"IP-81, IP-82, IP-83, IP-84, IP-88, IP-89","Fractionating column, coking drum, flare stack","Boiler-like stacked multiblock, blaze-burner heat, superheated mixing",5,H
+7. Chemistry,"IE-67, IE-69, IE-68, IE-03, IE-11, IP-90, IE-32","Fermenting vat, basin catalyst holder, concrete fluid",Mostly basin/spout recipes — minimal new blocks,"1, 2",M
+8. Excavation,IE-73,"Mineral veins, core sampler, bucket-wheel excavator",Large rotating visual; output via belts,2 (for ore uses),H
+9. Lubrication,IP-86,"Lubricator, oil can",+speed / −stress modifier on kinetic machines,6,M
+10. QoL & building,"IE-41, IE-39, IE-46, IE-43, IE-26","Hydroponic planter, friction heater, spring/flywheel storage, magnet, curtains",Kinetic-driven,—,L

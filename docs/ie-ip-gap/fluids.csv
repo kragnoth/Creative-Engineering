@@ -1,0 +1,21 @@
+Fluid,Mod,Made by,Used for,Create equivalent,Needed for
+Creosote oil,IE,Coke oven (coal → coke),"Treated wood, phenolic resin, electrodes, weak generator fuel",None,"Steelworks, plastics"
+Plant oil,IE,Squeezer (seeds),"Biodiesel, ersatz leather, weak lubricant",None,Fuels
+Ethanol,IE,Fermenter (crops/sugar),"Biodiesel, acetaldehyde, herbicide",None,"Fuels, plastics"
+Biodiesel / high-cetane biodiesel,IE,Refinery (plant oil + ethanol; + strength potion),"Diesel generator, drill, buzzsaw",None,Engines
+Redstone acid,IE,Mixer (redstone + water),"Accumulators, copper oxidising, drill fortune",None,Optional
+Acetaldehyde,IE,Refinery (ethanol or petroleum gas + catalyst),Phenolic resin,None,Plastics
+Phenolic resin,IE,Refinery (acetaldehyde + creosote),"Duroplast, fiberboard, shells",None,Plastics
+Herbicide,IE,Mixer (ethanol + copper + sulfur),Chemical thrower,None,Skip
+Liquid concrete,IE,Mixer (water + gravel + clay + sand),"Concrete blocks in world, derrick pipes",None,"Construction, derrick"
+Potion fluid,IE,Mixer,Bottling,create:potion,Covered
+Crude oil,IP,Derrick / pumpjack,Distillation,None,Petrochem
+Naphtha,IP,Distillation,"Gasoline, petroleum gas, portable generator",None,Petrochem
+Kerosene,IP,Distillation,"Generator fuel, re-distillation",None,Petrochem
+Sulfur diesel,IP,"Distillation, coker","Generator fuel, hydrotreating",None,Petrochem
+Diesel,IP,Hydrotreater,Best generator fuel (322),None,Engines
+Lubricant,IP,Distillation,"Lubrication, cracking → wax",None,Lubrication
+Benzol,IP,Kerosene distillation,"Gasoline, creosote/resin route",None,Petrochem
+Gasoline,IP,Refinery (naphtha + benzol),"Portable generator, motorboat, napalm, molotov",None,Engines
+Petroleum gas,IP,Hydrotreater (naphtha cracking),"Acetaldehyde, creosote route",None,Plastics
+Napalm,IP,Mixer (gasoline + aluminium dust),Chemical thrower,None,Skip

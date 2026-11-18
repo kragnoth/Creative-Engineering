@@ -1,0 +1,16 @@
+# Third-party material is fetched by tools/setup_refs.sh — never committed
+ref/
+srv/
+jars/
+*.jar
+minecraft_decompiled*/
+NeoForge-*/
+__pycache__/
+*.pyc
+# Gradle (future mod sources)
+.gradle/
+build/
+run/
+out/
+.idea/
+*.iml
