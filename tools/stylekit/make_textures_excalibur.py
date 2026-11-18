@@ -111,9 +111,9 @@ def carbon_packed():
 
 def sheet_plate():
     """Our own sheet, drawn on the rules Create's sheets follow (no Create pixels used): a square plate lying flat,
-    seen from above and turned ~45 degrees, so a wide squashed diamond; a 1 px darker thickness rim along its lower
-    edges; light from the top-left with a highlight along the upper-left edge and a soft dent in the middle.
-    Then recoloured at Excalibur's values like the ingot, plus two IE-style rivets."""
+    seen from above and turned ~45 degrees (a wide squashed diamond); a dark 1 px thickness rim under its lower
+    edges; light from the top-left with a bright highlight along the upper-left edge. Thin-metal read comes from
+    a LIGHT outline on the upper edges and the dark only underneath. One IE-style rivet, kept small."""
     face = [
         '................', '................', '................', '................',
         '.......###......',
@@ -125,30 +125,41 @@ def sheet_plate():
         '....#########...',
         '......#####.....',
         '................', '................', '................', '................']
-    face = [list(r) for r in face]
-    mask = [['.'] * 16 for _ in range(16)]
+    F = lambda x, y: 0 <= x < 16 and 0 <= y < 16 and face[y][x] == '#'
+    st = [hexrgb(h) for h in RAMPS['M']]
+    img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
     for y in range(16):
         for x in range(16):
-            if face[y][x] == '#':
-                mask[y][x] = 'M'
-    for y in range(15, -1, -1):                          # thickness rim: one row under every lower edge
+            if not F(x, y):
+                continue
+            top_edge = not F(x, y - 1) or not F(x - 1, y)
+            d = (x - 1) + (y - 4) * 2                        # distance from the top-left corner
+            if top_edge and (x + 2 * y) < 22:
+                t = 7                                        # highlight along the upper-left edge
+            elif top_edge:
+                t = 6
+            elif d < 10:
+                t = 6
+            elif d < 18:
+                t = 5
+            else:
+                t = 4
+            img.putpixel((x, y), st[t])
+    for y in range(16):                                      # thickness rim under the lower edges
         for x in range(16):
-            if face[y][x] == '#' and (y + 1 > 15 or face[y + 1][x] != '#'):
-                if y + 1 <= 15:
-                    mask[y + 1][x] = 'm'
-    mask = [''.join(r) for r in mask]
-    from make_textures import shade
-    img = shade(mask, gradient=True)
-    steel = [hexrgb(h) for h in RAMPS['M']]
-    for x, y in [(5, 5), (6, 5), (4, 6), (3, 7)]:          # highlight along the upper-left edge
-        img.putpixel((x, y), steel[7])
-    for x, y in [(8, 8), (9, 8), (8, 9)]:                  # soft dent in the middle
-        img.putpixel((x, y), steel[3])
-    img, kinds = recolour(img, lift=0.85)
-    img.putpixel((7, 5), steel[8]); img.putpixel((8, 6), steel[2])   # rivet top
-    img.putpixel((11, 9), steel[8]); img.putpixel((12, 10), steel[2])  # rivet right
-    img.putpixel((5, 9), TEMPER[0])
-    img.putpixel((10, 7), steel[7])                      # a blister
+            if F(x, y) and not F(x, y + 1) and y + 1 < 16:
+                img.putpixel((x, y + 1), st[2])
+    solid = {(x, y) for y in range(16) for x in range(16) if img.getpixel((x, y))[3]}   # snapshot first
+    for y in range(16):                                      # outline: soft above the plate, dark below it
+        for x in range(16):
+            if (x, y) in solid:
+                continue
+            n = [(x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)]
+            if not any(q in solid for q in n):
+                continue
+            img.putpixel((x, y), st[3] if (x, y + 1) in solid or ((x + 1, y) in solid and y < 8) or ((x - 1, y) in solid and y < 8) else st[0])
+    img.putpixel((11, 8), st[7]); img.putpixel((12, 9), st[2])   # one rivet
+    img.putpixel((6, 8), TEMPER[0])                          # a single temper fleck
     return img
 
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
