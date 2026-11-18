@@ -1,10 +1,9 @@
 {
-  "variants": {
-    "lit=false": {
-      "model": "creativeengineering:block/coke_oven_bricks"
-    },
-    "lit=true": {
-      "model": "creativeengineering:block/coke_oven_bricks_lit"
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativeengineering:block/coke_oven_bricks"
+      }
     }
-  }
+  ]
 }

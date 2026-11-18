@@ -39,5 +39,7 @@ public class CEJeiPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModItems.COKE_OVEN_BRICKS.get()), CokingCategory.TYPE);
+        // Looking up a Blaze Burner's uses shows coking too: it's the oven's heat source.
+        registration.addRecipeCatalyst(CokingCategory.createItem("blaze_burner"), CokingCategory.TYPE);
     }
 }

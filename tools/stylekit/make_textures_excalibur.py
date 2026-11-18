@@ -222,7 +222,6 @@ def creosote_bucket():
 
 def tier2(made):
     made.append(save(coke_oven_bricks(False), 'block/coke_oven_bricks'))
-    made.append(save(coke_oven_bricks(True), 'block/coke_oven_bricks_lit'))
     made.append(save(coke_item(ITEM + 'coal.png', lift=2.3), 'item/coal_coke'))
     made.append(save(coke_item(ITEM + 'gunpowder.png'), 'item/coke_dust'))
     made.append(save(coke_item(BLOCK + 'coal_block.png', lift=1.9), 'block/coke_block'))

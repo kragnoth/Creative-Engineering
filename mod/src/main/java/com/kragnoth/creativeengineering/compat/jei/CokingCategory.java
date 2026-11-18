@@ -45,12 +45,12 @@ public class CokingCategory implements IRecipeCategory<CokingRecipe> {
 
     @Override
     public int getWidth() {
-        return 120;
+        return 160;
     }
 
     @Override
     public int getHeight() {
-        return 44;
+        return 72;
     }
 
     @Override
@@ -72,8 +72,51 @@ public class CokingCategory implements IRecipeCategory<CokingRecipe> {
 
     @Override
     public void draw(CokingRecipe recipe, IRecipeSlotsView slots, GuiGraphics g, double mouseX, double mouseY) {
+        var font = Minecraft.getInstance().font;
         arrow.draw(g, 28, 9);
-        String time = (recipe.time() / 20F) + "s @ x1";
-        g.drawString(Minecraft.getInstance().font, time, 4, 32, 0xFF808080, false);
+        g.drawString(font, Component.translatable("creativeengineering.jei.coking.time", trim(recipe.time() / 20F)), 4, 28, 0xFF808080, false);
+        // Heat row: what can sit under the oven and how fast it runs on each
+        g.drawString(font, Component.translatable("creativeengineering.jei.coking.heat"), 4, 40, 0xFF808080, false);
+        int x = 4;
+        for (int i = 0; i < HEAT_ICONS.length; i++) {
+            g.renderItem(HEAT_ICONS[i].get(), x, 51);
+            g.drawString(font, HEAT_LABELS[i], x + 17, 56, 0xFF606060, false);
+            x += 38;
+        }
+    }
+
+    @Override
+    public void getTooltip(mezz.jei.api.gui.builder.ITooltipBuilder tooltip, CokingRecipe recipe, IRecipeSlotsView slots,
+                           double mouseX, double mouseY) {
+        if (mouseY >= 50 && mouseY < 68 && mouseX >= 4 && mouseX < 4 + 38 * HEAT_ICONS.length) {
+            int i = (int) ((mouseX - 4) / 38);
+            tooltip.add(Component.translatable(HEAT_TIPS[i]));
+            tooltip.add(Component.translatable("creativeengineering.jei.coking.heat.every_column"));
+        }
+    }
+
+    private static String trim(float f) {
+        return f == (int) f ? Integer.toString((int) f) : Float.toString(f);
+    }
+
+    // Create's items looked up by id (Create is required at runtime; no compile-time item references needed).
+    private static final java.util.function.Supplier<ItemStack>[] HEAT_ICONS = heatIcons();
+    private static final String[] HEAT_LABELS = {"x0.5", "x1", "x2"};
+    private static final String[] HEAT_TIPS = {
+            "creativeengineering.jei.coking.heat.passive",
+            "creativeengineering.jei.coking.heat.burner",
+            "creativeengineering.jei.coking.heat.superheated"};
+
+    @SuppressWarnings("unchecked")
+    private static java.util.function.Supplier<ItemStack>[] heatIcons() {
+        return new java.util.function.Supplier[]{
+                () -> new ItemStack(net.minecraft.world.item.Items.CAMPFIRE),
+                () -> createItem("blaze_burner"),
+                () -> createItem("blaze_cake")};
+    }
+
+    static ItemStack createItem(String path) {
+        return new ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.get(
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", path)));
     }
 }

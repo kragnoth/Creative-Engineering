@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "creativeengineering:block/coke_oven_bricks_lit"
-  }
-}

@@ -78,7 +78,12 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 
 **Info:** goggles show heat, slots busy, progress and creosote. A display-link source gives coke count and creosote %.
 
-**Visuals:** the door glows when active, smoke rises from the top, and a vent puff shows creosote being lost.
+**Visuals (revised 0.2.1, Kragnoth):**
+- No texture swap.
+- *Working* (heated and coking): campfire-style smoke from the top layer, a heavier puff now and then, and a crackle.
+- *Heated*: embers along the bottom edge.
+- *Tank full*: a dark burst when creosote is lost.
+- JEI shows the heat sources and their speeds.
 
 ## 4. Tier 3: blast furnace
 **Block:** *Blast Furnace Bricks* (crafted from bricks + blister steel sheet + nether brick).

@@ -23,14 +23,13 @@ public final class ModBlocks {
                     .strength(5.0F, 6.0F)
                     .sound(SoundType.METAL));
 
-    /** Tier 2: forms a coke oven with its neighbours (1-3 wide, 1-3 tall). Glows while heated. */
+    /** Tier 2: forms a coke oven with its neighbours (1-3 wide, 1-3 tall). Smokes while working, embers while heated. */
     public static final DeferredBlock<CokeOvenBlock> COKE_OVEN_BRICKS = BLOCKS.register("coke_oven_bricks",
             () -> new CokeOvenBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_RED)
                     .requiresCorrectToolForDrops()
                     .strength(2.0F, 6.0F)
-                    .sound(SoundType.STONE)
-                    .lightLevel(state -> state.getValue(CokeOvenBlock.LIT) ? 7 : 0)));
+                    .sound(SoundType.STONE)));
 
     public static final DeferredBlock<Block> COKE_BLOCK = BLOCKS.registerSimpleBlock("coke_block",
             BlockBehaviour.Properties.of()

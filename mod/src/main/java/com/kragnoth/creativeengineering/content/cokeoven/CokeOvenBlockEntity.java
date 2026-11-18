@@ -131,6 +131,7 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
         if (isController() && ++heatTimer >= HEAT_CHECK_TICKS) {
             heatTimer = 0;
             refreshHeat();
+            refreshWorking();
         }
         CokeOvenBlockEntity c = getControllerBE();
         if (c == null || c.speed <= 0) {
@@ -186,8 +187,11 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
         if (filled < mb && ventTimer == 0 && level instanceof ServerLevel server) {
             ventTimer = 10;
             BlockPos top = worldPosition.above(height);
+            // A dark, dense burst: reads differently from normal working smoke (tank full, creosote venting)
             server.sendParticles(ParticleTypes.LARGE_SMOKE, top.getX() + width / 2.0, top.getY() + 0.1, top.getZ() + width / 2.0,
-                    6, 0.25 * width, 0.1, 0.25 * width, 0.01);
+                    10, 0.25 * width, 0.1, 0.25 * width, 0.03);
+            server.sendParticles(ParticleTypes.SQUID_INK, top.getX() + width / 2.0, top.getY() + 0.2, top.getZ() + width / 2.0,
+                    4, 0.2 * width, 0.05, 0.2 * width, 0.02);
         }
     }
 
@@ -208,6 +212,28 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
             forEachPart(p -> p.setLit(speed > 0));
             sendData();
         }
+    }
+
+    /** WORKING on every brick while the oven is heated and at least one slot is coking (drives smoke and crackle). */
+    protected void refreshWorking() {
+        boolean busy = false;
+        if (speed > 0) {
+            for (CokeOvenBlockEntity p : parts()) {
+                for (int i = 0; i < WORK_SLOTS && !busy; i++) {
+                    busy = !p.work.getStackInSlot(i).isEmpty();
+                }
+                if (busy) {
+                    break;
+                }
+            }
+        }
+        boolean working = busy;
+        forEachPart(p -> {
+            BlockState st = p.getBlockState();
+            if (st.hasProperty(CokeOvenBlock.WORKING) && st.getValue(CokeOvenBlock.WORKING) != working) {
+                p.level.setBlock(p.worldPosition, st.setValue(CokeOvenBlock.WORKING, working), Block.UPDATE_CLIENTS);
+            }
+        });
     }
 
     private void setLit(boolean lit) {

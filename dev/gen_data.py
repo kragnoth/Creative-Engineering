@@ -53,6 +53,12 @@ LANG = collections.OrderedDict([
     ('fluid_type.%s.creosote' % MODID, 'Creosote Oil'),
     ('%s.jei.coking' % MODID, 'Coking'),
     ('%s.jei.coking.creosote_bonus' % MODID, 'Bonus: vented as smoke if the oven\'s tank is full'),
+    ('%s.jei.coking.time' % MODID, '%ss each, 4 at a time per brick'),
+    ('%s.jei.coking.heat' % MODID, 'Needs heat under the oven:'),
+    ('%s.jei.coking.heat.passive' % MODID, 'Fire, campfire, magma or lava: half speed'),
+    ('%s.jei.coking.heat.burner' % MODID, 'Blaze Burner (fuelled): full speed'),
+    ('%s.jei.coking.heat.superheated' % MODID, 'Superheated Blaze Burner (Blaze Cake): double speed'),
+    ('%s.jei.coking.heat.every_column' % MODID, 'Speed is the average over every column of the oven\'s bottom'),
     ('%s.coke_oven.size' % MODID, 'Size: %sx%sx%s'),
     ('%s.coke_oven.heat' % MODID, 'Heat: %s'),
     ('%s.coke_oven.heat.none' % MODID, 'none'),
@@ -82,12 +88,10 @@ for b in BLOCKS:
                    'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
         'random_sequence': ce('blocks/' + b)})
 
-# Coke oven bricks: lit / unlit models
-for name, tex in [('coke_oven_bricks', 'coke_oven_bricks'), ('coke_oven_bricks_lit', 'coke_oven_bricks_lit')]:
-    put('%s/models/block/%s.json' % (A, name), {'parent': 'minecraft:block/cube_all', 'textures': {'all': ce('block/' + tex)}})
+# Coke oven bricks: one model for every state (lit / working show as particles and sound, not a texture swap)
+put('%s/models/block/coke_oven_bricks.json' % A, {'parent': 'minecraft:block/cube_all', 'textures': {'all': ce('block/coke_oven_bricks')}})
 put('%s/models/item/coke_oven_bricks.json' % A, {'parent': ce('block/coke_oven_bricks')})
-put('%s/blockstates/coke_oven_bricks.json' % A, {'variants': {
-    'lit=false': {'model': ce('block/coke_oven_bricks')}, 'lit=true': {'model': ce('block/coke_oven_bricks_lit')}}})
+put('%s/blockstates/coke_oven_bricks.json' % A, {'multipart': [{'apply': {'model': ce('block/coke_oven_bricks')}}]})
 put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],

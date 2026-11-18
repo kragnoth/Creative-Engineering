@@ -126,7 +126,8 @@ public final class CEScenes {
         for (int x = 2; x <= 3; x++) {
             for (int y = 2; y <= 3; y++) {
                 for (int z = 2; z <= 3; z++) {
-                    scene.world().modifyBlock(new BlockPos(x, y, z), st -> st.setValue(CokeOvenBlock.LIT, true), false);
+                    scene.world().modifyBlock(new BlockPos(x, y, z),
+                            st -> st.setValue(CokeOvenBlock.LIT, true).setValue(CokeOvenBlock.WORKING, true), false);
                 }
             }
         }
@@ -154,10 +155,16 @@ public final class CEScenes {
                 .pointAt(util.vector().topOf(4, 2, 3))
                 .placeNearTarget();
         scene.idle(80);
+        scene.overlay().showText(80)
+                .text("While it cokes, smoke rises from the top and it crackles. Embers along the bottom just mean it has heat")
+                .pointAt(util.vector().topOf(3, 3, 2))
+                .placeNearTarget()
+                .attachKeyFrame();
+        scene.idle(90);
 
         scene.overlay().showOutline(PonderPalette.OUTPUT, "creosote", oven, 80);
         scene.overlay().showText(90)
-                .text("Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest just vents as smoke, and the oven keeps going")
+                .text("Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going")
                 .pointAt(util.vector().topOf(2, 3, 2))
                 .placeNearTarget()
                 .attachKeyFrame();

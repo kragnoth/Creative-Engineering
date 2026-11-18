@@ -23,6 +23,12 @@
   "fluid_type.creativeengineering.creosote": "Creosote Oil",
   "creativeengineering.jei.coking": "Coking",
   "creativeengineering.jei.coking.creosote_bonus": "Bonus: vented as smoke if the oven's tank is full",
+  "creativeengineering.jei.coking.time": "%ss each, 4 at a time per brick",
+  "creativeengineering.jei.coking.heat": "Needs heat under the oven:",
+  "creativeengineering.jei.coking.heat.passive": "Fire, campfire, magma or lava: half speed",
+  "creativeengineering.jei.coking.heat.burner": "Blaze Burner (fuelled): full speed",
+  "creativeengineering.jei.coking.heat.superheated": "Superheated Blaze Burner (Blaze Cake): double speed",
+  "creativeengineering.jei.coking.heat.every_column": "Speed is the average over every column of the oven's bottom",
   "creativeengineering.coke_oven.size": "Size: %sx%sx%s",
   "creativeengineering.coke_oven.heat": "Heat: %s",
   "creativeengineering.coke_oven.heat.none": "none",
@@ -54,7 +60,8 @@
   "creativeengineering.ponder.coke_oven.text_3": "It needs heat below every column. Fire or magma works at half speed, a Blaze Burner at full speed, superheated at double",
   "creativeengineering.ponder.coke_oven.text_4": "Funnels, hoppers, belts and arms feed it from any side",
   "creativeengineering.ponder.coke_oven.text_5": "Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items",
-  "creativeengineering.ponder.coke_oven.text_6": "Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest just vents as smoke, and the oven keeps going",
+  "creativeengineering.ponder.coke_oven.text_6": "While it cokes, smoke rises from the top and it crackles. Embers along the bottom just mean it has heat",
+  "creativeengineering.ponder.coke_oven.text_7": "Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going",
   "creativeengineering.ponder.tag.creativeengineering": "Creative Engineering",
   "creativeengineering.ponder.tag.creativeengineering.description": "Steel and heavy industry, the Create way"
 }

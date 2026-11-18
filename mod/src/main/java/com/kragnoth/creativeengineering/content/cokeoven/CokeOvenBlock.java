@@ -5,6 +5,11 @@ import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -20,15 +25,17 @@ import net.neoforged.neoforge.items.IItemHandler;
 public class CokeOvenBlock extends Block implements IBE<CokeOvenBlockEntity>, IWrenchable {
     /** True while the oven has heat. Drives the glow, and tells autocrafters not to add fuel (tarbound-compat T4). */
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    /** True while something is actually coking (heated AND busy). Drives the smoke and crackle; no texture change. */
+    public static final BooleanProperty WORKING = BooleanProperty.create("working");
 
     public CokeOvenBlock(Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(LIT, false));
+        registerDefaultState(defaultBlockState().setValue(LIT, false).setValue(WORKING, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LIT);
+        builder.add(LIT, WORKING);
         super.createBlockStateDefinition(builder);
     }
 
@@ -55,6 +62,47 @@ public class CokeOvenBlock extends Block implements IBE<CokeOvenBlockEntity>, IW
     private static void drop(Level level, BlockPos pos, IItemHandler items) {
         for (int i = 0; i < items.getSlots(); i++) {
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(i).copy());
+        }
+    }
+
+    /**
+     * Client-only effects (no texture swap, the bricks keep their shape):
+     * <ul>
+     *   <li>working, top layer: campfire-style smoke wisps, a heavier puff every few seconds, a low crackle;</li>
+     *   <li>heated, bottom layer: embers and the odd spark along the bottom edge (heat coming up from below).</li>
+     * </ul>
+     */
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        boolean top = !level.getBlockState(pos.above()).is(this);
+        boolean bottom = !level.getBlockState(pos.below()).is(this);
+        if (state.getValue(WORKING) && top) {
+            if (random.nextInt(3) == 0) {
+                level.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true,
+                        pos.getX() + 0.3 + random.nextDouble() * 0.4, pos.getY() + 1.05, pos.getZ() + 0.3 + random.nextDouble() * 0.4,
+                        0, 0.03 + random.nextDouble() * 0.02, 0);
+            }
+            if (random.nextInt(50) == 0) {
+                for (int i = 0; i < 4; i++) {
+                    level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.6,
+                            pos.getY() + 1.1, pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.6, 0, 0.06, 0);
+                }
+            }
+            if (random.nextInt(80) == 0) {
+                level.playLocalSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLASTFURNACE_FIRE_CRACKLE,
+                        SoundSource.BLOCKS, 0.6F, 0.7F + random.nextFloat() * 0.2F, false);
+            }
+        }
+        if (state.getValue(LIT) && bottom && random.nextInt(5) == 0) {
+            Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            if (level.getBlockState(pos.relative(side)).is(this)) {
+                return; // only on the oven's outside faces
+            }
+            double along = random.nextDouble();
+            double x = pos.getX() + 0.5 + side.getStepX() * 0.52 + (side.getStepX() == 0 ? along - 0.5 : 0);
+            double z = pos.getZ() + 0.5 + side.getStepZ() * 0.52 + (side.getStepZ() == 0 ? along - 0.5 : 0);
+            level.addParticle(random.nextInt(4) == 0 ? ParticleTypes.LAVA : ParticleTypes.SMALL_FLAME,
+                    x, pos.getY() + 0.05 + random.nextDouble() * 0.15, z, 0, 0.01, 0);
         }
     }
 

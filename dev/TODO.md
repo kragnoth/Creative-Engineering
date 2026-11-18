@@ -5,9 +5,16 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
-## 0.2.0-alpha: Steelworks tier 2, coke oven (2026-11-18) - test in game
+## 0.2.1-alpha: coke oven feedback (2026-11-18) - test in game
+- [ ] Bricks no longer swap texture. While working (heated + coking), the top layer gives off campfire-style smoke, a heavier puff every few seconds, and a crackle.
+- [ ] Heated but idle: embers and the odd lava pop along the bottom edge only, with no smoke.
+- [ ] With a full creosote tank: a dark, dense burst from the top (looks different from working smoke).
+- [ ] JEI coking page: time per item, "4 at a time per brick", and a heat row (campfire x0.5, blaze burner x1, blaze cake/superheated x2) with tooltips. Checking a Blaze Burner's uses shows coking.
+- [ ] Ponder scene mentions smoke vs embers.
+
+## 0.2.0-alpha: Steelworks tier 2, coke oven (2026-11-18) - TESTED: works; feedback → 0.2.1
 - [ ] 8 bricks + 1 blister steel sheet → 2 Coke Oven Bricks. Bricks form ovens like Create tanks: 1–3 wide, 1–3 tall. Goggles show the size.
-- [ ] Heat under every bottom column: fire/magma/campfire ×0.5, blaze burner ×1, superheated ×2. With no heat the goggles say "No heat". While heated, the bricks glow (lit mortar).
+- [ ] Heat under every bottom column: fire/magma/campfire ×0.5, blaze burner ×1, superheated ×2. With no heat the goggles say "No heat". (Lit-mortar glow replaced in 0.2.1.)
 - [ ] Coal → coal coke + 250 mB creosote; coal block → coke block; any log → charcoal. 400 ticks per item at ×1, 4 at a time per brick.
 - [ ] Funnel, hopper, chute, belt end and mechanical arm all insert from any face. Extracting only ever takes finished output (never the coal). Comparator reads output fill.
 - [ ] A mechanical pump pulls creosote from any brick. With a full tank, coking continues and the top vents smoke.
