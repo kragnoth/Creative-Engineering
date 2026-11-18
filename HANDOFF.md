@@ -30,7 +30,8 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 **Read `docs/create-core-concepts.md` before designing anything.** It has Create's stated pillars, the mechanics confirmed in source, the 8 design rules, Kragnoth's **fun-first rules (9–15)**, and the revised steel ladder (§5).
 
-- [ ] **Pending Kragnoth's OK:** the 3-tier steel ladder in §5. Tier 1 is compacting + bulk blasting with no new blocks; tier 2 is the coke oven; tier 3 is the blast furnace. It explicitly avoids TFMG's chain: fireclay, blast stove, hot air, CO₂, casting.
+- [x] **Steel route approved:** blister steel (fan-blasting cementation) → coke oven → blast furnace (cast iron; steel with a fan air blast). The design is in **`docs/steelworks-spec.md`** (draft).
+- [ ] **Open:** spec questions A–C (blister steel tools? creosoted track now or later? coal as blast fuel?). Ask Kragnoth, then mark the spec approved.
 
 ### Steps
 1. `bash tools/setup_refs.sh`. Also attach or obtain the NeoForge and decompiled-MC sources if you need to check signatures.
@@ -42,7 +43,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 3. **Style kit** (`tools/stylekit/`):
    - Palette `.gpl` files built from the ramps in `docs/create-art-style.md`.
    - A PIL texture generator for new parts, plus an offline preview renderer.
-4. **Write the Steelworks design spec first** (`docs/steelworks-spec.md`) and get Kragnoth's approval before coding:
+4. **Steelworks spec:** drafted (`docs/steelworks-spec.md`). Resolve questions A–C, then build from it. The spec covers:
    - blocks
    - multiblock sizing rules
    - heat requirements

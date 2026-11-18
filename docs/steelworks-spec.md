@@ -1,0 +1,196 @@
+# Steelworks — design spec (draft for Kragnoth's approval)
+
+Module 1 of Creative Engineering. Read `create-core-concepts.md` first; rules 1–15 apply. Mod id `creativeengineering`, rotation (SU) only.
+
+## 1. The ladder at a glance
+Three real-world materials. Each one is useful the moment you have it, and each later tier improves the earlier ones rather than replacing them.
+
+| Tier | Process (real-world basis) | Machines | New blocks | Gives |
+|---|---|---|---|---|
+| 1 | **Cementation:** iron packed in carbon and baked | Press + basin (compacting), encased fan through lava or a burner (bulk blasting) | none | **Blister steel**: light steel |
+| 2 | **Coking** | Coke oven battery on any heat | Coke oven bricks | **Coke** (+ optional **creosote**) |
+| 3 | **Blast furnace** | Blast furnace stack on heated burners; optional fans as the air blast | Blast furnace bricks | **Cast iron** (no air) / **Steel** (air blast) + bonus slag |
+
+**Substitution, so nothing becomes a dead end:**
+- `#creativeengineering:steel_grade` = blister steel, steel. Light-steel recipes accept either.
+- `#creativeengineering:cast_grade` = cast iron, steel. Heavy-part recipes accept either.
+- Steel is also `c:ingots/steel`, so other mods' steel recipes see it. Blister steel and cast iron get their own `c:` tags.
+
+## 2. Tier 1: blister steel (no new blocks)
+1. **Packing** (`create:compacting`, unheated, press over basin):
+   - 1 iron ingot + 2 coal *or* 2 charcoal → 1 **carbon-packed iron**
+   - 2 iron ingots + 1 coke → 2 carbon-packed iron *(tier 2 upgrade: 4× less carbon)*
+2. **Cementation:** a `minecraft:blasting` recipe, carbon-packed iron → 1 **blister steel ingot**.
+   - Encased fan through lava or a lit blaze burner: bulk, about 150 ticks (Create's `fanProcessingTime`). This is the intended route.
+   - Vanilla blast furnace: one at a time, `cookingtime` 600 (30 s). A slow fallback.
+   - A regular furnace can't do it, because Create's fan reads smelting and blasting recipes and a regular furnace reads only smelting.
+3. Variants: blister steel nugget, ingot, block; **blister steel sheet** (`create:pressing`).
+
+**What blister steel unlocks right away:** coke oven bricks, blast furnace bricks, and light-steel parts for later modules (springs, rods, blades).
+
+## 3. Tier 2: coke oven
+**Block:** *Coke Oven Bricks* (crafted from bricks + blister steel sheet).
+
+**Forming:** like Create's item vault: placed bricks join into a cuboid, 1–3 wide, 1–3 deep and 1–3 tall. Any size works. Each brick block in the oven adds **4 parallel coking slots**.
+
+**Heat:** heat sources go directly under the bottom layer, any `BoilerHeater` (Create's API). Total heat sets speed:
+
+| Heat under each bottom column | Speed multiplier |
+|---|---|
+| Passive (fire, magma, campfire) | ×0.5 |
+| Heated blaze burner | ×1 |
+| Superheated blaze burner | ×2 |
+
+**Speed:** the oven's speed is the average across its bottom footprint. No heat means no coking.
+
+**Recipe type `creativeengineering:coking`** (datapack-extensible), base time 400 ticks per slot at ×1:
+
+| Input | Output | Creosote |
+|---|---|---|
+| Coal | 1 coal coke | 250 mB |
+| Coal block | 1 coke block | 2,250 mB |
+| Any log | 1 charcoal | 100 mB |
+
+**Item I/O:** through any face, like a vault. Funnels, hoppers, chutes and arms insert inputs and extract outputs. Inputs and outputs use separate slots, so pulling never grabs coal.
+
+**Creosote:** an internal tank, 1,000 mB per brick block, pumped out of any face by a mechanical pump.
+- **When the tank is full, extra creosote vents as smoke and is lost. The oven never stops** (rule 10).
+
+**Info:** goggles show heat, slots busy, progress and creosote. A display-link source gives coke count and creosote %.
+
+**Visuals:** the door glows when active, smoke rises from the top, and a vent puff shows creosote being lost.
+
+## 4. Tier 3: blast furnace
+**Block:** *Blast Furnace Bricks* (crafted from bricks + blister steel sheet + nether brick).
+
+**Forming:** like Create's fluid tank: a vertical stack with a square footprint of 1×1, 2×2 or 3×3, and 2–6 tall. Bigger means more parallel smelting. No hollow centre and no pattern checks.
+
+**Heat:** at least one **heated** blaze burner under the bottom layer. Passive heat isn't enough, but plain heated is.
+- Speed: each heated burner = ×1, each superheated burner = ×2, capped by footprint (one burner per bottom column counts).
+
+**Charge:** insert from the top face (funnel, chute, arm):
+- **Iron:** iron ingot, raw iron, crushed raw iron, or nuggets (9 = 1 unit).
+- **Fuel:**
+
+  | Fuel | Iron units per fuel item |
+  |---|---|
+  | Coke | 2 |
+  | Charcoal | 1 |
+  | Coal | not accepted (sulfur, flavour) |
+
+  So the coke oven is an efficiency upgrade, not a gate (rule 11).
+
+**Product, decided by the air blast:**
+
+| Air blast | Product |
+|---|---|
+| None | **Cast iron** ingot |
+| ≥1 encased fan **blowing into** a bottom-layer side face | **Steel** ingot |
+
+- 1 iron unit → 1 ingot, matching Create's own crushed ore → 1 ingot.
+- The fan works through Create's normal stress cost of 2 SU per RPM. Each extra blowing fan adds +25% speed, up to 4 fans.
+- A fan at 0 RPM doesn't count.
+
+**Slag:** 25% chance per iron unit, from raw or crushed iron only.
+- Kept in its own output slot, extracted from any face.
+- **When the slot is full, new slag is voided. Slag never stops the furnace.**
+
+**Recipe type `creativeengineering:blast_smelting`** (datapack-extensible):
+- ingredient
+- iron units
+- `result_cast`
+- `result_blast`
+- `slag_chance`
+- `base_time`: 200 ticks per unit at ×1
+
+**Item I/O:**
+- Metal and slag come out of any face. Funnel filters can split them onto separate belts.
+- Inputs only go in through the top. That keeps "load the top, unload the bottom" readable.
+
+**Info:** goggles show heat, the air-blast state (*"Cast iron: no air blast"* / *"Steel: 2 fans, +25%"*), fuel units, queue and slag. A display-link source too.
+
+**Visuals:** a lit window band glows by heat level, flame and smoke at the top, and a hot-metal glow on the output side when steel is being made.
+
+## 5. Recipes reusing Create machines (no new blocks)
+| Recipe | Machine |
+|---|---|
+| Coke → coke dust | Milling |
+| Slag → slag gravel (+ chance of iron nugget) | Crushing |
+| Steel / blister steel / cast iron sheets | Pressing |
+| Steel block ↔ ingots, etc. | Compacting / crafting |
+| Coal coke as fuel (burn time 3,200 = 2× coal) | NeoForge furnace-fuel data map, which also makes it a blaze-burner fuel |
+| Creosote → treated planks / logs | Filling (spout, 100 mB each) |
+| Electrum (gold + silver), constantan (copper + nickel) | Heated mixing; *conditional*, only loads if `c:ingots/silver` / `c:ingots/nickel` exist |
+
+## 6. What each material is for (initial sinks)
+- **Blister steel:**
+  - Steelworks bricks.
+  - Light-steel parts used by later modules.
+  - *Optional:* blister steel tools, between iron and diamond. **See question A.**
+- **Cast iron:**
+  - Cast iron block, grate, pillar and plate (decor).
+  - Later modules: heavy cogs, flywheel, engine block for the Fuels & Engines module.
+- **Steel:**
+  - Steel casing (encasing, like Create's casings).
+  - Steel block, girder and sheet.
+  - Later modules: arc crucible, derrick, pumpjack.
+- **Creosote:** treated timber set. *Stretch:* creosoted track sleepers for Create trains. **See question B.**
+- **Slag:** slag gravel, slag bricks.
+
+## 7. Content list
+**Items:**
+- carbon_packed_iron
+- blister_steel_ingot / nugget / sheet
+- cast_iron_ingot / nugget / sheet
+- steel_ingot / nugget / sheet
+- coal_coke, coke_dust
+- slag
+- creosote_bucket
+
+**Blocks:**
+- coke_oven_bricks, blast_furnace_bricks (the multiblocks)
+- blister_steel_block, cast_iron_block, steel_block
+- coke_block, slag_gravel, slag_bricks
+- treated planks / log / stairs / slab
+- steel_casing, cast_iron_grate
+
+**Fluid:** creosote.
+
+**Recipe types:** `coking`, `blast_smelting`.
+
+**Tags:** `steel_grade`, `cast_grade`, the `c:` ingots / nuggets / plates / storage_blocks for steel, blister_steel, cast_iron and coal_coke, plus `c:creosote`.
+
+## 8. Ponder scenes
+1. Cementation: pack iron with a press over a basin, then bulk blast it with a fan.
+2. Coke oven: forming, sizes, heat sources and speed.
+3. Coke oven: extracting creosote, venting when full.
+4. Blast furnace: forming and heated burners.
+5. Blast furnace: charging the top, fuel ratios.
+6. Blast furnace: air blast with fans → steel; extra fans add speed.
+7. Steel casing and the material tags (what substitutes for what).
+
+## 9. Art list (Create palette rules: `create-art-style.md`)
+**New textures:**
+- **Ingots, nuggets, sheets:**
+  - blister steel: warm grey with a faint temper sheen
+  - cast iron: dark, matte
+  - steel: cool blue-grey
+- coke (porous dark grey), coke dust, slag (glassy dark green-grey), carbon-packed iron.
+- **Coke oven bricks:** brick + a blister-steel door frame; active/idle glow overlay.
+- **Blast furnace bricks:** dark refractory brick with a steel band; heat-glow overlay.
+- Steel casing, cast iron grate, treated wood, creosote fluid (dark amber-brown).
+
+**Reused** by reference: `create:block/brass_casing` etc. where trims fit, and Create's fan/burner visuals for the air blast.
+
+## 10. Config (server)
+- Coking base time.
+- Blast base time.
+- Per-fan speed bonus and fan cap.
+- Slag chance.
+- Creosote per coal.
+- The heat-multiplier table.
+
+## 11. Questions for Kragnoth
+- **A.** Blister steel tools/armour (iron < blister < diamond)? Or keep it components-only?
+- **B.** Creosoted train-track sleepers in Steelworks, or save them for a later "Rail & Timber" module?
+- **C.** Should coal be allowed as blast-furnace fuel at a poor ratio (for example 1 coal per 0.5 iron), or stay excluded?

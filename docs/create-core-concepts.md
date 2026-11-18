@@ -109,7 +109,7 @@ The addon stays fun and functional. These rules sit beside the eight above and w
 14. **Forgiving multiblocks.** Any reasonable size works and bigger is faster. No exact patterns, no reinforcement checks, no new worldgen ore just for the building blocks.
 15. **Steel arrives around brass time** (early–mid game), not as a late-game wall.
 
-## 5. Steelworks: revised route (proposal, awaiting approval)
+## 5. Steelworks route
 For contrast, TFMG (1.21.1 @ e8fefaf) makes steel like this:
 - Mine fireclay (its own worldgen) and build firebrick walls.
 - Coke ovens: 1,200 ticks per coal, and CO₂ must be pumped out.
@@ -119,13 +119,9 @@ For contrast, TFMG (1.21.1 @ e8fefaf) makes steel like this:
 - A casting basin turns molten steel into ingots (200 ticks each).
 - Steel_from_raw_iron uses 40 mB of hot air per operation. Nothing pays off until every part works.
 
-Our route is a ladder you can stop on at any rung:
+Our route (approved direction, 2026-11-18) is a ladder of three real-world materials. **The full design is in `steelworks-spec.md`.**
+1. **Blister steel** (cementation): press iron + carbon in a basin, then bulk-blast it with an encased fan. No new blocks. Light steel.
+2. **Coke oven:** any size, any heat. Coke, plus creosote as an optional bonus that is voided when full.
+3. **Blast furnace:** heated burners. **Cast iron** by default; encased fans blowing in (the air blast) make **steel**. Slag is a bonus.
 
-| Tier | What the player builds | Gives | New blocks |
-|---|---|---|---|
-| 1 · Carburising | **Compacting** iron + coal/charcoal (press over basin) → *carbon-packed iron*; then **bulk blasting** with an encased fan through lava → steel ingot | Steel, slowly, from machines they already own | 0 (one item) |
-| 2 · Coke | **Coke oven**: any size, placement-formed, sitting on any heat (passive heat works, burners are faster). Coal → coke. Creosote is an optional bonus pumped from any face, voided when full. | Coke: a better carbon source (more steel per craft) and a strong blaze-burner fuel | 1 |
-| 3 · Blast furnace | **Blast furnace**: placement-formed stack over blaze burners, fed from the top by funnels or chutes. Crushed iron + coke → steel at the ore-processing bonus yield. Heated works; superheated is faster; fans blowing in add speed (and cost stress). Slag comes out as a bonus item and is never required. | Bulk steel. The project's showpiece | 1 |
-| Side | Heated **mixing**: electrum, constantan. **Milling** coke → coke dust. **Crushing** slag → slag gravel | Alloys and building blocks | 0 |
-
-Molten metal and casting are left out of Steelworks. They belong to the later, optional Arc Crucible.
+Higher grades substitute for lower ones through tags, so nothing becomes a dead end. Molten metal and casting stay out of Steelworks.
