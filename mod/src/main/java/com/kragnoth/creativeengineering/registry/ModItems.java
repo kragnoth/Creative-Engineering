@@ -49,6 +49,8 @@ public final class ModItems {
     public static final DeferredItem<Item> STEEL_SHEET = ITEMS.registerSimpleItem("steel_sheet");
     public static final DeferredItem<net.minecraft.world.item.BlockItem> STEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_BLOCK);
     public static final DeferredItem<Item> SLAG = ITEMS.registerSimpleItem("slag");
+    // Tier 4: alloy furnace
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> ALLOY_FURNACE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.ALLOY_FURNACE_BRICKS);
 
     // Blister steel gear: iron < blister steel < diamond. Attack values follow vanilla's iron set.
     public static final DeferredItem<SwordItem> BLISTER_STEEL_SWORD = ITEMS.register("blister_steel_sword",
@@ -79,7 +81,7 @@ public final class ModItems {
                 BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
                 COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
-                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG);
+                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

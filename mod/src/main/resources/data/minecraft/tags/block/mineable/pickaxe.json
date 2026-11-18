@@ -6,6 +6,7 @@
     "creativeengineering:cast_iron_block",
     "creativeengineering:steel_block",
     "creativeengineering:coke_oven_bricks",
-    "creativeengineering:blast_furnace_bricks"
+    "creativeengineering:blast_furnace_bricks",
+    "creativeengineering:alloy_furnace_bricks"
   ]
 }

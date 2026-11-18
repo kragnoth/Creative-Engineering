@@ -222,4 +222,47 @@ public final class CEScenes {
         scene.idle(90);
         scene.markAsFinished();
     }
+
+    /**
+     * "alloy_furnace" (6x6): four burners at (2..3,1,2..3) under a 2x2x2 furnace (2..3,2..3,2..3); a funnel on top
+     * at (2,4,2); a fan at (1,2,2) blowing east; an extracting funnel at (4,2,3).
+     */
+    public static void alloyFurnace(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("alloy_furnace", "Bulk Alloys in an Alloy Furnace");
+        scene.configureBasePlate(0, 0, 6);
+        scene.showBasePlate();
+        scene.idle(10);
+        scene.world().showSection(util.select().fromTo(2, 1, 2, 3, 1, 3), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().fromTo(2, 2, 2, 3, 3, 3), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(90)
+                .text("Alloy Furnace Bricks form a furnace from any solid box, 2 to 4 blocks on each side")
+                .pointAt(util.vector().topOf(3, 3, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showText(90)
+                .text("Every column needs a heated Blaze Burner below. Superheat them all for the toughest alloys")
+                .pointAt(util.vector().centerOf(2, 1, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().position(2, 4, 2), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(2, 4, 2), Pointing.DOWN, 50).withItem(new ItemStack(Items.COPPER_INGOT));
+        scene.overlay().showText(90)
+                .text("Feed ingredients and coke from any side. Half the bricks' count of batches run at once")
+                .pointAt(util.vector().topOf(2, 4, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().position(1, 2, 2), Direction.EAST);
+        scene.idle(10);
+        scene.overlay().showText(80)
+                .text("Fans blowing into the bottom layer are optional: each one makes it a quarter faster")
+                .pointAt(util.vector().centerOf(1, 2, 2)).placeNearTarget();
+        scene.idle(90);
+        scene.world().showSection(util.select().position(4, 2, 3), Direction.WEST);
+        scene.idle(10);
+        scene.overlay().showText(80)
+                .text("Take the alloys out from any side. Create's heated alloys and Ender IO's alloys work here too")
+                .pointAt(util.vector().topOf(4, 2, 3)).placeNearTarget();
+        scene.idle(90);
+        scene.markAsFinished();
+    }
 }

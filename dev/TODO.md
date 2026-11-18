@@ -5,6 +5,20 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.4.0-alpha: Steelworks tier 4, alloy furnace (2026-11-18) - test in game
+- [ ] Recipe: 4 steel sheets + 4 blast furnace bricks + a vanilla blast furnace → 4 Alloy Furnace Bricks.
+- [ ] Forming: any SOLID box, 2–4 on each side (2x2x2, 2x3x4, 4x4x4…) forms with an anvil clunk; the strap frame wraps the whole box. 1-thick walls, holes, L-shapes or anything over 4 stay loose bricks (each framed alone; goggles "Not formed"). Breaking a brick unforms it; replacing it reforms with items intact.
+- [ ] Heat: a heated Blaze Burner under EVERY bottom column. All superheated → superheated recipes too; speed = average (x1–x2).
+- [ ] Fans blowing into the bottom layer: optional, +25% speed each (max 4). Jade shows fans and speed.
+- [ ] Batches: volume/2 at once (2x2x2 = 4, 4x4x4 = 32). Fuel: coke = 2 batches, charcoal 1, coal ½.
+- [ ] Create brass (copper + zinc, heated) shows in JEI "Alloy Furnace" as "from create" and runs.
+- [ ] With Ender IO (and Ender IO: Evolution): its alloy-smelter ingot recipes appear (from enderio / evolution's namespace) and run; 10000+ FE ones need superheated. Three-ingredient ones (dark steel, energetic, vibrant) work.
+- [ ] With Immersive Engineering: electrum and constantan alloying recipes appear.
+- [ ] Automation: funnels/hoppers/chutes/belts/arms insert ingredients (one slot per kind, 9 kinds) and fuel from any face; extraction only gives output. Comparator reads output fill. Loose bricks expose nothing.
+- [ ] Hand: ingredient/fuel in hand goes in; empty hand takes output, then ingredients, then fuel.
+- [ ] Breaking the controller (lowest corner) drops all items, including ingredients in running batches.
+- [ ] Wrench ports and connected textures as on the other furnaces. Ponder "alloy_furnace" scene forms in the preview.
+
 ## 0.3.1-alpha: connected textures + wrench ports (2026-11-18) - test in game
 - [ ] Coke ovens and blast furnaces draw a riveted metal strap only around the OUTER edge of each formed multiblock (Create tank/vault style). Check 1x1, 2x2x3 and 3x3x6: interior bricks are seamless, corners get corner plates, top face is framed too.
 - [ ] Two separate furnaces touching stay two framed boxes (connections only within one formed multiblock). Breaking a brick reframes the pieces.

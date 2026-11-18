@@ -44,8 +44,11 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 - **0.3.1-alpha: connected textures + wrench ports.** `client/ct/`: Create's `CTModel` + `RECTANGLE` sheets wrapped in at `ModelEvent.ModifyBakingResult` (no Registrate). Bricks connect only within one formed multiblock (`ConnectivityHandler.isConnected`). The wrench cycles the `port` blockstate (bricks / input / output); it changes the look only. Sheets come from `connected()` in `make_textures_excalibur.py`.
 
+- **0.4.0-alpha: Steelworks tier 4 (alloy furnace).** `content/alloyfurnace/`: own forming (flood fill, any solid box 2–4 per side, min corner = controller holding all items; not ConnectivityHandler). Heated burner under every column; weakest burner = recipe tier, average = speed; fans optional +25% each. volume/2 parallel batches. Jobs from `alloying` JSON (Ender IO flat ingredient form), Create heated mixing → ingots, and `enderio:alloy_smelting` → ingots read through Ender IO's own codec (covers Ender IO: Evolution, no compile dep). JEI, Jade, Ponder, CT, wrench ports.
+
 ## Next goal
-1. Kragnoth tests 0.3.0 + 0.3.1. Fix feedback as 0.3.x.
+0. **Now:** display-link sources for all three machines and the rest of Create 6.0.10 automation integration (Kragnoth, 2026-11-18).
+1. Kragnoth tests 0.4.0. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
 3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).
 

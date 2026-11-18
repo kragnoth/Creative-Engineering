@@ -53,3 +53,12 @@ Everything is data-driven, so datapacks or KubeJS (`event.custom({...})`) can ad
   - `c:creosote` (fluid)
   - `creativeengineering:steel_grade` and `creativeengineering:cast_grade` (higher grades substitute for lower ones)
 - **Coming with tier 3:** `creativeengineering:blast_smelting` and the `creativeengineering:blast_furnace_fuel` data map.
+
+### Alloying (`creativeengineering:alloying`, 0.4.0)
+```json
+{"type": "creativeengineering:alloying",
+ "ingredients": [{"tag": "c:ingots/copper", "count": 3}, {"tag": "c:ingots/tin", "count": 1}],
+ "result": {"id": "somemod:bronze_ingot", "count": 4},
+ "heat": 1, "time": 200, "fuel": 1}
+```
+Up to 6 ingredients, in the same flat `{tag/item, count}` form Ender IO uses. `heat` 1 = heated, 2 = superheated (every burner); `fuel` = blast-furnace fuel units per batch (coke = 2); `time` = ticks per batch at x1. Create's heated mixing recipes that make ingots, and Ender IO `alloy_smelting` ingot recipes, are picked up automatically; remove them with KubeJS if you don't want them.

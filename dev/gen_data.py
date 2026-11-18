@@ -79,6 +79,24 @@ LANG = collections.OrderedDict([
     ('advancements.%s.blast_furnace.title' % MODID, 'Pig Iron and Air'),
     ('advancements.%s.blast_furnace.description' % MODID, 'Cast iron in a Blast Furnace'),
     ('advancements.%s.steel.title' % MODID, 'Proper Steel'),
+    ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
+    ('%s.alloy_furnace.heat.0' % MODID, 'Heat: not every column (needs a heated Blaze Burner under each)'),
+    ('%s.alloy_furnace.heat.1' % MODID, 'Heat: heated'),
+    ('%s.alloy_furnace.heat.2' % MODID, 'Heat: superheated'),
+    ('%s.alloy_furnace.fans' % MODID, 'Fans: %s (+25%% speed each, max 4)'),
+    ('%s.alloy_furnace.batches' % MODID, 'Batches: %s / %s'),
+    ('%s.alloy_furnace.blocker.loose' % MODID, 'Not formed: build a solid box, 2 to 4 blocks on each side'),
+    ('%s.alloy_furnace.blocker.no_heat' % MODID, 'No heat: a heated Blaze Burner under every column'),
+    ('%s.jade.alloy_items' % MODID, 'Ingredients: %s  Fuel: %s  Output: %s'),
+    ('%s.jei.alloying' % MODID, 'Alloy Furnace'),
+    ('%s.jei.alloy.heat.1' % MODID, 'Heated'),
+    ('%s.jei.alloy.heat.2' % MODID, 'Superheated'),
+    ('%s.jei.alloy.time' % MODID, '%ss per batch'),
+    ('%s.jei.alloy.inherited' % MODID, 'from %s'),
+    ('%s.jei.alloy.needs_tip' % MODID, 'A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. Fuel: coke (one smelts 2 batches), charcoal or coal. Runs half its brick count of batches at once.'),
+    ('config.jade.plugin_%s.alloy_furnace' % MODID, 'Alloy Furnace'),
+    ('advancements.%s.alloy_furnace.title' % MODID, 'Industrial Alloying'),
+    ('advancements.%s.alloy_furnace.description' % MODID, 'Make Alloy Furnace Bricks'),
     ('advancements.%s.steel.description' % MODID, 'Blow air into a Blast Furnace to make steel'),
     ('item.%s.creosote_bucket' % MODID, 'Creosote Bucket'),
     ('block.%s.coke_oven_bricks' % MODID, 'Coke Oven Bricks'),
@@ -141,11 +159,17 @@ def furnace_models(n):
         for p, sfx in (('bricks', ''), ('input', '_input'), ('output', '_output'))]})
 furnace_models('coke_oven_bricks')
 furnace_models('blast_furnace_bricks')
+furnace_models('alloy_furnace_bricks')
 put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],
                'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
     'random_sequence': ce('blocks/coke_oven_bricks')})
+put('%s/loot_table/blocks/alloy_furnace_bricks.json' % D, {
+    'type': 'minecraft:block',
+    'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('alloy_furnace_bricks')}],
+               'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
+    'random_sequence': ce('blocks/alloy_furnace_bricks')})
 put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('blast_furnace_bricks')}],
@@ -243,6 +267,18 @@ for metal in ('cast_iron', 'steel'):
 shaped('blast_furnace_bricks', ['NBN', 'BSB', 'NBN'], {'B': item('minecraft:bricks'), 'N': item('minecraft:nether_brick'),
        'S': tag('c:plates/blister_steel')}, ce('blast_furnace_bricks'), count=2, category='building')
 
+# Tier 4: alloying (docs/steelworks-spec.md 4b). Ingredients use the flat form Ender IO uses ({"tag": ..., "count": n}).
+# Create's heated mixing alloys (brass...) and Ender IO's alloy_smelting ingots (base + Evolution) are read at runtime,
+# so they need no JSON here. These are optional extras for other mods' metals, loaded only with that mod.
+def alloy(name, ingredients, result, count, mod, heat=1, time=200, fuel=1):
+    put(R + '/alloying/%s.json' % name, {'neoforge:conditions': [{'type': 'neoforge:mod_loaded', 'modid': mod}],
+        'type': ce('alloying'), 'ingredients': [dict(i, count=n) for i, n in ingredients],
+        'result': {'id': result, 'count': count}, 'heat': heat, 'time': time, 'fuel': fuel})
+alloy('ie_electrum', [(tag('c:ingots/gold'), 1), (tag('c:ingots/silver'), 1)], 'immersiveengineering:ingot_electrum', 2, 'immersiveengineering')
+alloy('ie_constantan', [(tag('c:ingots/copper'), 1), (tag('c:ingots/nickel'), 1)], 'immersiveengineering:ingot_constantan', 2, 'immersiveengineering')
+shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'), 'B': item(ce('blast_furnace_bricks')),
+       'F': item('minecraft:blast_furnace')}, ce('alloy_furnace_bricks'), count=4, category='building')
+
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
     put('%s/data/%s/tags/%s/%s.json' % (RES, ns, kind, path), {'replace': replace, 'values': values})
@@ -286,7 +322,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks')])
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])
@@ -313,6 +349,7 @@ adv('blister_steel', 'carbon_packed_iron', ce('blister_steel_ingot'), {'blister'
 adv('coke_oven', 'blister_steel', ce('coal_coke'), {'coke': has(ce('coal_coke'))})
 adv('blast_furnace', 'coke_oven', ce('cast_iron_ingot'), {'cast': has(ce('cast_iron_ingot'))})
 adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot'))}, 'goal')
+adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

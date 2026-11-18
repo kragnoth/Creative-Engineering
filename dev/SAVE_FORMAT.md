@@ -25,8 +25,14 @@ Pattern borrowed from Tarbound's `dev/SAVE_FORMAT.md`.
 ## Blockstate properties
 | Block | Property | Values |
 |---|---|---|
-| `coke_oven_bricks`, `blast_furnace_bricks` | `port` | `bricks` / `input` / `output` (0.3.1; wrench-cycled look, default `bricks`) |
+| `coke_oven_bricks`, `blast_furnace_bricks`, `alloy_furnace_bricks` | `port` | `bricks` / `input` / `output` (0.3.1; wrench-cycled look, default `bricks`) |
 | `coke_oven_bricks`, `blast_furnace_bricks` | `lit` | `true` / `false` (true while heated; see docs/tarbound-compat.md T4) |
 
 ## Block entity NBT: `blast_furnace` (0.3.0)
 Per brick: `Items` (4 slots: 0 iron in, 1 fuel, 2 metal out, 3 slag out), `Work` (2 smelting slots), `Progress0..1` (float ticks), `FuelCredit` (float iron units already paid for), `LastKnownPos`, `Controller` (non-controllers). Controller only: `Width`, `Height`, `Heat` (float, averaged burner level), `Fans` (int). Same `Uninitialized` flag as the coke oven. Blockstate `lit` / `working` as for the coke oven.
+
+## Tier 4 IDs (0.4.0)
+Block/item `alloy_furnace_bricks`; block entity `alloy_furnace`; recipe type/serializer `alloying`; arm point `alloy_furnace`.
+
+## Block entity NBT: `alloy_furnace` (0.4.0)
+`Controller` (absent = loose brick), `Size` (int[3] x,y,z), `Items` (19 slots: 0–8 ingredients, 9 fuel, 10–18 output), `FuelCredit`, `Work` (list of {`Recipe` id, `Progress`, `Consumed` item list}), `HeatAvg`, `HeatMin`, `Fans`. Only the controller (min corner) works; others keep leftovers until absorbed on the next forming.

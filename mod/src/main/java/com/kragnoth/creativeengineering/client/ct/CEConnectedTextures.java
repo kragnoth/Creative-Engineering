@@ -23,6 +23,7 @@ public final class CEConnectedTextures {
     static void onModifyBakingResult(ModelEvent.ModifyBakingResult event) {
         wrap(event.getModels(), ModBlocks.COKE_OVEN_BRICKS.get(), new FurnaceCTBehaviour("coke_oven_bricks"));
         wrap(event.getModels(), ModBlocks.BLAST_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("blast_furnace_bricks"));
+        wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
     }
 
     private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block, FurnaceCTBehaviour behaviour) {

@@ -19,6 +19,7 @@ import net.neoforged.fml.common.Mod;
 @Mod(CreativeEngineering.MODID)
 public final class CreativeEngineering {
     public static final String MODID = "creativeengineering";
+    public static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
 
     public CreativeEngineering(IEventBus modBus) {
         ModFluids.init(); // its block and bucket live in the BLOCKS / ITEMS registers below

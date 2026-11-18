@@ -1,6 +1,7 @@
 package com.kragnoth.creativeengineering.registry;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
+import com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity;
 import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlockEntity;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -30,10 +31,18 @@ public final class ModBlockEntities {
                             ModBlocks.BLAST_FURNACE_BRICKS.get())
                     .build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyFurnaceBlockEntity>> ALLOY_FURNACE =
+            BLOCK_ENTITIES.register("alloy_furnace", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new AlloyFurnaceBlockEntity(ModBlockEntities.ALLOY_FURNACE.get(), pos, state),
+                            ModBlocks.ALLOY_FURNACE_BRICKS.get())
+                    .build(null));
+
     /** Same compact view on every face and on the side-less query (spec section 0, tarbound-compat T1/T5). */
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationFluids());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BLAST_FURNACE.get(), (be, side) -> be.automationItems());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ALLOY_FURNACE.get(), (be, side) -> be.automationItems());
     }
 }

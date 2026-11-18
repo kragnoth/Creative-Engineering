@@ -24,4 +24,9 @@ public final class ModRecipes {
             TYPES.register("blast_smelting", () -> RecipeType.simple(CreativeEngineering.id("blast_smelting")));
     public static final DeferredHolder<RecipeSerializer<?>, BlastSmeltingRecipe.Serializer> BLAST_SMELTING_SERIALIZER =
             SERIALIZERS.register("blast_smelting", BlastSmeltingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<com.kragnoth.creativeengineering.content.alloyfurnace.AlloyingRecipe>> ALLOYING_TYPE =
+            TYPES.register("alloying", () -> RecipeType.simple(CreativeEngineering.id("alloying")));
+    public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyingRecipe.Serializer> ALLOYING_SERIALIZER =
+            SERIALIZERS.register("alloying", com.kragnoth.creativeengineering.content.alloyfurnace.AlloyingRecipe.Serializer::new);
 }

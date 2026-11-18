@@ -1,0 +1,84 @@
+package com.kragnoth.creativeengineering.content.alloyfurnace;
+
+import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.FUEL;
+import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.INPUTS;
+import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.OUT_START;
+import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.SLOTS;
+
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+
+/**
+ * The formed furnace as 19 slots, the same on every face and the side-less query (spec section 0, tarbound T1-T3):
+ * 0-8 ingredients (insert only; each kind keeps to one slot so one metal can't crowd out the other), 9 fuel
+ * (insert only), 10-18 output (extract only). Always the controller's storage.
+ */
+final class AlloyFurnaceAutomation implements IItemHandler {
+    private final AlloyFurnaceBlockEntity be;
+
+    AlloyFurnaceAutomation(AlloyFurnaceBlockEntity be) {
+        this.be = be;
+    }
+
+    private ItemStackHandler inv() {
+        AlloyFurnaceBlockEntity c = be.getControllerBE();
+        return c == null ? null : c.items();
+    }
+
+    @Override public int getSlots() { return SLOTS; }
+
+    @Override
+    public ItemStack getStackInSlot(int slot) {
+        ItemStackHandler inv = inv();
+        return inv == null ? ItemStack.EMPTY : inv.getStackInSlot(slot);
+    }
+
+    @Override public int getSlotLimit(int slot) { return 64; }
+
+    @Override
+    public boolean isItemValid(int slot, ItemStack stack) {
+        ItemStackHandler inv = inv();
+        if (inv == null || stack.isEmpty() || be.getLevel() == null) {
+            return false;
+        }
+        if (slot == FUEL) {
+            return BlastFuel.unitsOf(stack) > 0;
+        }
+        if (slot >= INPUTS) {
+            return false;
+        }
+        if (AlloyRecipes.all(be.getLevel()).stream().noneMatch(j -> j.uses(stack))) {
+            return false;
+        }
+        ItemStack here = inv.getStackInSlot(slot);
+        if (!here.isEmpty()) {
+            return ItemStack.isSameItemSameComponents(here, stack);
+        }
+        for (int i = 0; i < INPUTS; i++) { // one slot per kind
+            if (ItemStack.isSameItemSameComponents(inv.getStackInSlot(i), stack)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+        ItemStackHandler inv = inv();
+        if (inv == null || slot > FUEL || !isItemValid(slot, stack)) {
+            return stack;
+        }
+        return inv.insertItem(slot, stack, simulate);
+    }
+
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        ItemStackHandler inv = inv();
+        if (inv == null || slot < OUT_START) {
+            return ItemStack.EMPTY;
+        }
+        return inv.extractItem(slot, amount, simulate);
+    }
+}

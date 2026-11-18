@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:alloy_furnace_bricks"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.alloy_furnace.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.alloy_furnace.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:alloy_furnace_bricks"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "bricks"
+    ]
+  ],
+  "parent": "creativeengineering:steel"
+}

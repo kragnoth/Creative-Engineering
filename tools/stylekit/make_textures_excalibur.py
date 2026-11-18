@@ -238,6 +238,7 @@ def tier2(made):
 RAMPS['C'] = ['#141414', '#1f1e1d', '#2b2a28', '#383634', '#464441', '#55524f', '#65625e', '#77736e', '#8a8580']
 RAMPS['S'] = ['#12161b', '#1c2229', '#273039', '#333e49', '#404d5a', '#4f5e6c', '#62727f', '#7a8a96', '#a3b1ba']
 RAMPS['F'] = ['#17171a', '#232327', '#303035', '#3e3e44', '#4d4c52', '#5d5c61', '#6e6c70', '#817e80', '#959192']
+RAMPS['R'] = ['#160f0a', '#22170f', '#302014', '#3f2a1a', '#4f3520', '#614227', '#74512f', '#896238', '#9f7543']
 RAMPS['G'] = ['#0e1210', '#171d1a', '#212924', '#2c3530', '#38423c', '#455049', '#535f57', '#636f66', '#768178']
 
 def tier3(made):
@@ -345,6 +346,9 @@ def connected(made):
     ct_set(made, 'coke_oven_bricks', coke, recolour_all(coke, 'B', lift=0.75), 'M')
     blast = recolour_all(BLOCK + 'deepslate_bricks.png', 'F', lift=1.25)
     ct_set(made, 'blast_furnace_bricks', blast, recolour_all(blast, 'F', lift=0.8), 'S')
+    # Alloy furnace: dark ochre refractory brick (Excalibur's blackstone bricks), steel-strapped: it's built of steel
+    alloy = recolour_all(BLOCK + 'polished_blackstone_bricks.png', 'R', lift=1.3)
+    ct_set(made, 'alloy_furnace_bricks', alloy, recolour_all(alloy, 'R', lift=0.8), 'S')
 
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']

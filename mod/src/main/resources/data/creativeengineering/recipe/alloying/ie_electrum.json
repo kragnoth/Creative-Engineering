@@ -1,0 +1,26 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+  "type": "creativeengineering:alloying",
+  "ingredients": [
+    {
+      "tag": "c:ingots/gold",
+      "count": 1
+    },
+    {
+      "tag": "c:ingots/silver",
+      "count": 1
+    }
+  ],
+  "result": {
+    "id": "immersiveengineering:ingot_electrum",
+    "count": 2
+  },
+  "heat": 1,
+  "time": 200,
+  "fuel": 1
+}
