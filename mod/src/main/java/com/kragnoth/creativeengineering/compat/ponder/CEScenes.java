@@ -303,7 +303,7 @@ public final class CEScenes {
         ItemStack out = new ItemStack(ModItems.STEEL_ROD.get(), 2);
         scene.world().createItemOnBeltLike(depot, Direction.UP, out);
         scene.overlay().showControls(util.vector().topOf(depot), Pointing.UP, 50).withItem(out);
-        scene.overlay().showText(90).text("With a die fitted, the press only shapes what that die makes: rods, gears or wire. It works on belts and depots as usual")
+        scene.overlay().showText(90).text("With a die fitted, the press only shapes what that die makes: rods, gears, or wire pushed out of rods. It works on belts and depots as usual")
                 .pointAt(util.vector().topOf(depot)).placeNearTarget().attachKeyFrame();
         scene.idle(100);
         scene.overlay().showText(80).text("Dies never wear out. Without a die the press is an ordinary press again")

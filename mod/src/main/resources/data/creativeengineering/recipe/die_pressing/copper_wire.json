@@ -1,15 +1,15 @@
 {
   "type": "creativeengineering:die_pressing",
   "die": {
-    "item": "creativeengineering:wire_die"
+    "item": "creativeengineering:extrusion_die"
   },
   "ingredient": {
-    "tag": "c:ingots/copper"
+    "tag": "c:rods/copper"
   },
   "results": [
     {
       "id": "creativeengineering:copper_wire",
-      "count": 2
+      "count": 1
     }
   ]
 }

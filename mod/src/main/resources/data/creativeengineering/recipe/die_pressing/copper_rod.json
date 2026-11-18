@@ -1,0 +1,15 @@
+{
+  "type": "creativeengineering:die_pressing",
+  "die": {
+    "item": "creativeengineering:rod_die"
+  },
+  "ingredient": {
+    "tag": "c:ingots/copper"
+  },
+  "results": [
+    {
+      "id": "creativeengineering:copper_rod",
+      "count": 2
+    }
+  ]
+}

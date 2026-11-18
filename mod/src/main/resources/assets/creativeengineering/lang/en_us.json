@@ -51,7 +51,8 @@
   "block.creativeengineering.alloy_furnace_bricks": "Alloy Furnace Bricks",
   "item.creativeengineering.rod_die": "Rod Die",
   "item.creativeengineering.gear_die": "Gear Die",
-  "item.creativeengineering.wire_die": "Wire Die",
+  "item.creativeengineering.extrusion_die": "Extrusion Die",
+  "item.creativeengineering.copper_rod": "Copper Rod",
   "item.creativeengineering.iron_rod": "Iron Rod",
   "item.creativeengineering.steel_rod": "Steel Rod",
   "item.creativeengineering.iron_gear": "Iron Gear",
@@ -160,7 +161,7 @@
   "creativeengineering.ponder.alloy_furnace.text_6": "When alloys share ingredients, wrench a brick to an output hatch and set its filter: only matching alloys are made",
   "creativeengineering.ponder.press_dies.header": "Shaping Metal with Press Dies",
   "creativeengineering.ponder.press_dies.text_1": "Right-click a Mechanical Press with a die to fit it. Sneak-right-click with an empty hand takes it out",
-  "creativeengineering.ponder.press_dies.text_2": "With a die fitted, the press only shapes what that die makes: rods, gears or wire. It works on belts and depots as usual",
+  "creativeengineering.ponder.press_dies.text_2": "With a die fitted, the press only shapes what that die makes: rods, gears, or wire pushed out of rods. It works on belts and depots as usual",
   "creativeengineering.ponder.press_dies.text_3": "Dies never wear out. Without a die the press is an ordinary press again",
   "creativeengineering.ponder.tag.creativeengineering": "Creative Engineering",
   "creativeengineering.ponder.tag.creativeengineering.description": "Steel and heavy industry, the Create way"

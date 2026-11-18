@@ -5,6 +5,12 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.5.2-alpha: Extrusion Die (2026-11-18) - test in game
+- [ ] The Wire Die is now the Extrusion Die (8 steel sheets around string): a die block with a round hole and wire coming out. Old `wire_die` items from 0.5.0 are gone.
+- [ ] Rod Die now also makes Copper Rods (copper ingot → 2).
+- [ ] Extrusion Die: copper rod → copper wire, steel rod → steel wire (1 each, so still 2 wire per ingot). Ingots no longer make wire directly.
+- [ ] JEI shows the rod → wire chain; Ponder text updated.
+
 ## 0.5.1-alpha: die art (2026-11-18) - look in game
 - [ ] Dies are steel molds with the product's shape sunk into the face (rod groove, gear pocket with a centre pin, wire coil channel). Check they read at inventory size and in hand.
 

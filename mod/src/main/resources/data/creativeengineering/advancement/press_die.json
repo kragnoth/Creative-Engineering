@@ -35,12 +35,12 @@
         ]
       }
     },
-    "wire_die": {
+    "extrusion_die": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "creativeengineering:wire_die"
+            "items": "creativeengineering:extrusion_die"
           }
         ]
       }
@@ -50,7 +50,7 @@
     [
       "rod_die",
       "gear_die",
-      "wire_die"
+      "extrusion_die"
     ]
   ],
   "parent": "creativeengineering:steel"

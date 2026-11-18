@@ -25,7 +25,7 @@ def tag(t): return {'tag': t}
 SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet',
                 'coal_coke', 'coke_dust', 'cast_iron_ingot', 'cast_iron_nugget', 'cast_iron_sheet',
                 'steel_ingot', 'steel_nugget', 'steel_sheet', 'slag',
-                'rod_die', 'gear_die', 'wire_die', 'iron_rod', 'steel_rod', 'iron_gear', 'steel_gear', 'copper_wire', 'steel_wire']
+                'rod_die', 'gear_die', 'extrusion_die', 'copper_rod', 'iron_rod', 'steel_rod', 'iron_gear', 'steel_gear', 'copper_wire', 'steel_wire']
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOR = ['helmet', 'chestplate', 'leggings', 'boots']
 BLOCKS = ['blister_steel_block', 'coke_block', 'cast_iron_block', 'steel_block']
@@ -83,7 +83,8 @@ LANG = collections.OrderedDict([
     ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
     ('item.%s.rod_die' % MODID, 'Rod Die'),
     ('item.%s.gear_die' % MODID, 'Gear Die'),
-    ('item.%s.wire_die' % MODID, 'Wire Die'),
+    ('item.%s.extrusion_die' % MODID, 'Extrusion Die'),
+    ('item.%s.copper_rod' % MODID, 'Copper Rod'),
     ('item.%s.iron_rod' % MODID, 'Iron Rod'),
     ('item.%s.steel_rod' % MODID, 'Steel Rod'),
     ('item.%s.iron_gear' % MODID, 'Iron Gear'),
@@ -311,12 +312,14 @@ shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'
 def die_press(name, die, ingredient, result, count):
     put(R + '/die_pressing/%s.json' % name, {'type': ce('die_pressing'), 'die': item(ce(die)), 'ingredient': ingredient,
         'results': [{'id': ce(result), 'count': count}]})
-for metal in ('iron', 'steel'):
+for metal in ('copper', 'iron', 'steel'):
     die_press(metal + '_rod', 'rod_die', tag('c:ingots/' + metal), metal + '_rod', 2)
+for metal in ('iron', 'steel'):
     die_press(metal + '_gear', 'gear_die', tag('c:plates/' + metal), metal + '_gear', 1)
-die_press('copper_wire', 'wire_die', tag('c:ingots/copper'), 'copper_wire', 2)
-die_press('steel_wire', 'wire_die', tag('c:ingots/steel'), 'steel_wire', 2)
-for d, core in (('rod_die', item('minecraft:stick')), ('gear_die', item('create:cogwheel')), ('wire_die', item('minecraft:string'))):
+# Extrusion: the press pushes a rod through the die's hole and wire comes out (real extrusion; wire is never stamped)
+for metal in ('copper', 'steel'):
+    die_press(metal + '_wire', 'extrusion_die', tag('c:rods/' + metal), metal + '_wire', 1)
+for d, core in (('rod_die', item('minecraft:stick')), ('gear_die', item('create:cogwheel')), ('extrusion_die', item('minecraft:string'))):
     shaped(d, ['SSS', 'S#S', 'SSS'], {'S': tag('c:plates/steel'), '#': core}, ce(d), category='equipment')
 
 # ---------------------------------------------------------------------------------------- tags
@@ -352,8 +355,8 @@ tagfile('c', 'item', 'ingots', ['#c:ingots/blister_steel', '#c:ingots/cast_iron'
 tagfile('c', 'item', 'nuggets', ['#c:nuggets/blister_steel', '#c:nuggets/cast_iron', '#c:nuggets/steel'])
 tagfile('c', 'item', 'plates', ['#c:plates/blister_steel', '#c:plates/cast_iron', '#c:plates/steel'])
 tagfile('c', 'item', 'slag', [ce('slag')])
-tagfile(MODID, 'item', 'dies', [ce('rod_die'), ce('gear_die'), ce('wire_die')])
-for kind, metals in (('rods', ('iron', 'steel')), ('gears', ('iron', 'steel')), ('wires', ('copper', 'steel'))):
+tagfile(MODID, 'item', 'dies', [ce('rod_die'), ce('gear_die'), ce('extrusion_die')])
+for kind, metals in (('rods', ('copper', 'iron', 'steel')), ('gears', ('iron', 'steel')), ('wires', ('copper', 'steel'))):
     for m in metals:
         tagfile('c', 'item', '%s/%s' % (kind, m), [ce('%s_%s' % (m, kind[:-1]))])
     tagfile('c', 'item', kind, ['#c:%s/%s' % (kind, m) for m in metals])
@@ -395,7 +398,7 @@ adv('coke_oven', 'blister_steel', ce('coal_coke'), {'coke': has(ce('coal_coke'))
 adv('blast_furnace', 'coke_oven', ce('cast_iron_ingot'), {'cast': has(ce('cast_iron_ingot'))})
 adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot'))}, 'goal')
 adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
-adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die', 'wire_die')})
+adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die', 'extrusion_die')})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 
