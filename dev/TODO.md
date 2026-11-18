@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.3-alpha: visible alloy furnace filters (2026-11-18) - look in game
+- [ ] On an output-hatch brick with a filter set, the filter item now renders over the hatch on each side (like a Basin's), sitting just proud of the face. Empty filters show nothing until you look at the slot.
+
 ## 0.6.2-alpha: beam bolts no longer stretch (2026-11-18) - look in game
 - [ ] Joists along X and Z: bolts are square 2x2 heads on every face (no smeared streaks on tops or sides); grain runs along the beam. Posts unchanged.
 

@@ -11,6 +11,13 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 public final class CEClient {
     private CEClient() {}
 
+    /** Create draws filter slots (and their items) through SmartBlockEntityRenderer; without one they're invisible. */
+    @SubscribeEvent
+    static void renderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.ALLOY_FURNACE.get(),
+                com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer::new);
+    }
+
     @SubscribeEvent
     static void clientSetup(FMLClientSetupEvent event) {
         // Ponder ships with Create; PonderCompat is only touched behind this check (same pattern as Tarbound).

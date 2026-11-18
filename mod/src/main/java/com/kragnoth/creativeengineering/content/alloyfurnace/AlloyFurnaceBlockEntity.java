@@ -120,7 +120,7 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
     static final class HatchFilterSlot extends ValueBoxTransform.Sided {
         @Override
         protected Vec3 getSouthLocation() {
-            return VecHelper.voxelSpace(8, 8, 16.05);
+            return VecHelper.voxelSpace(8, 8, 16.25); // just proud of the hatch, so the filter item reads
         }
 
         @Override
