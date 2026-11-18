@@ -35,7 +35,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
   - Create, Flywheel and JEI API are compile-only (Create slim, non-transitive).
 
 ## Next goal
-**Steelworks tier 3: the blast furnace** (spec §4). Reuse the coke oven's patterns: per-brick storage, compact view, `BoilerHeater` heat, arm point, belt input, JEI category, `automationBlocker` ("No air blast").
+**Steelworks tier 3: the blast furnace** (spec §4), then **tier 4: the alloy furnace** (spec §4b, 0.4.0; decided 2026-11-18). The arc crucible is dropped: recycling and ore doubling are left to Create and KubeJS. Reuse the coke oven's patterns: per-brick storage, compact view, `BoilerHeater` heat, arm point, belt input, JEI category, `automationBlocker` ("No air blast").
 - Air blast: detect `create:encased_fan` blocks blowing into the bottom layer with speed > 0, through Create's fan block entity.
 - Add the `blast_smelting` recipe type, the `blast_furnace_fuel` data map, display-link sources for both machines, and an EMI category.
 

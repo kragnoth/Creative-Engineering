@@ -142,6 +142,26 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 
 **Visuals:** a lit window band glows by heat level, flame and smoke at the top, and a hot-metal glow on the output side when steel is being made.
 
+## 4b. Tier 4: alloy furnace (planned 0.4.0; decided with Kragnoth 2026-11-18)
+**Why:** Create's mixer does one batch per basin. That's fine early on, but it doesn't scale. This is the industrial bulk route. It is expensive to build and run, so it's an upgrade, not a cheap replacement (rule 11).
+
+**Build:** steel sheets + blast furnace bricks, so it comes after tier 3. It forms a stack like the blast furnace: 1×1 to 3×3 footprint, 2–6 tall. Every brick adds parallel batch slots.
+
+**Running costs, all required:**
+- Blaze burners underneath. Heated or superheated, per recipe, like Create's `HeatCondition`.
+- **Coke** consumed per batch from a fuel slot (data map `creativeengineering:alloy_furnace_fuel`).
+- At least one **encased fan** blowing into the bottom layer. More fans means faster, at their stress cost.
+
+**Inputs:** a mixed buffer, like a basin. Batches are matched by ratio.
+
+**Output:** the same ratios as the mixer. No bonus yield; the pay-off is throughput.
+
+**Recipes:** JSON type `creativeengineering:alloying`. It can optionally inherit Create heated/superheated `mixing` recipes whose ingredients and results are all items and whose result is in `c:ingots` (brass and any modded alloy work in bulk automatically).
+
+**Integration:** the same as every machine: §0 contract, hand use, Jade, JEI, Tarbound, Ponder.
+
+**Not doing:** the arc crucible, recycling and ore doubling. Create's crushing, washing and KubeJS already cover those.
+
 ## 5. Recipes reusing Create machines (no new blocks)
 | Recipe | Machine |
 |---|---|
@@ -164,7 +184,7 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 - **Steel:**
   - Steel casing (encasing, like Create's casings).
   - Steel block, girder and sheet.
-  - Later modules: arc crucible, derrick, pumpjack.
+  - Later: the Alloy Furnace (tier 4), derrick, pumpjack.
 - **Creosote:** treated timber set. Creosoted track sleepers are **deferred** to a later rail & timber module, but the framework ships now (§6b).
 - **Slag:** slag gravel, slag bricks.
 

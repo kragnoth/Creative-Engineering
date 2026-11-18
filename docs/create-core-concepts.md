@@ -125,4 +125,7 @@ Our route (approved direction, 2026-11-18) is a ladder of three real-world mater
 2. **Coke oven:** any size, any heat. Coke, plus creosote as an optional bonus that is voided when full.
 3. **Blast furnace:** heated burners. **Cast iron** by default; encased fans blowing in (the air blast) make **steel**. Slag is a bonus.
 
-Higher grades substitute for lower ones through tags, so nothing becomes a dead end. Molten metal and casting stay out of Steelworks.
+Higher grades substitute for lower ones through tags, so nothing becomes a dead end.
+4. **Alloy furnace** (tier 4): bulk alloying after steel. Needs burners, coke and fans.
+
+No molten metal, casting or arc crucible: recycling and ore doubling are left to Create's crushing and washing and to KubeJS.
