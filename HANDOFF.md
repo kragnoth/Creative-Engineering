@@ -52,8 +52,11 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 - **0.5.0-alpha: Metalworking (gap module 4).** `content/metalworking/`: `DieBehaviour` attached to Create's press via `BlockEntityBehaviourEvent` (saved + synced, drops on break); `PressDies` handles fitting (RightClickBlock, so deployers work) and the recipe override; `mixin/MechanicalPressRecipeMixin` is one MixinExtras `@ModifyReturnValue` on `MechanicalPressBlockEntity.getRecipe` (require=0, config not required). With a die fitted only `die_pressing` recipes run. JEI, Jade, Ponder.
 
+- **0.5.1–0.5.3:** dies drawn as molds of their product; the wire die was tried as an extrusion die and then removed (Kragnoth). Wire items and art stay without recipes for later.
+- **0.6.0-alpha: treated timber.** Creosote's first use: Spout filling (planks 125 mB, stripped logs/wood 250 mB) or 8-around-a-bucket crafting. Planks, stairs, slab, log, wood, and `treated_beam` (`content/timber/TreatedBeamBlock` extends Create's `GirderBlock` for connection logic; our own models; shafts refused). Palette ramp `W` from Kragnoth's reference photo.
+
 ## Next goal
-1. Kragnoth tests 0.4.0–0.5.0.
+1. Kragnoth tests 0.4.0–0.6.0.
 2. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks petroleum.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.

@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:treated_planks"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.treated_wood.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.treated_wood.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "treated_planks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:treated_planks"
+          }
+        ]
+      }
+    },
+    "treated_log": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:treated_log"
+          }
+        ]
+      }
+    },
+    "treated_wood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:treated_wood"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "treated_planks",
+      "treated_log",
+      "treated_wood"
+    ]
+  ],
+  "parent": "creativeengineering:coke_oven"
+}

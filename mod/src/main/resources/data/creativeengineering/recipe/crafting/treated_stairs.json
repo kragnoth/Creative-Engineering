@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "creativeengineering:treated_planks"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:treated_stairs",
+    "count": 4
+  }
+}

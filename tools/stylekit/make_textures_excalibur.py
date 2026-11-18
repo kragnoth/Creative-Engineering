@@ -487,6 +487,39 @@ def metalworking(made):
     for metal, ramp in (('copper', 'U'), ('steel', 'S')):
         made.append(save(recolour_all(ITEM + 'string.png', ramp, lift=1.1), 'item/%s_wire' % metal))
 
+# ---------------------------------------------------------------------------------------- treated timber
+# Creosote-soaked wood (Kragnoth's reference photo): near-black end grain, deep oxblood-brown faces, warm orange
+# where the grain catches the light.
+RAMPS['W'] = ['#1c100b', '#2c180f', '#3e2114', '#532a17', '#6a341a', '#82401e', '#9a4e24', '#b05f2d', '#c7773c']
+
+def soot_ends(img, k=0.7):
+    """Darken an end-grain texture toward its rim, the way creosote soaks in deepest at the cut ends."""
+    out = img.copy()
+    for y in range(16):
+        for x in range(16):
+            c = img.getpixel((x, y))
+            if c[3] and (x in (0, 15) or y in (0, 15)):
+                out.putpixel((x, y), _darker(c, k))
+    return out
+
+def bolt(img, x, y):
+    st = [hexrgb(h) for h in RAMPS['S']]
+    img.putpixel((x, y), st[7]); img.putpixel((x + 1, y), st[5]); img.putpixel((x, y + 1), st[4]); img.putpixel((x + 1, y + 1), st[2])
+
+def timber(made):
+    planks = recolour_all(BLOCK + 'spruce_planks.png', 'W', lift=0.9)
+    made.append(save(planks, 'block/treated_planks'))
+    side = recolour_all(BLOCK + 'stripped_spruce_log.png', 'W', lift=0.95)
+    top = soot_ends(recolour_all(BLOCK + 'stripped_spruce_log_top.png', 'W', lift=0.5), 0.6)
+    made.append(save(side, 'block/treated_log'))
+    made.append(save(top, 'block/treated_log_top'))
+    # beam: the log side with steel bolts through it, and a sooty end
+    beam = side.copy()
+    for (x, y) in ((5, 7), (9, 7)):   # one through-bolt pair per block, inside the faces the beam models show
+        bolt(beam, x, y)
+    made.append(save(beam, 'block/treated_beam'))
+    made.append(save(soot_ends(top, 0.75), 'block/treated_beam_end'))
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -518,6 +551,7 @@ if __name__ == '__main__':
     tier3(made)
     connected(made)
     metalworking(made)
+    timber(made)
     made = [m for m in made if m]
     layers = []
     for n in (1, 2):

@@ -41,6 +41,23 @@ public final class ModBlocks {
     public static final DeferredBlock<AlloyFurnaceBlock> ALLOY_FURNACE_BRICKS = BLOCKS.register("alloy_furnace_bricks",
             () -> new AlloyFurnaceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN)
                     .requiresCorrectToolForDrops().strength(3.5F, 8.0F).sound(SoundType.NETHER_BRICKS)));
+    // Creosote-treated timber (coke-oven creosote, applied with a Spout or a bucket)
+    public static final DeferredBlock<Block> TREATED_PLANKS = BLOCKS.registerSimpleBlock("treated_planks",
+            BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).strength(2.5F, 4.0F).sound(SoundType.WOOD));
+    public static final DeferredBlock<net.minecraft.world.level.block.StairBlock> TREATED_STAIRS = BLOCKS.register("treated_stairs",
+            () -> new net.minecraft.world.level.block.StairBlock(TREATED_PLANKS.get().defaultBlockState(),
+                    BlockBehaviour.Properties.ofFullCopy(TREATED_PLANKS.get())));
+    public static final DeferredBlock<net.minecraft.world.level.block.SlabBlock> TREATED_SLAB = BLOCKS.register("treated_slab",
+            () -> new net.minecraft.world.level.block.SlabBlock(BlockBehaviour.Properties.ofFullCopy(TREATED_PLANKS.get())));
+    public static final DeferredBlock<net.minecraft.world.level.block.RotatedPillarBlock> TREATED_LOG = BLOCKS.register("treated_log",
+            () -> new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN)
+                    .strength(2.5F, 4.0F).sound(SoundType.WOOD)));
+    public static final DeferredBlock<net.minecraft.world.level.block.RotatedPillarBlock> TREATED_WOOD = BLOCKS.register("treated_wood",
+            () -> new net.minecraft.world.level.block.RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(TREATED_LOG.get())));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.timber.TreatedBeamBlock> TREATED_BEAM = BLOCKS.register("treated_beam",
+            () -> new com.kragnoth.creativeengineering.content.timber.TreatedBeamBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.TERRACOTTA_BROWN).strength(2.5F, 5.0F).sound(SoundType.WOOD).noOcclusion()));
+
     public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));
     public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerSimpleBlock("steel_block",

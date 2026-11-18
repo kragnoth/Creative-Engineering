@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "creativeengineering:treated_logs"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:treated_planks",
+    "count": 4
+  }
+}

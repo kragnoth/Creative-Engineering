@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "minecraft:planks"
+    },
+    "B": {
+      "item": "creativeengineering:creosote_bucket"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:treated_planks",
+    "count": 8
+  }
+}

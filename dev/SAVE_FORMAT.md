@@ -41,3 +41,6 @@ Block/item `alloy_furnace_bricks`; block entity `alloy_furnace`; recipe type/ser
 
 ## Metalworking (0.5.0)
 Items `rod_die`, `gear_die`, (`wire_die` 0.5.0–0.5.1 and `extrusion_die` 0.5.2 were removed in 0.5.3), `copper_rod`, `iron_rod`, `steel_rod`, `iron_gear`, `steel_gear`, `copper_wire`, `steel_wire`; recipe type/serializer `die_pressing`; item tag `creativeengineering:dies`. On Create's `mechanical_press` block entity our behaviour saves `CreativeEngineeringDie` (item stack). Removing the mod leaves that tag unread (harmless) and the die is lost.
+
+## Treated timber (0.6.0)
+Blocks/items `treated_planks`, `treated_stairs`, `treated_slab`, `treated_log`, `treated_wood`, `treated_beam` (Create girder states: `x`, `z`, `top`, `bottom`, `axis`, `waterlogged`). Item tag `creativeengineering:treated_logs`; `creosoted_sleepers` now holds the treated slab.

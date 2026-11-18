@@ -5,6 +5,15 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.0-alpha: treated timber (2026-11-18) - test in game
+- [ ] Spout + creosote (from the coke oven): planks on a belt/depot → Treated Planks (125 mB); stripped logs → Treated Log, stripped wood → Treated Wood (250 mB). JEI shows them under Create's Filling.
+- [ ] Early game: 8 planks / stripped logs / stripped wood around a Creosote Bucket → 8 treated (empty bucket returned).
+- [ ] Treated log → 4 planks; 4 logs → 3 wood; stairs and slabs (double slab drops 2). Axe mines them. Treated planks work in vanilla plank recipes.
+- [ ] Colours: deep oxblood-brown with warm orange grain; near-black, sooty end grain.
+- [ ] Treated Beam (treated log, iron nugget, treated log → 4): place in a line → joists along X / Z; alone or stacked → an 8x8 post; touching a block above/below grows stubs; crossing beams get a bolster. Connects to Create Metal Girders. Bolt pairs show on posts and joists.
+- [ ] A Shaft can NOT be put into a treated beam (would turn it into Create's metal girder).
+- [ ] Advancement "Smells Like a Railway".
+
 ## 0.5.3-alpha: wire die removed (2026-11-18) - test in game
 - [ ] No Extrusion/Wire Die anywhere (JEI, creative tab, recipes). Copper and Steel Wire items still exist (creative tab) with no recipe: kept for later (wire rope).
 - [ ] Rod Die still makes copper, iron and steel rods; Gear Die unchanged.

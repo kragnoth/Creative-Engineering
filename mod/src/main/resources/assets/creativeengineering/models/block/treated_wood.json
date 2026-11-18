@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "creativeengineering:block/treated_log",
+    "side": "creativeengineering:block/treated_log"
+  }
+}

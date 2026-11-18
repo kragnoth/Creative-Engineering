@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "T",
+    "N",
+    "T"
+  ],
+  "key": {
+    "T": {
+      "tag": "creativeengineering:treated_logs"
+    },
+    "N": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:treated_beam",
+    "count": 4
+  }
+}

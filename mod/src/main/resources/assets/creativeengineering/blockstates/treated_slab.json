@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "creativeengineering:block/treated_slab"
+    },
+    "type=top": {
+      "model": "creativeengineering:block/treated_slab_top"
+    },
+    "type=double": {
+      "model": "creativeengineering:block/treated_planks"
+    }
+  }
+}

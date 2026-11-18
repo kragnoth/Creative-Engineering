@@ -1,0 +1,78 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "x": "false",
+        "z": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_pole"
+      }
+    },
+    {
+      "when": {
+        "x": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_x"
+      }
+    },
+    {
+      "when": {
+        "z": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_z"
+      }
+    },
+    {
+      "when": {
+        "x": "true",
+        "z": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_cross"
+      }
+    },
+    {
+      "when": {
+        "top": "true",
+        "x": "true",
+        "z": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_top"
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "x": "true",
+        "z": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_bottom"
+      }
+    },
+    {
+      "when": {
+        "top": "true",
+        "x": "false",
+        "z": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_top"
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "x": "false",
+        "z": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/treated_beam_bottom"
+      }
+    }
+  ]
+}

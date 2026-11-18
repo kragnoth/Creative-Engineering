@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "creativeengineering:treated_log"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:treated_wood",
+    "count": 3
+  }
+}

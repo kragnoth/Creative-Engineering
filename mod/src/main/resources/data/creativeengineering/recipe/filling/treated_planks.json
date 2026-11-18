@@ -1,0 +1,18 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "tag": "minecraft:planks"
+    },
+    {
+      "type": "neoforge:tag",
+      "tag": "c:creosote",
+      "amount": 125
+    }
+  ],
+  "results": [
+    {
+      "id": "creativeengineering:treated_planks"
+    }
+  ]
+}

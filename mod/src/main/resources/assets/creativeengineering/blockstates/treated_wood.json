@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "creativeengineering:block/treated_wood"
+    },
+    "axis=z": {
+      "model": "creativeengineering:block/treated_wood_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "creativeengineering:block/treated_wood_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

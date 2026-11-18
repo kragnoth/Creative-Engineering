@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "creativeengineering:treated_planks",
+    "creativeengineering:treated_stairs",
+    "creativeengineering:treated_slab",
+    "creativeengineering:treated_log",
+    "creativeengineering:treated_wood",
+    "creativeengineering:treated_beam"
+  ]
+}

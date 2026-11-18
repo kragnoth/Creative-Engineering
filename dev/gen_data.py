@@ -82,6 +82,14 @@ LANG = collections.OrderedDict([
     ('advancements.%s.steel.title' % MODID, 'Proper Steel'),
     ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
     ('item.%s.rod_die' % MODID, 'Rod Die'),
+    ('block.%s.treated_planks' % MODID, 'Treated Planks'),
+    ('block.%s.treated_stairs' % MODID, 'Treated Stairs'),
+    ('block.%s.treated_slab' % MODID, 'Treated Slab'),
+    ('block.%s.treated_log' % MODID, 'Treated Log'),
+    ('block.%s.treated_wood' % MODID, 'Treated Wood'),
+    ('block.%s.treated_beam' % MODID, 'Treated Beam'),
+    ('advancements.%s.treated_wood.title' % MODID, 'Smells Like a Railway'),
+    ('advancements.%s.treated_wood.description' % MODID, 'Treat wood with creosote'),
     ('item.%s.gear_die' % MODID, 'Gear Die'),
     ('item.%s.copper_rod' % MODID, 'Copper Rod'),
     ('item.%s.iron_rod' % MODID, 'Iron Rod'),
@@ -319,6 +327,101 @@ for metal in ('iron', 'steel'):
 for d, core in (('rod_die', item('minecraft:stick')), ('gear_die', item('create:cogwheel'))):
     shaped(d, ['SSS', 'S#S', 'SSS'], {'S': tag('c:plates/steel'), '#': core}, ce(d), category='equipment')
 
+# Treated timber: coke-oven creosote soaked into wood. Spout it onto planks / stripped logs on a belt, or (early
+# game) craft 8 around a creosote bucket. Beams use Create's girder logic with our own heavy-timber models.
+def simple_loot(b, slab=False):
+    entry = {'type': 'minecraft:item', 'name': ce(b)}
+    if slab:
+        entry['functions'] = [{'function': 'minecraft:set_count', 'count': 2, 'add': False, 'conditions': [
+            {'condition': 'minecraft:block_state_property', 'block': ce(b), 'properties': {'type': 'double'}}]},
+            {'function': 'minecraft:explosion_decay'}]
+    put('%s/loot_table/blocks/%s.json' % (D, b), {'type': 'minecraft:block', 'pools': [{'rolls': 1, 'bonus_rolls': 0,
+        'entries': [entry], 'conditions': [] if slab else [{'condition': 'minecraft:survives_explosion'}]}],
+        'random_sequence': ce('blocks/' + b)})
+
+TP = ce('block/treated_planks')
+put('%s/models/block/treated_planks.json' % A, {'parent': 'minecraft:block/cube_all', 'textures': {'all': TP}})
+for n, parent in (('treated_stairs', 'stairs'), ('treated_stairs_inner', 'inner_stairs'), ('treated_stairs_outer', 'outer_stairs'),
+                  ('treated_slab', 'slab'), ('treated_slab_top', 'slab_top')):
+    put('%s/models/block/%s.json' % (A, n), {'parent': 'minecraft:block/' + parent, 'textures': {'bottom': TP, 'top': TP, 'side': TP}})
+put('%s/blockstates/treated_planks.json' % A, {'variants': {'': {'model': TP}}})
+put('%s/blockstates/treated_slab.json' % A, {'variants': {'type=bottom': {'model': ce('block/treated_slab')},
+    'type=top': {'model': ce('block/treated_slab_top')}, 'type=double': {'model': TP}}})
+stairs = {}
+for facing, ry in (('east', 0), ('south', 90), ('west', 180), ('north', 270)):
+    for half in ('bottom', 'top'):
+        for shape in ('straight', 'inner_left', 'inner_right', 'outer_left', 'outer_right'):
+            model = ce('block/treated_stairs' + ('_inner' if shape.startswith('inner') else '_outer' if shape.startswith('outer') else ''))
+            y = ry
+            if shape in ('inner_left', 'outer_left'):
+                y -= 90 if half == 'bottom' else 0
+            if shape in ('inner_right', 'outer_right') and half == 'top':
+                y += 90
+            v = {'model': model}
+            if half == 'top':
+                v['x'] = 180
+            if y % 360:
+                v['y'] = y % 360
+            if half == 'top' or y % 360:
+                v['uvlock'] = True
+            stairs['facing=%s,half=%s,shape=%s' % (facing, half, shape)] = v
+put('%s/blockstates/treated_stairs.json' % A, {'variants': stairs})
+for n, side, end in (('treated_log', 'treated_log', 'treated_log_top'), ('treated_wood', 'treated_log', 'treated_log')):
+    put('%s/models/block/%s.json' % (A, n), {'parent': 'minecraft:block/cube_column', 'textures': {'end': ce('block/' + end), 'side': ce('block/' + side)}})
+    put('%s/models/block/%s_horizontal.json' % (A, n), {'parent': 'minecraft:block/cube_column_horizontal', 'textures': {'end': ce('block/' + end), 'side': ce('block/' + side)}})
+    put('%s/blockstates/%s.json' % (A, n), {'variants': {'axis=y': {'model': ce('block/' + n)},
+        'axis=z': {'model': ce('block/%s_horizontal' % n), 'x': 90},
+        'axis=x': {'model': ce('block/%s_horizontal' % n), 'x': 90, 'y': 90}}})
+# Beam models (our own geometry): a heavy 8x8 post, 6x10 joists along X / Z, stubs up and down, a bolster at crossings.
+B, BE = ce('block/treated_beam'), ce('block/treated_beam_end')
+def faces(rot_sides=0, rot_tb=0, end_axis='y'):
+    f = {}
+    for d in ('north', 'south', 'east', 'west', 'up', 'down'):
+        axis = 'z' if d in ('north', 'south') else 'x' if d in ('east', 'west') else 'y'
+        if axis == end_axis:
+            f[d] = {'texture': '#end'}
+        else:
+            f[d] = {'texture': '#side'}
+            r = rot_tb if axis == 'y' else rot_sides
+            if r:
+                f[d]['rotation'] = r
+    return f
+def beam_model(name, elements):
+    put('%s/models/block/treated_beam_%s.json' % (A, name), {'parent': 'minecraft:block/block',
+        'textures': {'side': B, 'end': BE, 'particle': B}, 'elements': elements})
+beam_model('pole', [{'from': [4, 0, 4], 'to': [12, 16, 12], 'faces': faces(end_axis='y')}])
+beam_model('x', [{'from': [0, 3, 5], 'to': [16, 13, 11], 'faces': faces(rot_sides=90, rot_tb=90, end_axis='x')}])
+beam_model('z', [{'from': [5, 3, 0], 'to': [11, 13, 16], 'faces': faces(rot_sides=90, rot_tb=0, end_axis='z')}])
+beam_model('top', [{'from': [5, 13, 5], 'to': [11, 16, 11], 'faces': faces(end_axis='y')}])
+beam_model('bottom', [{'from': [5, 0, 5], 'to': [11, 3, 11], 'faces': faces(end_axis='y')}])
+beam_model('cross', [{'from': [4, 2, 4], 'to': [12, 14, 12], 'faces': faces(end_axis='y')}])
+mp = [{'when': {'x': 'false', 'z': 'false'}, 'apply': {'model': ce('block/treated_beam_pole')}},
+      {'when': {'x': 'true'}, 'apply': {'model': ce('block/treated_beam_x')}},
+      {'when': {'z': 'true'}, 'apply': {'model': ce('block/treated_beam_z')}},
+      {'when': {'x': 'true', 'z': 'true'}, 'apply': {'model': ce('block/treated_beam_cross')}}]
+for xx in (True, False):
+    for part in ('top', 'bottom'):
+        mp.append({'when': {part: 'true', 'x': str(xx).lower(), 'z': str(not xx).lower()}, 'apply': {'model': ce('block/treated_beam_' + part)}})
+put('%s/blockstates/treated_beam.json' % A, {'multipart': mp})
+for n in ('treated_planks', 'treated_stairs', 'treated_slab', 'treated_log', 'treated_wood'):
+    put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
+    simple_loot(n, slab=n == 'treated_slab')
+put('%s/models/item/treated_beam.json' % A, {'parent': ce('block/treated_beam_pole')})
+simple_loot('treated_beam')
+
+CREOSOTE_IN = lambda mb: {'type': 'neoforge:tag', 'tag': 'c:creosote', 'amount': mb}
+for name, src, out, mb in (('treated_planks', tag('minecraft:planks'), 'treated_planks', 125),
+                           ('treated_log', tag('c:stripped_logs'), 'treated_log', 250),
+                           ('treated_wood', tag('c:stripped_woods'), 'treated_wood', 250)):
+    put(R + '/filling/%s.json' % name, {'type': 'create:filling', 'ingredients': [src, CREOSOTE_IN(mb)],
+        'results': [{'id': ce(out)}]})
+    shaped(name + '_by_bucket', ['###', '#B#', '###'], {'#': src, 'B': item(ce('creosote_bucket'))}, ce(out), count=8, category='building')
+shapeless('treated_planks_from_log', [tag(ce('treated_logs'))], ce('treated_planks'), 4)
+shaped('treated_wood', ['##', '##'], {'#': item(ce('treated_log'))}, ce('treated_wood'), count=3, category='building')
+shaped('treated_stairs', ['#  ', '## ', '###'], {'#': item(ce('treated_planks'))}, ce('treated_stairs'), count=4, category='building')
+shaped('treated_slab', ['###'], {'#': item(ce('treated_planks'))}, ce('treated_slab'), count=6, category='building')
+shaped('treated_beam', ['T', 'N', 'T'], {'T': tag(ce('treated_logs')), 'N': tag('c:nuggets/iron')}, ce('treated_beam'), count=4, category='building')
+
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
     put('%s/data/%s/tags/%s/%s.json' % (RES, ns, kind, path), {'replace': replace, 'values': values})
@@ -359,7 +462,14 @@ for kind, metals in (('rods', ('copper', 'iron', 'steel')), ('gears', ('iron', '
     tagfile('c', 'item', kind, ['#c:%s/%s' % (kind, m) for m in metals])
 tagfile(MODID, 'item', 'steel_grade', ['#c:ingots/blister_steel', '#c:ingots/steel'])
 tagfile(MODID, 'item', 'cast_grade', ['#c:ingots/cast_iron', '#c:ingots/steel'])
-tagfile(MODID, 'item', 'creosoted_sleepers', [])  # rail & timber module, later
+tagfile(MODID, 'item', 'creosoted_sleepers', [ce('treated_slab')])  # rail module, later
+tagfile(MODID, 'item', 'treated_logs', [ce('treated_log'), ce('treated_wood')])
+tagfile('minecraft', 'item', 'planks', [ce('treated_planks')])
+tagfile('minecraft', 'block', 'planks', [ce('treated_planks')])
+for kind in ('item', 'block'):
+    tagfile('minecraft', kind, 'wooden_stairs', [ce('treated_stairs')])
+    tagfile('minecraft', kind, 'wooden_slabs', [ce('treated_slab')])
+tagfile('minecraft', 'block', 'mineable/axe', [ce(b) for b in ('treated_planks', 'treated_stairs', 'treated_slab', 'treated_log', 'treated_wood', 'treated_beam')])
 # Vanilla: tool/armour tags drive enchanting tables, anvils and other mods' checks.
 for t in TOOLS:
     tagfile('minecraft', 'item', t + 's', [ce('blister_steel_' + t)])
@@ -396,6 +506,7 @@ adv('blast_furnace', 'coke_oven', ce('cast_iron_ingot'), {'cast': has(ce('cast_i
 adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot'))}, 'goal')
 adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
 adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die')})
+adv('treated_wood', 'coke_oven', ce('treated_planks'), {n: has(ce(n)) for n in ('treated_planks', 'treated_log', 'treated_wood')})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

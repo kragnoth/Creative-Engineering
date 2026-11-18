@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:stripped_woods"
+    },
+    "B": {
+      "item": "creativeengineering:creosote_bucket"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:treated_wood",
+    "count": 8
+  }
+}
