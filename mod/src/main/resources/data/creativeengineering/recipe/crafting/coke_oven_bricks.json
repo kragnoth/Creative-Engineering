@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "BSB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:brick"
+    },
+    "S": {
+      "tag": "c:plates/blister_steel"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:coke_oven_bricks",
+    "count": 2
+  }
+}

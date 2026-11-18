@@ -26,3 +26,30 @@ bash tools/config_defaults.sh   # IE/IP config defaults
 ```
 
 Third-party sources, jars and assets are never committed. The scripts fetch the exact pinned versions.
+
+## For pack makers
+
+Everything is data-driven, so datapacks or KubeJS (`event.custom({...})`) can add, remove or change recipes.
+
+**Coking** (Coke Oven), `creativeengineering:coking`:
+```json
+{ "type": "creativeengineering:coking",
+  "ingredient": { "item": "minecraft:coal" },
+  "result": { "id": "creativeengineering:coal_coke", "count": 1 },
+  "creosote": 250,
+  "time": 400 }
+```
+- `creosote` is the mB of creosote oil per item. It's optional and defaults to 0. When the oven's tank is full, the rest is vented.
+- `time` is ticks per item at ×1 heat. It's optional and defaults to 400.
+- Speed by heat source: passive heat ×0.5, blaze burner ×1, superheated ×2.
+
+**Other hooks:**
+- **Cementation** is a plain `minecraft:blasting` recipe (carbon-packed iron → blister steel). Create's fan runs it in bulk.
+- **Packing** is `create:compacting`.
+- **Coke as fuel** is set in the NeoForge `furnace_fuels` data map, which Create's blaze burners also read.
+- **Heat sources** are anything registered with Create's `BoilerHeater` API, or in `#create:passive_boiler_heaters`.
+- **Tags:**
+  - `c:coal_coke` (any mod's coke works)
+  - `c:creosote` (fluid)
+  - `creativeengineering:steel_grade` and `creativeengineering:cast_grade` (higher grades substitute for lower ones)
+- **Coming with tier 3:** `creativeengineering:blast_smelting` and the `creativeengineering:blast_furnace_fuel` data map.

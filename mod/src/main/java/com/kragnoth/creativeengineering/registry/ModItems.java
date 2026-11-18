@@ -30,6 +30,14 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> BLISTER_STEEL_BLOCK =
             ITEMS.registerSimpleBlockItem(ModBlocks.BLISTER_STEEL_BLOCK);
 
+    // Tier 2: coking
+    public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
+    public static final DeferredItem<Item> COKE_DUST = ITEMS.registerSimpleItem("coke_dust");
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> COKE_OVEN_BRICKS =
+            ITEMS.registerSimpleBlockItem(ModBlocks.COKE_OVEN_BRICKS);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> COKE_BLOCK =
+            ITEMS.registerSimpleBlockItem(ModBlocks.COKE_BLOCK);
+
     // Blister steel gear: iron < blister steel < diamond. Attack values follow vanilla's iron set.
     public static final DeferredItem<SwordItem> BLISTER_STEEL_SWORD = ITEMS.register("blister_steel_sword",
             () -> new ShearForged.Sword(new Item.Properties().attributes(SwordItem.createAttributes(ModTiers.BLISTER_STEEL, 3, -2.4F))));
@@ -56,7 +64,8 @@ public final class ModItems {
     public static List<DeferredItem<? extends Item>> tabOrder() {
         return List.of(CARBON_PACKED_IRON, BLISTER_STEEL_NUGGET, BLISTER_STEEL_INGOT, BLISTER_STEEL_SHEET, BLISTER_STEEL_BLOCK,
                 BLISTER_STEEL_SWORD, BLISTER_STEEL_PICKAXE, BLISTER_STEEL_AXE, BLISTER_STEEL_SHOVEL, BLISTER_STEEL_HOE,
-                BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS);
+                BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
+                COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

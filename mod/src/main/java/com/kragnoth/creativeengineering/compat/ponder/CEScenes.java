@@ -6,6 +6,8 @@ import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
+import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -87,6 +89,79 @@ public final class CEScenes {
                 .placeNearTarget()
                 .attachKeyFrame();
         scene.idle(90);
+        scene.markAsFinished();
+    }
+
+    /**
+     * "coke_oven" (6x6): blaze burners at y=1 under a 2x2x2 oven (x 2-3, y 2-3, z 2-3); a funnel feeding coal at
+     * (1,3,2); an extracting funnel at (4,2,3) taking coke out.
+     */
+    public static void cokeOven(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("coke_oven", "Coking Coal in a Coke Oven");
+        scene.configureBasePlate(0, 0, 6);
+        scene.showBasePlate();
+        scene.idle(10);
+
+        Selection burners = util.select().fromTo(2, 1, 2, 3, 1, 3);
+        Selection oven = util.select().fromTo(2, 2, 2, 3, 3, 3);
+        Selection in = util.select().position(1, 3, 2);
+        Selection out = util.select().position(4, 2, 3);
+
+        scene.world().showSection(oven, Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(80)
+                .text("Coke Oven Bricks placed together form one oven, up to 3 wide and 3 tall")
+                .pointAt(util.vector().topOf(3, 3, 3))
+                .placeNearTarget()
+                .attachKeyFrame();
+        scene.idle(90);
+        scene.overlay().showText(70)
+                .text("Every brick adds four coking slots: bigger ovens coke more at once")
+                .pointAt(util.vector().topOf(2, 3, 2))
+                .placeNearTarget();
+        scene.idle(80);
+
+        scene.world().showSection(burners, Direction.UP);
+        scene.idle(15);
+        for (int x = 2; x <= 3; x++) {
+            for (int y = 2; y <= 3; y++) {
+                for (int z = 2; z <= 3; z++) {
+                    scene.world().modifyBlock(new BlockPos(x, y, z), st -> st.setValue(CokeOvenBlock.LIT, true), false);
+                }
+            }
+        }
+        scene.overlay().showText(90)
+                .text("It needs heat below every column. Fire or magma works at half speed, a Blaze Burner at full speed, superheated at double")
+                .pointAt(util.vector().centerOf(2, 1, 2))
+                .placeNearTarget()
+                .attachKeyFrame();
+        scene.idle(100);
+
+        scene.world().showSection(in, Direction.EAST);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(1, 3, 2), Pointing.DOWN, 50).withItem(new ItemStack(Items.COAL));
+        scene.overlay().showText(70)
+                .text("Funnels, hoppers, belts and arms feed it from any side")
+                .pointAt(util.vector().blockSurface(new BlockPos(1, 3, 2), Direction.WEST))
+                .placeNearTarget()
+                .attachKeyFrame();
+        scene.idle(80);
+        scene.world().showSection(out, Direction.WEST);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(4, 2, 3), Pointing.DOWN, 50).withItem(new ItemStack(ModItems.COAL_COKE.get()));
+        scene.overlay().showText(70)
+                .text("Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items")
+                .pointAt(util.vector().topOf(4, 2, 3))
+                .placeNearTarget();
+        scene.idle(80);
+
+        scene.overlay().showOutline(PonderPalette.OUTPUT, "creosote", oven, 80);
+        scene.overlay().showText(90)
+                .text("Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest just vents as smoke, and the oven keeps going")
+                .pointAt(util.vector().topOf(2, 3, 2))
+                .placeNearTarget()
+                .attachKeyFrame();
+        scene.idle(100);
         scene.markAsFinished();
     }
 }

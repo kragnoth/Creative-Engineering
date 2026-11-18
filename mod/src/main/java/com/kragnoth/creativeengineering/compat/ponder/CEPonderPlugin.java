@@ -18,6 +18,8 @@ public class CEPonderPlugin implements PonderPlugin {
     public void registerScenes(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         helper.forComponents(ModItems.CARBON_PACKED_IRON.getId(), ModItems.BLISTER_STEEL_INGOT.getId())
                 .addStoryBoard("cementation", CEScenes::cementation);
+        helper.forComponents(ModItems.COKE_OVEN_BRICKS.getId(), ModItems.COAL_COKE.getId())
+                .addStoryBoard("coke_oven", CEScenes::cokeOven);
     }
 
     @Override
@@ -31,6 +33,8 @@ public class CEPonderPlugin implements PonderPlugin {
                 .register();
         helper.addToTag(tag)
                 .add(ModItems.CARBON_PACKED_IRON.getId())
-                .add(ModItems.BLISTER_STEEL_INGOT.getId());
+                .add(ModItems.BLISTER_STEEL_INGOT.getId())
+                .add(ModItems.COKE_OVEN_BRICKS.getId())
+                .add(ModItems.COAL_COKE.getId());
     }
 }

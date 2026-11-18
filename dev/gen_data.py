@@ -22,10 +22,11 @@ def item(i): return {'item': i}
 def tag(t): return {'tag': t}
 
 # ---------------------------------------------------------------------------------------- content
-SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet']
+SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet',
+                'coal_coke', 'coke_dust', 'creosote_bucket']
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOR = ['helmet', 'chestplate', 'leggings', 'boots']
-BLOCKS = ['blister_steel_block']
+BLOCKS = ['blister_steel_block', 'coke_block']
 
 LANG = collections.OrderedDict([
     ('itemGroup.%s' % MODID, 'Creative Engineering'),
@@ -43,6 +44,24 @@ LANG = collections.OrderedDict([
     ('advancements.%s.blister_steel.description' % MODID, 'Bake carbon-packed iron into blister steel with a fan through lava'),
     ('advancements.%s.shear_forged.title' % MODID, 'Shear-Forged'),
     ('advancements.%s.shear_forged.description' % MODID, 'Make a blister steel tool or piece of armour'),
+    ('item.%s.coal_coke' % MODID, 'Coal Coke'),
+    ('item.%s.coke_dust' % MODID, 'Coke Dust'),
+    ('item.%s.creosote_bucket' % MODID, 'Creosote Bucket'),
+    ('block.%s.coke_oven_bricks' % MODID, 'Coke Oven Bricks'),
+    ('block.%s.coke_block' % MODID, 'Block of Coal Coke'),
+    ('block.%s.creosote' % MODID, 'Creosote Oil'),
+    ('fluid_type.%s.creosote' % MODID, 'Creosote Oil'),
+    ('%s.jei.coking' % MODID, 'Coking'),
+    ('%s.jei.coking.creosote_bonus' % MODID, 'Bonus: vented as smoke if the oven\'s tank is full'),
+    ('%s.coke_oven.size' % MODID, 'Size: %sx%sx%s'),
+    ('%s.coke_oven.heat' % MODID, 'Heat: %s'),
+    ('%s.coke_oven.heat.none' % MODID, 'none'),
+    ('%s.coke_oven.slots' % MODID, 'Coking: %s / %s slots'),
+    ('%s.coke_oven.creosote' % MODID, 'Creosote: %s / %s mB'),
+    ('%s.coke_oven.blocker.no_heat' % MODID, 'No heat: put a heat source under every column'),
+    ('%s.coke_oven.blocker.output_full' % MODID, 'Output full'),
+    ('advancements.%s.coke_oven.title' % MODID, 'Purity in Pyrolysis'),
+    ('advancements.%s.coke_oven.description' % MODID, 'Coke coal in a Coke Oven'),
 ])
 for t in TOOLS + ARMOR:
     LANG['item.%s.blister_steel_%s' % (MODID, t)] = 'Blister Steel %s' % t.capitalize()
@@ -62,6 +81,21 @@ for b in BLOCKS:
         'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce(b)}],
                    'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
         'random_sequence': ce('blocks/' + b)})
+
+# Coke oven bricks: lit / unlit models
+for name, tex in [('coke_oven_bricks', 'coke_oven_bricks'), ('coke_oven_bricks_lit', 'coke_oven_bricks_lit')]:
+    put('%s/models/block/%s.json' % (A, name), {'parent': 'minecraft:block/cube_all', 'textures': {'all': ce('block/' + tex)}})
+put('%s/models/item/coke_oven_bricks.json' % A, {'parent': ce('block/coke_oven_bricks')})
+put('%s/blockstates/coke_oven_bricks.json' % A, {'variants': {
+    'lit=false': {'model': ce('block/coke_oven_bricks')}, 'lit=true': {'model': ce('block/coke_oven_bricks_lit')}}})
+put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
+    'type': 'minecraft:block',
+    'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],
+               'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
+    'random_sequence': ce('blocks/coke_oven_bricks')})
+# Creosote fluid block: model only carries the particle texture
+put('%s/models/block/creosote.json' % A, {'textures': {'particle': ce('block/creosote_still')}})
+put('%s/blockstates/creosote.json' % A, {'variants': {'': {'model': ce('block/creosote')}}})
 
 # ---------------------------------------------------------------------------------------- recipes
 R = D + '/recipe'
@@ -107,6 +141,23 @@ for a, pat in [('helmet', ['###', '# #']), ('chestplate', ['# #', '###', '###'])
                ('boots', ['# #', '# #'])]:
     shaped('blister_steel_' + a, pat, {'#': M}, ce('blister_steel_' + a))
 
+# Tier 2: coking (docs/steelworks-spec.md 3). time = ticks per coking slot at x1 heat.
+put(R + '/coking/coal_coke.json', {'type': ce('coking'), 'ingredient': item('minecraft:coal'),
+    'result': {'id': ce('coal_coke'), 'count': 1}, 'creosote': 250, 'time': 400})
+put(R + '/coking/coke_block.json', {'type': ce('coking'), 'ingredient': item('minecraft:coal_block'),
+    'result': {'id': ce('coke_block'), 'count': 1}, 'creosote': 2250, 'time': 3600})
+put(R + '/coking/charcoal.json', {'type': ce('coking'), 'ingredient': tag('minecraft:logs_that_burn'),
+    'result': {'id': 'minecraft:charcoal', 'count': 1}, 'creosote': 100, 'time': 400})
+put(R + '/milling/coke_dust.json', {'type': 'create:milling', 'ingredients': [tag('c:coal_coke')],
+    'processing_time': 100, 'results': [{'id': ce('coke_dust')}]})
+shaped('coke_oven_bricks', ['BBB', 'BSB', 'BBB'], {'B': item('minecraft:brick'), 'S': tag('c:plates/blister_steel')},
+       ce('coke_oven_bricks'), count=2, category='building')
+shaped('coke_block', ['###', '###', '###'], {'#': item(ce('coal_coke'))}, ce('coke_block'), category='building')
+shapeless('coal_coke_from_block', [item(ce('coke_block'))], ce('coal_coke'), 9)
+# Fuel: coke burns twice as long as coal (furnaces and Create's blaze burners both read this data map).
+put('%s/data/neoforge/data_maps/item/furnace_fuels.json' % RES, {'values': {
+    ce('coal_coke'): {'burn_time': 3200}, ce('coke_block'): {'burn_time': 32000}}})
+
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
     put('%s/data/%s/tags/%s/%s.json' % (RES, ns, kind, path), {'replace': replace, 'values': values})
@@ -119,8 +170,16 @@ tagfile('c', 'block', 'storage_blocks/blister_steel', [ce('blister_steel_block')
 tagfile('c', 'item', 'ingots', ['#c:ingots/blister_steel'])
 tagfile('c', 'item', 'nuggets', ['#c:nuggets/blister_steel'])
 tagfile('c', 'item', 'plates', ['#c:plates/blister_steel'])
-tagfile('c', 'item', 'storage_blocks', ['#c:storage_blocks/blister_steel'])
-tagfile('c', 'block', 'storage_blocks', ['#c:storage_blocks/blister_steel'])
+tagfile('c', 'item', 'storage_blocks', ['#c:storage_blocks/blister_steel', '#c:storage_blocks/coal_coke'])
+tagfile('c', 'block', 'storage_blocks', ['#c:storage_blocks/blister_steel', '#c:storage_blocks/coal_coke'])
+tagfile('c', 'item', 'coal_coke', [ce('coal_coke')])
+tagfile('c', 'item', 'dusts/coal_coke', [ce('coke_dust')])
+tagfile('c', 'item', 'dusts', ['#c:dusts/coal_coke'])
+tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
+tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
+tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
+# Tarbound (optional, soft): jobs may burn coke (docs/tarbound-compat.md A3). Ignored when Tarbound is absent.
+put('%s/data/tarbound/tags/item/pool_fuel.json' % RES, {'replace': False, 'values': [{'id': '#c:coal_coke', 'required': False}]})
 # Grade tags (docs/steelworks-spec.md 1): higher grades join these as they arrive.
 tagfile(MODID, 'item', 'steel_grade', ['#c:ingots/blister_steel'])
 tagfile(MODID, 'item', 'cast_grade', [])
@@ -132,9 +191,9 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS])
-tagfile('minecraft', 'block', 'needs_stone_tool', [ce(b) for b in BLOCKS])
-tagfile('minecraft', 'block', 'beacon_base_blocks', [ce(b) for b in BLOCKS])
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks')])
+tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block')])
+tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block')])
 
 # ---------------------------------------------------------------------------------------- advancements
 ADV = D + '/advancement'
@@ -155,6 +214,7 @@ def adv(name, parent, icon, criteria, frame='task'):
 adv('root', None, ce('blister_steel_ingot'), {'iron': has('minecraft:iron_ingot')})
 adv('carbon_packed_iron', 'root', ce('carbon_packed_iron'), {'packed': has(ce('carbon_packed_iron'))})
 adv('blister_steel', 'carbon_packed_iron', ce('blister_steel_ingot'), {'blister': has(ce('blister_steel_ingot'))}, 'goal')
+adv('coke_oven', 'blister_steel', ce('coal_coke'), {'coke': has(ce('coal_coke'))})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

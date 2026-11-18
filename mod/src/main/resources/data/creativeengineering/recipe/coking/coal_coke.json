@@ -1,0 +1,12 @@
+{
+  "type": "creativeengineering:coking",
+  "ingredient": {
+    "item": "minecraft:coal"
+  },
+  "result": {
+    "id": "creativeengineering:coal_coke",
+    "count": 1
+  },
+  "creosote": 250,
+  "time": 400
+}

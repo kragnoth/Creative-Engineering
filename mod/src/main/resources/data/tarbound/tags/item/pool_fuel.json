@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:coal_coke",
+      "required": false
+    }
+  ]
+}

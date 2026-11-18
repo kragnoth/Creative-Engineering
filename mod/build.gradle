@@ -40,6 +40,12 @@ configurations {
 dependencies {
     // Ponder ships inside Create 6; compile against its API only.
     compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}") { transitive = false }
+    // Create itself (slim jar, nothing transitive) for ConnectivityHandler, BoilerHeater, belts, arms, goggles.
+    compileOnly("com.simibubi.create:create-${minecraft_version}:${create_maven_version}:slim") { transitive = false }
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}") { transitive = false }
+    // JEI API for our recipe categories (optional at runtime).
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
 
     // Dev runs only (runClient / runServer / runGameTestServer): never shipped, never a dependency of the jar.
     // Create's Modrinth jar bundles Ponder, Flywheel and Registrate, so it's the only required mod.

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#c:storage_blocks/blister_steel"
+    "#c:storage_blocks/blister_steel",
+    "#c:storage_blocks/coal_coke"
   ]
 }

@@ -62,6 +62,7 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
         <li>Flywheel partial-model conventions</li>
       </ul></li>
     <li><span class="tag done">done</span><b>Create core-concept summary and design rules:</b> <code>docs/create-core-concepts.md</code>.</li>
+    <li><span class="tag done">released</span><b>0.2.0-alpha: Steelworks tier 2 (coke oven).</b> A vault-style multiblock on Create's <code>ConnectivityHandler</code>, heat from <code>BoilerHeater</code>, a compact 2-slot view, belt and arm support, goggles, JEI, Ponder and 4 game tests. Creosote vents when full.</li>
     <li><span class="tag done">released</span><b>0.1.0-alpha: Steelworks tier 1 (blister steel).</b> In <code>mod/</code>. Build with <code>cd mod; ./gradlew build</code>. Data from <code>dev/gen_data.py</code>; Excalibur-based art from <code>tools/stylekit/make_textures_excalibur.py</code>; test list in <code>dev/TODO.md</code>.</li>
     <li><span class="tag done">done</span><b>Tarbound compat plan</b> (<code>docs/tarbound-compat.md</code>). Creative Engineering stays a standard machine (T1–T7). Tarbound adapters (A1–A4) live in Tarbound. No dependencies either way.</li>
     <li><span class="tag done">done</span><b>Dev tools from Tarbound</b> (<code>dev/</code>): Ponder schematic and lang generators, game-test floor, <code>SAVE_FORMAT.md</code>, <code>TODO.md</code>.</li>
@@ -75,7 +76,7 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
 
 <h2>2 · Next goal</h2>
 <section>
-  <p><span class="tag next">next</span><b>Steelworks tier 2: the coke oven.</b> Needs Create as a compile-only dependency for <code>ConnectivityHandler</code>, <code>BoilerHeater</code>, the belt-input hook, goggles and the arm point. The Registrate Maven is blocked from Claude's sandbox, so use Create's jar non-transitively. (Earlier goal, for history:) <b>Scaffold the addon and build the first module: Steelworks.</b> That means the coking oven, the blast furnace, slag and <code>c:ingots/steel</code>. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.</p>
+  <p><span class="tag next">next</span><b>Steelworks tier 3: the blast furnace.</b> Reuse the coke oven's patterns. Air blast = encased fans blowing into the bottom layer. Add <code>blast_smelting</code>, the <code>blast_furnace_fuel</code> data map, display-link sources and EMI. (Earlier:) <b>Steelworks tier 2: the coke oven.</b> Needs Create as a compile-only dependency for <code>ConnectivityHandler</code>, <code>BoilerHeater</code>, the belt-input hook, goggles and the arm point. The Registrate Maven is blocked from Claude's sandbox, so use Create's jar non-transitively. (Earlier goal, for history:) <b>Scaffold the addon and build the first module: Steelworks.</b> That means the coking oven, the blast furnace, slag and <code>c:ingots/steel</code>. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.</p>
   <p><span class="tag done">decided</span>Settled by Kragnoth on 2026-11-18:</p>
   <ul>
     <li><b>Power:</b> pure rotation (SU) only. No FE, no wires, no internal batteries.</li>

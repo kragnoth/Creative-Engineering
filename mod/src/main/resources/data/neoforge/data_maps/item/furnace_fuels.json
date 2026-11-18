@@ -1,0 +1,10 @@
+{
+  "values": {
+    "creativeengineering:coal_coke": {
+      "burn_time": 3200
+    },
+    "creativeengineering:coke_block": {
+      "burn_time": 32000
+    }
+  }
+}

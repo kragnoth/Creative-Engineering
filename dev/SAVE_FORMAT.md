@@ -1,6 +1,9 @@
 # Creative Engineering: save-format freeze
 
-**Status: 0.1.0-alpha (alpha, not yet public).** IDs in use since 0.1.0: `carbon_packed_iron`, the `blister_steel_*` items and block, and the tags `steel_grade`, `cast_grade` and `creosoted_sleepers`. Nothing is frozen until the first public release. These are the IDs **reserved** by `docs/steelworks-spec.md`.
+**Status: 0.2.0-alpha (alpha, not yet public).**
+- IDs in use since 0.1.0: `carbon_packed_iron`, the `blister_steel_*` items and block, and the tags `steel_grade`, `cast_grade` and `creosoted_sleepers`.
+- IDs in use since 0.2.0: `coke_oven_bricks` (block entity `coke_oven`, blockstate `lit`), `coal_coke`, `coke_dust`, `coke_block`, the fluids `creosote`/`flowing_creosote` and `creosote_bucket`, recipe type `coking`, and arm point type `coke_oven`.
+- Coke oven NBT keys: `Controller`, `LastKnownPos`, `Uninitialized`, `Width`, `Height`, `Speed`, `Creosote`, `CreosoteCapacity`, `Items`, `Work`, `Progress0`–`Progress3`. Nothing is frozen until the first public release. These are the IDs **reserved** by `docs/steelworks-spec.md`.
 From the first public release, everything listed here is permanent:
 - **Never rename or remove** a listed ID.
 - Adding is fine. Display names, models, textures and recipes may change.

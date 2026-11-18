@@ -28,8 +28,18 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
   - Test list: `dev/TODO.md`.
   - **Dev runs:** `./gradlew runClient` pulls Create 6.0.10 and JEI as runtime-only mods (`localRuntime`; never shipped). Switch the recipe viewer with `dev_recipe_viewer` = jei / emi / none. Only Kragnoth launches runs.
 
+- **0.2.0-alpha: Steelworks tier 2 (coke oven).**
+  - `content/cokeoven/`: a vault-style multiblock via Create's `ConnectivityHandler`. Each brick holds its own items; the controller holds the shared creosote tank.
+  - Heat from Create's `BoilerHeater`. A compact 2-slot automation view. Belt input behaviour, an arm point type, goggles, and `automationBlocker()`.
+  - JEI coking category, Ponder scene, 4 game tests.
+  - Create, Flywheel and JEI API are compile-only (Create slim, non-transitive).
+
 ## Next goal
-**Steelworks tier 2: the coke oven** (spec §3, and §0's integration contract).
+**Steelworks tier 3: the blast furnace** (spec §4). Reuse the coke oven's patterns: per-brick storage, compact view, `BoilerHeater` heat, arm point, belt input, JEI category, `automationBlocker` ("No air blast").
+- Air blast: detect `create:encased_fan` blocks blowing into the bottom layer with speed > 0, through Create's fan block entity.
+- Add the `blast_smelting` recipe type, the `blast_furnace_fuel` data map, display-link sources for both machines, and an EMI category.
+
+Earlier goal, kept for history:
 - This needs Create compiled in as a dependency (`compileOnly`), so the multiblock can use `ConnectivityHandler`, `BoilerHeater`, `DirectBeltInputBehaviour`, `IHaveGoggleInformation` and the arm-point registry.
 - Note: the Registrate Maven (`maven.ithundxr.dev`) is blocked from Claude's sandbox. Use Create's jar with `transitive = false` and avoid Registrate types.
 

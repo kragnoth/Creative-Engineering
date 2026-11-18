@@ -1,6 +1,10 @@
 package com.kragnoth.creativeengineering;
 
+import com.kragnoth.creativeengineering.registry.ModArmPoints;
 import com.kragnoth.creativeengineering.registry.ModArmorMaterials;
+import com.kragnoth.creativeengineering.registry.ModBlockEntities;
+import com.kragnoth.creativeengineering.registry.ModFluids;
+import com.kragnoth.creativeengineering.registry.ModRecipes;
 import com.kragnoth.creativeengineering.registry.ModBlocks;
 import com.kragnoth.creativeengineering.registry.ModCreativeTabs;
 import com.kragnoth.creativeengineering.registry.ModItems;
@@ -17,10 +21,18 @@ public final class CreativeEngineering {
     public static final String MODID = "creativeengineering";
 
     public CreativeEngineering(IEventBus modBus) {
+        ModFluids.init(); // its block and bucket live in the BLOCKS / ITEMS registers below
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
+        ModFluids.TYPES.register(modBus);
+        ModFluids.FLUIDS.register(modBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ModRecipes.TYPES.register(modBus);
+        ModRecipes.SERIALIZERS.register(modBus);
+        ModArmPoints.TYPES.register(modBus);
         ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
+        modBus.addListener(ModBlockEntities::registerCapabilities);
     }
 
     public static ResourceLocation id(String path) {

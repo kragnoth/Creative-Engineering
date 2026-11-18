@@ -19,6 +19,13 @@ BLOCK = EXC + '/assets/minecraft/textures/block/'
 ARMOR = EXC + '/overlay_1.21.1/assets/minecraft/textures/models/armor/'
 
 # Treated-wood handle ramp: IE-style reddish brown, darkened toward Excalibur's values
+# Coke-oven brick: dusky fired brick, darker than vanilla brick (IE coke-brick flavour, Excalibur values)
+RAMPS['B'] = ['#1c0f0b', '#2d1912', '#40231a', '#542e21', '#673a29', '#7b4632', '#8e553d', '#a26649', '#b57957']
+# Coke: porous silver-grey carbon
+RAMPS['K'] = ['#151617', '#212325', '#2e3134', '#3c3f43', '#4b4f53', '#5b5f64', '#6c7176', '#7e8389', '#92979d']
+# Creosote oil: dark amber-brown
+RAMPS['O'] = ['#0d0805', '#170e08', '#22140b', '#2e1b0e', '#3b2311', '#4a2c14', '#5a3617', '#6b411b', '#7d4d20']
+EMBER = [hexrgb('#ff9a3c'), hexrgb('#e8661c'), hexrgb('#b8400f')]
 RAMPS['T'] = ['#1a0f0a', '#2a1810', '#3b2216', '#4d2c1b', '#5e3722', '#70432a', '#834f31', '#965c38', '#a96a42']
 
 def lum(c):
@@ -162,6 +169,71 @@ def sheet_plate():
     img.putpixel((6, 8), TEMPER[0])                          # a single temper fleck
     return img
 
+def recolour_all(src, ramp, lift=1.0):
+    """Every opaque pixel to the nearest-brightness tone of one ramp (used for coke, creosote, bricks)."""
+    im = src if isinstance(src, Image.Image) else Image.open(src).convert('RGBA')
+    out = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    for y in range(im.height):
+        for x in range(im.width):
+            c = im.getpixel((x, y))
+            if c[3] >= 128:
+                out.putpixel((x, y), nearest(RAMPS[ramp], lum(c), lift))
+    return out
+
+def coke_oven_bricks(lit):
+    """Excalibur's bricks in coke-brick tones; the lit variant glows in the mortar joints (ember)."""
+    src = Image.open(BLOCK + 'bricks.png').convert('RGBA')
+    img = recolour_all(src, 'B', lift=0.95)
+    if lit:
+        # mortar = the darkest quarter of the source: those joints glow
+        ls = sorted(lum(src.getpixel((x, y))) for y in range(16) for x in range(16))
+        cut = ls[len(ls) // 4]
+        for y in range(16):
+            for x in range(16):
+                if lum(src.getpixel((x, y))) <= cut:
+                    img.putpixel((x, y), EMBER[(x + 2 * y) % 3])
+    return img
+
+def coke_item(src, lift=1.35):
+    """Excalibur shapes recoloured to coke, with a few dark pores and bright glints for the porous look."""
+    img = recolour_all(src, 'K', lift=lift)
+    pts = [(x, y) for y in range(16) for x in range(16) if img.getpixel((x, y))[3]]
+    k = [hexrgb(h) for h in RAMPS['K']]
+    for i, p in enumerate(pts[3::7]):
+        img.putpixel(p, k[1] if i % 2 == 0 else k[7])
+    return img
+
+def creosote_strip(src):
+    return recolour_all(src, 'O', lift=0.42)
+
+def creosote_bucket():
+    """Excalibur's lava bucket with the lava (saturated orange pixels) turned to creosote; the bucket stays."""
+    im = Image.open(ITEM + 'lava_bucket.png').convert('RGBA')
+    out = im.copy()
+    for y in range(16):
+        for x in range(16):
+            c = im.getpixel((x, y))
+            if c[3] < 128:
+                continue
+            h, sat, v = colorsys.rgb_to_hsv(c[0] / 255, c[1] / 255, c[2] / 255)
+            if sat > 0.45 and (h < 0.16 or h > 0.95):
+                out.putpixel((x, y), nearest(RAMPS['O'], lum(c), 0.7))
+    return out
+
+def tier2(made):
+    made.append(save(coke_oven_bricks(False), 'block/coke_oven_bricks'))
+    made.append(save(coke_oven_bricks(True), 'block/coke_oven_bricks_lit'))
+    made.append(save(coke_item(ITEM + 'coal.png', lift=2.3), 'item/coal_coke'))
+    made.append(save(coke_item(ITEM + 'gunpowder.png'), 'item/coke_dust'))
+    made.append(save(coke_item(BLOCK + 'coal_block.png', lift=1.9), 'block/coke_block'))
+    made.append(save(creosote_bucket(), 'item/creosote_bucket'))
+    import shutil
+    for name in ('still', 'flow'):
+        strip = creosote_strip(BLOCK + 'lava_%s.png' % name)
+        save(strip, 'block/creosote_%s' % name)
+        shutil.copy(BLOCK + 'lava_%s.png.mcmeta' % name, '%s/block/creosote_%s.png.mcmeta' % (TEX, name))
+        made.append(None)
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -189,6 +261,8 @@ if __name__ == '__main__':
     made.append(save(img, 'block/blister_steel_block'))
     # Sheet: Excalibur has no Create sheet; keep the hand-drawn one from make_textures.py (same blister-steel ramp).
     made.append(save(sheet_plate(), 'item/blister_steel_sheet'))
+    tier2(made)
+    made = [m for m in made if m]
     layers = []
     for n in (1, 2):
         img, kinds = recolour(ARMOR + 'iron_layer_%d.png' % n)

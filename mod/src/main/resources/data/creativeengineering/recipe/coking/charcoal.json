@@ -1,0 +1,12 @@
+{
+  "type": "creativeengineering:coking",
+  "ingredient": {
+    "tag": "minecraft:logs_that_burn"
+  },
+  "result": {
+    "id": "minecraft:charcoal",
+    "count": 1
+  },
+  "creosote": 100,
+  "time": 400
+}
