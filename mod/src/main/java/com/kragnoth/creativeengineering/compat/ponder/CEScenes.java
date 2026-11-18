@@ -6,6 +6,7 @@ import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.api.scene.SceneBuilder;
 import net.createmod.ponder.api.scene.SceneBuildingUtil;
 import net.createmod.ponder.api.scene.Selection;
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlock;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -169,6 +170,56 @@ public final class CEScenes {
                 .placeNearTarget()
                 .attachKeyFrame();
         scene.idle(100);
+        scene.markAsFinished();
+    }
+
+    /**
+     * "blast_furnace" (5x5): a blaze burner at (2,1,2) under a 1x1x3 stack (2,2..4,2); a funnel charging the top at
+     * (2,5,2); an encased fan at (1,2,2) blowing east into the bottom layer; an extracting funnel at (3,2,2).
+     */
+    public static void blastFurnace(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("blast_furnace", "Cast Iron and Steel in a Blast Furnace");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.idle(10);
+        Selection burner = util.select().position(2, 1, 2);
+        Selection stack = util.select().fromTo(2, 2, 2, 2, 4, 2);
+        scene.world().showSection(burner, Direction.DOWN);
+        scene.world().showSection(stack, Direction.DOWN);
+        scene.idle(15);
+        for (int y = 2; y <= 4; y++) {
+            scene.world().modifyBlock(new BlockPos(2, y, 2),
+                    st -> st.setValue(BlastFurnaceBlock.LIT, true).setValue(BlastFurnaceBlock.WORKING, true), false);
+        }
+        scene.overlay().showText(90)
+                .text("Blast Furnace Bricks stack into one furnace, up to 3 wide and 6 tall. It needs a heated Blaze Burner below")
+                .pointAt(util.vector().topOf(2, 4, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().position(2, 5, 2), Direction.DOWN);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(2, 5, 2), Pointing.DOWN, 50).withItem(new ItemStack(Items.IRON_INGOT));
+        scene.overlay().showText(80)
+                .text("Feed iron and fuel from any side. Coke smelts 2 iron, charcoal 1, coal half")
+                .pointAt(util.vector().topOf(2, 5, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(90);
+        scene.overlay().showControls(util.vector().topOf(2, 4, 2), Pointing.DOWN, 50).withItem(new ItemStack(ModItems.CAST_IRON_INGOT.get()));
+        scene.overlay().showText(70)
+                .text("On its own it makes Cast Iron")
+                .pointAt(util.vector().topOf(2, 4, 2)).placeNearTarget();
+        scene.idle(80);
+        scene.world().showSection(util.select().position(1, 2, 2), Direction.EAST);
+        scene.idle(10);
+        scene.overlay().showText(90)
+                .text("Encased Fans blowing into the bottom layer give it an air blast: now it makes Steel. Each extra fan makes it a quarter faster")
+                .pointAt(util.vector().centerOf(1, 2, 2)).placeNearTarget().attachKeyFrame();
+        scene.overlay().showControls(util.vector().topOf(2, 4, 2), Pointing.DOWN, 60).withItem(new ItemStack(ModItems.STEEL_INGOT.get()));
+        scene.idle(100);
+        scene.world().showSection(util.select().position(3, 2, 2), Direction.WEST);
+        scene.idle(10);
+        scene.overlay().showText(80)
+                .text("Take out metal and slag from any side. Slag is a bonus: when it's full it's thrown away, never blocking the furnace")
+                .pointAt(util.vector().topOf(3, 2, 2)).placeNearTarget();
+        scene.idle(90);
         scene.markAsFinished();
     }
 }

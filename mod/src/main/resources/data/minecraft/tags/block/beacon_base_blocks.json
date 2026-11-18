@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "creativeengineering:blister_steel_block"
+    "creativeengineering:blister_steel_block",
+    "creativeengineering:steel_block"
   ]
 }

@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:steel_ingot"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.steel.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.steel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "steel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:steel_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "steel"
+    ]
+  ],
+  "parent": "creativeengineering:blast_furnace"
+}

@@ -1,5 +1,7 @@
 package com.kragnoth.creativeengineering.compat.jade;
 
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlock;
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlockEntity;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlockEntity;
 import snownee.jade.api.IWailaClientRegistration;
@@ -13,10 +15,12 @@ public class CEJadePlugin implements IWailaPlugin {
     @Override
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(CokeOvenJadeProvider.INSTANCE, CokeOvenBlockEntity.class);
+        registration.registerBlockDataProvider(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlockEntity.class);
     }
 
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(CokeOvenJadeProvider.INSTANCE, CokeOvenBlock.class);
+        registration.registerBlockComponent(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlock.class);
     }
 }

@@ -32,4 +32,17 @@ public final class ModArmPoints {
                     return new ArmInteractionPoint(this, level, pos, state);
                 }
             });
+
+    public static final DeferredHolder<ArmInteractionPointType, ArmInteractionPointType> BLAST_FURNACE =
+            TYPES.register("blast_furnace", () -> new ArmInteractionPointType() {
+                @Override
+                public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
+                    return state.is(ModBlocks.BLAST_FURNACE_BRICKS.get());
+                }
+
+                @Override
+                public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
+                    return new ArmInteractionPoint(this, level, pos, state);
+                }
+            });
 }

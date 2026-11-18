@@ -33,6 +33,7 @@ public final class CreativeEngineering {
         ModArmorMaterials.ARMOR_MATERIALS.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         modBus.addListener(ModBlockEntities::registerCapabilities);
+        modBus.addListener(com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel::register);
     }
 
     public static ResourceLocation id(String path) {

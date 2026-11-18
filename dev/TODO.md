@@ -5,7 +5,24 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
-## 0.2.3-alpha: hand + bucket use (2026-11-18) - test in game
+## 0.3.0-alpha: Steelworks tier 3, blast furnace (2026-11-18) - test in game
+- [ ] Recipe: bricks + nether brick + blister steel sheet → 2 Blast Furnace Bricks. Stack them 1–3 wide, up to 6 tall; goggles show the size.
+- [ ] Heat: a **heated** Blaze Burner under the bottom layer (magma/campfire don't count). Superheated = x2 (averaged over the footprint). No heat → goggles/Jade "No heat".
+- [ ] Fuel: coke smelts 2 iron, charcoal 1, coal ½ (data map `blast_furnace_fuel`). No fuel → "No fuel".
+- [ ] No fans: iron ingot / raw iron / crushed raw iron → Cast Iron Ingot. Iron block → cast iron block (9 fuel units).
+- [ ] An encased fan next to the bottom layer, blowing **in**: same inputs make Steel. 2–4 fans: +25% each past the first (Jade "Speed").
+- [ ] Blister steel → steel at half fuel, with or without fans.
+- [ ] Raw/crushed iron: 25% slag. Fill the slag slot: the furnace keeps going (slag voided).
+- [ ] Funnels/hoppers/chutes/belts/arms insert iron and fuel from any face (each goes to its slot); extraction gives metal, then slag. Comparator reads the metal output.
+- [ ] Hand: right-click with iron or fuel puts it in; empty hand takes metal, then slag, then input, then fuel, then mid-smelt items.
+- [ ] Working: flames + smoke from the top, crackle; heated idle: embers only.
+- [ ] Cast iron/steel nugget ↔ ingot ↔ block crafting; press ingots into sheets. Gear recipes accept steel (`steel_grade`).
+- [ ] JEI "Blast Furnace" page: cast vs steel output, slag %, burner/fan/fuel row with tooltip. Jade shows size, air, speed, slots %, in/fuel, metal/slag, stop reason.
+- [ ] Ponder `blast_furnace` scene on the bricks, steel and cast iron.
+- [ ] Advancements "Pig Iron and Air" and "Proper Steel".
+- Not done yet (carry over): blast furnace game tests (need a Blaze Burner set to heated in the template), display-link sources, EMI category.
+
+## 0.2.3-alpha: hand + bucket use (2026-11-18) - TESTED OK by Kragnoth
 - [ ] Empty hand, right-click any brick: you get all finished output from the whole oven. With no output: the unstarted input. With neither: whatever is mid-coking (progress lost), like Create's Millstone.
 - [ ] Right-click holding coal or logs: the held stack goes in (creative: the stack stays in hand). Non-cokeable items do nothing.
 - [ ] Empty bucket on any brick: Creosote Bucket (1000 mB taken), with the usual Create tank sound. A filled creosote bucket can't be poured back in.

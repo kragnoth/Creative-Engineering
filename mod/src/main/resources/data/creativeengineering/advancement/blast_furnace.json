@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:cast_iron_ingot"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.blast_furnace.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.blast_furnace.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cast": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:cast_iron_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cast"
+    ]
+  ],
+  "parent": "creativeengineering:coke_oven"
+}

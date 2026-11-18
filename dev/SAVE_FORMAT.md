@@ -26,3 +26,6 @@ Pattern borrowed from Tarbound's `dev/SAVE_FORMAT.md`.
 | Block | Property | Values |
 |---|---|---|
 | `coke_oven_bricks`, `blast_furnace_bricks` | `lit` | `true` / `false` (true while heated; see docs/tarbound-compat.md T4) |
+
+## Block entity NBT: `blast_furnace` (0.3.0)
+Per brick: `Items` (4 slots: 0 iron in, 1 fuel, 2 metal out, 3 slag out), `Work` (2 smelting slots), `Progress0..1` (float ticks), `FuelCredit` (float iron units already paid for), `LastKnownPos`, `Controller` (non-controllers). Controller only: `Width`, `Height`, `Heat` (float, averaged burner level), `Fans` (int). Same `Uninitialized` flag as the coke oven. Blockstate `lit` / `working` as for the coke oven.

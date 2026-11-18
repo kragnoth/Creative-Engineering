@@ -3,6 +3,9 @@
   "values": [
     "creativeengineering:blister_steel_block",
     "creativeengineering:coke_block",
-    "creativeengineering:coke_oven_bricks"
+    "creativeengineering:cast_iron_block",
+    "creativeengineering:steel_block",
+    "creativeengineering:coke_oven_bricks",
+    "creativeengineering:blast_furnace_bricks"
   ]
 }

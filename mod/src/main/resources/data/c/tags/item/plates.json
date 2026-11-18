@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#c:plates/blister_steel"
+    "#c:plates/blister_steel",
+    "#c:plates/cast_iron",
+    "#c:plates/steel"
   ]
 }

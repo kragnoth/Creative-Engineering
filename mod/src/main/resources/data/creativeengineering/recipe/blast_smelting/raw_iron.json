@@ -1,0 +1,15 @@
+{
+  "type": "creativeengineering:blast_smelting",
+  "ingredient": {
+    "tag": "c:raw_materials/iron"
+  },
+  "result_cast": {
+    "id": "creativeengineering:cast_iron_ingot"
+  },
+  "result_blast": {
+    "id": "creativeengineering:steel_ingot"
+  },
+  "iron_units": 1,
+  "slag_chance": 0.25,
+  "time": 200
+}

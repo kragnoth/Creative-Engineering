@@ -1,6 +1,7 @@
 package com.kragnoth.creativeengineering.registry;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastSmeltingRecipe;
 import com.kragnoth.creativeengineering.content.cokeoven.CokingRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -18,4 +19,9 @@ public final class ModRecipes {
             TYPES.register("coking", () -> RecipeType.simple(CreativeEngineering.id("coking")));
     public static final DeferredHolder<RecipeSerializer<?>, CokingRecipe.Serializer> COKING_SERIALIZER =
             SERIALIZERS.register("coking", CokingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<BlastSmeltingRecipe>> BLAST_SMELTING_TYPE =
+            TYPES.register("blast_smelting", () -> RecipeType.simple(CreativeEngineering.id("blast_smelting")));
+    public static final DeferredHolder<RecipeSerializer<?>, BlastSmeltingRecipe.Serializer> BLAST_SMELTING_SERIALIZER =
+            SERIALIZERS.register("blast_smelting", BlastSmeltingRecipe.Serializer::new);
 }

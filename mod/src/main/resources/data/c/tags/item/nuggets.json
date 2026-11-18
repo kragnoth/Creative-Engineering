@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "#c:nuggets/blister_steel"
+    "#c:nuggets/blister_steel",
+    "#c:nuggets/cast_iron",
+    "#c:nuggets/steel"
   ]
 }

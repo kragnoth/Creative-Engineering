@@ -38,6 +38,18 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> COKE_BLOCK =
             ITEMS.registerSimpleBlockItem(ModBlocks.COKE_BLOCK);
 
+    // Tier 3: blast furnace
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BLAST_FURNACE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.BLAST_FURNACE_BRICKS);
+    public static final DeferredItem<Item> CAST_IRON_INGOT = ITEMS.registerSimpleItem("cast_iron_ingot");
+    public static final DeferredItem<Item> CAST_IRON_NUGGET = ITEMS.registerSimpleItem("cast_iron_nugget");
+    public static final DeferredItem<Item> CAST_IRON_SHEET = ITEMS.registerSimpleItem("cast_iron_sheet");
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> CAST_IRON_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CAST_IRON_BLOCK);
+    public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
+    public static final DeferredItem<Item> STEEL_NUGGET = ITEMS.registerSimpleItem("steel_nugget");
+    public static final DeferredItem<Item> STEEL_SHEET = ITEMS.registerSimpleItem("steel_sheet");
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> STEEL_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_BLOCK);
+    public static final DeferredItem<Item> SLAG = ITEMS.registerSimpleItem("slag");
+
     // Blister steel gear: iron < blister steel < diamond. Attack values follow vanilla's iron set.
     public static final DeferredItem<SwordItem> BLISTER_STEEL_SWORD = ITEMS.register("blister_steel_sword",
             () -> new ShearForged.Sword(new Item.Properties().attributes(SwordItem.createAttributes(ModTiers.BLISTER_STEEL, 3, -2.4F))));
@@ -65,7 +77,9 @@ public final class ModItems {
         return List.of(CARBON_PACKED_IRON, BLISTER_STEEL_NUGGET, BLISTER_STEEL_INGOT, BLISTER_STEEL_SHEET, BLISTER_STEEL_BLOCK,
                 BLISTER_STEEL_SWORD, BLISTER_STEEL_PICKAXE, BLISTER_STEEL_AXE, BLISTER_STEEL_SHOVEL, BLISTER_STEEL_HOE,
                 BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
-                COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET);
+                COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET,
+                BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
+                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

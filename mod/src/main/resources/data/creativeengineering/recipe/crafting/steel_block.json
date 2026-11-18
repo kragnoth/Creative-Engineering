@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/steel"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:steel_block",
+    "count": 1
+  }
+}

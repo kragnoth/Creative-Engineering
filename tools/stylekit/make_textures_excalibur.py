@@ -116,7 +116,7 @@ def carbon_packed():
         out.putpixel(q, coal_px[(q[0] * 7 + q[1] * 13) % len(coal_px)])
     return out
 
-def sheet_plate():
+def sheet_plate(ramp='M', fleck=True):
     """Our own sheet, drawn on the rules Create's sheets follow (no Create pixels used): a square plate lying flat,
     seen from above and turned ~45 degrees (a wide squashed diamond); a dark 1 px thickness rim under its lower
     edges; light from the top-left with a bright highlight along the upper-left edge. Thin-metal read comes from
@@ -133,7 +133,7 @@ def sheet_plate():
         '......#####.....',
         '................', '................', '................', '................']
     F = lambda x, y: 0 <= x < 16 and 0 <= y < 16 and face[y][x] == '#'
-    st = [hexrgb(h) for h in RAMPS['M']]
+    st = [hexrgb(h) for h in RAMPS[ramp]]
     img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
     for y in range(16):
         for x in range(16):
@@ -166,7 +166,8 @@ def sheet_plate():
                 continue
             img.putpixel((x, y), st[3] if (x, y + 1) in solid or ((x + 1, y) in solid and y < 8) or ((x - 1, y) in solid and y < 8) else st[0])
     img.putpixel((11, 8), st[7]); img.putpixel((12, 9), st[2])   # one rivet
-    img.putpixel((6, 8), TEMPER[0])                          # a single temper fleck
+    if fleck:
+        img.putpixel((6, 8), TEMPER[0])                      # a single temper fleck
     return img
 
 def recolour_all(src, ramp, lift=1.0):
@@ -232,6 +233,25 @@ def tier2(made):
         shutil.copy(BLOCK + 'lava_%s.png.mcmeta' % name, '%s/block/creosote_%s.png.mcmeta' % (TEX, name))
         made.append(None)
 
+# Tier 3 ramps: cast iron (dark graphite grey, a touch warm), steel (cool blue-grey, brighter top),
+# blast-furnace brick (grey fireclay), slag (glassy dark grey-green)
+RAMPS['C'] = ['#141414', '#1f1e1d', '#2b2a28', '#383634', '#464441', '#55524f', '#65625e', '#77736e', '#8a8580']
+RAMPS['S'] = ['#12161b', '#1c2229', '#273039', '#333e49', '#404d5a', '#4f5e6c', '#62727f', '#7a8a96', '#a3b1ba']
+RAMPS['F'] = ['#17171a', '#232327', '#303035', '#3e3e44', '#4d4c52', '#5d5c61', '#6e6c70', '#817e80', '#959192']
+RAMPS['G'] = ['#0e1210', '#171d1a', '#212924', '#2c3530', '#38423c', '#455049', '#535f57', '#636f66', '#768178']
+
+def tier3(made):
+    made.append(save(recolour_all(BLOCK + 'deepslate_bricks.png', 'F', lift=1.25), 'block/blast_furnace_bricks'))
+    for metal, name in (('C', 'cast_iron'), ('S', 'steel')):
+        img, _ = recolour(ITEM + 'iron_ingot.png', metal=metal, lift=1.0)
+        made.append(save(img, 'item/%s_ingot' % name))
+        img, _ = recolour(ITEM + 'iron_nugget.png', metal=metal, lift=1.0)
+        made.append(save(img, 'item/%s_nugget' % name))
+        img, _ = recolour(BLOCK + 'iron_block.png', metal=metal, lift=1.0)
+        made.append(save(img, 'block/%s_block' % name))
+        made.append(save(sheet_plate(metal, fleck=False), 'item/%s_sheet' % name))
+    made.append(save(recolour_all(ITEM + 'flint.png', 'G', lift=1.2), 'item/slag'))
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 
@@ -260,6 +280,7 @@ if __name__ == '__main__':
     # Sheet: Excalibur has no Create sheet; keep the hand-drawn one from make_textures.py (same blister-steel ramp).
     made.append(save(sheet_plate(), 'item/blister_steel_sheet'))
     tier2(made)
+    tier3(made)
     made = [m for m in made if m]
     layers = []
     for n in (1, 2):

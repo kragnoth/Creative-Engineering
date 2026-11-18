@@ -34,10 +34,18 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
   - JEI coking category, Ponder scene, 4 game tests.
   - Create, Flywheel and JEI API are compile-only (Create slim, non-transitive).
 
+- **0.2.1–0.2.3:** smoke/ember feedback, JEI heat row, Jade provider, Millstone-style hand use and buckets. 0.2.3 TESTED OK.
+
+- **0.3.0-alpha: Steelworks tier 3 (blast furnace). Built, awaiting Kragnoth's in-game test (`dev/TODO.md`).**
+  - `content/blastfurnace/`: same tank-style multiblock as the coke oven (1–3 wide, up to 6 tall). Per brick: iron in, fuel, metal out, slag out, 2 smelting slots, fuel credit.
+  - Heat: heated Blaze Burner only (`BoilerHeater` level ≥ 1), averaged over the footprint. Air blast: `EncasedFanBlockEntity.getAirFlowDirection()` pointing into a bottom-layer brick; any fan → `result_blast` (steel), +25% per extra fan up to 4.
+  - `blast_smelting` recipe JSON: `ingredient`, `result_cast`, `result_blast`, `iron_units`, `slag_chance`, `time`. Fuel data map `creativeengineering:blast_furnace_fuel` (`iron_units`). Slag is voided when full.
+  - 4-slot compact view, belt input, arm point, goggles, Jade, JEI category, Ponder scene. Cast iron + steel ingot/nugget/sheet/block, slag, Excalibur-based textures.
+
 ## Next goal
-**Steelworks tier 3: the blast furnace** (spec §4), then **tier 4: the alloy furnace** (spec §4b, 0.4.0; decided 2026-11-18). The arc crucible is dropped: recycling and ore doubling are left to Create and KubeJS. Reuse the coke oven's patterns: per-brick storage, compact view, `BoilerHeater` heat, arm point, belt input, JEI category, `automationBlocker` ("No air blast").
-- Air blast: detect `create:encased_fan` blocks blowing into the bottom layer with speed > 0, through Create's fan block entity.
-- Add the `blast_smelting` recipe type, the `blast_furnace_fuel` data map, display-link sources for both machines, and an EMI category.
+1. Kragnoth tests 0.3.0. Fix feedback as 0.3.x.
+2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
+3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).
 
 Earlier goal, kept for history:
 - This needs Create compiled in as a dependency (`compileOnly`), so the multiblock can use `ConnectivityHandler`, `BoilerHeater`, `DirectBeltInputBehaviour`, `IHaveGoggleInformation` and the arm-point registry.

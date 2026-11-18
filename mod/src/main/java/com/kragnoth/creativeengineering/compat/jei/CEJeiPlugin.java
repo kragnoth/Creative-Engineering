@@ -23,7 +23,8 @@ public class CEJeiPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new CokingCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new CokingCategory(registration.getJeiHelpers().getGuiHelper()),
+                new BlastSmeltingCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -34,6 +35,8 @@ public class CEJeiPlugin implements IModPlugin {
         }
         registration.addRecipes(CokingCategory.TYPE, level.getRecipeManager()
                 .getAllRecipesFor(ModRecipes.COKING_TYPE.get()).stream().map(RecipeHolder::value).toList());
+        registration.addRecipes(BlastSmeltingCategory.TYPE, level.getRecipeManager()
+                .getAllRecipesFor(ModRecipes.BLAST_SMELTING_TYPE.get()).stream().map(RecipeHolder::value).toList());
     }
 
     @Override
@@ -41,5 +44,7 @@ public class CEJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.COKE_OVEN_BRICKS.get()), CokingCategory.TYPE);
         // Looking up a Blaze Burner's uses shows coking too: it's the oven's heat source.
         registration.addRecipeCatalyst(CokingCategory.createItem("blaze_burner"), CokingCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.BLAST_FURNACE_BRICKS.get()), BlastSmeltingCategory.TYPE);
+        registration.addRecipeCatalyst(CokingCategory.createItem("encased_fan"), BlastSmeltingCategory.TYPE);
     }
 }

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#c:storage_blocks/blister_steel",
-    "#c:storage_blocks/coal_coke"
+    "#c:storage_blocks/coal_coke",
+    "#c:storage_blocks/cast_iron",
+    "#c:storage_blocks/steel"
   ]
 }

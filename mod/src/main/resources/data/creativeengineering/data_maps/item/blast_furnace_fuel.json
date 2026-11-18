@@ -1,0 +1,16 @@
+{
+  "values": {
+    "#c:coal_coke": {
+      "iron_units": 2
+    },
+    "creativeengineering:coke_block": {
+      "iron_units": 18
+    },
+    "minecraft:charcoal": {
+      "iron_units": 1
+    },
+    "minecraft:coal": {
+      "iron_units": 0.5
+    }
+  }
+}

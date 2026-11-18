@@ -1,0 +1,15 @@
+{
+  "type": "creativeengineering:blast_smelting",
+  "ingredient": {
+    "tag": "c:ingots/blister_steel"
+  },
+  "result_cast": {
+    "id": "creativeengineering:steel_ingot"
+  },
+  "result_blast": {
+    "id": "creativeengineering:steel_ingot"
+  },
+  "iron_units": 0.5,
+  "slag_chance": 0.0,
+  "time": 100
+}

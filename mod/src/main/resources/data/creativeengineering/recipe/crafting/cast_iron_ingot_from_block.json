@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "creativeengineering:cast_iron_block"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:cast_iron_ingot",
+    "count": 9
+  }
+}

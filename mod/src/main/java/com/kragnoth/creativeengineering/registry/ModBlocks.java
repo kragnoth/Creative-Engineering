@@ -1,6 +1,7 @@
 package com.kragnoth.creativeengineering.registry;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
+import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlock;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -30,6 +31,15 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(2.0F, 6.0F)
                     .sound(SoundType.STONE)));
+
+    /** Tier 3: stacks into a blast furnace (1-3 wide, up to 6 tall). Cast iron without air, steel with fans blowing in. */
+    public static final DeferredBlock<BlastFurnaceBlock> BLAST_FURNACE_BRICKS = BLOCKS.register("blast_furnace_bricks",
+            () -> new BlastFurnaceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY)
+                    .requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.DEEPSLATE_BRICKS)));
+    public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));
+    public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerSimpleBlock("steel_block",
+            BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(6.0F, 7.0F).sound(SoundType.METAL));
 
     public static final DeferredBlock<Block> COKE_BLOCK = BLOCKS.registerSimpleBlock("coke_block",
             BlockBehaviour.Properties.of()

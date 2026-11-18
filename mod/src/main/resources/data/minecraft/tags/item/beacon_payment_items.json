@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "creativeengineering:blister_steel_ingot"
+    "creativeengineering:blister_steel_ingot",
+    "creativeengineering:steel_ingot"
   ]
 }

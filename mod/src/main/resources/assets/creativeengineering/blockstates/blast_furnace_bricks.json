@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativeengineering:block/blast_furnace_bricks"
+      }
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#c:ingots/blister_steel"
+    "#c:ingots/blister_steel",
+    "#c:ingots/steel"
   ]
 }

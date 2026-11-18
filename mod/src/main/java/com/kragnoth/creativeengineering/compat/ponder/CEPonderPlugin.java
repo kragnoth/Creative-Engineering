@@ -20,6 +20,8 @@ public class CEPonderPlugin implements PonderPlugin {
                 .addStoryBoard("cementation", CEScenes::cementation);
         helper.forComponents(ModItems.COKE_OVEN_BRICKS.getId(), ModItems.COAL_COKE.getId())
                 .addStoryBoard("coke_oven", CEScenes::cokeOven);
+        helper.forComponents(ModItems.BLAST_FURNACE_BRICKS.getId(), ModItems.STEEL_INGOT.getId(), ModItems.CAST_IRON_INGOT.getId())
+                .addStoryBoard("blast_furnace", CEScenes::blastFurnace);
     }
 
     @Override
@@ -35,6 +37,8 @@ public class CEPonderPlugin implements PonderPlugin {
                 .add(ModItems.CARBON_PACKED_IRON.getId())
                 .add(ModItems.BLISTER_STEEL_INGOT.getId())
                 .add(ModItems.COKE_OVEN_BRICKS.getId())
-                .add(ModItems.COAL_COKE.getId());
+                .add(ModItems.COAL_COKE.getId())
+                .add(ModItems.BLAST_FURNACE_BRICKS.getId())
+                .add(ModItems.STEEL_INGOT.getId());
     }
 }

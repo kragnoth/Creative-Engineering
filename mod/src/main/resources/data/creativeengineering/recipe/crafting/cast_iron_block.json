@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:ingots/cast_iron"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:cast_iron_block",
+    "count": 1
+  }
+}
