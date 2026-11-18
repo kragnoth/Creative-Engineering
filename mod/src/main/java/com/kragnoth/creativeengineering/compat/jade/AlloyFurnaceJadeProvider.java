@@ -44,7 +44,6 @@ public enum AlloyFurnaceJadeProvider implements IBlockComponentProvider, IServer
                 else if (i >= AlloyFurnaceBlockEntity.OUT_START) out += s.getCount();
             }
             d.putInt("in", in);
-            d.putInt("fuel", view.getStackInSlot(AlloyFurnaceBlockEntity.FUEL).getCount());
             d.putInt("out", out);
         }
         Component b = be.automationBlocker(List.of());
@@ -70,7 +69,7 @@ public enum AlloyFurnaceJadeProvider implements IBlockComponentProvider, IServer
             if (d.getInt("filters") > 0) {
                 t.add(Component.translatable("creativeengineering.alloy_furnace.filtered", d.getInt("filters")).withStyle(ChatFormatting.GOLD));
             }
-            t.add(Component.translatable("creativeengineering.jade.alloy_items", d.getInt("in"), d.getInt("fuel"), d.getInt("out")).withStyle(ChatFormatting.GRAY));
+            t.add(Component.translatable("creativeengineering.jade.alloy_items", d.getInt("in"), d.getInt("out")).withStyle(ChatFormatting.GRAY));
         }
         if (d.contains("blocker")) {
             Component b = Component.Serializer.fromJson(d.getString("blocker"), a.getLevel().registryAccess());

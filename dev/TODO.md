@@ -5,6 +5,11 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.6-alpha: alloy furnace has no fuel (2026-11-18) - test in game
+- [ ] The alloy furnace burns nothing: heated (or superheated) Blaze Burners under every column are the only running cost. Iron + coke → blister steel just runs; all coke fed in is ingredient.
+- [ ] JEI page: no coke slot; tooltip says the burners are the cost. Jade: "Ingredients / Output" only; no "No fuel" message.
+- [ ] Old furnaces: anything left in the old fuel slot comes out by hand (empty hand, after outputs and ingredients) or by extraction.
+
 ## 0.6.5-alpha: coke as ingredient and fuel (2026-11-18) - test in game
 - [ ] Feed only iron + coal coke (fuel slot empty): blister steel batches start; spare coke in the ingredient slots is burned as fuel, never the coke a batch needs. "No fuel" only shows when there's no fuel anywhere.
 - [ ] With coke/charcoal in the fuel slot, that's used first.

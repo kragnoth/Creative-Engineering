@@ -1,6 +1,5 @@
 package com.kragnoth.creativeengineering.content.alloyfurnace;
 
-import com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel;
 import com.kragnoth.creativeengineering.content.shared.Port;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
@@ -52,14 +51,15 @@ import net.neoforged.neoforge.items.wrapper.RangedWrapper;
  *   <li>Heat: Blaze Burners under EVERY column of the bottom layer. The weakest burner sets which recipes run
  *       (heated / superheated); the average sets speed (x1 .. x2).</li>
  *   <li>Fans blowing into the bottom layer are extra speed: +25% each, up to 4. Not required.</li>
- *   <li>Fuel: each batch burns its recipe's fuel units from the blast-furnace fuel data map (coke 2 per item).</li>
+ *   <li>No fuel of its own: the Blaze Burners are the running cost, as with Create's Basin.</li>
  *   <li>Bulk: volume / 2 batches at once (4 for 2x2x2, 32 for 4x4x4).</li>
  * </ul>
  */
 public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation,
         com.kragnoth.creativeengineering.content.shared.MachineReadout {
     public static final int MIN = 2, MAX = 4, MAX_BRICKS = MAX * MAX * MAX;
-    public static final int INPUTS = 9, FUEL = 9, OUT_START = 10, SLOTS = 19;
+    /** Slot 9 was the fuel slot up to 0.6.5; it's kept only so old saves line up, and is emptied by hand use. */
+    public static final int INPUTS = 9, LEGACY = 9, OUT_START = 10, SLOTS = 19;
     private static final int CHECK_TICKS = 20;
 
     /** One running batch: the recipe, what it consumed (refunded if the furnace breaks), progress in ticks. */
@@ -87,7 +87,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     };
     protected final List<Batch> batches = new ArrayList<>();
-    protected float fuelCredit;
     protected float heatAvg;
     protected int heatMin;
     protected int fans;
@@ -277,8 +276,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         }
         batches.addAll(m.batches);
         m.batches.clear();
-        fuelCredit += m.fuelCredit;
-        m.fuelCredit = 0;
     }
 
     // ------------------------------------------------------------------------------------------------ ticking
@@ -366,7 +363,7 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         List<AlloyRecipes.Job> jobs = AlloyRecipes.all(level);
         int cap = capacity();
         while (batches.size() < cap && startBatch(jobs)) {
-            // keep starting while there are ingredients, fuel and room
+            // keep starting while there are ingredients and room
         }
         float speed = speed();
         for (int i = 0; i < batches.size(); i++) {
@@ -398,13 +395,11 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
 
     private boolean startBatch(List<AlloyRecipes.Job> jobs) {
         for (AlloyRecipes.Job job : jobs) {
-            int[] left = job.heat() > heatMin || !allowed(job) ? null : leftoverAfter(job);
-            if (left == null || !canPay(job.fuel(), left)) {
+            if (job.heat() > heatMin || !allowed(job) || leftoverAfter(job) == null) {
                 continue;
             }
             List<ItemStack> consumed = new ArrayList<>();
             take(job, consumed);
-            pay(job.fuel());
             batches.add(new Batch(job.id(), consumed, 0));
             return true;
         }
@@ -449,36 +444,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
-    /**
-     * Fuel comes from the fuel slot first, then from fuel sitting in the ingredient slots (coke is both an alloying
-     * ingredient and a fuel, and automation fills ingredient slots first). {@code left} = ingredient counts after
-     * this batch's own ingredients are set aside, so a batch never burns what it needs.
-     */
-    private boolean canPay(float units, int[] left) {
-        ItemStack fuel = inv.getStackInSlot(FUEL);
-        float have = fuelCredit + fuel.getCount() * BlastFuel.unitsOf(fuel);
-        for (int i = 0; i < INPUTS && have < units; i++) {
-            have += left[i] * BlastFuel.unitsOf(inv.getStackInSlot(i));
-        }
-        return have >= units;
-    }
-
-    private void pay(float units) {
-        while (fuelCredit < units) {
-            int slot = BlastFuel.unitsOf(inv.getStackInSlot(FUEL)) > 0 ? FUEL : -1;
-            for (int i = 0; slot < 0 && i < INPUTS; i++) {
-                if (BlastFuel.unitsOf(inv.getStackInSlot(i)) > 0) {
-                    slot = i;
-                }
-            }
-            if (slot < 0) {
-                return;
-            }
-            fuelCredit += BlastFuel.unitsOf(inv.getStackInSlot(slot));
-            inv.extractItem(slot, 1, false);
-        }
-        fuelCredit -= units;
-    }
 
     // ------------------------------------------------------------------------------------------------ views & info
 
@@ -520,14 +485,14 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         return out;
     }
 
-    /** Empty-hand use (Millstone-style): outputs first, then inputs, then fuel. */
+    /** Empty-hand use (Millstone-style): outputs first, then inputs (then any pre-0.6.6 fuel left behind). */
     public List<ItemStack> takeForHand() {
         AlloyFurnaceBlockEntity c = getControllerBE();
         List<ItemStack> out = new ArrayList<>();
         if (c == null) {
             return out;
         }
-        for (int[] range : new int[][]{{OUT_START, SLOTS}, {0, INPUTS}, {FUEL, FUEL + 1}}) {
+        for (int[] range : new int[][]{{OUT_START, SLOTS}, {0, INPUTS}, {LEGACY, LEGACY + 1}}) {
             for (int i = range[0]; i < range[1]; i++) {
                 ItemStack s = c.inv.getStackInSlot(i);
                 if (!s.isEmpty()) {
@@ -580,13 +545,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         }
         if (c.heatMin < 1) {
             return Component.translatable("creativeengineering.alloy_furnace.blocker.no_heat");
-        }
-        boolean fuelInInputs = false;
-        for (int i = 0; i < INPUTS; i++) {
-            fuelInInputs |= BlastFuel.unitsOf(c.inv.getStackInSlot(i)) > 0;
-        }
-        if (c.inv.getStackInSlot(FUEL).isEmpty() && !fuelInInputs && c.fuelCredit <= 0 && c.batches.isEmpty()) {
-            return Component.translatable("creativeengineering.blast_furnace.blocker.no_fuel");
         }
         for (int i = OUT_START; i < SLOTS; i++) {
             if (c.inv.getStackInSlot(i).isEmpty()) {
@@ -651,7 +609,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         tag.putInt("Batches", batches.size());
         if (!clientPacket) {
             tag.put("Items", inv.serializeNBT(registries));
-            tag.putFloat("FuelCredit", fuelCredit);
             ListTag list = new ListTag();
             for (Batch b : batches) {
                 CompoundTag t = new CompoundTag();
@@ -681,7 +638,6 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         fans = tag.getInt("Fans");
         if (!clientPacket) {
             inv.deserializeNBT(registries, tag.getCompound("Items"));
-            fuelCredit = tag.getFloat("FuelCredit");
             batches.clear();
             for (Tag t0 : tag.getList("Work", Tag.TAG_COMPOUND)) {
                 CompoundTag t = (CompoundTag) t0;

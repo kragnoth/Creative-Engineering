@@ -22,17 +22,16 @@ import net.neoforged.neoforge.common.crafting.SizedIngredient;
 /**
  * {@code creativeengineering:alloying} (docs/steelworks-spec.md 4b): up to 6 counted ingredients in the same flat form as
  * Ender IO ({@code {"tag": "c:ingots/iron", "count": 1}}), one result. {@code heat} 1 = heated, 2 = superheated burners;
- * {@code fuel} = blast-furnace fuel units burned per batch; {@code time} = ticks per batch at x1.
+ * {@code time} = ticks per batch at x1. No fuel: the burners are the cost (an old {@code fuel} field is ignored).
  * Create's own heated mixing recipes that make ingots are also run (AlloyRecipes), so packs get those for free.
  */
-public record AlloyingRecipe(List<SizedIngredient> ingredients, ItemStack result, int heat, float fuel, int time)
+public record AlloyingRecipe(List<SizedIngredient> ingredients, ItemStack result, int heat, int time)
         implements Recipe<RecipeInput> {
 
     public static final MapCodec<AlloyingRecipe> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             SizedIngredient.FLAT_CODEC.listOf(1, 6).fieldOf("ingredients").forGetter(AlloyingRecipe::ingredients),
             ItemStack.STRICT_CODEC.fieldOf("result").forGetter(AlloyingRecipe::result),
             Codec.intRange(1, 2).optionalFieldOf("heat", 1).forGetter(AlloyingRecipe::heat),
-            Codec.FLOAT.optionalFieldOf("fuel", 1F).forGetter(AlloyingRecipe::fuel),
             Codec.INT.optionalFieldOf("time", 200).forGetter(AlloyingRecipe::time)
     ).apply(i, AlloyingRecipe::new));
 
@@ -40,7 +39,6 @@ public record AlloyingRecipe(List<SizedIngredient> ingredients, ItemStack result
             SizedIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), AlloyingRecipe::ingredients,
             ItemStack.STREAM_CODEC, AlloyingRecipe::result,
             ByteBufCodecs.VAR_INT, AlloyingRecipe::heat,
-            ByteBufCodecs.FLOAT, AlloyingRecipe::fuel,
             ByteBufCodecs.VAR_INT, AlloyingRecipe::time,
             AlloyingRecipe::new);
 

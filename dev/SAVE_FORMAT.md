@@ -44,3 +44,5 @@ Items `rod_die`, `gear_die`, (`wire_die` 0.5.0–0.5.1 and `extrusion_die` 0.5.2
 
 ## Treated timber (0.6.0)
 Blocks/items `treated_planks`, `treated_stairs`, `treated_slab`, `treated_log`, `treated_wood`, `treated_beam` (Create girder states: `x`, `z`, `top`, `bottom`, `axis`, `waterlogged`). Item tag `creativeengineering:treated_logs`; `creosoted_sleepers` now holds the treated slab.
+
+- 0.6.6: `alloy_furnace` no longer saves `FuelCredit`; item slot 9 is unused (legacy fuel, extract-only).

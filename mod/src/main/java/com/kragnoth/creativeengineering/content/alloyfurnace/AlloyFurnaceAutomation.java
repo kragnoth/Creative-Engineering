@@ -1,19 +1,18 @@
 package com.kragnoth.creativeengineering.content.alloyfurnace;
 
-import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.FUEL;
+import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.LEGACY;
 import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.INPUTS;
 import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.OUT_START;
 import static com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.SLOTS;
 
-import com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
  * The formed furnace as 19 slots, the same on every face and the side-less query (spec section 0, tarbound T1-T3):
- * 0-8 ingredients (insert only; one kind takes at most 3 slots so one metal can't crowd out the rest), 9 fuel
- * (insert only), 10-18 output (extract only). Always the controller's storage.
+ * 0-8 ingredients (insert only; one kind takes at most 3 slots so one metal can't crowd out the rest), 9 unused
+ * (pre-0.6.6 fuel; extract only, so leftovers can be pulled out), 10-18 output (extract only). Always the controller's storage.
  */
 final class AlloyFurnaceAutomation implements IItemHandler {
     static final int MAX_SLOTS_PER_KIND = 3;
@@ -44,9 +43,6 @@ final class AlloyFurnaceAutomation implements IItemHandler {
         if (inv == null || stack.isEmpty() || be.getLevel() == null) {
             return false;
         }
-        if (slot == FUEL) {
-            return BlastFuel.unitsOf(stack) > 0;
-        }
         if (slot >= INPUTS) {
             return false;
         }
@@ -69,7 +65,7 @@ final class AlloyFurnaceAutomation implements IItemHandler {
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         ItemStackHandler inv = inv();
-        if (inv == null || slot > FUEL || !isItemValid(slot, stack)) {
+        if (inv == null || slot >= INPUTS || !isItemValid(slot, stack)) {
             return stack;
         }
         return inv.insertItem(slot, stack, simulate);
@@ -78,7 +74,7 @@ final class AlloyFurnaceAutomation implements IItemHandler {
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         ItemStackHandler inv = inv();
-        if (inv == null || slot < OUT_START) {
+        if (inv == null || (slot < OUT_START && slot != LEGACY)) {
             return ItemStack.EMPTY;
         }
         return inv.extractItem(slot, amount, simulate);

@@ -86,8 +86,8 @@ public class AlloyFurnaceBlock extends Block implements IBE<AlloyFurnaceBlockEnt
     }
 
     /**
-     * Hand use like Create's Millstone: an ingredient or fuel in hand goes in; an empty hand takes the output, or
-     * with no output the ingredients, or the fuel.
+     * Hand use like Create's Millstone: an ingredient in hand goes in; an empty hand takes the output, or
+     * with no output the ingredients.
      */
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,

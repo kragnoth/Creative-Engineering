@@ -20,7 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 
-/** JEI page for the alloy furnace: up to 6 counted ingredients, result, burner level, fuel, source. */
+/** JEI page for the alloy furnace: up to 6 counted ingredients, result, burner level, source. */
 public class AlloyingCategory implements IRecipeCategory<AlloyRecipes.Job> {
     public static final RecipeType<AlloyRecipes.Job> TYPE =
             RecipeType.create(CreativeEngineering.MODID, "alloying", AlloyRecipes.Job.class);
@@ -51,7 +51,6 @@ public class AlloyingCategory implements IRecipeCategory<AlloyRecipes.Job> {
         builder.addSlot(RecipeIngredientRole.OUTPUT, 100, 13).setOutputSlotBackground().addItemStack(r.result());
         builder.addSlot(RecipeIngredientRole.CATALYST, 4, 54).addItemStack(CokingCategory.createItem("blaze_burner"));
         builder.addSlot(RecipeIngredientRole.CATALYST, 22, 54).addItemStack(CokingCategory.createItem("encased_fan"));
-        builder.addSlot(RecipeIngredientRole.INPUT, 40, 54).addItemStack(new ItemStack(ModItems.COAL_COKE.get()));
     }
 
     @Override

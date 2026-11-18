@@ -116,13 +116,13 @@ LANG = collections.OrderedDict([
     ('%s.alloy_furnace.filtered' % MODID, 'Recipe filter: %s output hatch(es)'),
     ('%s.alloy_furnace.blocker.loose' % MODID, 'Not formed: build a solid box, 2 to 4 blocks on each side'),
     ('%s.alloy_furnace.blocker.no_heat' % MODID, 'No heat: a heated Blaze Burner under every column'),
-    ('%s.jade.alloy_items' % MODID, 'Ingredients: %s  Fuel: %s  Output: %s'),
+    ('%s.jade.alloy_items' % MODID, 'Ingredients: %s  Output: %s'),
     ('%s.jei.alloying' % MODID, 'Alloy Furnace'),
     ('%s.jei.alloy.heat.1' % MODID, 'Heated'),
     ('%s.jei.alloy.heat.2' % MODID, 'Superheated'),
     ('%s.jei.alloy.time' % MODID, '%ss per batch'),
     ('%s.jei.alloy.inherited' % MODID, 'from %s'),
-    ('%s.jei.alloy.needs_tip' % MODID, 'A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. Fuel: coke (one smelts 2 batches), charcoal or coal. Runs half its brick count of batches at once. To pick between alloys that share ingredients, wrench a brick to an output hatch and set its filter.'),
+    ('%s.jei.alloy.needs_tip' % MODID, 'A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. No fuel: the burners are the running cost. Runs half its brick count of batches at once. To pick between alloys that share ingredients, wrench a brick to an output hatch and set its filter.'),
     ('config.jade.plugin_%s.alloy_furnace' % MODID, 'Alloy Furnace'),
     ('%s.display_source.machine_status' % MODID, 'Machine Status'),
     ('%s.display_source.machine_progress' % MODID, 'Machine Progress'),
@@ -305,15 +305,15 @@ shaped('blast_furnace_bricks', ['NBN', 'BSB', 'NBN'], {'B': item('minecraft:bric
 # Tier 4: alloying (docs/steelworks-spec.md 4b). Ingredients use the flat form Ender IO uses ({"tag": ..., "count": n}).
 # Create's heated mixing alloys (brass...) and Ender IO's alloy_smelting ingots (base + Evolution) are read at runtime,
 # so they need no JSON here. These are optional extras for other mods' metals, loaded only with that mod.
-def alloy(name, ingredients, result, count, mod, heat=1, time=200, fuel=1):
+def alloy(name, ingredients, result, count, mod, heat=1, time=200):
     put(R + '/alloying/%s.json' % name, {'neoforge:conditions': [{'type': 'neoforge:mod_loaded', 'modid': mod}],
         'type': ce('alloying'), 'ingredients': [dict(i, count=n) for i, n in ingredients],
-        'result': {'id': result, 'count': count}, 'heat': heat, 'time': time, 'fuel': fuel})
+        'result': {'id': result, 'count': count}, 'heat': heat, 'time': time})
 # Our own: bulk cementation. Same ratio as compacting with coke (2 iron + 1 coke -> 2 carbon-packed iron -> 2
 # blister steel), in one step: the furnace does the baking the fan would.
 put(R + '/alloying/blister_steel.json', {'type': ce('alloying'),
     'ingredients': [dict(tag('c:ingots/iron'), count=2), dict(tag('c:coal_coke'), count=1)],
-    'result': {'id': ce('blister_steel_ingot'), 'count': 2}, 'heat': 1, 'time': 200, 'fuel': 1})
+    'result': {'id': ce('blister_steel_ingot'), 'count': 2}, 'heat': 1, 'time': 200})
 alloy('ie_electrum', [(tag('c:ingots/gold'), 1), (tag('c:ingots/silver'), 1)], 'immersiveengineering:ingot_electrum', 2, 'immersiveengineering')
 alloy('ie_constantan', [(tag('c:ingots/copper'), 1), (tag('c:ingots/nickel'), 1)], 'immersiveengineering:ingot_constantan', 2, 'immersiveengineering')
 shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'), 'B': item(ce('blast_furnace_bricks')),

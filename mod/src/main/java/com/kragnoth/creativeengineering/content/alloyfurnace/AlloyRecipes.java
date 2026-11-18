@@ -41,7 +41,7 @@ import net.neoforged.neoforge.common.crafting.SizedIngredient;
  */
 public final class AlloyRecipes {
     /** One runnable recipe. heat: 1 heated, 2 superheated. */
-    public record Job(ResourceLocation id, List<SizedIngredient> inputs, ItemStack result, int heat, float fuel, int time,
+    public record Job(ResourceLocation id, List<SizedIngredient> inputs, ItemStack result, int heat, int time,
                       boolean fromCreate) {
         public boolean uses(ItemStack stack) {
             return inputs.stream().anyMatch(s -> s.ingredient().test(stack));
@@ -62,7 +62,7 @@ public final class AlloyRecipes {
         List<Job> out = new ArrayList<>();
         for (RecipeHolder<AlloyingRecipe> h : rm.getAllRecipesFor(ModRecipes.ALLOYING_TYPE.get())) {
             AlloyingRecipe r = h.value();
-            out.add(new Job(h.id(), r.ingredients(), r.result(), r.heat(), r.fuel(), r.time(), false));
+            out.add(new Job(h.id(), r.ingredients(), r.result(), r.heat(), r.time(), false));
         }
         for (RecipeHolder<? extends Recipe<?>> h : rm.getAllRecipesFor(AllRecipeTypes.MIXING.getType())) {
             if (!(h.value() instanceof BasinRecipe r)) {
@@ -81,7 +81,7 @@ public final class AlloyRecipes {
             for (Ingredient i : r.getIngredients()) {
                 in.add(new SizedIngredient(i, 1));
             }
-            out.add(new Job(h.id(), in, o.getStack().copy(), heat == HeatCondition.SUPERHEATED ? 2 : 1, 1F, 200, true));
+            out.add(new Job(h.id(), in, o.getStack().copy(), heat == HeatCondition.SUPERHEATED ? 2 : 1, 200, true));
         }
         enderIo(rm, access, out);
         return out;
@@ -110,7 +110,7 @@ public final class AlloyRecipes {
                     continue;
                 }
                 int energy = json.has("energy") ? json.get("energy").getAsInt() : 3200;
-                out.add(new Job(h.id(), in, result, energy >= 10000 ? 2 : 1, 1F, Math.clamp(energy / 16, 100, 1200), true));
+                out.add(new Job(h.id(), in, result, energy >= 10000 ? 2 : 1, Math.clamp(energy / 16, 100, 1200), true));
             } catch (RuntimeException e) {
                 CreativeEngineering.LOGGER.debug("Alloy furnace skipped {}: {}", h.id(), e.getMessage());
             }

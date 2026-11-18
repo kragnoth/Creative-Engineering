@@ -251,7 +251,7 @@ public final class CEScenes {
         scene.idle(10);
         scene.overlay().showControls(util.vector().topOf(2, 4, 2), Pointing.DOWN, 50).withItem(new ItemStack(Items.COPPER_INGOT));
         scene.overlay().showText(90)
-                .text("Feed ingredients and coke from any side. Half the bricks' count of batches run at once")
+                .text("Feed ingredients from any side. Half the bricks' count of batches run at once. The burners are its only running cost")
                 .pointAt(util.vector().topOf(2, 4, 2)).placeNearTarget().attachKeyFrame();
         scene.idle(100);
         scene.world().showSection(util.select().position(1, 2, 2), Direction.EAST);
