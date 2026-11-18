@@ -23,7 +23,7 @@ def tag(t): return {'tag': t}
 
 # ---------------------------------------------------------------------------------------- content
 SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet',
-                'coal_coke', 'coke_dust', 'creosote_bucket']
+                'coal_coke', 'coke_dust']
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOR = ['helmet', 'chestplate', 'leggings', 'boots']
 BLOCKS = ['blister_steel_block', 'coke_block']
@@ -93,6 +93,10 @@ put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],
                'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
     'random_sequence': ce('blocks/coke_oven_bricks')})
+# Creosote bucket: built at runtime by NeoForge from whatever bucket texture is loaded (vanilla, Excalibur, any
+# pack) with our creosote texture masked into it. No bucket texture of our own.
+put('%s/models/item/creosote_bucket.json' % A, {'parent': 'neoforge:item/bucket_drip',
+    'loader': 'neoforge:fluid_container', 'fluid': ce('creosote')})
 # Creosote fluid block: model only carries the particle texture
 put('%s/models/block/creosote.json' % A, {'textures': {'particle': ce('block/creosote_still')}})
 put('%s/blockstates/creosote.json' % A, {'variants': {'': {'model': ce('block/creosote')}}})

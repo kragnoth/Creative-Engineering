@@ -226,7 +226,6 @@ def tier2(made):
     made.append(save(coke_item(ITEM + 'coal.png', lift=2.3), 'item/coal_coke'))
     made.append(save(coke_item(ITEM + 'gunpowder.png'), 'item/coke_dust'))
     made.append(save(coke_item(BLOCK + 'coal_block.png', lift=1.9), 'block/coke_block'))
-    made.append(save(creosote_bucket(), 'item/creosote_bucket'))
     import shutil
     for name in ('still', 'flow'):
         strip = creosote_strip(BLOCK + 'lava_%s.png' % name)
