@@ -5,6 +5,12 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.2.3-alpha: hand + bucket use (2026-11-18) - test in game
+- [ ] Empty hand, right-click any brick: you get all finished output from the whole oven. With no output: the unstarted input. With neither: whatever is mid-coking (progress lost), like Create's Millstone.
+- [ ] Right-click holding coal or logs: the held stack goes in (creative: the stack stays in hand). Non-cokeable items do nothing.
+- [ ] Empty bucket on any brick: Creosote Bucket (1000 mB taken), with the usual Create tank sound. A filled creosote bucket can't be poured back in.
+- [ ] Ponder text mentions hand and bucket use.
+
 ## 0.2.2-alpha: Jade (2026-11-18) - test in game
 - [ ] `runClient` now has Jade (`dev_jade=true` in gradle.properties).
 - [ ] Looking at any coke oven brick shows: size, heat (xN and source type), coking busy/total slots and progress %, In/Out items with counts, creosote mB (red with "vents" when full), and the stop reason (e.g. "No heat") in red.

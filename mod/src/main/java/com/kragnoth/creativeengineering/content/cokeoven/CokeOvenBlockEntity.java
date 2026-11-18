@@ -324,6 +324,12 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
         return c == null ? creosote : c.creosote;
     }
 
+    /** Clears this brick's coking progress (used when a player takes mid-coking items out by hand). */
+    public void resetProgress() {
+        java.util.Arrays.fill(progress, 0F);
+        setChanged();
+    }
+
     public ItemStackHandler ownItems() {
         return own;
     }

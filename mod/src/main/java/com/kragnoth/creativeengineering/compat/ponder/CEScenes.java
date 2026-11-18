@@ -151,7 +151,7 @@ public final class CEScenes {
         scene.idle(10);
         scene.overlay().showControls(util.vector().topOf(4, 2, 3), Pointing.DOWN, 50).withItem(new ItemStack(ModItems.COAL_COKE.get()));
         scene.overlay().showText(70)
-                .text("Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items")
+                .text("Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items. By hand, right-click with an empty hand")
                 .pointAt(util.vector().topOf(4, 2, 3))
                 .placeNearTarget();
         scene.idle(80);
@@ -164,7 +164,7 @@ public final class CEScenes {
 
         scene.overlay().showOutline(PonderPalette.OUTPUT, "creosote", oven, 80);
         scene.overlay().showText(90)
-                .text("Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going")
+                .text("Coking also gives Creosote Oil. Pump it, or use a bucket, on any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going")
                 .pointAt(util.vector().topOf(2, 3, 2))
                 .placeNearTarget()
                 .attachKeyFrame();

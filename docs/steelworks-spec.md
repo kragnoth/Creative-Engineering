@@ -76,6 +76,12 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 **Creosote:** an internal tank, 1,000 mB per brick block, pumped out of any face by a mechanical pump.
 - **When the tank is full, extra creosote vents as smoke and is lost. The oven never stops** (rule 10).
 
+**Hand use (0.2.3, like Create's Millstone/Basin):**
+- Empty hand takes all output, else the input, else what's mid-coking.
+- Held cokeable items go in.
+- A bucket takes 1000 mB of creosote through Create's FluidHelper.
+- The blast furnace will do the same.
+
 **Info:** goggles show heat, slots busy, progress and creosote. A display-link source gives coke count and creosote %.
 
 **Visuals (revised 0.2.1, Kragnoth):**

@@ -65,9 +65,9 @@
   "creativeengineering.ponder.coke_oven.text_2": "Every brick adds four coking slots: bigger ovens coke more at once",
   "creativeengineering.ponder.coke_oven.text_3": "It needs heat below every column. Fire or magma works at half speed, a Blaze Burner at full speed, superheated at double",
   "creativeengineering.ponder.coke_oven.text_4": "Funnels, hoppers, belts and arms feed it from any side",
-  "creativeengineering.ponder.coke_oven.text_5": "Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items",
+  "creativeengineering.ponder.coke_oven.text_5": "Coal comes out as Coal Coke, logs as Charcoal. Pulling from it only ever takes finished items. By hand, right-click with an empty hand",
   "creativeengineering.ponder.coke_oven.text_6": "While it cokes, smoke rises from the top and it crackles. Embers along the bottom just mean it has heat",
-  "creativeengineering.ponder.coke_oven.text_7": "Coking also gives Creosote Oil. Pump it from any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going",
+  "creativeengineering.ponder.coke_oven.text_7": "Coking also gives Creosote Oil. Pump it, or use a bucket, on any brick. When the tank is full the rest vents in a dark burst, and the oven keeps going",
   "creativeengineering.ponder.tag.creativeengineering": "Creative Engineering",
   "creativeengineering.ponder.tag.creativeengineering.description": "Steel and heavy industry, the Create way"
 }

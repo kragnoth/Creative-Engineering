@@ -4,7 +4,12 @@ import com.kragnoth.creativeengineering.registry.ModBlockEntities;
 import com.simibubi.create.api.connectivity.ConnectivityHandler;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.fluid.FluidHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
@@ -63,6 +68,88 @@ public class CokeOvenBlock extends Block implements IBE<CokeOvenBlockEntity>, IW
         for (int i = 0; i < items.getSlots(); i++) {
             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.getStackInSlot(i).copy());
         }
+    }
+
+    /**
+     * Hand use, like Create's Millstone and Basin (Kragnoth, 0.2.3):
+     * <ul>
+     *   <li>fluid container (bucket...): fills with creosote through Create's FluidHelper, like a Create tank
+     *       (the oven's fluid view is drain-only, so nothing can be poured in);</li>
+     *   <li>something cokeable: puts the held stack in;</li>
+     *   <li>empty hand: takes all finished output; if there is none, the unstarted input; if none, what's mid-coking.</li>
+     * </ul>
+     */
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player,
+                                              InteractionHand hand, BlockHitResult hit) {
+        if (!(level.getBlockEntity(pos) instanceof CokeOvenBlockEntity be)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (!stack.isEmpty()) {
+            if (stack.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.ITEM) != null) {
+                if (level.isClientSide) {
+                    return ItemInteractionResult.SUCCESS;
+                }
+                return FluidHelper.tryFillItemFromBE(level, player, hand, stack, be)
+                        ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
+            IItemHandler view = be.automationItems();
+            if (!view.isItemValid(0, stack)) {
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            }
+            if (!level.isClientSide) {
+                ItemStack rest = view.insertItem(0, stack.copy(), false);
+                if (!player.isCreative()) {
+                    player.setItemInHand(hand, rest);
+                }
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 0.3F, 0.8F);
+            }
+            return ItemInteractionResult.SUCCESS;
+        }
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
+        boolean took = takeAll(be, 1, player);           // finished output first
+        if (!took) {
+            took = takeAll(be, 0, player);               // then unstarted input
+        }
+        if (!took) {
+            for (CokeOvenBlockEntity p : be.parts()) {    // then what's mid-coking (progress is lost, as with the Millstone)
+                took |= give(p.workItems(), player);
+                p.resetProgress();
+            }
+        }
+        if (took) {
+            level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS, 0.2F,
+                    1.0F + level.random.nextFloat());
+        }
+        return ItemInteractionResult.SUCCESS;
+    }
+
+    private static boolean takeAll(CokeOvenBlockEntity be, int slot, Player player) {
+        boolean took = false;
+        for (CokeOvenBlockEntity p : be.parts()) {
+            ItemStack s = p.ownItems().getStackInSlot(slot);
+            if (!s.isEmpty()) {
+                player.getInventory().placeItemBackInInventory(s.copy());
+                p.ownItems().setStackInSlot(slot, ItemStack.EMPTY);
+                took = true;
+            }
+        }
+        return took;
+    }
+
+    private static boolean give(net.neoforged.neoforge.items.ItemStackHandler items, Player player) {
+        boolean took = false;
+        for (int i = 0; i < items.getSlots(); i++) {
+            ItemStack s = items.getStackInSlot(i);
+            if (!s.isEmpty()) {
+                player.getInventory().placeItemBackInInventory(s.copy());
+                items.setStackInSlot(i, ItemStack.EMPTY);
+                took = true;
+            }
+        }
+        return took;
     }
 
     /**
