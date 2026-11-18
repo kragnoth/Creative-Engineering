@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.5-alpha: coke as ingredient and fuel (2026-11-18) - test in game
+- [ ] Feed only iron + coal coke (fuel slot empty): blister steel batches start; spare coke in the ingredient slots is burned as fuel, never the coke a batch needs. "No fuel" only shows when there's no fuel anywhere.
+- [ ] With coke/charcoal in the fuel slot, that's used first.
+
 ## 0.6.4-alpha: bulk blister steel (2026-11-18) - test in game
 - [ ] Alloy furnace: 2 iron ingots + 1 coal coke → 2 blister steel (heated, 10 s per batch at x1, 1 fuel unit). Shows in JEI under Alloy Furnace. Pairs with the blast furnace's blister → steel at half fuel.
 

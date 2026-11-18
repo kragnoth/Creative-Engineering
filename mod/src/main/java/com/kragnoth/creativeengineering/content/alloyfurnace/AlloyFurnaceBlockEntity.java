@@ -398,20 +398,22 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
 
     private boolean startBatch(List<AlloyRecipes.Job> jobs) {
         for (AlloyRecipes.Job job : jobs) {
-            if (job.heat() > heatMin || !allowed(job) || !canTake(job, false) || !canPay(job.fuel())) {
+            int[] left = job.heat() > heatMin || !allowed(job) ? null : leftoverAfter(job);
+            if (left == null || !canPay(job.fuel(), left)) {
                 continue;
             }
-            pay(job.fuel());
             List<ItemStack> consumed = new ArrayList<>();
             take(job, consumed);
+            pay(job.fuel());
             batches.add(new Batch(job.id(), consumed, 0));
             return true;
         }
         return false;
     }
 
-    /** Whether the input slots hold every counted ingredient (each stack can only be used once). */
-    private boolean canTake(AlloyRecipes.Job job, boolean unused) {
+    /** What each input slot would hold after taking this job's ingredients, or null if they aren't all there. */
+    @Nullable
+    private int[] leftoverAfter(AlloyRecipes.Job job) {
         int[] left = new int[INPUTS];
         for (int i = 0; i < INPUTS; i++) {
             left[i] = inv.getStackInSlot(i).getCount();
@@ -426,10 +428,10 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
                 }
             }
             if (n > 0) {
-                return false;
+                return null;
             }
         }
-        return true;
+        return left;
     }
 
     private void take(AlloyRecipes.Job job, List<ItemStack> consumed) {
@@ -447,20 +449,33 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         }
     }
 
-    private boolean canPay(float units) {
+    /**
+     * Fuel comes from the fuel slot first, then from fuel sitting in the ingredient slots (coke is both an alloying
+     * ingredient and a fuel, and automation fills ingredient slots first). {@code left} = ingredient counts after
+     * this batch's own ingredients are set aside, so a batch never burns what it needs.
+     */
+    private boolean canPay(float units, int[] left) {
         ItemStack fuel = inv.getStackInSlot(FUEL);
-        return fuelCredit + fuel.getCount() * BlastFuel.unitsOf(fuel) >= units;
+        float have = fuelCredit + fuel.getCount() * BlastFuel.unitsOf(fuel);
+        for (int i = 0; i < INPUTS && have < units; i++) {
+            have += left[i] * BlastFuel.unitsOf(inv.getStackInSlot(i));
+        }
+        return have >= units;
     }
 
     private void pay(float units) {
         while (fuelCredit < units) {
-            ItemStack fuel = inv.getStackInSlot(FUEL);
-            float per = BlastFuel.unitsOf(fuel);
-            if (per <= 0) {
+            int slot = BlastFuel.unitsOf(inv.getStackInSlot(FUEL)) > 0 ? FUEL : -1;
+            for (int i = 0; slot < 0 && i < INPUTS; i++) {
+                if (BlastFuel.unitsOf(inv.getStackInSlot(i)) > 0) {
+                    slot = i;
+                }
+            }
+            if (slot < 0) {
                 return;
             }
-            fuelCredit += per;
-            inv.extractItem(FUEL, 1, false);
+            fuelCredit += BlastFuel.unitsOf(inv.getStackInSlot(slot));
+            inv.extractItem(slot, 1, false);
         }
         fuelCredit -= units;
     }
@@ -566,7 +581,11 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
         if (c.heatMin < 1) {
             return Component.translatable("creativeengineering.alloy_furnace.blocker.no_heat");
         }
-        if (c.inv.getStackInSlot(FUEL).isEmpty() && c.fuelCredit <= 0 && c.batches.isEmpty()) {
+        boolean fuelInInputs = false;
+        for (int i = 0; i < INPUTS; i++) {
+            fuelInInputs |= BlastFuel.unitsOf(c.inv.getStackInSlot(i)) > 0;
+        }
+        if (c.inv.getStackInSlot(FUEL).isEmpty() && !fuelInInputs && c.fuelCredit <= 0 && c.batches.isEmpty()) {
             return Component.translatable("creativeengineering.blast_furnace.blocker.no_fuel");
         }
         for (int i = OUT_START; i < SLOTS; i++) {
