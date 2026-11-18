@@ -54,6 +54,7 @@
   "creativeengineering.alloy_furnace.heat.2": "Heat: superheated",
   "creativeengineering.alloy_furnace.fans": "Fans: %s (+25%% speed each, max 4)",
   "creativeengineering.alloy_furnace.batches": "Batches: %s / %s",
+  "creativeengineering.alloy_furnace.filtered": "Recipe filter: %s output hatch(es)",
   "creativeengineering.alloy_furnace.blocker.loose": "Not formed: build a solid box, 2 to 4 blocks on each side",
   "creativeengineering.alloy_furnace.blocker.no_heat": "No heat: a heated Blaze Burner under every column",
   "creativeengineering.jade.alloy_items": "Ingredients: %s  Fuel: %s  Output: %s",
@@ -62,7 +63,7 @@
   "creativeengineering.jei.alloy.heat.2": "Superheated",
   "creativeengineering.jei.alloy.time": "%ss per batch",
   "creativeengineering.jei.alloy.inherited": "from %s",
-  "creativeengineering.jei.alloy.needs_tip": "A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. Fuel: coke (one smelts 2 batches), charcoal or coal. Runs half its brick count of batches at once.",
+  "creativeengineering.jei.alloy.needs_tip": "A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. Fuel: coke (one smelts 2 batches), charcoal or coal. Runs half its brick count of batches at once. To pick between alloys that share ingredients, wrench a brick to an output hatch and set its filter.",
   "config.jade.plugin_creativeengineering.alloy_furnace": "Alloy Furnace",
   "creativeengineering.display_source.machine_status": "Machine Status",
   "creativeengineering.display_source.machine_progress": "Machine Progress",
@@ -137,6 +138,7 @@
   "creativeengineering.ponder.alloy_furnace.text_3": "Feed ingredients and coke from any side. Half the bricks' count of batches run at once",
   "creativeengineering.ponder.alloy_furnace.text_4": "Fans blowing into the bottom layer are optional: each one makes it a quarter faster",
   "creativeengineering.ponder.alloy_furnace.text_5": "Take the alloys out from any side. Create's heated alloys and Ender IO's alloys work here too",
+  "creativeengineering.ponder.alloy_furnace.text_6": "When alloys share ingredients, wrench a brick to an output hatch and set its filter: only matching alloys are made",
   "creativeengineering.ponder.tag.creativeengineering": "Creative Engineering",
   "creativeengineering.ponder.tag.creativeengineering.description": "Steel and heavy industry, the Create way"
 }

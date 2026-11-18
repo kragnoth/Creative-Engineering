@@ -36,3 +36,5 @@ Block/item `alloy_furnace_bricks`; block entity `alloy_furnace`; recipe type/ser
 
 ## Block entity NBT: `alloy_furnace` (0.4.0)
 `Controller` (absent = loose brick), `Size` (int[3] x,y,z), `Items` (19 slots: 0–8 ingredients, 9 fuel, 10–18 output), `FuelCredit`, `Work` (list of {`Recipe` id, `Progress`, `Consumed` item list}), `HeatAvg`, `HeatMin`, `Fans`. Only the controller (min corner) works; others keep leftovers until absorbed on the next forming.
+
+- 0.4.2: each `alloy_furnace` brick also saves Create's `Filter` tag (FilteringBehaviour); only used while its `port` is `output`.

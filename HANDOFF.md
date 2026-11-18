@@ -48,8 +48,10 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 
 - **0.4.1-alpha: Create 6 integration.** `compat/create/CEDisplaySources`: Display Link sources (status, progress %/bar, output count, creosote level) via `CreateRegistries.DISPLAY_SOURCE` + `DisplaySource.BY_BLOCK`. Machines implement `content/shared/MachineReadout`. Packagers, Stock Links, Threshold Switch, Smart Observer and Frogports work through the item/fluid capabilities; alloy furnace ingredients may use up to 3 slots so multi-stack packages unpack.
 
+- **0.4.2-alpha:** alloy furnace recipe filter: Create `FilteringBehaviour` on output-hatch bricks (Basin-style, tests the job's result); the controller gathers the filters every 20 ticks.
+
 ## Next goal
-1. Kragnoth tests 0.4.0 + 0.4.1.
+1. Kragnoth tests 0.4.0–0.4.2.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
 3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).

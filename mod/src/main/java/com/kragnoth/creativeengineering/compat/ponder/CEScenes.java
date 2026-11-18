@@ -263,6 +263,14 @@ public final class CEScenes {
                 .text("Take the alloys out from any side. Create's heated alloys and Ender IO's alloys work here too")
                 .pointAt(util.vector().topOf(4, 2, 3)).placeNearTarget();
         scene.idle(90);
+        scene.world().modifyBlock(new BlockPos(3, 2, 3), st -> st.setValue(com.kragnoth.creativeengineering.content.shared.Port.PROPERTY,
+                com.kragnoth.creativeengineering.content.shared.Port.OUTPUT), false);
+        scene.overlay().showControls(util.vector().blockSurface(new BlockPos(3, 2, 3), Direction.EAST), Pointing.RIGHT, 60)
+                .withItem(new ItemStack(Items.IRON_INGOT));
+        scene.overlay().showText(100)
+                .text("When alloys share ingredients, wrench a brick to an output hatch and set its filter: only matching alloys are made")
+                .pointAt(util.vector().blockSurface(new BlockPos(3, 2, 3), Direction.EAST)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
         scene.markAsFinished();
     }
 }

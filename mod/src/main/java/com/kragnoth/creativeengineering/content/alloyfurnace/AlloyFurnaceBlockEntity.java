@@ -1,6 +1,11 @@
 package com.kragnoth.creativeengineering.content.alloyfurnace;
 
 import com.kragnoth.creativeengineering.content.blastfurnace.BlastFuel;
+import com.kragnoth.creativeengineering.content.shared.Port;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
+import net.createmod.catnip.math.VecHelper;
+import net.minecraft.world.phys.Vec3;
 import com.kragnoth.creativeengineering.registry.ModBlocks;
 import com.simibubi.create.api.boiler.BoilerHeater;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -73,6 +78,7 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
     @Nullable protected BlockPos controller; // null = loose brick
     protected int sx = 1, sy = 1, sz = 1;
     protected boolean recheck = true;
+    protected FilteringBehaviour filter;
 
     protected final ItemStackHandler inv = new ItemStackHandler(SLOTS) {
         @Override
@@ -98,6 +104,49 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         behaviours.add(new DirectBeltInputBehaviour(this).setInsertionHandler(
                 (t, side, simulate) -> ItemHandlerHelper.insertItem(automationItems(), t.stack, simulate)));
+        // Recipe filter, like a Basin's: shown on output-hatch bricks only (wrench a brick to the output look).
+        filter = new FilteringBehaviour(this, new HatchFilterSlot())
+                .onlyActiveWhen(() -> getBlockState().getValue(Port.PROPERTY) == Port.OUTPUT)
+                .withCallback(f -> {
+                    AlloyFurnaceBlockEntity c = getControllerBE();
+                    if (c != null) {
+                        c.checkTimer = CHECK_TICKS; // pick the new filter up on the next tick
+                    }
+                });
+        behaviours.add(filter);
+    }
+
+    /** The filter slot sits over the output hatch on each side face. */
+    static final class HatchFilterSlot extends ValueBoxTransform.Sided {
+        @Override
+        protected Vec3 getSouthLocation() {
+            return VecHelper.voxelSpace(8, 8, 16.05);
+        }
+
+        @Override
+        protected boolean isSideActive(BlockState state, Direction direction) {
+            return direction.getAxis().isHorizontal();
+        }
+    }
+
+    /** Filters set on this furnace's output hatches; empty = run anything. Refreshed with heat (controller only). */
+    private final List<FilteringBehaviour> recipeFilters = new ArrayList<>();
+
+    private boolean allowed(AlloyRecipes.Job job) {
+        if (recipeFilters.isEmpty()) {
+            return true;
+        }
+        for (FilteringBehaviour f : recipeFilters) {
+            if (f.test(job.result())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int filterCount() {
+        AlloyFurnaceBlockEntity c = getControllerBE();
+        return c == null ? 0 : c.recipeFilters.size();
     }
 
     // ------------------------------------------------------------------------------------------------ forming
@@ -286,6 +335,12 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
             }
         }
         fans = n;
+        recipeFilters.clear();
+        forEachMember(m -> {
+            if (m.filter != null && m.filter.isActive() && !m.filter.getFilter().isEmpty()) {
+                recipeFilters.add(m.filter);
+            }
+        });
         boolean lit = heatMin >= 1, busy = lit && !batches.isEmpty();
         forEachMember(m -> {
             m.setState(AlloyFurnaceBlock.LIT, lit);
@@ -343,7 +398,7 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
 
     private boolean startBatch(List<AlloyRecipes.Job> jobs) {
         for (AlloyRecipes.Job job : jobs) {
-            if (job.heat() > heatMin || !canTake(job, false) || !canPay(job.fuel())) {
+            if (job.heat() > heatMin || !allowed(job) || !canTake(job, false) || !canPay(job.fuel())) {
                 continue;
             }
             pay(job.fuel());
@@ -532,6 +587,9 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
             tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.alloy_furnace.fans", fans())).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.blast_furnace.speed", String.format("%.2f", speed()))).withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.alloy_furnace.batches", use[0], use[1])).withStyle(ChatFormatting.GRAY));
+            if (filterCount() > 0) {
+                tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.alloy_furnace.filtered", filterCount())).withStyle(ChatFormatting.GOLD));
+            }
         }
         Component b = automationBlocker(List.of());
         if (b != null) {

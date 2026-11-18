@@ -5,6 +5,12 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.4.2-alpha: alloy furnace recipe filter (2026-11-18) - test in game
+- [ ] Wrench an alloy furnace brick to the output-hatch look: a Create filter slot appears over the hatch on its sides (other looks show none).
+- [ ] Set it to an ingot: only alloys with that result start (e.g. brass vs another copper+zinc alloy). A List or Attribute Filter works too. Two hatches with different filters allow either.
+- [ ] Clear every filter, or wrench the hatch back to bricks: everything runs again. Goggles and Jade show "Recipe filter: N output hatch(es)".
+- [ ] Batches already running keep going; the filter only decides what starts next. Ponder scene ends with the filter step.
+
 ## 0.4.1-alpha: Display Links + Create 6 logistics (2026-11-18) - test in game
 - [ ] Display Link on any brick of a coke oven, blast furnace or alloy furnace offers: Machine Status (Working / Idle / the stop reason), Machine Progress (percent or progress bar, like Create's fill level), Finished Output (count). The coke oven also offers Creosote Level. Try a Display Board and a sign.
 - [ ] Threshold Switch on a furnace reads its items (outputs and inputs) and the coke oven's creosote.

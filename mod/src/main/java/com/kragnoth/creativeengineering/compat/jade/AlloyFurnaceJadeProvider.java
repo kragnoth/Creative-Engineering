@@ -35,6 +35,7 @@ public enum AlloyFurnaceJadeProvider implements IBlockComponentProvider, IServer
             d.putInt("busy", use[0]);
             d.putInt("cap", use[1]);
             d.putFloat("progress", be.averageProgress());
+            d.putInt("filters", be.filterCount());
             int in = 0, out = 0;
             var view = be.automationItems();
             for (int i = 0; i < view.getSlots(); i++) {
@@ -66,6 +67,9 @@ public enum AlloyFurnaceJadeProvider implements IBlockComponentProvider, IServer
                 batches = batches.copy().append("  " + Math.round(d.getFloat("progress") * 100) + "%");
             }
             t.add(batches.copy().withStyle(ChatFormatting.GRAY));
+            if (d.getInt("filters") > 0) {
+                t.add(Component.translatable("creativeengineering.alloy_furnace.filtered", d.getInt("filters")).withStyle(ChatFormatting.GOLD));
+            }
             t.add(Component.translatable("creativeengineering.jade.alloy_items", d.getInt("in"), d.getInt("fuel"), d.getInt("out")).withStyle(ChatFormatting.GRAY));
         }
         if (d.contains("blocker")) {
