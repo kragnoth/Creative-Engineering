@@ -16,6 +16,16 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 repositories {
     mavenLocal()
     maven {
+        name = 'BlameJared (JEI)'
+        url = 'https://maven.blamejared.com/'
+        content { includeGroup 'mezz.jei' }
+    }
+    maven {
+        name = 'Modrinth (Create, EMI for dev runs)'
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+    maven {
         name = 'Create (Ponder, Flywheel, Create)'
         url = 'https://maven.createmod.net'
         content { includeGroup 'net.createmod.ponder'; includeGroup 'com.simibubi.create'; includeGroup 'dev.engine-room.flywheel' }
@@ -30,6 +40,16 @@ configurations {
 dependencies {
     // Ponder ships inside Create 6; compile against its API only.
     compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}") { transitive = false }
+
+    // Dev runs only (runClient / runServer / runGameTestServer): never shipped, never a dependency of the jar.
+    // Create's Modrinth jar bundles Ponder, Flywheel and Registrate, so it's the only required mod.
+    localRuntime "maven.modrinth:create:${create_runtime_version}"
+    // Recipe viewer for dev runs: dev_recipe_viewer = jei, emi or none (gradle.properties, or -Pdev_recipe_viewer=emi).
+    if (project.dev_recipe_viewer == 'jei') {
+        localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+    } else if (project.dev_recipe_viewer == 'emi') {
+        localRuntime "maven.modrinth:emi:${emi_version}+neoforge"
+    }
 }
 
 neoForge {

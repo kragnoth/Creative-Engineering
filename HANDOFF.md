@@ -26,6 +26,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
   - Data comes from `dev/gen_data.py`; edit that, not the JSON.
   - Art comes from `tools/stylekit/make_textures_excalibur.py` (Excalibur-based, IE loan styling).
   - Test list: `dev/TODO.md`.
+  - **Dev runs:** `./gradlew runClient` pulls Create 6.0.10 and JEI as runtime-only mods (`localRuntime`; never shipped). Switch the recipe viewer with `dev_recipe_viewer` = jei / emi / none. Only Kragnoth launches runs.
 
 ## Next goal
 **Steelworks tier 2: the coke oven** (spec §3, and §0's integration contract).
