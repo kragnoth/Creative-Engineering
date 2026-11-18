@@ -28,7 +28,9 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 - [x] **Mod id / package:** `creativeengineering` / `com.kragnoth.creativeengineering`.
 - [x] **First module:** Steelworks.
 
-**Read `docs/create-core-concepts.md` before designing anything.** It has Create's stated pillars, the mechanics confirmed in source, and the 8 design rules this addon follows.
+**Read `docs/create-core-concepts.md` before designing anything.** It has Create's stated pillars, the mechanics confirmed in source, the 8 design rules, Kragnoth's **fun-first rules (9–15)**, and the revised steel ladder (§5).
+
+- [ ] **Pending Kragnoth's OK:** the 3-tier steel ladder in §5. Tier 1 is compacting + bulk blasting with no new blocks; tier 2 is the coke oven; tier 3 is the blast furnace. It explicitly avoids TFMG's chain: fireclay, blast stove, hot air, CO₂, casting.
 
 ### Steps
 1. `bash tools/setup_refs.sh`. Also attach or obtain the NeoForge and decompiled-MC sources if you need to check signatures.
@@ -53,8 +55,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
    Starting points:
    - `docs/create-core-concepts.md` §4
    - Features tab rows IE-59 (coke oven) and IE-61 (blast furnace)
-   - Coking Oven: placement-formed brick chamber heated by blaze burners. Coal → coke, plus creosote drained by pipe.
-   - Blast Furnace: top-fed by funnels, superheated burners, encased fans as the air blast (stress cost). Steel and slag out of separate faces.
+   - Follow the steel ladder in `docs/create-core-concepts.md` §5. It supersedes the earlier draft, in which superheat and fans were required.
    - Recipe types `coking` and `blast_smelting`. Heated-mixing alloys (electrum, constantan). Coke as a `BlazeBurnerFuel` data-map entry. `c:ingots/steel` and `c:` tags throughout.
 5. Ponder scenes and goggle info for both machines.
 6. Build: `./gradlew build`. **Do not launch a client or server unless Kragnoth asks for a full compile and load-up.**

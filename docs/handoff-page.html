@@ -79,7 +79,8 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
     <li><b>Mod id / package:</b> <code>creativeengineering</code> / <code>com.kragnoth.creativeengineering</code>.</li>
     <li><b>First module:</b> Steelworks.</li>
   </ul>
-  <p><b>Read <code>docs/create-core-concepts.md</code> before designing anything.</b> It has Create's stated pillars, the mechanics confirmed in source (SU = impact × RPM, heat levels, in-world processing, placement-formed multiblocks) and the 8 design rules this addon follows.</p>
+  <p><b>Read <code>docs/create-core-concepts.md</code> before designing anything.</b> It has Create's stated pillars, the mechanics confirmed in source (SU = impact × RPM, heat levels, in-world processing, placement-formed multiblocks) the 8 design rules, Kragnoth's fun-first rules (9–15) and the revised steel ladder (§5).</p>
+  <p><span class="tag ask">pending</span>Kragnoth's OK on the 3-tier steel ladder. Tier 1: compacting + bulk blasting, no new blocks. Tier 2: coke oven. Tier 3: blast furnace. Every tier pays off on its own, and nothing stalls on byproducts.</p>
 </section>
 
 <h2>3 · How to get there</h2>
@@ -89,9 +90,9 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
     <tr><td>1</td><td>Set up the reference sources. Get NeoForge and decompiled MC from Kragnoth's zips or from ModDevGradle if you need to check signatures.</td><td><code>tools/setup_refs.sh</code></td></tr>
     <tr><td>2</td><td>Create a ModDevGradle project in <code>mod/</code>: NeoForge 21.1.267, Create 6.0.10 as a hard dependency (with Flywheel and Ponder), Parchment, datagen.</td><td><code>~/ref/create</code> for API usage</td></tr>
     <tr><td>3</td><td>Style kit in <code>tools/stylekit/</code>: palette <code>.gpl</code> files, a PIL texture generator for new parts, a preview renderer.</td><td><code>docs/create-art-style.md</code>, <code>tools/analyze_palette.py</code></td></tr>
-    <tr><td>4a</td><td><b>Write <code>docs/steelworks-spec.md</code> and get Kragnoth's approval before coding:</b> blocks, sizing rules, heat, fan/stress numbers, I/O faces, recipes, Ponder list, art list.</td><td><code>docs/create-core-concepts.md</code> §3–4</td></tr>
-    <tr><td>4b</td><td>Coking Oven (<code>IE-59</code>): placement-formed brick chamber heated by a blaze burner; coal → coke plus creosote.</td><td>Features tab of the Sheet</td></tr>
-    <tr><td>5</td><td>Blast Furnace (<code>IE-61</code>): fed by funnels, heated by superheated burners, encased fans as preheaters; steel out the front, slag out the back.</td><td><code>tools/rows.py</code> (designs)</td></tr>
+    <tr><td>4a</td><td><b>Write <code>docs/steelworks-spec.md</code> and get Kragnoth's approval before coding:</b> blocks, sizing rules, heat, fan/stress numbers, I/O faces, recipes, Ponder list, art list.</td><td><code>docs/create-core-concepts.md</code> §3–5</td></tr>
+    <tr><td>4b</td><td>Coke oven (tier 2): any size, any heat, creosote an optional bonus.</td><td>Features tab of the Sheet</td></tr>
+    <tr><td>5</td><td>Blast furnace (tier 3): top-fed; heated works, superheat and fans only add speed; slag is a bonus.</td><td><code>tools/rows.py</code> (designs)</td></tr>
     <tr><td>6</td><td>Recipe types <code>coking</code> and <code>blast_smelting</code>; heated-mixing alloys for electrum and constantan; <code>c:</code> tags.</td><td>Recipe types tab</td></tr>
     <tr><td>7</td><td>Ponder scenes and goggle tooltips, then <code>./gradlew build</code>.</td><td>—</td></tr>
     <tr><td>8</td><td>Update <code>HANDOFF.md</code> (and this page) before ending the session; commit as Kragnoth.</td><td>—</td></tr>

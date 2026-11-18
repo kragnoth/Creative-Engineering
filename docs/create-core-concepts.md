@@ -99,19 +99,33 @@ Sources: Create's README and Modrinth page (stated intent), and Create 6.0.10 so
 7. **Art:** reference `create:` textures. New textures use Create's exact palettes, and models stay chunky and simple.
 8. **Interoperate.** Use `c:` tags for every ingot, dust and fluid. Use Create's data maps and registries where they exist.
 
-## 4. What this means for Steelworks (first module)
-- **Coking Oven:** a brick chamber formed by placement, sized like a vault/boiler, heated by blaze burners underneath.
-  - Coal goes in through funnels; coke comes out through funnels.
-  - Creosote is drained with a pipe and mechanical pump (Create's normal fluid output).
-  - No rotation needed; heat level sets speed.
-  - Goggles show contents and progress.
-- **Blast Furnace:** a tall placement-formed stack.
-  - Iron and coke are loaded from the top by funnel or chute.
-  - Superheated burners provide heat.
-  - Encased fans blowing in act as the preheaters/air blast: more fans mean faster, and their RPM costs stress.
-  - Steel and slag come out of separate faces onto belts or depots.
-- **Not new blocks:**
-  - electrum and constantan → heated mixing recipes
-  - coke dust → milling
-  - slag gravel → crushing
-  - coke as burner fuel → `BlazeBurnerFuel` data map
+## 4. Fun-first progression (Kragnoth, 2026-11-18)
+The addon stays fun and functional. These rules sit beside the eight above and win any tie.
+9. **Every stage pays off on its own.** A player who stops at any tier already has steel or something useful. Nothing is worth building only once the whole chain is done.
+10. **Byproducts never stall a machine.** Creosote, slag and the like are bonuses. If they aren't extracted, the machine keeps running: it voids or ejects them.
+11. **Upgrades multiply, they don't gate.** Coke beats coal, more heat beats less, a bigger build beats a small one. Each makes things faster or higher-yield; none is required to get started.
+12. **No mandatory fluid balancing.** No air, CO₂ or hot-air loops, and no multi-fluid juggling just to keep a machine alive.
+13. **Use machines the player already has.** Each tier adds at most one new block, and early tiers add none.
+14. **Forgiving multiblocks.** Any reasonable size works and bigger is faster. No exact patterns, no reinforcement checks, no new worldgen ore just for the building blocks.
+15. **Steel arrives around brass time** (early–mid game), not as a late-game wall.
+
+## 5. Steelworks: revised route (proposal, awaiting approval)
+For contrast, TFMG (1.21.1 @ e8fefaf) makes steel like this:
+- Mine fireclay (its own worldgen) and build firebrick walls.
+- Coke ovens: 1,200 ticks per coal, and CO₂ must be pumped out.
+- A blast stove: needs air pumped in, burns creosote or furnace gas, CO₂ pumped out, outputs hot air.
+- A blast furnace: a brick cylinder plus reinforcements, a hatch for hot air, coke as fuel, flux.
+- Molten steel, slag and furnace gas all have to be handled.
+- A casting basin turns molten steel into ingots (200 ticks each).
+- Steel_from_raw_iron uses 40 mB of hot air per operation. Nothing pays off until every part works.
+
+Our route is a ladder you can stop on at any rung:
+
+| Tier | What the player builds | Gives | New blocks |
+|---|---|---|---|
+| 1 · Carburising | **Compacting** iron + coal/charcoal (press over basin) → *carbon-packed iron*; then **bulk blasting** with an encased fan through lava → steel ingot | Steel, slowly, from machines they already own | 0 (one item) |
+| 2 · Coke | **Coke oven**: any size, placement-formed, sitting on any heat (passive heat works, burners are faster). Coal → coke. Creosote is an optional bonus pumped from any face, voided when full. | Coke: a better carbon source (more steel per craft) and a strong blaze-burner fuel | 1 |
+| 3 · Blast furnace | **Blast furnace**: placement-formed stack over blaze burners, fed from the top by funnels or chutes. Crushed iron + coke → steel at the ore-processing bonus yield. Heated works; superheated is faster; fans blowing in add speed (and cost stress). Slag comes out as a bonus item and is never required. | Bulk steel. The project's showpiece | 1 |
+| Side | Heated **mixing**: electrum, constantan. **Milling** coke → coke dust. **Crushing** slag → slag gravel | Alloys and building blocks | 0 |
+
+Molten metal and casting are left out of Steelworks. They belong to the later, optional Arc Crucible.
