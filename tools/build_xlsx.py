@@ -34,8 +34,8 @@ for c in 'BCDE': ov[f'{c}9']=f'=SUM({c}5:{c}8)'
 ov['A11']='Gap key'; ov['A11'].font=Font(bold=True)
 keys=[('Covered','Create 6.0.10 already does this; at most add recipes.'),('Partial','Similar mechanic exists; pieces missing.'),('Missing','Nothing comparable in Create.'),('Skip','Out of scope for a Create-style industry addon (weapons, cosmetics, electricity-only items).')]
 for i,(k,v) in enumerate(keys,12): ov[f'A{i}']=k; ov[f'B{i}']=v
-ov['A17']='Open decision'; ov['A17'].font=Font(bold=True)
-ov['B17']='Electricity: stay pure rotation (SU) or add an FE wire layer? See Features IE-44. Every module on the Modules tab works without electricity.'
+ov['A17']='Decision'; ov['A17'].font=Font(bold=True)
+ov['B17']='Power: pure rotation (SU) only, decided 2026-11-18. No FE wire layer. First module: Steelworks. Mod id: creativeengineering.'
 ov['A19']='Tabs'; ov['A19'].font=Font(bold=True)
 for i,(k,v) in enumerate([('Features','Every IE/IP feature: what it does, defaults, Create equivalent, gap, Create-style idea, priority.'),('Modules','Proposed addon modules grouping the gaps, with dependencies.'),('Recipe types','Each IE/IP recipe type, how many recipes ship, and which Create type can express it.'),('Fluids','Every IE/IP fluid, how it is made and used.')],20): ov[f'A{i}']=k; ov[f'B{i}']=v
 ov.column_dimensions['A'].width=16

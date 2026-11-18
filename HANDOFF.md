@@ -18,14 +18,17 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
    - Live Sheet: https://claude.ai/artifact/48UN6NEtpD5XpK1GaNhsWt
    - Repo copy: `docs/ie-ip-gap/` (xlsx + CSVs; source of truth is `tools/rows.py`).
    - Result: 35 Missing, 22 Partial, 21 Covered, 14 Skip. The Modules tab groups the gaps into 10 addon modules.
+4. **Create core-concept summary + design rules** in `docs/create-core-concepts.md`: stated pillars, SU/heat/processing mechanics confirmed in source, and 8 rules for this addon.
 
 ## Next goal
 **Scaffold the addon and build the first module: Steelworks.** That means a coking oven, a blast furnace, slag and steel. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.
 
-### Blocking decisions (ask Kragnoth before coding)
-- [ ] **Electricity:** stay pure SU (recommended; every module works without it) or add an FE wire layer?
-- [ ] **Mod id / package:** proposal: modid `creativeengineering`, package `com.kragnoth.creativeengineering`.
-- [ ] **First module:** confirm Steelworks, or start with Fuels & Engines (the diesel engine) instead.
+### Decisions (settled 2026-11-18 by Kragnoth)
+- [x] **Power:** pure rotation (SU) only. No FE, no wires, no internal batteries.
+- [x] **Mod id / package:** `creativeengineering` / `com.kragnoth.creativeengineering`.
+- [x] **First module:** Steelworks.
+
+**Read `docs/create-core-concepts.md` before designing anything.** It has Create's stated pillars, the mechanics confirmed in source, and the 8 design rules this addon follows.
 
 ### Steps
 1. `bash tools/setup_refs.sh`. Also attach or obtain the NeoForge and decompiled-MC sources if you need to check signatures.
@@ -37,11 +40,22 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 3. **Style kit** (`tools/stylekit/`):
    - Palette `.gpl` files built from the ramps in `docs/create-art-style.md`.
    - A PIL texture generator for new parts, plus an offline preview renderer.
-4. Steelworks content (designs are on the Features tab, IE-59 coke oven and IE-61 blast furnace):
-   - Coking Oven: placement-formed brick chamber heated by a blaze burner. Coal → coke plus creosote fluid.
-   - Blast Furnace: fed by funnels, heated by superheated burners, encased fans act as preheaters. Steel out the front, slag out the back.
-   - Recipe types `coking` and `blast_smelting`, plus heated-mixing alloys for electrum and constantan.
-   - `c:ingots/steel` and `c:` tags throughout.
+4. **Write the Steelworks design spec first** (`docs/steelworks-spec.md`) and get Kragnoth's approval before coding:
+   - blocks
+   - multiblock sizing rules
+   - heat requirements
+   - fan/stress numbers
+   - I/O faces
+   - recipes
+   - Ponder scene list
+   - art list
+
+   Starting points:
+   - `docs/create-core-concepts.md` §4
+   - Features tab rows IE-59 (coke oven) and IE-61 (blast furnace)
+   - Coking Oven: placement-formed brick chamber heated by blaze burners. Coal → coke, plus creosote drained by pipe.
+   - Blast Furnace: top-fed by funnels, superheated burners, encased fans as the air blast (stress cost). Steel and slag out of separate faces.
+   - Recipe types `coking` and `blast_smelting`. Heated-mixing alloys (electrum, constantan). Coke as a `BlazeBurnerFuel` data-map entry. `c:ingots/steel` and `c:` tags throughout.
 5. Ponder scenes and goggle info for both machines.
 6. Build: `./gradlew build`. **Do not launch a client or server unless Kragnoth asks for a full compile and load-up.**
 

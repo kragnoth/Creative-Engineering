@@ -61,6 +61,7 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
         <li>model rules: median 3 elements, rotations only ±22.5° and ±45°</li>
         <li>Flywheel partial-model conventions</li>
       </ul></li>
+    <li><span class="tag done">done</span><b>Create core-concept summary and design rules:</b> <code>docs/create-core-concepts.md</code>.</li>
     <li><span class="tag done">done</span><b>Clean-room IE 12.4.2 + IP 4.5.0 inventory vs Create</b> (<code>docs/ie-ip-gap/</code>):
       <ul>
         <li>92 features: 35 Missing, 22 Partial, 21 Covered, 14 Skip</li>
@@ -72,12 +73,13 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
 <h2>2 · Next goal</h2>
 <section>
   <p><span class="tag next">next</span><b>Scaffold the addon and build the first module: Steelworks.</b> That means the coking oven, the blast furnace, slag and <code>c:ingots/steel</code>. Kragnoth asked for furnaces and the arc furnace, and the arc crucible needs steel, so Steelworks comes first.</p>
-  <p><span class="tag ask">ask first</span>Get Kragnoth's answer on these before writing mod code:</p>
-  <ol>
-    <li><b>Electricity:</b> stay pure rotation (SU), which is recommended because every module works without it, or add an FE wire layer? See Features <code>IE-44</code>.</li>
-    <li><b>Mod id / package:</b> proposal is <code>creativeengineering</code> / <code>com.kragnoth.creativeengineering</code>.</li>
-    <li><b>First module:</b> confirm Steelworks, or start with Fuels &amp; Engines (the diesel engine) instead.</li>
-  </ol>
+  <p><span class="tag done">decided</span>Settled by Kragnoth on 2026-11-18:</p>
+  <ul>
+    <li><b>Power:</b> pure rotation (SU) only. No FE, no wires, no internal batteries.</li>
+    <li><b>Mod id / package:</b> <code>creativeengineering</code> / <code>com.kragnoth.creativeengineering</code>.</li>
+    <li><b>First module:</b> Steelworks.</li>
+  </ul>
+  <p><b>Read <code>docs/create-core-concepts.md</code> before designing anything.</b> It has Create's stated pillars, the mechanics confirmed in source (SU = impact × RPM, heat levels, in-world processing, placement-formed multiblocks) and the 8 design rules this addon follows.</p>
 </section>
 
 <h2>3 · How to get there</h2>
@@ -87,7 +89,8 @@ bash tools/setup_refs.sh                 # pinned Create / IE / IP sources + jar
     <tr><td>1</td><td>Set up the reference sources. Get NeoForge and decompiled MC from Kragnoth's zips or from ModDevGradle if you need to check signatures.</td><td><code>tools/setup_refs.sh</code></td></tr>
     <tr><td>2</td><td>Create a ModDevGradle project in <code>mod/</code>: NeoForge 21.1.267, Create 6.0.10 as a hard dependency (with Flywheel and Ponder), Parchment, datagen.</td><td><code>~/ref/create</code> for API usage</td></tr>
     <tr><td>3</td><td>Style kit in <code>tools/stylekit/</code>: palette <code>.gpl</code> files, a PIL texture generator for new parts, a preview renderer.</td><td><code>docs/create-art-style.md</code>, <code>tools/analyze_palette.py</code></td></tr>
-    <tr><td>4</td><td>Coking Oven (<code>IE-59</code>): placement-formed brick chamber heated by a blaze burner; coal → coke plus creosote.</td><td>Features tab of the Sheet</td></tr>
+    <tr><td>4a</td><td><b>Write <code>docs/steelworks-spec.md</code> and get Kragnoth's approval before coding:</b> blocks, sizing rules, heat, fan/stress numbers, I/O faces, recipes, Ponder list, art list.</td><td><code>docs/create-core-concepts.md</code> §3–4</td></tr>
+    <tr><td>4b</td><td>Coking Oven (<code>IE-59</code>): placement-formed brick chamber heated by a blaze burner; coal → coke plus creosote.</td><td>Features tab of the Sheet</td></tr>
     <tr><td>5</td><td>Blast Furnace (<code>IE-61</code>): fed by funnels, heated by superheated burners, encased fans as preheaters; steel out the front, slag out the back.</td><td><code>tools/rows.py</code> (designs)</td></tr>
     <tr><td>6</td><td>Recipe types <code>coking</code> and <code>blast_smelting</code>; heated-mixing alloys for electrum and constantan; <code>c:</code> tags.</td><td>Recipe types tab</td></tr>
     <tr><td>7</td><td>Ponder scenes and goggle tooltips, then <code>./gradlew build</code>.</td><td>—</td></tr>

@@ -17,7 +17,7 @@ Biggest Create-fashion wins, in order:
 6. Refining.
 7. Mineral-vein excavation.
 
-**Open decision:** electricity. Either stay pure rotation (SU), or add an FE wire layer. Every proposed module works without it.
+**Decided 2026-11-18:** pure rotation (SU), no FE layer. First module: Steelworks.
 
 ## Versions and method (clean room: behaviour documented, no code copied)
 | Item | Version |
