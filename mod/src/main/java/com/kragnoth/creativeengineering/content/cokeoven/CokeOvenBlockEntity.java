@@ -278,6 +278,52 @@ public class CokeOvenBlockEntity extends SmartBlockEntity implements IMultiBlock
         parts().forEach(action);
     }
 
+    /** Oven speed multiplier from heat (controller's value). 0 = no heat. */
+    public float heatSpeed() {
+        CokeOvenBlockEntity c = getControllerBE();
+        return c == null ? 0 : c.speed;
+    }
+
+    /** [busy slots, total slots] across the whole oven. */
+    public int[] slotUse() {
+        int busy = 0;
+        List<CokeOvenBlockEntity> ps = parts();
+        for (CokeOvenBlockEntity p : ps) {
+            for (int i = 0; i < WORK_SLOTS; i++) {
+                if (!p.work.getStackInSlot(i).isEmpty()) {
+                    busy++;
+                }
+            }
+        }
+        return new int[]{busy, ps.size() * WORK_SLOTS};
+    }
+
+    /** Average progress (0..1) of the slots currently coking, or 0 if none. */
+    public float averageProgress() {
+        float sum = 0;
+        int n = 0;
+        for (CokeOvenBlockEntity p : parts()) {
+            for (int i = 0; i < WORK_SLOTS; i++) {
+                ItemStack s = p.work.getStackInSlot(i);
+                if (s.isEmpty()) {
+                    continue;
+                }
+                int time = p.recipeFor(s).map(r -> r.value().time()).orElse(0);
+                if (time > 0) {
+                    sum += Math.min(1F, p.progress[i] / time);
+                    n++;
+                }
+            }
+        }
+        return n == 0 ? 0 : sum / n;
+    }
+
+    /** The oven's creosote tank (controller's). */
+    public FluidTank creosoteTank() {
+        CokeOvenBlockEntity c = getControllerBE();
+        return c == null ? creosote : c.creosote;
+    }
+
     public ItemStackHandler ownItems() {
         return own;
     }

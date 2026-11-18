@@ -14,7 +14,7 @@ By Kragnoth.
 | `docs/registry-dumps/` | Registry IDs from a headless server running Create + IE + IP |
 | `docs/tarbound-compat.md` | How CE stays compatible with Kragnoth's Tarbound autocrafting, without design concessions |
 | `dev/` | Ponder / game-test generators, `SAVE_FORMAT.md`, `TODO.md` (release test lists) |
-| `mod/` | The NeoForge 1.21.1 mod (ModDevGradle). Build: `cd mod; ./gradlew build`. Play-test: `./gradlew runClient` (Create + JEI pulled in for dev runs; `-Pdev_recipe_viewer=emi` or `none` to switch) |
+| `mod/` | The NeoForge 1.21.1 mod (ModDevGradle). Build: `cd mod; ./gradlew build`. Play-test: `./gradlew runClient` (Create, JEI and Jade pulled in for dev runs; `-Pdev_recipe_viewer=emi` or `none` to switch the viewer; `-Pdev_jade=false` drops Jade) |
 | `CREDITS.md` | Excalibur (Maffhew, used with permission), Create, Tarbound |
 | `tools/` | Reference setup, headless server, palette/model/recipe/config analysis, worksheet build |
 

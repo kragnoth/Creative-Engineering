@@ -45,3 +45,10 @@ credits="Item, armour and block textures are based on Excalibur by Maffhew, used
     versionRange="[0.67,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="jade"
+    type="optional"
+    versionRange="[15.0,)"
+    ordering="NONE"
+    side="BOTH"

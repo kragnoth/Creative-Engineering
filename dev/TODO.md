@@ -5,6 +5,11 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.2.2-alpha: Jade (2026-11-18) - test in game
+- [ ] `runClient` now has Jade (`dev_jade=true` in gradle.properties).
+- [ ] Looking at any coke oven brick shows: size, heat (xN and source type), coking busy/total slots and progress %, In/Out items with counts, creosote mB (red with "vents" when full), and the stop reason (e.g. "No heat") in red.
+- [ ] Jade config lists "Coke Oven" under the plugin, and it can be toggled.
+
 ## 0.2.1-alpha: coke oven feedback (2026-11-18) - test in game
 - [ ] Bricks no longer swap texture. While working (heated + coking), the top layer gives off campfire-style smoke, a heavier puff every few seconds, and a crackle.
 - [ ] Heated but idle: embers and the odd lava pop along the bottom edge only, with no smoke.

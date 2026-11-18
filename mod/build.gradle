@@ -46,10 +46,15 @@ dependencies {
     // JEI API for our recipe categories (optional at runtime).
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    // Jade API (optional at runtime): tooltip info for our machines.
+    compileOnly "maven.modrinth:jade:${jade_version}"
 
     // Dev runs only (runClient / runServer / runGameTestServer): never shipped, never a dependency of the jar.
     // Create's Modrinth jar bundles Ponder, Flywheel and Registrate, so it's the only required mod.
     localRuntime "maven.modrinth:create:${create_runtime_version}"
+    if (project.dev_jade == 'true') {
+        localRuntime "maven.modrinth:jade:${jade_version}"
+    }
     // Recipe viewer for dev runs: dev_recipe_viewer = jei, emi or none (gradle.properties, or -Pdev_recipe_viewer=emi).
     if (project.dev_recipe_viewer == 'jei') {
         localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"

@@ -66,6 +66,12 @@ LANG = collections.OrderedDict([
     ('%s.coke_oven.creosote' % MODID, 'Creosote: %s / %s mB'),
     ('%s.coke_oven.blocker.no_heat' % MODID, 'No heat: put a heat source under every column'),
     ('%s.coke_oven.blocker.output_full' % MODID, 'Output full'),
+    ('%s.jade.heat.passive' % MODID, 'fire/magma'),
+    ('%s.jade.heat.burner' % MODID, 'blaze burner'),
+    ('%s.jade.heat.superheated' % MODID, 'superheated'),
+    ('%s.jade.in_out' % MODID, 'In: %s  Out: %s'),
+    ('%s.jade.venting' % MODID, 'Tank full: extra creosote vents'),
+    ('config.jade.plugin_%s.coke_oven' % MODID, 'Coke Oven'),
     ('advancements.%s.coke_oven.title' % MODID, 'Purity in Pyrolysis'),
     ('advancements.%s.coke_oven.description' % MODID, 'Coke coal in a Coke Oven'),
 ])

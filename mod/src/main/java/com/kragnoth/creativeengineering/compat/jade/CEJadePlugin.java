@@ -1,0 +1,22 @@
+package com.kragnoth.creativeengineering.compat.jade;
+
+import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
+import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlockEntity;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaCommonRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
+
+/** Jade (optional): what our machines are doing at a glance. Jade finds this by its annotation; never loaded without Jade. */
+@WailaPlugin
+public class CEJadePlugin implements IWailaPlugin {
+    @Override
+    public void register(IWailaCommonRegistration registration) {
+        registration.registerBlockDataProvider(CokeOvenJadeProvider.INSTANCE, CokeOvenBlockEntity.class);
+    }
+
+    @Override
+    public void registerClient(IWailaClientRegistration registration) {
+        registration.registerBlockComponent(CokeOvenJadeProvider.INSTANCE, CokeOvenBlock.class);
+    }
+}
