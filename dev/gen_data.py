@@ -309,6 +309,11 @@ def alloy(name, ingredients, result, count, mod, heat=1, time=200, fuel=1):
     put(R + '/alloying/%s.json' % name, {'neoforge:conditions': [{'type': 'neoforge:mod_loaded', 'modid': mod}],
         'type': ce('alloying'), 'ingredients': [dict(i, count=n) for i, n in ingredients],
         'result': {'id': result, 'count': count}, 'heat': heat, 'time': time, 'fuel': fuel})
+# Our own: bulk cementation. Same ratio as compacting with coke (2 iron + 1 coke -> 2 carbon-packed iron -> 2
+# blister steel), in one step: the furnace does the baking the fan would.
+put(R + '/alloying/blister_steel.json', {'type': ce('alloying'),
+    'ingredients': [dict(tag('c:ingots/iron'), count=2), dict(tag('c:coal_coke'), count=1)],
+    'result': {'id': ce('blister_steel_ingot'), 'count': 2}, 'heat': 1, 'time': 200, 'fuel': 1})
 alloy('ie_electrum', [(tag('c:ingots/gold'), 1), (tag('c:ingots/silver'), 1)], 'immersiveengineering:ingot_electrum', 2, 'immersiveengineering')
 alloy('ie_constantan', [(tag('c:ingots/copper'), 1), (tag('c:ingots/nickel'), 1)], 'immersiveengineering:ingot_constantan', 2, 'immersiveengineering')
 shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'), 'B': item(ce('blast_furnace_bricks')),

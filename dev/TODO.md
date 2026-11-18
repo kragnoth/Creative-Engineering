@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.6.4-alpha: bulk blister steel (2026-11-18) - test in game
+- [ ] Alloy furnace: 2 iron ingots + 1 coal coke → 2 blister steel (heated, 10 s per batch at x1, 1 fuel unit). Shows in JEI under Alloy Furnace. Pairs with the blast furnace's blister → steel at half fuel.
+
 ## 0.6.3-alpha: visible alloy furnace filters (2026-11-18) - look in game
 - [ ] On an output-hatch brick with a filter set, the filter item now renders over the hatch on each side (like a Basin's), sitting just proud of the face. Empty filters show nothing until you look at the slot.
 
