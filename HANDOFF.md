@@ -55,8 +55,11 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 - **0.5.1–0.5.3:** dies drawn as molds of their product; the wire die was tried as an extrusion die and then removed (Kragnoth). Wire items and art stay without recipes for later.
 - **0.6.0-alpha: treated timber.** Creosote's first use: Spout filling (planks 125 mB, stripped logs/wood 250 mB) or 8-around-a-bucket crafting. Planks, stairs, slab, log, wood, and `treated_beam` (`content/timber/TreatedBeamBlock` extends Create's `GirderBlock` for connection logic; our own models; shafts refused). Palette ramp `W` from Kragnoth's reference photo.
 
+- **0.6.1–0.6.6 (2026-11-18; beams and filters confirmed in game, 0.6.5–0.6.6 fuel changes awaiting test):** treated beams use Create's girder placement helper (`TreatedBeamPlacementHelper`); joist faces use a pre-rotated texture (no UV stretch); alloy furnace filters render (Create's `SmartBlockEntityRenderer` registered); bulk blister steel alloying (2 iron + 1 coke → 2); the alloy furnace has **no fuel**: burners are its running cost (slot 9 kept only for old saves). The blast furnace **keeps** burning coke (Kragnoth, 2026-11-20).
+
 ## Next goal
-1. Kragnoth tests 0.4.0–0.6.0.
+1. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks the petroleum line (extraction → refining → lubrication).
+2. Carry-overs: game tests for blast and alloy furnaces, EMI categories, die shown on the press head, treated beam Ponder scene.
 2. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks petroleum.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
 2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
