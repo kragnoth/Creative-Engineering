@@ -58,7 +58,7 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 - **0.6.1–0.6.6 (2026-11-18; beams and filters confirmed in game, 0.6.5–0.6.6 fuel changes awaiting test):** treated beams use Create's girder placement helper (`TreatedBeamPlacementHelper`); joist faces use a pre-rotated texture (no UV stretch); alloy furnace filters render (Create's `SmartBlockEntityRenderer` registered); bulk blister steel alloying (2 iron + 1 coke → 2); the alloy furnace has **no fuel**: burners are its running cost (slot 9 kept only for old saves). The blast furnace **keeps** burning coke (Kragnoth, 2026-11-20).
 
 ## Next goal
-1. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks the petroleum line (extraction → refining → lubrication).
+1. **Module 1: Fuels & Engines, the diesel engine.** Design agreed by Kragnoth on 2026-11-20: **read `docs/engines-spec.md` first** (crankcase line, cylinders at 45°, 2 per block, tank feeds directly with no pump, crank jump-start, any-shape parts). Ask Kragnoth only the open questions listed there that he hasn't answered.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories, die shown on the press head, treated beam Ponder scene.
 2. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks petroleum.
 2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
