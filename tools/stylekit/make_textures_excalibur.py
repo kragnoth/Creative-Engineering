@@ -352,18 +352,130 @@ def connected(made):
 
 
 # ---------------------------------------------------------------------------------------- fermenting vat
-# Connected sheets for the vat (RECTANGLE, same layout as the furnaces): dark steel plate walls with a riveted
-# copper strap only around the OUTER edge of the formed vat, and a copper lid with a steel rim, so a 1x1 and a
-# 3x3x4 read as one vessel. Create's basin is the reference for the look; nothing of it is copied.
+# "Big picture" textures (Kragnoth, 2026-11-22: like a CTM resource pack / Create's tanks, one picture over the whole
+# vat). One picture is drawn per face size: walls 1..3 wide x 1..4 tall, lid 1..3 x 1..3. Each block shows its own
+# 16x16 slice (client VatModel remaps the UVs). Features sit in the picture, not per block, so they land right at
+# any size: copper strap round the outside, copper barrel hoops spaced by the vat's height (off the block seams), a
+# brass-framed sight glass centred on the wall, and a copper lid with a steel rim and a bolted hatch under the valve.
+# Sheets: cell (W, H) at ((W-1)*48, (H-1)*64) in a 256x256 wall sheet; lid cell (W, D) at ((W-1)*48, (D-1)*48).
+RAMPS['Y'] = ['#1f1405', '#3a2709', '#5a3d0e', '#7a5614', '#9a701c', '#b98b27', '#d3a63a', '#e6c25a', '#f3dc8a']
+
+def _tiled(base, w, h, off=8):
+    img = Image.new('RGBA', (w, h))
+    for y in range(h):
+        for x in range(w):
+            img.putpixel((x, y), base.getpixel(((x + off) % 16, (y + off) % 16)))
+    return img
+
+def _strap(img, band, t=3):
+    """Riveted strap round the picture's outer edge (same shading rules as the furnace frames)."""
+    b = [hexrgb(h) for h in RAMPS[band]]
+    W, H = img.size
+    for y in range(H):
+        for x in range(W):
+            d = min(x, y, W - 1 - x, H - 1 - y)
+            if d < t:
+                lit = (x == d or y == d)
+                img.putpixel((x, y), b[1] if d == 0 else (b[6] if lit and d == 1 else b[4] if d == 1 else b[3]))
+            elif d == t:
+                img.putpixel((x, y), _darker(img.getpixel((x, y)), 0.72))
+    def rivet(x, y):
+        img.putpixel((x, y), b[7]); img.putpixel((x + 1, y), b[5]); img.putpixel((x, y + 1), b[5]); img.putpixel((x + 1, y + 1), b[2])
+    return rivet
+
+def _frame(img, band, t=3):
+    b = [hexrgb(h) for h in RAMPS[band]]
+    rivet = _strap(img, band, t)
+    W, H = img.size
+    for x in range(7, W - 8, 8):
+        rivet(x, (t - 2) // 2)
+        rivet(x, H - t + (t - 2) // 2)
+    for y in range(7, H - 8, 8):
+        rivet((t - 2) // 2, y)
+        rivet(W - t + (t - 2) // 2, y)
+    for cx, cy in ((0, 0), (W - 5, 0), (0, H - 5), (W - 5, H - 5)):       # corner plates
+        for y in range(5):
+            for x in range(5):
+                outer = (cx == 0 and x == 0) or (cx > 0 and x == 4) or (cy == 0 and y == 0) or (cy > 0 and y == 4)
+                img.putpixel((cx + x, cy + y), b[1] if outer else b[5])
+        rivet(cx + 2 - (cx > 0), cy + 2 - (cy > 0))
+
+def _hoop(img, y0, band):
+    b = [hexrgb(h) for h in RAMPS[band]]
+    W, _ = img.size
+    for x in range(3, W - 3):
+        img.putpixel((x, y0 - 1), _darker(img.getpixel((x, y0 - 1)), 0.8))
+        img.putpixel((x, y0), b[6]); img.putpixel((x, y0 + 1), b[4]); img.putpixel((x, y0 + 2), b[2])
+        img.putpixel((x, y0 + 3), _darker(img.getpixel((x, y0 + 3)), 0.6))
+    for x in range(11, W - 8, 16):
+        img.putpixel((x, y0), b[8]); img.putpixel((x, y0 + 1), b[5])
+
+def _sight_glass(img):
+    """Brass-framed sight glass centred on the wall, height scaled to the wall."""
+    y_ = [hexrgb(h) for h in RAMPS['Y']]
+    W, H = img.size
+    gw = 4 if W < 32 else 6
+    gh = max(6, min(H - 14, int(H * 0.55)))
+    x0, y0 = W // 2 - gw // 2 - 1, H // 2 - gh // 2 - 1
+    glass = [hexrgb('#123b3a'), hexrgb('#1d5652'), hexrgb('#2f7a70'), hexrgb('#7fc9b8')]
+    for y in range(y0, y0 + gh + 2):
+        for x in range(x0, x0 + gw + 2):
+            edge = x in (x0, x0 + gw + 1) or y in (y0, y0 + gh + 1)
+            if edge:
+                img.putpixel((x, y), y_[6] if (x == x0 or y == y0) else y_[3])
+            else:
+                gx = x - x0 - 1
+                img.putpixel((x, y), glass[3] if gx == 0 and (y - y0) % 5 else glass[2 if gx == 1 else 1 if gx < gw - 1 else 0])
+    for y in range(y0 + 3, y0 + gh, 3):                    # graduation ticks on the right of the frame
+        img.putpixel((x0 + gw + 2, y), y_[5])
+    for y in (y0 - 2, y0 + gh + 3):                        # mounting bolts above and below
+        img.putpixel((W // 2 - 1, y), y_[7]); img.putpixel((W // 2, y), y_[4])
+
+def vat_wall_picture(base, W, H):
+    img = _tiled(base, W * 16, H * 16)
+    n = 0 if H == 1 else 1 if H == 2 else 2
+    for k in range(1, n + 1):
+        _hoop(img, round(H * 16 * k / (n + 1)) - 2, 'U')
+    _sight_glass(img)
+    _frame(img, 'U')
+    return img
+
+def vat_lid_picture(base, W, D):
+    img = _tiled(base, W * 16, D * 16)
+    s = [hexrgb(h) for h in RAMPS['S']]
+    cx, cy = (W // 2) * 16 + 8, (D // 2) * 16 + 8         # hatch under the valve (block W//2, D//2)
+    r = min(6 if min(W, D) == 1 else 10, cx - 2, cy - 2, W * 16 - cx - 2, D * 16 - cy - 2)
+    for y in range(D * 16):
+        for x in range(W * 16):
+            dist = ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2) ** 0.5
+            if r - 2 <= dist < r:
+                lit = (x < cx and y < cy)
+                img.putpixel((x, y), s[6] if lit else s[4] if dist < r - 1 else s[2])
+            elif r <= dist < r + 1:
+                img.putpixel((x, y), _darker(img.getpixel((x, y)), 0.7))
+    import math
+    for k in range(8):                                      # hatch bolts
+        a = k * math.pi / 4
+        bx, by = int(cx + math.cos(a) * (r - 1)), int(cy + math.sin(a) * (r - 1))
+        img.putpixel((bx, by), s[8])
+    _frame(img, 'S', t=2)
+    return img
+
 def vat(made):
     wall = recolour_all(BLOCK + 'iron_block.png', 'S', lift=0.62)
     lid = recolour_all(BLOCK + 'cut_copper.png', 'U', lift=0.95)
-    for name, base, band in (('fermenting_vat', wall, 'U'), ('fermenting_vat_lid', lid, 'S')):
-        sheet = ct_sheet(base, band)
-        save(sheet, 'block/%s_connected' % name)
-        made.append(save(sheet.crop((48, 48, 64, 64)), 'block/%s' % name))
-    bottom = recolour_all(BLOCK + 'iron_block.png', 'S', lift=0.4)
-    made.append(save(bottom, 'block/fermenting_vat_bottom'))
+    wall_sheet = Image.new('RGBA', (256, 256), (0, 0, 0, 0))
+    lid_sheet = Image.new('RGBA', (256, 256), (0, 0, 0, 0))
+    for W in (1, 2, 3):
+        for H in (1, 2, 3, 4):
+            wall_sheet.alpha_composite(vat_wall_picture(wall, W, H), ((W - 1) * 48, (H - 1) * 64))
+        for D in (1, 2, 3):
+            lid_sheet.alpha_composite(vat_lid_picture(lid, W, D), ((W - 1) * 48, (D - 1) * 48))
+    save(wall_sheet, 'block/fermenting_vat_big')
+    save(lid_sheet, 'block/fermenting_vat_lid_big')
+    made.append(save(wall_sheet.crop((0, 0, 16, 16)), 'block/fermenting_vat'))       # the 1x1 picture: item + placeholder
+    made.append(save(lid_sheet.crop((0, 0, 16, 16)), 'block/fermenting_vat_lid'))
+    made.append(save(recolour_all(BLOCK + 'iron_block.png', 'S', lift=0.4), 'block/fermenting_vat_bottom'))
 
 # ---------------------------------------------------------------------------------------- metalworking
 RAMPS['U'] = ['#1d0d07', '#33160b', '#4d2410', '#6a3416', '#87451c', '#a35a26', '#bb7034', '#d08a48', '#e3a866']

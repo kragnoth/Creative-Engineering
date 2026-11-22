@@ -23,14 +23,12 @@ CE = 'creativeengineering:block/'
 GROUND = cube('minecraft:block/smooth_stone', frm=(0, 15, 0), to=(16, 16, 16))
 
 
-def tile(sheet, L, R, T, B):
-    """RECTANGLE tile for a face with neighbours left / right / up / down (True = connected)."""
-    tx = {(False, False): 0, (False, True): 1, (True, True): 2, (True, False): 3}[(L, R)]
-    ty = {(False, True): 0, (True, True): 1, (True, False): 2, (False, False): 3}[(T, B)]
-    name = '%s_%d_%d' % (sheet, tx, ty)
+def tile(sheet, px, py):
+    """16x16 slice at (px, py) of a big-picture sheet, as the client VatModel picks it."""
+    name = '%s_%d_%d' % (sheet, px, py)
     path = os.path.join(CT, 'textures', name + '.png')
     if not os.path.exists(path):
-        Image.open(os.path.join(TEX, sheet + '_connected.png')).crop((tx * 16, ty * 16, tx * 16 + 16, ty * 16 + 16)).save(path)
+        Image.open(os.path.join(TEX, sheet + '.png')).crop((px, py, px + 16, py + 16)).save(path)
     return 'preview:' + name
 
 
@@ -62,14 +60,13 @@ def vat(sc, w, h, d, heat='campfire', working=False):
                         e['faces'].pop(face)          # skipRendering: walls between vat blocks don't draw
                         continue
                     key = 'f_' + face
-                    m['textures'][key] = tile('fermenting_vat', inside(x + l[0], y, z + l[2]), inside(x + r[0], y, z + r[2]),
-                                              inside(x, y + 1, z), inside(x, y - 1, z))
+                    col, width = {'north': (w - 1 - x, w), 'south': (x, w), 'east': (d - 1 - z, d), 'west': (z, d)}[face]
+                    m['textures'][key] = tile('fermenting_vat_big', (width - 1) * 48 + col * 16, (h - 1) * 64 + (h - 1 - y) * 16)
                     e['faces'][face]['texture'] = '#' + key
                 if y < h - 1:
                     e['faces'].pop('up')
                 else:
-                    m['textures']['f_up'] = tile('fermenting_vat_lid', inside(x - 1, y, z), inside(x + 1, y, z),
-                                                 inside(x, y, z - 1), inside(x, y, z + 1))
+                    m['textures']['f_up'] = tile('fermenting_vat_lid_big', (w - 1) * 48 + x * 16, (d - 1) * 48 + z * 16)
                     e['faces']['up']['texture'] = '#f_up'
                 if y > 0:
                     e['faces'].pop('down')

@@ -637,6 +637,7 @@ public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveG
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         BlockPos old = controller;
+        int oldSize = sx * 100 + sy * 10 + sz;
         controller = tag.contains("Controller") ? NbtUtils.readBlockPos(tag, "Controller").orElse(null) : null;
         int[] s = tag.getIntArray("Size");
         if (s.length == 3) {
@@ -649,10 +650,18 @@ public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveG
         active = tag.contains("Active") ? ResourceLocation.parse(tag.getString("Active")) : null;
         batches = tag.getInt("Batches");
         progress = tag.getFloat("Progress");
+        if (clientPacket && level != null && oldSize != sx * 100 + sy * 10 + sz) {
+            old = null;   // same controller, new size: still a new picture for every block
+        }
         if (clientPacket && level != null && !java.util.Objects.equals(old, controller)) {
             // connected textures depend on which vat this block belongs to: re-render
             com.kragnoth.creativeengineering.content.shared.CTRefresh.onClientController(this, old, controller);
         }
+    }
+
+    /** Client-safe: this block's copy of its vat's size {w, h, d} (synced to every member). */
+    public int[] clientSize() {
+        return new int[]{sx, sy, sz};
     }
 
     /** Client-safe: the formed vat's controller this block belongs to (for connected textures). */

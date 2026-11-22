@@ -229,7 +229,8 @@ Convention (borrowed from Tarbound):
 - [ ] Display link: status / progress.
 - [ ] Each drink's bucket runs the diesel engine at ethanol output.
 
-## 0.9.1 — vat connected textures + instant furnace CT
-- [ ] Vat: 1x1, 1x3, 2x2x2 and 3x3x4 each read as one vessel (strap / lid rim on the outside only; no inner seams; feet on the outer corners only).
+## 0.9.1–0.9.2 — vat big-picture textures + instant furnace CT
+- [ ] Vat: 1x1, 1x3, 2x2x2, 3x1x2 and 3x3x4 each show one whole picture per face (strap round the outside, hoops, centred sight glass, lid hatch under the valve; no inner seams; feet on the outer corners only).
+- [ ] Extend a vat (e.g. 2x2 to 3x3): every block swaps to the new picture at once.
 - [ ] Two separate vats side by side stay two framed vessels.
 - [ ] Coke oven, blast furnace, alloy furnace and vat join their connected textures instantly when formed or extended (they used to lag up to ~5 s).
