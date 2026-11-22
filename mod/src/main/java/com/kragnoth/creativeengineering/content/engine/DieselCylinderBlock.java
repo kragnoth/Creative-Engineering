@@ -19,7 +19,7 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 /**
  * A diesel cylinder: sits diagonally above a crankcase and leans toward its FACING (away from the crankshaft). The
  * engine sets RUNNING while it fires; that only drives client effects: occasional vanilla campfire smoke off the
- * head and a soft thump (no custom particles, no server cost).
+ * head (no custom particles, no server cost). The engine's running sound comes from the crankcase, once per engine.
  */
 public class DieselCylinderBlock extends HorizontalDirectionalBlock implements IWrenchable,
         com.simibubi.create.foundation.block.IBE<DieselCylinderBlockEntity> {
@@ -66,9 +66,6 @@ public class DieselCylinderBlock extends HorizontalDirectionalBlock implements I
         double x = pos.getX() + 0.5 + f.getStepX() * 0.55, y = pos.getY() + 1.05, z = pos.getZ() + 0.5 + f.getStepZ() * 0.55;
         if (random.nextInt(3) == 0) {
             level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y, z, f.getStepX() * 0.005, 0.03, f.getStepZ() * 0.005);
-        }
-        if (random.nextInt(6) == 0) {
-            level.playLocalSound(x, y, z, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 0.05F, 0.5F + random.nextFloat() * 0.2F, false);
         }
     }
 }

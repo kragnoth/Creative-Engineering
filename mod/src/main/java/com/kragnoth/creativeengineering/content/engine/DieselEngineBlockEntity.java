@@ -74,7 +74,11 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
     @Override
     public void tick() {
         super.tick();
-        if (level == null || level.isClientSide || !isController()) {
+        if (level == null || !isController()) {
+            return;
+        }
+        if (level.isClientSide) {
+            soundTick();
             return;
         }
         if (--scanTimer <= 0) {
@@ -109,6 +113,26 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
                 return;
             }
             burnDebt -= mb;
+        }
+    }
+
+    private float chugDebt;
+
+    /**
+     * The engine's one running sound (client, controller only): a low, muffled thump per firing, 4-stroke at 64 RPM,
+     * so the rhythm speeds up with cylinders (single ~0.5/s, V8 ~4/s, which blurs into a thrum). Capped at 6/s.
+     */
+    private void soundTick() {
+        if (!running || cylinders == 0) {
+            chugDebt = 0;
+            return;
+        }
+        chugDebt += Math.min(6F, cylinders * RPM / 120F) / 20F;
+        if (chugDebt >= 1) {
+            chugDebt -= 1;
+            float vol = 0.18F + 0.04F * (float) Math.sqrt(cylinders);
+            level.playLocalSound(worldPosition.getX() + 0.5, worldPosition.getY() + 0.5, worldPosition.getZ() + 0.5,
+                    SoundEvents.NOTE_BLOCK_BASEDRUM.value(), SoundSource.BLOCKS, vol, 0.48F + level.random.nextFloat() * 0.06F, false);
         }
     }
 

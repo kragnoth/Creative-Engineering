@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.7-alpha: engine running sound (2026-11-22) - listen in game
+- [ ] One sound per engine, from the output-end crankcase: a low muffled thump per firing (bass drum pitched down, quiet). Single cylinder ~every 2 s; V8 ~4/s, blurring into a thrum. No per-cylinder sounds. Stops with the engine.
+- [ ] Tell me if it should be lower / quieter / more continuous (a looped hum under the thumps is the next step if needed).
+
 ## 0.8.6-alpha: engine fixes from Kragnoth's test (2026-11-22) - test in game
 - [ ] Flywheel renders and spins with Flywheel instancing on (cause in latest.log: backend flywheel:indirect active, so Create's classic kinetic renderer skips itself and there was no instanced visual). Also with `/flywheel backend off`.
 - [ ] Crankshaft sticks out 1 px past the bearing rings at both ends (and shows between joined crankcases).
