@@ -101,6 +101,14 @@ public final class ModFluids {
     /** Pressed from seeds in a Basin under a Mechanical Press (Create compacting). Tagged c:plantoil. */
     public static final Tinted PLANT_OIL = new Tinted("plant_oil", 0xFFD9B44A, 920, 2500, MapColor.COLOR_YELLOW);
 
+    // Fermenting Vat products (docs/fermentation-spec.md). Ethanol also fuels the diesel engine.
+    public static final Tinted ETHANOL = new Tinted("ethanol", 0xC0E8EEF0, 790, 1000, MapColor.COLOR_LIGHT_GRAY);
+    public static final Tinted HOOCH = new Tinted("hooch", 0xD0D8D2B8, 950, 1000, MapColor.SAND);
+    public static final Tinted WINE = new Tinted("wine", 0xF0761226, 990, 1100, MapColor.COLOR_RED);
+    public static final Tinted CIDER = new Tinted("cider", 0xE8D9962E, 1010, 1050, MapColor.COLOR_ORANGE);
+    public static final Tinted MEAD = new Tinted("mead", 0xF0E3A83A, 1040, 1600, MapColor.GOLD);
+    public static final Tinted ALE = new Tinted("ale", 0xF07A4A1E, 1010, 1100, MapColor.COLOR_BROWN);
+
     /** Called from the mod constructor so the holders above are created before registration fires. */
     public static void init() {}
 }

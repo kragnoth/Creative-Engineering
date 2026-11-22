@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " V ",
+    "CBC",
+    "C C"
+  ],
+  "key": {
+    "V": {
+      "item": "create:fluid_valve"
+    },
+    "B": {
+      "item": "create:basin"
+    },
+    "C": {
+      "tag": "c:plates/copper"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:fermenting_vat",
+    "count": 1
+  }
+}

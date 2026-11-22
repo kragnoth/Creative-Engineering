@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:fermenting_vat"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.fermenting.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.fermenting.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "vat": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:fermenting_vat"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "vat"
+    ]
+  ],
+  "parent": "creativeengineering:coke_oven"
+}

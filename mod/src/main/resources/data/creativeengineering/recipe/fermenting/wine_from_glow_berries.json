@@ -1,0 +1,18 @@
+{
+  "type": "creativeengineering:fermenting",
+  "ingredients": [
+    {
+      "item": "minecraft:glow_berries",
+      "count": 8
+    }
+  ],
+  "fluid": {
+    "fluid": "minecraft:water",
+    "amount": 250
+  },
+  "result": {
+    "id": "creativeengineering:wine",
+    "amount": 250
+  },
+  "time": 400
+}

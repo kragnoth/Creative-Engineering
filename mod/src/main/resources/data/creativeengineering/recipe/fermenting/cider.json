@@ -1,0 +1,18 @@
+{
+  "type": "creativeengineering:fermenting",
+  "ingredients": [
+    {
+      "item": "minecraft:apple",
+      "count": 4
+    }
+  ],
+  "fluid": {
+    "fluid": "minecraft:water",
+    "amount": 250
+  },
+  "result": {
+    "id": "creativeengineering:cider",
+    "amount": 250
+  },
+  "time": 400
+}

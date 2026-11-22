@@ -10,6 +10,10 @@ A = '%s/assets/%s' % (RES, MODID)
 D = '%s/data/%s' % (RES, MODID)
 written = []
 
+def load_json(path):
+    with open(path) as f:
+        return json.load(f)
+
 def put(path, obj):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'w', encoding='utf-8') as f:
@@ -158,6 +162,41 @@ LANG = collections.OrderedDict([
     ('fluid_type.%s.plant_oil' % MODID, 'Plant Oil'),
     ('block.%s.plant_oil' % MODID, 'Plant Oil'),
     ('item.%s.plant_oil_bucket' % MODID, 'Plant Oil Bucket'),
+    ('fluid_type.%s.ethanol' % MODID, 'Ethanol'),
+    ('block.%s.ethanol' % MODID, 'Ethanol'),
+    ('item.%s.ethanol_bucket' % MODID, 'Ethanol Bucket'),
+    ('fluid_type.%s.hooch' % MODID, 'Hooch'),
+    ('block.%s.hooch' % MODID, 'Hooch'),
+    ('item.%s.hooch_bucket' % MODID, 'Hooch Bucket'),
+    ('fluid_type.%s.wine' % MODID, 'Wine'),
+    ('block.%s.wine' % MODID, 'Wine'),
+    ('item.%s.wine_bucket' % MODID, 'Wine Bucket'),
+    ('fluid_type.%s.cider' % MODID, 'Cider'),
+    ('block.%s.cider' % MODID, 'Cider'),
+    ('item.%s.cider_bucket' % MODID, 'Cider Bucket'),
+    ('fluid_type.%s.mead' % MODID, 'Mead'),
+    ('block.%s.mead' % MODID, 'Mead'),
+    ('item.%s.mead_bucket' % MODID, 'Mead Bucket'),
+    ('fluid_type.%s.ale' % MODID, 'Ale'),
+    ('block.%s.ale' % MODID, 'Ale'),
+    ('item.%s.ale_bucket' % MODID, 'Ale Bucket'),
+    ('block.%s.fermenting_vat' % MODID, 'Fermenting Vat'),
+    ('%s.vat.heat' % MODID, 'Heat: x%s (campfire x1, lit burner x2, superheated x3)'),
+    ('%s.vat.tank.0' % MODID, 'In: %s %s / %s mB'),
+    ('%s.vat.tank.1' % MODID, 'Out: %s %s / %s mB'),
+    ('%s.vat.empty' % MODID, 'empty'),
+    ('%s.vat.progress' % MODID, 'Fermenting %s batch(es): %s%%'),
+    ('%s.vat.blocker.no_heat' % MODID, 'No heat: a campfire or Blaze Burner under it'),
+    ('%s.vat.blocker.no_fluid' % MODID, 'Needs water (or the recipe fluid)'),
+    ('%s.vat.blocker.no_items' % MODID, 'Needs something to ferment'),
+    ('%s.vat.blocker.no_recipe' % MODID, 'Nothing ferments from this (or the output is full)'),
+    ('%s.jei.fermenting' % MODID, 'Fermenting'),
+    ('advancements.%s.fermenting.title' % MODID, 'Something Brewing'),
+    ('advancements.%s.fermenting.description' % MODID, 'Make a Fermenting Vat'),
+    ('%s.jei.fermenting.time' % MODID, '%ss at passive heat'),
+    ('%s.jei.fermenting.tip' % MODID, 'Any heat under the vat: campfire or unlit Blaze Burner x1, lit x2, superheated x3. Bigger vats run more batches at once.'),
+    ('%s.jade.vat_items' % MODID, 'Ingredients: %s'),
+    ('config.jade.plugin_%s.fermenting_vat' % MODID, 'Fermenting Vat'),
     ('block.%s.coke_oven_bricks' % MODID, 'Coke Oven Bricks'),
     ('block.%s.coke_block' % MODID, 'Block of Coal Coke'),
     ('block.%s.creosote' % MODID, 'Creosote Oil'),
@@ -237,7 +276,8 @@ put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
 # Creosote bucket: built at runtime by NeoForge from whatever bucket texture is loaded (vanilla, Excalibur, any
 # pack) with our creosote texture masked into it. No bucket texture of our own.
 # Tinted fluids (ModFluids.Tinted): bucket models fill from the fluid at runtime, like creosote's.
-TINTED = [('plant_oil', 'Plant Oil')]
+TINTED = [('plant_oil', 'Plant Oil'), ('ethanol', 'Ethanol'), ('hooch', 'Hooch'), ('wine', 'Wine'), ('cider', 'Cider'),
+          ('mead', 'Mead'), ('ale', 'Ale')]
 for n, _ in TINTED:
     put('%s/models/item/%s_bucket.json' % (A, n), {'parent': 'neoforge:item/bucket_drip', 'loader': 'neoforge:fluid_container', 'fluid': ce(n)})
     put('%s/blockstates/%s.json' % (A, n), {'variants': {'': {'model': ce('block/' + n)}}})
@@ -581,6 +621,35 @@ for ang in (0, 45):
            box([6.5, 0, 6.5], [9.5, 16, 9.5], 'iron', rot=rr), box([6.5, 6.5, 0], [9.5, 9.5, 16], 'iron', rot=rr)]
 eng('diesel_flywheel', ENG_T, fw)
 
+# Fermenting Vat models (Create textures): basin walls on every block, feet on the bottom layer, a copper lid on the
+# top layer, one pressure-release valve (brass stem + handwheel) top-middle. Multipart on top / bottom / valve.
+VAT_T = {'wall': CR('basin'), 'iron': CR('industrial_iron_block'), 'dark': CR('dark_metal_block'), 'lid': CR('copper_casing'),
+         'brass': CR('brass_block'), 'shaft': CR('axis'), 'shaft_end': CR('axis_top')}
+def vat_wall(y0):
+    e = box([0, y0, 0], [16, 16, 16], 'wall', {'up': 'iron', 'down': 'dark'})
+    for d in ('north', 'south', 'east', 'west'):
+        e['faces'][d]['uv'] = [0, 0, 8, 7]
+    return e
+eng('fermenting_vat_body', VAT_T, [vat_wall(0)])
+eng('fermenting_vat_body_bottom', VAT_T, [vat_wall(2), box([2, 0, 2], [14, 2, 14], 'dark'),
+                                          box([0.5, 0, 0.5], [3, 2, 3], 'iron'), box([13, 0, 0.5], [15.5, 2, 3], 'iron'),
+                                          box([0.5, 0, 13], [3, 2, 15.5], 'iron'), box([13, 0, 13], [15.5, 2, 15.5], 'iron')])
+eng('fermenting_vat_lid', VAT_T, [box([0.5, 16, 0.5], [15.5, 17, 15.5], 'lid'), box([2, 17, 2], [14, 17.5, 14], 'lid')])
+eng('fermenting_vat_valve', VAT_T, [box([7, 17.5, 7], [9, 20, 9], 'brass'),
+                                    box([5, 20, 7.5], [11, 20.75, 8.5], 'dark'), box([7.5, 20, 5], [8.5, 20.75, 11], 'dark'),
+                                    box([7.25, 20.75, 7.25], [8.75, 21.5, 8.75], 'brass'),
+                                    box([9, 18, 7.5], [11.5, 19, 8.5], 'brass')])          # vent spout
+put('%s/blockstates/fermenting_vat.json' % A, {'multipart': [
+    {'when': {'bottom': 'false'}, 'apply': {'model': ce('block/fermenting_vat_body')}},
+    {'when': {'bottom': 'true'}, 'apply': {'model': ce('block/fermenting_vat_body_bottom')}},
+    {'when': {'top': 'true'}, 'apply': {'model': ce('block/fermenting_vat_lid')}},
+    {'when': {'valve': 'true'}, 'apply': {'model': ce('block/fermenting_vat_valve')}}]})
+vat_item = load_json('%s/models/block/fermenting_vat_body_bottom.json' % A)
+for extra in ('fermenting_vat_lid', 'fermenting_vat_valve'):
+    vat_item['elements'] += load_json('%s/models/block/%s.json' % (A, extra))['elements']
+put('%s/models/item/fermenting_vat.json' % A, vat_item)
+simple_loot('fermenting_vat')
+
 # Engine blockstates: models are drawn for engine axis X / facing south (cylinder leans +Z); rotate the rest.
 FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}          # cylinder model leans +Z (south)
 OUT_Y = {'east': 0, 'south': 90, 'west': 180, 'north': 270}            # crankcase model's output end is +X (east)
@@ -624,6 +693,22 @@ tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
+tagfile('c', 'fluid', 'ethanol', [ce('ethanol'), ce('flowing_ethanol')])
+# Fermenting Vat: 250 mB water + produce -> 250 mB, 20 s at passive heat (docs/fermentation-spec.md).
+def ferment(name, ingredient, count, result, time=400):
+    put(R + '/fermenting/%s.json' % name, {'type': ce('fermenting'), 'ingredients': [dict(ingredient, count=count)],
+        'fluid': {'fluid': 'minecraft:water', 'amount': 250}, 'result': {'id': ce(result), 'amount': 250}, 'time': time})
+ferment('ethanol_from_sugar_cane', item('minecraft:sugar_cane'), 4, 'ethanol')
+ferment('ethanol_from_beetroot', tag('c:crops/beetroot'), 4, 'ethanol')
+ferment('hooch', tag('c:crops/potato'), 4, 'hooch')
+ferment('wine', item('minecraft:sweet_berries'), 8, 'wine')
+ferment('wine_from_glow_berries', item('minecraft:glow_berries'), 8, 'wine')
+ferment('cider', item('minecraft:apple'), 4, 'cider')
+ferment('mead', item('minecraft:honey_bottle'), 2, 'mead', 600)
+ferment('ale', tag('c:crops/wheat'), 4, 'ale')
+shaped('fermenting_vat', [' V ', 'CBC', 'C C'], {'V': item('create:fluid_valve'), 'B': item('create:basin'),
+       'C': tag('c:plates/copper')}, ce('fermenting_vat'), category='misc')
+
 # Plant oil: seeds pressed in a Basin under a Mechanical Press (Create compacting). 4 seeds -> 250 mB.
 put(R + '/compacting/plant_oil.json', {'type': 'create:compacting', 'ingredients': [tag('c:seeds')] * 4,
     'results': [{'id': ce('plant_oil'), 'amount': 250}]})
@@ -638,7 +723,7 @@ opt = lambda i: {'id': i, 'required': False}
 FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 12288, 2),
          ('plant_oil', [ce('plant_oil'), '#c:plantoil', '#c:plant_oil', '#c:seed_oil', 'createaddition:seed_oil', 'createdieselgenerators:plant_oil',
                         'immersiveengineering:plantoil'], 15360, 2),
-         ('ethanol', ['#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
+         ('ethanol', [ce('ethanol'), ce('hooch'), ce('wine'), ce('cider'), ce('mead'), ce('ale'), '#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
                       'immersiveengineering:ethanol'], 18432, 2),
          ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel'], 24576, 1.5),
          ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 30720, 1),
@@ -685,7 +770,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'fermenting_vat')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])
@@ -716,6 +801,7 @@ adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('all
 adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die')})
 adv('treated_wood', 'coke_oven', ce('treated_planks'), {n: has(ce(n)) for n in ('treated_planks', 'treated_log', 'treated_wood')})
 adv('diesel_engine', 'press_die', ce('diesel_cylinder'), {'cylinder': has(ce('diesel_cylinder'))}, 'goal')
+adv('fermenting', 'coke_oven', ce('fermenting_vat'), {'vat': has(ce('fermenting_vat'))})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

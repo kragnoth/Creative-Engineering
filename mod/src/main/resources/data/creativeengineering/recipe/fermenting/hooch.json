@@ -1,0 +1,18 @@
+{
+  "type": "creativeengineering:fermenting",
+  "ingredients": [
+    {
+      "tag": "c:crops/potato",
+      "count": 4
+    }
+  ],
+  "fluid": {
+    "fluid": "minecraft:water",
+    "amount": 250
+  },
+  "result": {
+    "id": "creativeengineering:hooch",
+    "amount": 250
+  },
+  "time": 400
+}

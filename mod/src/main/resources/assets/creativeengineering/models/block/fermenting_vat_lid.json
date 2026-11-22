@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "wall": "create:block/basin",
+    "iron": "create:block/industrial_iron_block",
+    "dark": "create:block/dark_metal_block",
+    "lid": "create:block/copper_casing",
+    "brass": "create:block/brass_block",
+    "shaft": "create:block/axis",
+    "shaft_end": "create:block/axis_top",
+    "particle": "create:block/basin"
+  },
+  "elements": [
+    {
+      "from": [
+        0.5,
+        16,
+        0.5
+      ],
+      "to": [
+        15.5,
+        17,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lid"
+        },
+        "south": {
+          "texture": "#lid"
+        },
+        "east": {
+          "texture": "#lid"
+        },
+        "west": {
+          "texture": "#lid"
+        },
+        "up": {
+          "texture": "#lid"
+        },
+        "down": {
+          "texture": "#lid"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        17,
+        2
+      ],
+      "to": [
+        14,
+        17.5,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#lid"
+        },
+        "south": {
+          "texture": "#lid"
+        },
+        "east": {
+          "texture": "#lid"
+        },
+        "west": {
+          "texture": "#lid"
+        },
+        "up": {
+          "texture": "#lid"
+        },
+        "down": {
+          "texture": "#lid"
+        }
+      }
+    }
+  ]
+}

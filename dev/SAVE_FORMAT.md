@@ -51,3 +51,10 @@ Blocks/items `treated_planks`, `treated_stairs`, `treated_slab`, `treated_log`, 
 Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `diesel_cylinder` (`facing`, `running`), `diesel_flywheel` (`axis`). Block entities `diesel_engine` (Create kinetic NBT + `Running`, `Cylinders`, `Length`, `Fuel` fluid id, `BurnDebt`) and `diesel_flywheel` (plain Create kinetic). Data map `engine_fuel`; fluid tags `engine_fuels/*`. Removed in 0.7.1: `diesel_exhaust`, `diesel_exhaust_stack`; in 0.7.0 pass: `diesel_starter`.
 
 - 0.8.1: block entity `diesel_cylinder` (no saved data; drives the rocker animation). Client config `creativeengineering-client.toml`: `visuals.animateEngines`.
+
+
+## 0.9.0
+- New block / BE `creativeengineering:fermenting_vat` (states top, bottom, valve, working).
+  - BE NBT: Controller, Size[3], Item, Input, Product, Speed, Active, Batches, Progress.
+- New fluids and buckets: ethanol, hooch, wine, cider, mead, ale (`<name>`, `flowing_<name>`, `<name>_bucket`).
+- New recipe type `creativeengineering:fermenting`.

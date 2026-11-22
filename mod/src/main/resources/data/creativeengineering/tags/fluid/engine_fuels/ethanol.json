@@ -2,6 +2,30 @@
   "replace": false,
   "values": [
     {
+      "id": "creativeengineering:ethanol",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:hooch",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:wine",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:cider",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:mead",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:ale",
+      "required": false
+    },
+    {
       "id": "#c:ethanol",
       "required": false
     },

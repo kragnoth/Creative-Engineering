@@ -1,0 +1,18 @@
+{
+  "type": "creativeengineering:fermenting",
+  "ingredients": [
+    {
+      "item": "minecraft:honey_bottle",
+      "count": 2
+    }
+  ],
+  "fluid": {
+    "fluid": "minecraft:water",
+    "amount": 250
+  },
+  "result": {
+    "id": "creativeengineering:mead",
+    "amount": 250
+  },
+  "time": 600
+}

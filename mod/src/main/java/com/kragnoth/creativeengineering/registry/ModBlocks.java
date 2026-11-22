@@ -66,6 +66,11 @@ public final class ModBlocks {
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
             () -> new com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
+    /** Chemistry: Fermenting Vat (docs/fermentation-spec.md). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock> FERMENTING_VAT = BLOCKS.register("fermenting_vat",
+            () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
+
     public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));
     public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerSimpleBlock("steel_block",

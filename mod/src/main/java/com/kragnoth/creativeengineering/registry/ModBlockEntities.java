@@ -45,6 +45,12 @@ public final class ModBlockEntities {
                             ModBlocks.DIESEL_CRANKCASE.get())
                     .build(null));
     @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity>> FERMENTING_VAT =
+            BLOCK_ENTITIES.register("fermenting_vat", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity(ModBlockEntities.FERMENTING_VAT.get(), pos, state),
+                            ModBlocks.FERMENTING_VAT.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.DieselCylinderBlockEntity>> DIESEL_CYLINDER =
             BLOCK_ENTITIES.register("diesel_cylinder", () -> BlockEntityType.Builder
                     .of((pos, state) -> new com.kragnoth.creativeengineering.content.engine.DieselCylinderBlockEntity(ModBlockEntities.DIESEL_CYLINDER.get(), pos, state),
@@ -63,5 +69,7 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationFluids());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BLAST_FURNACE.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ALLOY_FURNACE.get(), (be, side) -> be.automationItems());
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationItems());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationFluids());
     }
 }

@@ -155,4 +155,38 @@ public final class CEPlaytests {
             h.assertTrue(engine.cylinderCount() == 2, "engine counts " + engine.cylinderCount() + " cylinders");
         }));
     }
+
+    /** 2x2x2 vat over campfires forms one vat; water + sugar cane ferments to ethanol, all four batches at once. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 1200)
+    public static void fermentingVatFormsAndFerments(GameTestHelper h) {
+        BlockPos base = new BlockPos(4, 2, 4);
+        for (int x = 0; x < 2; x++) {
+            for (int z = 0; z < 2; z++) {
+                h.setBlock(base.offset(x, 0, z), net.minecraft.world.level.block.Blocks.CAMPFIRE);
+                for (int y = 1; y <= 2; y++) {
+                    h.setBlock(base.offset(x, y, z), ModBlocks.FERMENTING_VAT.get());
+                }
+            }
+        }
+        BlockPos vat = base.above();
+        h.runAfterDelay(5, () -> {
+            var level = h.getLevel();
+            var fl = level.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(vat.above().east()), Direction.UP);
+            h.assertTrue(fl != null && fl.getTankCapacity(0) == 8 * 2000, "vat did not form as 2x2x2");
+            fl.fill(new net.neoforged.neoforge.fluids.FluidStack(net.minecraft.world.level.material.Fluids.WATER, 1000),
+                    net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+            var it = level.getCapability(Capabilities.ItemHandler.BLOCK, h.absolutePos(vat.south()), Direction.NORTH);
+            var rest = it.insertItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.SUGAR_CANE, 16), false);
+            h.assertTrue(rest.isEmpty(), "vat refused sugar cane");
+            h.assertTrue(it.insertItem(0, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COBBLESTONE), true).getCount() == 1,
+                    "vat took a non-ingredient");
+        });
+        h.succeedWhen(() -> {
+            var fl = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(vat), Direction.UP);
+            var out = fl.getFluidInTank(1);
+            h.assertTrue(out.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.ETHANOL.source.get() && out.getAmount() == 1000,
+                    "product " + out.getAmount() + " " + out.getFluid());
+            h.assertTrue(fl.getFluidInTank(0).isEmpty(), "water left over");
+        });
+    }
 }

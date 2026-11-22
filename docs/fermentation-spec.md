@@ -25,3 +25,28 @@ vanilla water textures + tint, runtime bucket model), tagged `c:plantoil`, in th
    carrots, ethanol = sugar cane / beetroot. Distil hooch -> ethanol later (refining module)?
 3. Vat shape limits: like Create tanks (1-3 wide, any height) or smaller (1-2 wide, up to 3 tall)?
 4. Look pass first (renders for approval, like the engine), or build straight away?
+
+
+## Fermenting Vat — built in 0.9.0 (defaults chosen while the questions were open; Kragnoth confirmed "rest is good", 2026-11-22)
+
+- **Block:** `creativeengineering:fermenting_vat`. Recipe: fluid valve over a basin, between copper plates.
+- **Forming:** any box of vats 1–3 wide and 1–4 tall forms one vat (flood fill, like the alloy furnace). The min corner is the controller. A shape that isn't a box leaves every block working alone.
+- **Storage:** each block keeps its own ingredient slot (1 stack), a 2000 mB input tank and a 2000 mB product tank, so splitting a vat loses nothing. Automation sees one vat: 1 item slot (insert-only, ingredients only) and 2 tanks (0 = input, fill-only, recipe fluids only; 1 = product, drain-only), the same from every side. Belts feed it directly.
+- **Hand use:** buckets fill / empty like a tank; any ingredient goes in; an empty hand takes the ingredients back.
+- **Heat:** averaged over the footprint below the bottom layer. Campfire or unlit Blaze Burner (passive) x1, lit x2, superheated x3, nothing 0 (stops).
+- **Batches:** one recipe at a time, run as many times at once as the vat has blocks (ingredients, fluid and output room allowing).
+- **Look:** Create textures. Basin walls, a copper-casing lid on the top layer, iron feet on the bottom layer, one brass pressure-release valve top-middle that puffs and hisses softly while working.
+- **Recipe type `creativeengineering:fermenting`:** `ingredients` (1–4 counted), `fluid` (sized fluid ingredient), `result` (fluid stack), `time` (ticks at x1 heat, default 400).
+- **Default recipes (250 mB water each, giving 250 mB product):**
+
+  | Product | Ingredients |
+  |---|---|
+  | Ethanol | 4 sugar cane, or 4 beetroot |
+  | Hooch | 4 potatoes |
+  | Wine | 8 sweet berries, or 8 glow berries |
+  | Cider | 4 apples |
+  | Mead | 2 honey bottles, 30 s |
+  | Ale | 4 wheat |
+
+- **Fluids:** ethanol, hooch, wine, cider, mead and ale, each with a bucket. All six are in the engine's ethanol fuel tier (`c:ethanol` covers ethanol).
+- **Next pass (Kragnoth, 2026-11-22):** drinkable bottles with effects for each drink. The buckets stay.

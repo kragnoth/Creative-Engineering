@@ -215,3 +215,16 @@ Convention (borrowed from Tarbound):
 - EMI category for coking (JEI is done; EMI shows JEI categories only through its own plugin).
 - Creosoted Create track (rail & timber module): tag framework already reserved.
 - Built-in resource pack variant (Excalibur style).
+
+
+## 0.9.0 — Fermenting Vat
+- [ ] Place 1 vat on a campfire; Jade/goggles show 1x1x1, heat x1.00.
+- [ ] Build a 2x2x2 over mixed campfire/lit burner; heat averages; one valve top-middle; lid only on the top layer, feet only on the bottom.
+- [ ] Bucket of water in, sugar cane by hand and from a belt; it ferments; bucket the ethanol out; a pipe drains the product from any side.
+- [ ] Cobblestone and lava refused (by hand, funnel, pipe).
+- [ ] Empty hand returns ingredients. Breaking a block drops its stack.
+- [ ] Remove the heat: it stops, and Jade says why.
+- [ ] Valve puffs and hisses only while working.
+- [ ] JEI: Fermenting tab with every drink; vat, campfire and blaze burner as catalysts.
+- [ ] Display link: status / progress.
+- [ ] Each drink's bucket runs the diesel engine at ethanol output.

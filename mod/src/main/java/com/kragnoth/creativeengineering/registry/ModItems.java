@@ -57,7 +57,8 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_WOOD = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_WOOD);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_BEAM = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_BEAM);
 
-    // Diesel engine (first pass, look only)
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> FERMENTING_VAT = ITEMS.registerSimpleBlockItem(ModBlocks.FERMENTING_VAT);
+    // Diesel engine
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CYLINDER = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CYLINDER);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_FLYWHEEL = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_FLYWHEEL);
@@ -103,11 +104,14 @@ public final class ModItems {
                 BLISTER_STEEL_SWORD, BLISTER_STEEL_PICKAXE, BLISTER_STEEL_AXE, BLISTER_STEEL_SHOVEL, BLISTER_STEEL_HOE,
                 BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
                 COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET, com.kragnoth.creativeengineering.registry.ModFluids.PLANT_OIL.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.ETHANOL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.HOOCH.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.WINE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.CIDER.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.MEAD.bucket, com.kragnoth.creativeengineering.registry.ModFluids.ALE.bucket,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL);
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, FERMENTING_VAT);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

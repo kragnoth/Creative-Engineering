@@ -58,56 +58,9 @@ _Last updated: 2026-11-18 by Claude (session with Kragnoth)._ Update this file a
 - **0.6.1–0.6.6 (2026-11-18; beams and filters confirmed in game, 0.6.5–0.6.6 fuel changes awaiting test):** treated beams use Create's girder placement helper (`TreatedBeamPlacementHelper`); joist faces use a pre-rotated texture (no UV stretch); alloy furnace filters render (Create's `SmartBlockEntityRenderer` registered); bulk blister steel alloying (2 iron + 1 coke → 2); the alloy furnace has **no fuel**: burners are its running cost (slot 9 kept only for old saves). The blast furnace **keeps** burning coke (Kragnoth, 2026-11-20).
 
 ## Next goal
-1. **Module 1: Fuels & Engines, the diesel engine: feature-complete in 0.8.3** (runs, valve-gear animation + `animateEngines` config, Ponder, Jade, Display Links; headless game test passes). Kragnoth to test 0.8.0–0.8.3 in game and tune fuel values. Then **chemistry slice (Kragnoth, 2026-11-22): plant oil is in (0.8.5); next the Fermenting Vat, read `docs/fermentation-spec.md`** (questions there). After that: petroleum extraction (reservoirs, pumpjack). **Read `docs/engines-spec.md` first** (crankcase line, cylinders at 45°, 2 per block, tank feeds directly with no pump, crank jump-start, any-shape parts). Ask Kragnoth only the open questions listed there that he hasn't answered.
-2. Carry-overs: game tests for blast and alloy furnaces, EMI categories, die shown on the press head, treated beam Ponder scene.
-2. Next module (suggested): 1. Fuels & Engines (diesel engine), which unlocks petroleum.
-2. Carry-overs: game tests for blast and alloy furnaces, EMI categories. Fix feedback as 0.3.x.
-2. Carry-overs: blast furnace game tests (template with a heated Blaze Burner), display-link sources for both machines, EMI categories.
-3. **Tier 4: the Alloy Furnace** (spec §4b, 0.4.0): steel-built bulk alloying, blaze burners + coke + fans; can read Create heated-mixing alloy recipes. The arc crucible is dropped (Create + KubeJS cover recycling and ore doubling).
 
-Earlier goal, kept for history:
-- This needs Create compiled in as a dependency (`compileOnly`), so the multiblock can use `ConnectivityHandler`, `BoilerHeater`, `DirectBeltInputBehaviour`, `IHaveGoggleInformation` and the arm-point registry.
-- Note: the Registrate Maven (`maven.ithundxr.dev`) is blocked from Claude's sandbox. Use Create's jar with `transitive = false` and avoid Registrate types.
-
-(Tier 1, blister steel, was released as 0.1.0-alpha.)
-
-### Decisions (settled 2026-11-18 by Kragnoth)
-- [x] **Power:** pure rotation (SU) only. No FE, no wires, no internal batteries.
-- [x] **Mod id / package:** `creativeengineering` / `com.kragnoth.creativeengineering`.
-- [x] **First module:** Steelworks.
-
-**Read `docs/create-core-concepts.md` before designing anything.** It has Create's stated pillars, the mechanics confirmed in source, the 8 design rules, Kragnoth's **fun-first rules (9–15)**, and the revised steel ladder (§5).
-
-- [x] **Steel route approved:** blister steel (fan-blasting cementation) → coke oven → blast furnace (cast iron; steel with a fan air blast). The design is in **`docs/steelworks-spec.md`** (draft).
-- [x] **Spec approved:** blister steel tools and armour yes; creosoted track deferred (framework only); coal allowed at a poor rate; full base-Create and hopper logistics compatibility (spec §0).
-
-### Steps
-1. `bash tools/setup_refs.sh`. Also attach or obtain the NeoForge and decompiled-MC sources if you need to check signatures.
-2. Create the ModDevGradle project in `mod/`:
-   - NeoForge 21.1.267.
-   - Create 6.0.10 as a hard dependency, plus Flywheel and Ponder as Create requires.
-   - Parchment mappings.
-   - Datagen for models that reference `create:` textures.
-3. **Style kit** (`tools/stylekit/`):
-   - Palette `.gpl` files built from the ramps in `docs/create-art-style.md`.
-   - A PIL texture generator for new parts, plus an offline preview renderer.
-4. **Steelworks spec: approved** (`docs/steelworks-spec.md`). Build exactly from it. Start with §0, the integration contract. The spec covers:
-   - blocks
-   - multiblock sizing rules
-   - heat requirements
-   - fan/stress numbers
-   - I/O faces
-   - recipes
-   - Ponder scene list
-   - art list
-
-   Starting points:
-   - `docs/create-core-concepts.md` §4
-   - Features tab rows IE-59 (coke oven) and IE-61 (blast furnace)
-   - Follow the steel ladder in `docs/create-core-concepts.md` §5. It supersedes the earlier draft, in which superheat and fans were required.
-   - Recipe types `coking` and `blast_smelting`. Heated-mixing alloys (electrum, constantan). Coke as a `BlazeBurnerFuel` data-map entry. `c:ingots/steel` and `c:` tags throughout.
-5. Ponder scenes and goggle info for both machines.
-6. Build: `./gradlew build`. **Do not launch a client or server unless Kragnoth asks for a full compile and load-up.**
+**0.9.0 shipped the Fermenting Vat and six drink fluids** (docs/fermentation-spec.md), with headless tests 7/7. Waiting on Kragnoth's in-game test and his approval of the look.
+Next pass: drinkable bottles with effects for ethanol / hooch / wine / cider / mead / ale (buckets stay; the drinks are already ethanol-tier engine fuel). Then vat Ponder, then petroleum extraction.
 
 ## Compat and dev tools
 - **Tarbound compat:** `docs/tarbound-compat.md`. CE stays a standard machine (T1–T7, generic). Tarbound-specific adapters (A1–A4) belong in the Tarbound repo, done by soft compat. Neither mod depends on the other.

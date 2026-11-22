@@ -34,4 +34,9 @@ public final class ModRecipes {
             TYPES.register("die_pressing", () -> RecipeType.simple(CreativeEngineering.id("die_pressing")));
     public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.metalworking.DiePressingRecipe.Serializer> DIE_PRESSING_SERIALIZER =
             SERIALIZERS.register("die_pressing", com.kragnoth.creativeengineering.content.metalworking.DiePressingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<com.kragnoth.creativeengineering.content.fermenting.FermentingRecipe>> FERMENTING_TYPE =
+            TYPES.register("fermenting", () -> RecipeType.simple(CreativeEngineering.id("fermenting")));
+    public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.fermenting.FermentingRecipe.Serializer> FERMENTING_SERIALIZER =
+            SERIALIZERS.register("fermenting", com.kragnoth.creativeengineering.content.fermenting.FermentingRecipe.Serializer::new);
 }
