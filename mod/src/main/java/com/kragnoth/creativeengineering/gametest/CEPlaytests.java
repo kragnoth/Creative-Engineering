@@ -468,4 +468,35 @@ public final class CEPlaytests {
             h.succeed();
         });
     }
+
+    /** The /test rundistill demo really runs: pumped hooch distils into the water and vodka storage tanks. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 900)
+    public static void distillDemoRuns(GameTestHelper h) {
+        open(h);
+        BlockPos o = new BlockPos(4, 2, 4);
+        com.kragnoth.creativeengineering.demo.DemoCommands.buildDistiller(h.getLevel(), h.absolutePos(o));
+        h.runAfterDelay(20, () -> h.succeedWhen(() -> {
+            var L = h.getLevel();
+            var w = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(com.kragnoth.creativeengineering.demo.DemoCommands.WATER_TANK)), Direction.UP).getFluidInTank(0);
+            var v = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(com.kragnoth.creativeengineering.demo.DemoCommands.VODKA_TANK)), Direction.UP).getFluidInTank(0);
+            var src = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(-1, 1, 2)), Direction.EAST);
+            var pump = h.getBlockEntity(o.offset(1, 1, 2));
+            var boiler = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(2, 1, 2)), Direction.WEST);
+            String diag = " | creative tank " + (src == null ? "none" : src.getFluidInTank(0).getAmount() + " " + src.getFluidInTank(0).getFluid())
+                    + " | pump " + (pump instanceof com.simibubi.create.content.kinetics.base.KineticBlockEntity k ? k.getSpeed() + " rpm" : String.valueOf(pump))
+                    + " | boiler " + (boiler == null ? "none" : boiler.getFluidInTank(0).getAmount() + " " + boiler.getFluidInTank(0).getFluid());
+            if (h.getBlockEntity(o.offset(2, 1, 2)) instanceof com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity t) {
+                var b = t.blocker();
+                diag += " | size " + java.util.Arrays.toString(t.size()) + " heat " + t.speed() + " progress " + t.progressFraction()
+                        + " blocker " + (b == null ? "none" : b.getString()) + " | L1 " + t.layerFluid(1).getAmount() + " " + t.layerFluid(1).getFluid()
+                        + " L2 " + t.layerFluid(2).getAmount() + " " + t.layerFluid(2).getFluid();
+                var wcap = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(4, 2, 2)), Direction.WEST);
+                diag += " | water tank block " + L.getBlockState(h.absolutePos(o.offset(4, 2, 2))) + " cap " + (wcap == null ? "null" : wcap.getTankCapacity(0))
+                        + " | L1 east neighbour of (3,2,2): " + L.getBlockState(h.absolutePos(o.offset(3, 2, 2))).getBlock();
+            }
+            h.assertTrue(w.getFluid() == net.minecraft.world.level.material.Fluids.WATER && w.getAmount() >= 150, "water tank: " + w.getAmount() + " " + w.getFluid() + diag);
+            h.assertTrue(v.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.VODKA.source.get() && v.getAmount() >= 100,
+                    "vodka tank: " + v.getAmount() + " " + v.getFluid());
+        }));
+    }
 }

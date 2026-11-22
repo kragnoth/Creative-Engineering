@@ -34,8 +34,15 @@ Kragnoth, 2026-11-22: "work on the distilling tank next". Chosen: **one machine 
 4. Optional: place Create scaffolding around it wherever you want platforms; it becomes catwalks.
 5. Fill the boiler (bottom level) by pipe or bucket from any side.
 
+## Demo: `/test rundistill`
+Op level 2, in any world with cheats. It clears a space a few blocks in front of you and builds a running example:
+- **Input:** a Create creative fluid tank of hooch -> pipe -> mechanical pump (cogwheel on a creative motor) -> the boiler.
+- **Column:** 2x2x4 Distilling Tank on four lit copper Campfire Stands, with a catwalk ring on the top level.
+- **Outputs:** a Create fluid tank against level 1 (water) and one against level 2 (vodka), with no output pumps. Signs label each part.
+- The game test `distillDemoRuns` builds the same thing and checks both storage tanks fill (`DemoCommands.buildDistiller`).
+
 ## Getting the fractions out (Kragnoth: "each layer easily pumped and put into storage tanks")
-- **No pump needed:** every fraction level pushes its fluid (100 mB every 5 ticks per block) into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.
+- **No pump needed:** every fraction level pushes its fluid, as one tank (100 mB every 5 ticks per touching face), into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.
 - **Pumped lines:** Create pipes connect to every side of every level; a pump pulls that level's fraction.
 - A catwalk occupies the space beside the column on its level, so put storage and pipes on levels without catwalks.
 - No other mods needed: Create's own pipes, pumps and tanks do it.

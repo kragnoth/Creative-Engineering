@@ -284,25 +284,25 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
      * column's boiler...). Pumps and pipes work on any side too. The boiler never pushes.
      */
     private void pushOutputs() {
+        // a level pushes as one tank: whichever of its blocks touches the container, the fluid can come from any of them
         for (int y = 1; y < sy; y++) {
             for (DistillingTankBlockEntity m : layerMembers(y)) {
-                if (m.tank.isEmpty()) {
-                    continue;
-                }
                 for (Direction d : Direction.Plane.HORIZONTAL) {
+                    FluidStack have = layerFluid(y);
+                    if (have.isEmpty()) {
+                        break;
+                    }
                     BlockPos n = m.worldPosition.relative(d);
-                    if (m.tank.isEmpty() || level.getBlockEntity(n) instanceof DistillingTankBlockEntity o && o.controller != null
-                            && o.controller.equals(controller)) {
+                    if (level.getBlockEntity(n) instanceof DistillingTankBlockEntity o && o.controller != null && o.controller.equals(controller)) {
                         continue;
                     }
                     IFluidHandler h = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK, n, d.getOpposite());
                     if (h == null) {
                         continue;
                     }
-                    FluidStack offer = m.tank.getFluid().copyWithAmount(Math.min(PUSH_MB, m.tank.getFluidAmount()));
-                    int took = h.fill(offer, IFluidHandler.FluidAction.EXECUTE);
+                    int took = h.fill(have.copyWithAmount(Math.min(PUSH_MB, have.getAmount())), IFluidHandler.FluidAction.EXECUTE);
                     if (took > 0) {
-                        m.tank.drain(took, IFluidHandler.FluidAction.EXECUTE);
+                        drainLayer(y, have.copyWithAmount(took));
                     }
                 }
             }

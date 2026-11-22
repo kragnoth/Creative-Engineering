@@ -324,3 +324,8 @@ Convention (borrowed from Tarbound):
 - [ ] Create fluid tank against a fraction level fills with that fraction (no pump); boiler doesn't push; a second column's boiler can be fed this way.
 - [ ] Create scaffolding beside the column (incl. corners) turns into catwalk of the same metal; railings only on open sides; climb through from below; sneak down; breaking gives scaffolding back.
 - [ ] Scaffolding away from a column stays scaffolding.
+
+## 0.12.3 — /test rundistill
+- [ ] `/test rundistill` in runClient builds the demo in front of you: hooch is pumped in, water and vodka fill their tanks within a minute; signs label the parts; the catwalk ring is walkable.
+- [ ] 2x2 and wider columns push from every block of a level (fixed: only the touching block used to push).
+- [ ] `/test runall`: 19 pass (new: distillDemoRuns).
