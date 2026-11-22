@@ -74,3 +74,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 ## 0.11.0
 - New block / BE `drive_pulley` (axis x/z); new item `drive_belt`.
 - `diesel_flywheel` BE is now FlywheelBlockEntity (same type id); flywheel and pulley BEs store `BeltPartner` (relative BlockPos).
+
+## 0.11.3
+- Belt wheel BEs store `Chains` (list of relative BlockPos, up to 2). The older `BeltPartner` is still read and migrated.

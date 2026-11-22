@@ -28,9 +28,6 @@ import org.joml.Vector3f;
  * and running at the wheels' surface speed. Cosmetic: it passes through blocks.
  */
 public class DriveBeltRenderer extends KineticBlockEntityRenderer<BeltWheelBlockEntity> {
-    /** Where the chain sits, in pixels from each wheel's centre: on the flywheel rim, in the sprocket's teeth. */
-    public static final float BIG_CHAIN_RADIUS = 23F, SMALL_CHAIN_RADIUS = 8F;
-
     public DriveBeltRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
@@ -50,38 +47,50 @@ public class DriveBeltRenderer extends KineticBlockEntityRenderer<BeltWheelBlock
     @Override
     protected void renderSafe(BeltWheelBlockEntity be, float pt, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(be, pt, ms, buffer, light, overlay);   // skips itself when instancing draws the wheel
-        if (!be.isBig() || !be.hasBelt() || be.partnerBE() == null) {
-            return;
-        }
-        BlockPos partner = be.partner();
-        float dy = (partner.getY() - be.getBlockPos().getY()) * 16F;
-        boolean alongX = BeltWheelBlockEntity.axis(be.getBlockState()) == Direction.Axis.X;
-        List<float[]> loop = loop(BIG_CHAIN_RADIUS, SMALL_CHAIN_RADIUS, dy);
-
-        // chain travel (px along the loop) = flywheel surface travel. Create turns a wheel by +angle about the positive
-        // axis; in this plane (w across, y up) that is clockwise for X and anticlockwise for Z, and the loop is walked
-        // clockwise round the flywheel when the sprocket is above, anticlockwise when below.
-        double angle = AnimationTickHolder.getRenderTime(be.getLevel()) * be.getSpeed() * 3.0 / 10 / 180 * Math.PI;
-        double sigma = alongX ? -1 : 1, walk = -Math.signum(dy);
-        double travel = sigma * walk * angle * BIG_CHAIN_RADIUS;
-        float shift = (float) (((travel % 16) + 16) % 16);
-
-        float pos = 0;
-        for (int i = 0; i < loop.size(); i++) {
-            float[] a = loop.get(i), b = loop.get((i + 1) % loop.size());
-            float len = (float) Math.hypot(b[0] - a[0], b[1] - a[1]);
-            if (len < 1e-3F) {
-                continue;
+        for (BlockPos pp : be.partners()) {
+            BeltWheelBlockEntity other = be.partnerAt(pp);
+            if (other == null || be.getBlockPos().compareTo(pp) > 0) {
+                continue;   // each chain is drawn by one end: the lower position
             }
-            Vector3f from = toBlock(a[0], a[1], alongX), to = toBlock(b[0], b[1], alongX);
-            Vector3f dir = new Vector3f(to).sub(from).normalize();
-            ms.pushPose();
-            ms.translate(from.x, from.y, from.z);
-            ms.mulPose(new Quaternionf().rotationTo(0, 1, 0, dir.x, dir.y, dir.z));
-            ms.translate(-0.5, 0, -0.5);   // renderChain centres itself on (0.5, 0.5)
-            ChainConveyorRenderer.renderChain(ms, buffer, (pos - shift) / 16F, len / 16F, light, light, false);
-            ms.popPose();
-            pos += len;
+            BlockPos partner = other.getBlockPos();
+            boolean alongX = BeltWheelBlockEntity.axis(be.getBlockState()) == Direction.Axis.X;
+            // offset to the other wheel in the wheel plane (w across the axis, y up), pixels
+            float ow = (alongX ? partner.getZ() - be.getBlockPos().getZ() : partner.getX() - be.getBlockPos().getX()) * 16F;
+            float oy = (partner.getY() - be.getBlockPos().getY()) * 16F;
+            float dist = (float) Math.hypot(ow, oy), uw = ow / dist, uy = oy / dist;
+            float r1 = be.chainRadius();
+            List<float[]> loop = loop(r1, other.chainRadius(), dist);
+            for (float[] p : loop) {   // the loop is built with the other wheel straight "up": turn it to point at it
+                float w = p[0], y = p[1];
+                p[0] = uy * w + uw * y;
+                p[1] = -uw * w + uy * y;
+            }
+
+            // chain travel (px along the loop) = this wheel's surface travel. Create turns a wheel by +angle about the
+            // positive axis; in this plane that is clockwise for X and anticlockwise for Z, and the loop is walked clockwise
+            // round this wheel (a rotation keeps that).
+            double angle = AnimationTickHolder.getRenderTime(be.getLevel()) * be.getSpeed() * 3.0 / 10 / 180 * Math.PI;
+            double sigma = alongX ? -1 : 1, walk = -1;
+            double travel = sigma * walk * angle * r1;
+            float shift = (float) (((travel % 16) + 16) % 16);
+
+            float pos = 0;
+            for (int i = 0; i < loop.size(); i++) {
+                float[] a = loop.get(i), b = loop.get((i + 1) % loop.size());
+                float len = (float) Math.hypot(b[0] - a[0], b[1] - a[1]);
+                if (len < 1e-3F) {
+                    continue;
+                }
+                Vector3f from = toBlock(a[0], a[1], alongX), to = toBlock(b[0], b[1], alongX);
+                Vector3f dir = new Vector3f(to).sub(from).normalize();
+                ms.pushPose();
+                ms.translate(from.x, from.y, from.z);
+                ms.mulPose(new Quaternionf().rotationTo(0, 1, 0, dir.x, dir.y, dir.z));
+                ms.translate(-0.5, 0, -0.5);   // renderChain centres itself on (0.5, 0.5)
+                ChainConveyorRenderer.renderChain(ms, buffer, (pos - shift) / 16F, len / 16F, light, light, false);
+                ms.popPose();
+                pos += len;
+            }
         }
     }
 
@@ -91,17 +100,17 @@ public class DriveBeltRenderer extends KineticBlockEntityRenderer<BeltWheelBlock
     }
 
     /**
-     * The chain as a closed loop in the wheel plane (w = horizontal across the axis, y = up), in pixels from the
-     * flywheel's centre: wrap round the flywheel's far side, straight run, wrap round the sprocket's far side, straight
-     * run back. Each point is {w, y, normal w, normal y}.
+     * The chain as a closed loop in the wheel plane, in pixels from this wheel's centre, with the other wheel at
+     * (0, dy) above it: wrap round this wheel's far side, straight run, wrap round the other's far side, straight run
+     * back. Each point is {w, y, normal w, normal y}; the caller turns it toward the real other wheel.
      */
     static List<float[]> loop(float r1, float r2, float dy) {
         float s = Math.signum(dy), ny = (r1 - r2) / dy, nw = (float) Math.sqrt(Math.max(0, 1 - ny * ny));
         double aPlus = Math.atan2(ny, nw), aMinus = Math.atan2(ny, -nw);
         double away = Math.atan2(-s, 0), toward = Math.atan2(s, 0);
         List<float[]> pts = new ArrayList<>();
-        arc(pts, 0, 0, r1, aPlus, aMinus, away, 24);
-        arc(pts, 0, dy, r2, aMinus, aPlus, toward, 10);
+        arc(pts, 0, 0, r1, aPlus, aMinus, away, r1 > 12 ? 24 : 10);
+        arc(pts, 0, dy, r2, aMinus, aPlus, toward, r2 > 12 ? 24 : 10);
         return pts;
     }
 
@@ -130,6 +139,9 @@ public class DriveBeltRenderer extends KineticBlockEntityRenderer<BeltWheelBlock
     @Override
     public AABB getRenderBoundingBox(BeltWheelBlockEntity be) {
         AABB box = new AABB(be.getBlockPos()).inflate(1.5);
-        return be.hasBelt() ? box.minmax(new AABB(be.partner()).inflate(1)) : box;
+        for (BlockPos p : be.partners()) {
+            box = box.minmax(new AABB(p).inflate(1.5));
+        }
+        return box;
     }
 }

@@ -290,3 +290,12 @@ Convention (borrowed from Tarbound):
 - [ ] The sprocket looks and spins like a Create cogwheel on the right axis (X and Z), instanced and fallback.
 - [ ] The chain shows vanilla chain links, unstretched at any gap, wrapping the rim and the cog teeth.
 - [ ] The chain moves with the wheels: same direction as the rim and teeth, both axes, sprocket above and below, forward and reverse rotation. (If it runs backwards in any case, note which.)
+
+## 0.11.3 — chains anywhere in the plane, relays
+- [ ] Chain a flywheel to a sprocket sideways and diagonally (same plane): chain draws correctly and moves with the wheels.
+- [ ] Sprocket to sprocket and flywheel to flywheel run 1:1; flywheel to sprocket 4x.
+- [ ] A sprocket with two chains relays; a third chain is refused ("already has a chain").
+- [ ] Out of plane, different axis, overlapping or > 32 blocks: clear refusal messages.
+- [ ] Break a relay sprocket: both chains drop, both other wheels keep working.
+- [ ] 0.11.x worlds: existing chains still connected after updating.
+- [ ] `/test runall`: 16 pass (new: driveChainSideways, driveChainSprocketToSprocket, driveChainRelay).

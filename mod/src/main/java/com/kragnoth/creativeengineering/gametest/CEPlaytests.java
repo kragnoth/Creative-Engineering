@@ -332,14 +332,77 @@ public final class CEPlaytests {
         open(h);
         BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(2);
         beltRig(h, fly, pulley, fly.west(), Direction.EAST);
-        h.runAfterDelay(2, () -> com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
-                h.getLevel(), h.absolutePos(fly), h.absolutePos(pulley)));
+        h.runAfterDelay(2, () -> h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                h.getLevel(), h.absolutePos(fly), h.absolutePos(pulley)), "chain refused at a 2 block gap"));
         h.runAfterDelay(10, () -> h.destroyBlock(pulley));
         h.runAfterDelay(14, () -> h.succeedWhen(() -> {
-            h.assertItemEntityPresent(com.kragnoth.creativeengineering.registry.ModItems.DRIVE_BELT.get(), pulley, 2);
+            h.assertItemEntityPresent(com.kragnoth.creativeengineering.registry.ModItems.DRIVE_BELT.get(), pulley, 5);   // it falls
             var w = (com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity) h.getBlockEntity(fly);
             h.assertFalse(w.hasBelt(), "flywheel still thinks it has a belt");
             h.assertTrue(w.getSpeed() != 0, "flywheel lost its motor drive");
+        }));
+    }
+
+    /** Chains go anywhere in the wheels' plane: flywheel to a sprocket 3 blocks to the side at the same height = 4x. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveChainSideways(GameTestHelper h) {
+        open(h);
+        BlockPos fly = new BlockPos(5, 3, 3), sprocket = fly.south(3);
+        beltRig(h, fly, sprocket, fly.west(), Direction.EAST);
+        h.runAfterDelay(2, () -> h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                h.getLevel(), h.absolutePos(fly), h.absolutePos(sprocket)), "sideways chain refused"));
+        h.runAfterDelay(10, () -> h.succeedWhen(() -> {
+            float in = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(fly)).getSpeed();
+            float out = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(sprocket)).getSpeed();
+            h.assertTrue(in != 0 && out == in * 4, "flywheel " + in + " rpm, sprocket " + out + " rpm");
+        }));
+    }
+
+    /** Sprocket to sprocket on a diagonal is 1:1; a sprocket out of the plane is refused. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveChainSprocketToSprocket(GameTestHelper h) {
+        open(h);
+        var ax = net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
+        BlockPos a = new BlockPos(5, 2, 2), b = a.offset(0, 2, 3), off = a.offset(1, 2, 3);
+        for (BlockPos p : new BlockPos[]{a, b, off}) {
+            h.setBlock(p, ModBlocks.DRIVE_PULLEY.get().defaultBlockState().setValue(ax, Direction.Axis.X));
+        }
+        h.setBlock(a.west(), block("create:creative_motor").defaultBlockState()
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.EAST));
+        h.runAfterDelay(2, () -> {
+            h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.linkProblem(
+                    h.getLevel(), h.absolutePos(a), h.absolutePos(off)) != null, "out-of-plane chain accepted");
+            h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                    h.getLevel(), h.absolutePos(a), h.absolutePos(b)), "diagonal sprocket chain refused");
+        });
+        h.runAfterDelay(10, () -> h.succeedWhen(() -> {
+            float in = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(a)).getSpeed();
+            float out = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(b)).getSpeed();
+            h.assertTrue(in != 0 && out == in, "sprocket " + in + " rpm, other sprocket " + out + " rpm");
+        }));
+    }
+
+    /** A sprocket relays: flywheel -> sprocket A (4x) -> sprocket B (1:1); a third chain on A is refused. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveChainRelay(GameTestHelper h) {
+        open(h);
+        var ax = net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
+        BlockPos fly = new BlockPos(5, 2, 2), a = fly.south(3), b = a.offset(0, 3, 2), c = a.offset(0, 0, 3);
+        beltRig(h, fly, a, fly.west(), Direction.EAST);
+        for (BlockPos p : new BlockPos[]{b, c}) {
+            h.setBlock(p, ModBlocks.DRIVE_PULLEY.get().defaultBlockState().setValue(ax, Direction.Axis.X));
+        }
+        h.runAfterDelay(2, () -> {
+            var L = h.getLevel();
+            h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(L, h.absolutePos(fly), h.absolutePos(a)), "first chain refused");
+            h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(L, h.absolutePos(a), h.absolutePos(b)), "relay chain refused");
+            h.assertTrue("taken".equals(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.linkProblem(
+                    L, h.absolutePos(a), h.absolutePos(c))), "third chain on one wheel accepted");
+        });
+        h.runAfterDelay(10, () -> h.succeedWhen(() -> {
+            float in = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(fly)).getSpeed();
+            float out = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(b)).getSpeed();
+            h.assertTrue(in != 0 && out == in * 4, "flywheel " + in + " rpm, relayed sprocket " + out + " rpm");
         }));
     }
 }

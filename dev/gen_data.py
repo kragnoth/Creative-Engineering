@@ -665,9 +665,10 @@ shapeless('drive_belt', [item('minecraft:chain'), item('minecraft:chain'), item(
 for k, v in (('block.%s.drive_pulley', 'Drive Sprocket'), ('item.%s.drive_belt', 'Drive Chain'),
              ('%s.drive_belt.started', 'Chain started: now click the other wheel'),
              ('%s.drive_belt.taken', 'That wheel already has a chain'),
-             ('%s.drive_belt.not_wheels', 'A Drive Chain goes between a flywheel and a Drive Sprocket'),
-             ('%s.drive_belt.need_both', 'One end on a flywheel, the other on a Drive Sprocket'),
-             ('%s.drive_belt.alignment', 'The sprocket must be straight above or below the flywheel, 2 to 8 blocks away'),
+             ('%s.drive_belt.not_wheels', 'A Drive Chain goes between two wheels: flywheels or Drive Sprockets'),
+             ('%s.drive_belt.plane', 'Both wheels must sit in the same plane across their shafts'),
+             ('%s.drive_belt.too_close', 'Too close: the wheels would overlap'),
+             ('%s.drive_belt.too_far', 'Too far: 32 blocks at most'),
              ('%s.drive_belt.axis', 'Both wheels must turn on the same axis')):
     LANG[k % MODID] = v
 

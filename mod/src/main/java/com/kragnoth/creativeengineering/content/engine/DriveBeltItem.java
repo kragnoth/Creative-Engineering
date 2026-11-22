@@ -17,8 +17,9 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 /**
- * Drive Belt: click a flywheel, then a Drive Pulley 2..8 blocks straight above or below it on the same axis (either
- * order). Fitting it costs the item; breaking either wheel drops it again. Sneak-use on air clears a started belt.
+ * Drive Chain (id drive_belt): click one wheel (flywheel or Drive Sprocket), then another on the same axis in the same
+ * plane, any direction, up to 32 blocks (BeltWheelBlockEntity.linkProblem). Fitting it costs the item; breaking either
+ * wheel drops it again. A wheel takes up to two chains.
  */
 public class DriveBeltItem extends Item {
     public DriveBeltItem(Properties p) {
@@ -40,7 +41,7 @@ public class DriveBeltItem extends Item {
         CustomData data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
         BlockPos first = data.contains("BeltStart") ? NbtUtils.readBlockPos(data.copyTag(), "BeltStart").orElse(null) : null;
         if (first == null || first.equals(pos)) {
-            if (wheel.hasBelt()) {
+            if (wheel.isFull()) {
                 tell(player, "taken");
                 return InteractionResult.FAIL;
             }

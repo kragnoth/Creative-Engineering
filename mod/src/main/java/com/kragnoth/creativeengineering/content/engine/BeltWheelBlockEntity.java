@@ -18,19 +18,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 /**
- * A wheel that can carry a Drive Belt (Kragnoth, 2026-11-22): the flywheel (big) or a Drive Pulley (small), linked
- * vertically 2..8 blocks apart on the same horizontal axis. The link is a real Create kinetic connection with a
- * ratio: the pulley turns RATIO x the flywheel's speed (and the flywheel 1 / RATIO of a driving pulley), so Create's
- * own speed / stress rules apply. The belt is cosmetic and passes through blocks.
+ * A wheel that can carry a Drive Chain (Kragnoth, 2026-11-22): the flywheel (big) or a Drive Sprocket (small). Any two
+ * wheels can be chained (0.11.3: "anywhere"), as long as they turn on the same horizontal axis and sit in the same
+ * plane across it, far enough apart not to overlap and at most MAX_REACH blocks. The link is a real Create kinetic
+ * connection with a ratio: flywheel to sprocket 4x, sprocket to flywheel 1/4, like to like 1:1, so Create's own
+ * speed / stress rules apply. The chain is cosmetic and passes through blocks.
  */
 public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
     public static final float RATIO = 4;
-    public static final int MIN_GAP = 2, MAX_GAP = 8;
-    /** Belt radii in pixels: flywheel rim and pulley drum (4:1, matching RATIO). */
-    public static final float BIG_RADIUS = 22.4F, SMALL_RADIUS = 5.6F;
+    public static final int MAX_REACH = 32;
+    /** Where the chain runs, in pixels from a wheel's centre: on the flywheel rim, in the sprocket's teeth. */
+    public static final float BIG_RADIUS = 23F, SMALL_RADIUS = 8F;
 
-    /** Offset to the other wheel, or null when no belt is fitted. */
-    @Nullable protected BlockPos partnerOffset;
+    /** Chains per wheel: two lets a sprocket relay rotation on (Kragnoth, 2026-11-22: transfer stress interestingly). */
+    public static final int MAX_CHAINS = 2;
+    /** Offsets to the wheels this one is chained to. */
+    protected final List<BlockPos> partnerOffsets = new java.util.ArrayList<>();
 
     protected BeltWheelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -38,46 +41,62 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
 
     public abstract boolean isBig();
 
-    @Nullable
-    public BlockPos partner() {
-        return partnerOffset == null ? null : worldPosition.offset(partnerOffset);
+    public float chainRadius() {
+        return isBig() ? BIG_RADIUS : SMALL_RADIUS;
+    }
+
+    public List<BlockPos> partners() {
+        return partnerOffsets.stream().map(worldPosition::offset).toList();
     }
 
     public boolean hasBelt() {
-        return partnerOffset != null;
+        return !partnerOffsets.isEmpty();
+    }
+
+    public boolean isFull() {
+        return partnerOffsets.size() >= MAX_CHAINS;
+    }
+
+    public boolean isChainedTo(BlockPos other) {
+        return partnerOffsets.contains(other.subtract(worldPosition));
     }
 
     public static Direction.Axis axis(BlockState s) {
         return s.getValue(BlockStateProperties.HORIZONTAL_AXIS);
     }
 
+    /** The chained wheel at p if it is loaded and chained back to this one. */
     @Nullable
-    public BeltWheelBlockEntity partnerBE() {
-        BlockPos p = partner();
-        if (p == null || level == null || !level.isLoaded(p)) {
+    public BeltWheelBlockEntity partnerAt(BlockPos p) {
+        if (level == null || !level.isLoaded(p)) {
             return null;
         }
-        return level.getBlockEntity(p) instanceof BeltWheelBlockEntity o && worldPosition.equals(o.partner()) ? o : null;
+        return level.getBlockEntity(p) instanceof BeltWheelBlockEntity o && o.isChainedTo(worldPosition) ? o : null;
     }
 
-    /** Why a belt can't join a and b, or null if it can. */
+    /** Why a chain can't join a and b, or null if it can. */
     @Nullable
     public static String linkProblem(Level level, BlockPos a, BlockPos b) {
-        if (!(level.getBlockEntity(a) instanceof BeltWheelBlockEntity wa) || !(level.getBlockEntity(b) instanceof BeltWheelBlockEntity wb)) {
+        if (!(level.getBlockEntity(a) instanceof BeltWheelBlockEntity wa) || !(level.getBlockEntity(b) instanceof BeltWheelBlockEntity wb)
+                || a.equals(b)) {
             return "not_wheels";
         }
-        if (wa.isBig() == wb.isBig()) {
-            return "need_both";
-        }
-        if (wa.hasBelt() || wb.hasBelt()) {
+        if (wa.isFull() || wb.isFull() || wa.isChainedTo(b)) {
             return "taken";
         }
-        int gap = Math.abs(a.getY() - b.getY());
-        if (a.getX() != b.getX() || a.getZ() != b.getZ() || gap < MIN_GAP || gap > MAX_GAP) {
-            return "alignment";
-        }
-        if (axis(wa.getBlockState()) != axis(wb.getBlockState())) {
+        Direction.Axis ax = axis(wa.getBlockState());
+        if (ax != axis(wb.getBlockState())) {
             return "axis";
+        }
+        if (ax == Direction.Axis.X ? a.getX() != b.getX() : a.getZ() != b.getZ()) {
+            return "plane";
+        }
+        double dist = Math.sqrt(a.distSqr(b));
+        if (dist * 16 < wa.chainRadius() + wb.chainRadius()) {   // rims would overlap
+            return "too_close";
+        }
+        if (dist > MAX_REACH) {
+            return "too_far";
         }
         return null;
     }
@@ -89,8 +108,8 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
         BeltWheelBlockEntity wa = (BeltWheelBlockEntity) level.getBlockEntity(a), wb = (BeltWheelBlockEntity) level.getBlockEntity(b);
         wa.detachKinetics();
         wb.detachKinetics();
-        wa.partnerOffset = b.subtract(a);
-        wb.partnerOffset = a.subtract(b);
+        wa.partnerOffsets.add(b.subtract(a));
+        wb.partnerOffsets.add(a.subtract(b));
         wa.attachKinetics();
         wb.attachKinetics();
         wa.notifyUpdate();
@@ -98,22 +117,29 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
         return true;
     }
 
-    /** Takes the belt off (both ends); drops the belt item at this wheel if asked. */
+    /** Takes every chain off this wheel (and the other ends); drops one chain item each if asked. */
     public void unlink(boolean drop) {
         unlink(drop, false);
     }
 
     /** removing: this wheel is being broken, so it isn't re-attached to the kinetic network. */
     public void unlink(boolean drop, boolean removing) {
-        BeltWheelBlockEntity other = partnerBE();
-        if (partnerOffset == null) {
+        for (BlockPos p : partners()) {
+            unlinkFrom(p, drop, removing);
+        }
+    }
+
+    private void unlinkFrom(BlockPos p, boolean drop, boolean removing) {
+        BlockPos off = p.subtract(worldPosition);
+        if (!partnerOffsets.contains(off)) {
             return;
         }
+        BeltWheelBlockEntity other = partnerAt(p);
         detachKinetics();
-        partnerOffset = null;
+        partnerOffsets.remove(off);
         if (other != null) {
             other.detachKinetics();
-            other.partnerOffset = null;
+            other.partnerOffsets.remove(worldPosition.subtract(p));
             other.attachKinetics();
             other.notifyUpdate();
         }
@@ -130,8 +156,13 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
     @Override
     public void lazyTick() {
         super.lazyTick();
-        if (level != null && !level.isClientSide && partnerOffset != null && level.isLoaded(partner()) && partnerBE() == null) {
-            unlink(true);   // the other wheel is gone or turned: the belt falls off
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        for (BlockPos p : partners()) {
+            if (level.isLoaded(p) && partnerAt(p) == null) {
+                unlinkFrom(p, true, false);   // the other wheel is gone or turned: that chain falls off
+            }
         }
     }
 
@@ -139,9 +170,10 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
 
     @Override
     public List<BlockPos> addPropagationLocations(IRotate block, BlockState state, List<BlockPos> neighbours) {
-        BlockPos p = partner();
-        if (p != null && !neighbours.contains(p)) {
-            neighbours.add(p);
+        for (BlockPos p : partners()) {
+            if (!neighbours.contains(p)) {
+                neighbours.add(p);
+            }
         }
         return super.addPropagationLocations(block, state, neighbours);
     }
@@ -149,29 +181,43 @@ public abstract class BeltWheelBlockEntity extends KineticBlockEntity {
     @Override
     public float propagateRotationTo(KineticBlockEntity target, BlockState stateFrom, BlockState stateTo, BlockPos diff,
             boolean connectedViaAxes, boolean connectedViaCogs) {
-        if (partnerOffset != null && diff.equals(partnerOffset) && target instanceof BeltWheelBlockEntity o
-                && worldPosition.equals(o.partner())) {
-            return isBig() ? RATIO : 1 / RATIO;   // open belt: both wheels turn the same way
+        if (partnerOffsets.contains(diff) && target instanceof BeltWheelBlockEntity o && o.isChainedTo(worldPosition)) {
+            // open chain: both wheels turn the same way, speeds in inverse proportion to their sizes
+            return isBig() == o.isBig() ? 1 : isBig() ? RATIO : 1 / RATIO;
         }
         return super.propagateRotationTo(target, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
     }
 
     @Override
     public boolean isCustomConnection(KineticBlockEntity other, BlockState state, BlockState otherState) {
-        return (partnerOffset != null && other.getBlockPos().equals(partner())) || super.isCustomConnection(other, state, otherState);
+        return isChainedTo(other.getBlockPos()) || super.isCustomConnection(other, state, otherState);
     }
 
     @Override
     protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
-        if (partnerOffset != null) {
-            tag.put("BeltPartner", NbtUtils.writeBlockPos(partnerOffset));
+        net.minecraft.nbt.ListTag list = new net.minecraft.nbt.ListTag();
+        for (BlockPos o : partnerOffsets) {
+            list.add(NbtUtils.writeBlockPos(o));
         }
+        tag.put("Chains", list);
     }
 
     @Override
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
-        partnerOffset = tag.contains("BeltPartner") ? NbtUtils.readBlockPos(tag, "BeltPartner").orElse(null) : null;
+        partnerOffsets.clear();
+        for (net.minecraft.nbt.Tag t : tag.getList("Chains", net.minecraft.nbt.Tag.TAG_INT_ARRAY)) {
+            if (t instanceof net.minecraft.nbt.IntArrayTag a && a.size() == 3) {
+                partnerOffsets.add(new BlockPos(a.get(0).getAsInt(), a.get(1).getAsInt(), a.get(2).getAsInt()));
+            }
+        }
+        if (tag.contains("BeltPartner")) {   // 0.11.0 - 0.11.2 saves: one chain
+            NbtUtils.readBlockPos(tag, "BeltPartner").ifPresent(o -> {
+                if (!partnerOffsets.contains(o)) {
+                    partnerOffsets.add(o);
+                }
+            });
+        }
     }
 }

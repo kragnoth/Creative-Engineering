@@ -77,3 +77,8 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
   - The chain is Create's chain-conveyor chain (`ChainConveyorRenderer.renderChain`: vanilla chain texture, repeating, never stretched). It runs round the loop at the flywheel's surface speed, in the same direction as the wheels.
   - The chain sits on the rim (23 px) and in the cog's teeth (8 px). Kinetics stay exactly 4:1.
   - Recipes: sprocket = Create cogwheel + iron nugget; chain = 2 chains + andesite alloy.
+- **0.11.3 (Kragnoth: "place anywhere ... transfer stress more interestingly"):**
+  - Chains go between any two wheels (flywheel or sprocket) on the same horizontal axis, in the same plane across it, in any direction. Limits: the rims mustn't overlap (2 blocks flywheel-sprocket, 3 flywheel-flywheel, 1 sprocket-sprocket), and at most 32 blocks.
+  - Ratios: flywheel to sprocket 4x, sprocket to flywheel 1/4, like to like 1:1.
+  - Each wheel takes up to two chains, so a sprocket can relay rotation onward.
+  - Each chain is drawn by its lower-position end. Saves: `Chains` list; the old single `BeltPartner` is still read.
