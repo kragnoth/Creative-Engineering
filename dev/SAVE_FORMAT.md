@@ -67,3 +67,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.9.5
 - New blocks `andesite_campfire_stand`, `brass_campfire_stand`, `copper_campfire_stand` (states fire = none / campfire / soul, lit).
+
+## 0.10.0
+- Diesel crankcase BE gains `Reservoir` (FluidTank NBT, 1000 mB). Old crankcases load empty and refill from their lines.

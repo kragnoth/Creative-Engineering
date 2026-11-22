@@ -264,3 +264,12 @@ Convention (borrowed from Tarbound):
 
 ## 0.9.9
 - [ ] Crankshaft turns with the engine (shaft + end stubs), both engine axes, with and without Flywheel instancing; the crankcase body stays still.
+
+## 0.10.0 — crankcase reservoirs + pump-less fuel lines
+- [ ] Tank touching a crankcase side: the engine runs as before (fuel goes via the reservoir).
+- [ ] Tank -> Create pipes (bends, glass, encased) -> crankcase side, no pump: the reservoir fills and the engine runs.
+- [ ] A closed valve in the line stops the pull; a pump in the line ends the pull there (the pump still pushes into the reservoir if pointed at it).
+- [ ] Non-fuel fluid (water) in the tank isn't pulled; a mixed setup doesn't contaminate the reservoir.
+- [ ] Pipes connect to the side faces, not the shaft ends.
+- [ ] Break a crankcase with fuel in it: the fuel is lost (no item); acceptable for alpha?
+- [ ] `/test runall`: 10 pass (new: crankcasePullsFuelThroughPipes).

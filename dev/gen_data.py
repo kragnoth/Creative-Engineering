@@ -100,7 +100,7 @@ LANG = collections.OrderedDict([
     ('advancements.%s.diesel_engine.description' % MODID, 'Make a Diesel Cylinder'),
     ('%s.engine.layout' % MODID, '%s crankcase(s), %s cylinder(s)'),
     ('%s.engine.fuel' % MODID, 'Fuel: %s'),
-    ('%s.engine.no_fuel' % MODID, 'none (touch a tank of creosote, plant oil, ethanol... to a crankcase side)'),
+    ('%s.engine.no_fuel' % MODID, 'none (pipe or touch a tank of creosote, plant oil, ethanol... to a crankcase side)'),
     ('%s.engine.state.running' % MODID, 'Running'),
     ('%s.engine.state.needs_start' % MODID, 'Stopped: turn the front shaft (e.g. a Hand Crank) to start'),
     ('%s.engine.state.no_cylinders' % MODID, 'No cylinders: place them diagonally above, leaning out'),

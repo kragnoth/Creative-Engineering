@@ -232,4 +232,39 @@ public final class CEPlaytests {
         }
         h.succeed();
     }
+
+    /** No pump: a crankcase pulls fuel out of a tank through a 3-pipe run into its reservoir, and the engine starts. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 300)
+    public static void crankcasePullsFuelThroughPipes(GameTestHelper h) {
+        BlockPos cc = new BlockPos(5, 3, 6);
+        h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
+        h.setBlock(cc.above().south(), ModBlocks.DIESEL_CYLINDER.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.FACING, Direction.SOUTH));
+        var pipe = block("create:fluid_pipe").defaultBlockState();
+        for (var prop : new net.minecraft.world.level.block.state.properties.BooleanProperty[]{
+                net.minecraft.world.level.block.state.properties.BlockStateProperties.EAST, net.minecraft.world.level.block.state.properties.BlockStateProperties.WEST,
+                net.minecraft.world.level.block.state.properties.BlockStateProperties.UP, net.minecraft.world.level.block.state.properties.BlockStateProperties.DOWN}) {
+            pipe = pipe.setValue(prop, false);
+        }
+        pipe = pipe.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.NORTH, true)
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.SOUTH, true);
+        for (int z = 1; z <= 3; z++) {
+            h.setBlock(cc.north(z), pipe);
+        }
+        BlockPos tank = cc.north(4);
+        h.setBlock(tank, block("create:fluid_tank"));
+        h.runAfterDelay(2, () -> {
+            h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(tank), Direction.SOUTH)
+                    .fill(new net.neoforged.neoforge.fluids.FluidStack(com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE.get(), 4000),
+                            net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+            h.setBlock(cc.west(), block("create:creative_motor").defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.EAST));
+        });
+        h.runAfterDelay(60, () -> h.succeedWhen(() -> {
+            var engine = (com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity) h.getBlockEntity(cc);
+            h.assertTrue(engine.reservoirFluid().getAmount() > 0, "reservoir empty: nothing pulled through the pipes");
+            h.assertBlockProperty(cc.above().south(), com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.RUNNING, true);
+        }));
+    }
 }

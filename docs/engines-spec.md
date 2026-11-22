@@ -55,3 +55,12 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
 - Animation (0.8.1, Kragnoth: "this is working", nothing campy): only the rocker arm on each head moves, nodding up to 7 degrees once per firing (4-stroke at 64 RPM), phase per cylinder. Flywheel instanced visual (`CylinderVisual`, `SimpleBlockEntityVisualizer`) with a renderer fallback (`CylinderRenderer`, skips itself when instancing is on); partial model `block/diesel_cylinder_rocker`. Client config `animateEngines` (default true) freezes it; purely visual. Server load is unaffected by any of this.
 
 - **0.9.9:** the crankshaft is now a separate partial (`block/diesel_crankshaft`: Create shaft, crank webs and pin, end stubs), spun by a SingleAxisRotatingVisual (fallback: CrankshaftRenderer). The crankcase model itself is static. Before this the shaft was baked into the static model and never turned.
+
+- **0.10.0 fuel intake (Kragnoth, 2026-11-22: "each crankcase an internal reservoir, pulling like a pump, no pump needed"):**
+  - Every crankcase has a 1000 mB fuel reservoir: engine fuels only, one kind at a time. The engine burns from the line's reservoirs combined.
+  - Each crankcase pulls up to 50 mB every 5 ticks into its reservoir, through its two side (non-shaft) faces:
+    - from any container touching the face;
+    - from every container at the far ends of a Create pipe run attached to the face. The run is followed up to Create's pump range; closed valves and Create pumps end a branch, and other crankcases are never sources (`FuelLines`).
+  - Pulling only takes fuels, and only the fuel the reservoir already holds.
+  - The side faces expose the reservoir as a fluid capability, so pipes connect visually, pumped lines fill it and Jade shows it. The shaft ends expose nothing.
+  - Fuel moves straight from source to reservoir: no flow animation in the pipes (that would mean driving Create's pressure network).

@@ -64,7 +64,7 @@
   "advancements.creativeengineering.diesel_engine.description": "Make a Diesel Cylinder",
   "creativeengineering.engine.layout": "%s crankcase(s), %s cylinder(s)",
   "creativeengineering.engine.fuel": "Fuel: %s",
-  "creativeengineering.engine.no_fuel": "none (touch a tank of creosote, plant oil, ethanol... to a crankcase side)",
+  "creativeengineering.engine.no_fuel": "none (pipe or touch a tank of creosote, plant oil, ethanol... to a crankcase side)",
   "creativeengineering.engine.state.running": "Running",
   "creativeengineering.engine.state.needs_start": "Stopped: turn the front shaft (e.g. a Hand Crank) to start",
   "creativeengineering.engine.state.no_cylinders": "No cylinders: place them diagonally above, leaning out",

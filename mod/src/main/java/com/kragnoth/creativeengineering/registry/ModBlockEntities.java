@@ -70,6 +70,7 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BLAST_FURNACE.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ALLOY_FURNACE.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationItems());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DIESEL_ENGINE.get(), (be, side) -> be.sideFluids(side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationFluids());
     }
 }

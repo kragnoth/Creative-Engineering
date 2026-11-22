@@ -50,7 +50,23 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
     protected int scanTimer;
     protected int length = 1;
     private final List<BlockPos> cylinderPositions = new ArrayList<>();
+    /** The line's crankcase reservoirs (controller only, from the last scan): what the engine burns from. */
     private final List<IFluidHandler> tanks = new ArrayList<>();
+
+    // Every crankcase: a 1000 mB fuel reservoir (engine fuels only, one kind at a time), kept topped up by pulling from
+    // what its two side faces touch, directly or through Create pipes, with no pump (FuelLines). Pipes and pumps can
+    // also fill it through those faces like any tank.
+    public static final int RESERVOIR = 1000, PULL_MB = 50, PULL_TICKS = 5, SOURCE_TICKS = 40;
+    protected final net.neoforged.neoforge.fluids.capability.templates.FluidTank reservoir =
+            new net.neoforged.neoforge.fluids.capability.templates.FluidTank(RESERVOIR, fs -> EngineFuel.of(fs) != null) {
+                @Override
+                protected void onContentsChanged() {
+                    setChanged();
+                    sendData();
+                }
+            };
+    private final List<IFluidHandler> sources = new ArrayList<>();
+    private int pullTimer, sourceTimer;
     @Nullable private BlockPos starterPos;
 
     public DieselEngineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -71,9 +87,64 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
         return level != null && !isCrankcase(worldPosition.relative(out()), out());
     }
 
+    /** The reservoir as automation sees it, on the two side faces only (the shaft ends stay shaft ends). */
+    @Nullable
+    public IFluidHandler sideFluids(@Nullable Direction face) {
+        return face == null || face.getAxis() != out().getAxis() ? reservoir : null;
+    }
+
+    public net.neoforged.neoforge.fluids.FluidStack reservoirFluid() {
+        return reservoir.getFluid();
+    }
+
+    private void pullFuel() {
+        if (--sourceTimer <= 0) {
+            sourceTimer = SOURCE_TICKS;
+            sources.clear();
+            for (Direction side : new Direction[]{out().getClockWise(), out().getCounterClockWise()}) {
+                for (IFluidHandler h : FuelLines.sources(level, worldPosition, side)) {
+                    if (!sources.contains(h)) {
+                        sources.add(h);
+                    }
+                }
+            }
+        }
+        if (--pullTimer > 0) {
+            return;
+        }
+        pullTimer = PULL_TICKS;
+        int room = reservoir.getSpace();
+        for (IFluidHandler h : sources) {
+            if (room <= 0) {
+                break;
+            }
+            FluidStack want = reservoir.isEmpty() ? null : reservoir.getFluid().copyWithAmount(Math.min(room, PULL_MB));
+            if (want == null) {
+                for (int t = 0; t < h.getTanks() && want == null; t++) {
+                    FluidStack f = h.getFluidInTank(t);
+                    if (!f.isEmpty() && EngineFuel.of(f) != null) {
+                        want = f.copyWithAmount(Math.min(room, PULL_MB));
+                    }
+                }
+            }
+            if (want == null) {
+                continue;
+            }
+            FluidStack got = h.drain(want, IFluidHandler.FluidAction.SIMULATE);
+            int fit = reservoir.fill(got, IFluidHandler.FluidAction.SIMULATE);
+            if (fit > 0) {
+                reservoir.fill(h.drain(want.copyWithAmount(fit), IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
+                room = reservoir.getSpace();
+            }
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
+        if (level != null && !level.isClientSide) {
+            pullFuel();
+        }
         if (level == null || !isController()) {
             return;
         }
@@ -161,10 +232,9 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
                     cylinders++;
                     cylinderPositions.add(c);
                 }
-                IFluidHandler h = level.getCapability(Capabilities.FluidHandler.BLOCK, p.relative(side), side.getOpposite());
-                if (h != null && !tanks.contains(h)) {
-                    tanks.add(h);
-                }
+            }
+            if (level.getBlockEntity(p) instanceof DieselEngineBlockEntity cc) {
+                tanks.add(cc.reservoir);
             }
             length++;
             p = p.relative(back);
@@ -267,7 +337,7 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
         return running && f != null ? cylinders * f.stress() : 0;
     }
 
-    /** Fuel in the touching tanks as a fraction of their capacity (0..1), from the controller's last scan. */
+    /** Fuel in the line's crankcase reservoirs as a fraction of their capacity (0..1), from the controller's last scan. */
     public float fuelFill() {
         if (fuelFluid == null) {
             return 0;
@@ -367,6 +437,7 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
             tag.putString("Fuel", BuiltInRegistries.FLUID.getKey(fuelFluid).toString());
         }
         tag.putFloat("BurnDebt", burnDebt);
+        tag.put("Reservoir", reservoir.writeToNBT(registries, new CompoundTag()));
         super.write(tag, registries, clientPacket);
     }
 
@@ -380,6 +451,7 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
             fuelFluid = null;
         }
         burnDebt = tag.getFloat("BurnDebt");
+        reservoir.readFromNBT(registries, tag.getCompound("Reservoir"));
         super.read(tag, registries, clientPacket);
     }
 }
