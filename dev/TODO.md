@@ -261,3 +261,6 @@ Convention (borrowed from Tarbound):
 ## 0.9.8
 - [ ] Flywheel: rim and spokes render with proper textures (no black faces or stray specks), at rest and spinning, on X and Z axes.
 - [ ] Cylinder heads / crankcase shaft stubs: no odd faces either.
+
+## 0.9.9
+- [ ] Crankshaft turns with the engine (shaft + end stubs), both engine axes, with and without Flywheel instancing; the crankcase body stays still.

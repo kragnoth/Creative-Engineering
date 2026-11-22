@@ -7,6 +7,8 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 public final class CEPartials {
     /** The flywheel model (built lying along X), spun by Create's rotating visual. */
     public static final PartialModel FLYWHEEL = PartialModel.of(CreativeEngineering.id("block/diesel_flywheel"));
+    /** Crankshaft through the crankcase (built along X): shaft, crank webs and pin, end stubs. */
+    public static final PartialModel CRANKSHAFT = PartialModel.of(CreativeEngineering.id("block/diesel_crankshaft"));
     public static final PartialModel CYLINDER_ROCKER = PartialModel.of(CreativeEngineering.id("block/diesel_cylinder_rocker"));
 
     private CEPartials() {}

@@ -589,17 +589,22 @@ cc += [box([0.5, 11, 11], [15.5, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 
        box([0, 13, 5.5], [16, 15, 10.5], 'casing'), box([0, 15, 6.5], [16, 16, 9.5], 'casing')]      # cam cover
 for x in (3, 11):                                                                                      # oil cups
     cc += [box([x + 0.5, 16, 7.5], [x + 1.5, 16.5, 8.5], 'brass'), box([x, 16.5, 7], [x + 2, 18, 9], 'brass')]
-cc.append(axis_x())
-# Crankshaft stubs poking 2 px past both faces. A hair thinner than a shaft (3.5 vs 4), so with anything attached
-# (crankcase, Create shaft, flywheel, hand crank) they sit inside its shaft: hidden, no z-fighting.
+eng('diesel_crankcase', ENG_T, cc)
+# The crankshaft is a separate partial spun like any Create shaft (0.9.9; Kragnoth noticed it stood still): Create's
+# shaft through the housing, an off-centre crank web pair and pin so the turning reads, and stubs poking 2 px past
+# both faces. The stubs are a hair thinner than a shaft (3.5 vs 4), so with anything attached (crankcase, Create
+# shaft, flywheel, hand crank) they sit inside its shaft: hidden, no z-fighting.
+crank = [axis_x(),
+         box([4.5, 5.5, 6], [6, 12, 10], 'dark'), box([10, 5.5, 6], [11.5, 12, 10], 'dark'),     # crank webs
+         box([6, 10, 7.25], [10, 11.5, 8.75], 'iron')]                                         # crank pin (big end)
 for x0, x1 in ((-2, 0), (16, 18)):
     st = box([x0, 6.25, 6.25], [x1, 9.75, 9.75], 'shaft', {'east': 'shaft_end', 'west': 'shaft_end'})
     for d in ('north', 'south', 'up', 'down'):
         st['faces'][d].update({'uv': [6.25, 0, 9.75, 2], 'rotation': 90})
     for d in ('east', 'west'):
         st['faces'][d]['uv'] = [6.25, 6.25, 9.75, 9.75]
-    cc.append(st)
-eng('diesel_crankcase', ENG_T, cc)
+    crank.append(st)
+eng('diesel_crankshaft', ENG_T, crank)
 
 # Cylinder: octagonal flange with bolts, octagonal barrel with cooling bands, octagonal head with studs, domed rocker
 # cover, brass injector and fuel line, pushrod tube. Built upright, then leaned 45 deg about X through the block centre
