@@ -50,3 +50,12 @@ vanilla water textures + tint, runtime bucket model), tagged `c:plantoil`, in th
 
 - **Fluids:** ethanol, hooch, wine, cider, mead and ale, each with a bucket. All six are in the engine's ethanol fuel tier (`c:ethanol` covers ethanol).
 - **Next pass (Kragnoth, 2026-11-22):** drinkable bottles with effects for each drink. The buckets stay.
+
+## Campfire Stand (0.9.5, Kragnoth 2026-11-22)
+- **Blocks:** `andesite_campfire_stand`, `brass_campfire_stand` and `copper_campfire_stand`. Each is Create's metal scaffolding model (parent `create:block/scaffold/block`, Create's per-metal textures referenced) with the vanilla campfire / soul campfire model inside. It's a full block, so a vat or boiler sits flush instead of floating. Fits base Create on its own.
+- **Use:** right-click with a campfire or soul campfire to fit it (it goes in lit); empty hand takes it back. Flint and steel or a fire charge lights it; a shovel or water bottle douses it. Deployers work through the same use path. Vanilla dispensers don't (their flint-and-steel behaviour only knows real campfires).
+- **Heat:** registered in Create's `BoilerHeater.REGISTRY` as passive heat while lit: Fermenting Vat x1, and Create boilers count it as a campfire. Light 15 (soul 10).
+- **Effects:** crackle, embers inside, smoke venting out of open sides.
+- **Drops:** itself, plus the fitted campfire item.
+- **Recipe:** shapeless, the matching Create scaffolding + andesite alloy / brass sheet / copper sheet. Shown as fermenting catalysts in JEI.
+- **Not yet:** connected scaffold textures between adjacent stands (Create's scaffold CT behaviour).

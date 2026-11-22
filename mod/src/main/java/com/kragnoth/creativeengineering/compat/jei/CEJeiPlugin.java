@@ -62,6 +62,9 @@ public class CEJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIESEL_CRANKCASE.get()), EngineFuelCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.FERMENTING_VAT.get()), FermentingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.item.Items.CAMPFIRE), FermentingCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.ANDESITE_CAMPFIRE_STAND.get()), FermentingCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.BRASS_CAMPFIRE_STAND.get()), FermentingCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.COPPER_CAMPFIRE_STAND.get()), FermentingCategory.TYPE);
         registration.addRecipeCatalyst(CokingCategory.createItem("blaze_burner"), FermentingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIESEL_CYLINDER.get()), EngineFuelCategory.TYPE);
     }

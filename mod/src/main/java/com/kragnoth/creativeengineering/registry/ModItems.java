@@ -57,6 +57,9 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_WOOD = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_WOOD);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_BEAM = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_BEAM);
 
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> ANDESITE_CAMPFIRE_STAND = ITEMS.registerSimpleBlockItem(ModBlocks.ANDESITE_CAMPFIRE_STAND);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BRASS_CAMPFIRE_STAND = ITEMS.registerSimpleBlockItem(ModBlocks.BRASS_CAMPFIRE_STAND);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> COPPER_CAMPFIRE_STAND = ITEMS.registerSimpleBlockItem(ModBlocks.COPPER_CAMPFIRE_STAND);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> FERMENTING_VAT = ITEMS.registerSimpleBlockItem(ModBlocks.FERMENTING_VAT);
     // Diesel engine
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
@@ -111,7 +114,8 @@ public final class ModItems {
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, FERMENTING_VAT);
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, FERMENTING_VAT,
+            ANDESITE_CAMPFIRE_STAND, BRASS_CAMPFIRE_STAND, COPPER_CAMPFIRE_STAND);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

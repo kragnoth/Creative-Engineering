@@ -66,6 +66,17 @@ public final class ModBlocks {
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
             () -> new com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
+    /** Campfire Stands: Create scaffolding frames holding a campfire (passive heat on a full block). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> ANDESITE_CAMPFIRE_STAND = stand("andesite", MapColor.STONE);
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> BRASS_CAMPFIRE_STAND = stand("brass", MapColor.TERRACOTTA_YELLOW);
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> COPPER_CAMPFIRE_STAND = stand("copper", MapColor.COLOR_ORANGE);
+
+    private static DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> stand(String metal, MapColor color) {
+        return BLOCKS.register(metal + "_campfire_stand", () -> new com.kragnoth.creativeengineering.content.heat.CampfireStandBlock(
+                BlockBehaviour.Properties.of().mapColor(color).strength(2F, 6F).sound(SoundType.SCAFFOLDING).noOcclusion()
+                        .lightLevel(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock::light)));
+    }
+
     /** Chemistry: Fermenting Vat (docs/fermentation-spec.md). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock> FERMENTING_VAT = BLOCKS.register("fermenting_vat",
             () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()

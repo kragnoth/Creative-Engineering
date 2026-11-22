@@ -242,3 +242,10 @@ Convention (borrowed from Tarbound):
 - [ ] Vat looks like a steel Create tank at 1x1, 1x3, 2x2x2 and 3x3x4, connecting like a tank. No missing textures (purple/black); check the log for "recolor:" warnings.
 - [ ] With a resource pack that changes Create's tanks, the vat follows.
 - [ ] Two vats side by side stay separate.
+
+## 0.9.5 — Campfire Stands
+- [ ] Craft all three; each looks like its Create scaffolding.
+- [ ] Fit a campfire / soul campfire (goes in lit); empty hand takes it back; breaking drops the stand + campfire.
+- [ ] Flint and steel / fire charge light it; shovel / water bottle douse it (smoke puff).
+- [ ] A vat on a lit stand heats at x1 (Jade); douse it and it stops. A Create boiler on stands counts passive heat.
+- [ ] Light level 15 lit (soul 10), 0 unlit. Smoke vents out of the sides only.

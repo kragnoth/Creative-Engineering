@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:copper_scaffolding"
+    },
+    {
+      "item": "create:copper_sheet"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:copper_campfire_stand",
+    "count": 1
+  }
+}

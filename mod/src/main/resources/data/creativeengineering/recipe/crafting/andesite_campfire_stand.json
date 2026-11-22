@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "create:andesite_scaffolding"
+    },
+    {
+      "item": "create:andesite_alloy"
+    }
+  ],
+  "result": {
+    "id": "creativeengineering:andesite_campfire_stand",
+    "count": 1
+  }
+}

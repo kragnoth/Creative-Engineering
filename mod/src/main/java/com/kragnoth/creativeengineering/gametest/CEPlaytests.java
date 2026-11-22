@@ -189,4 +189,23 @@ public final class CEPlaytests {
             h.assertTrue(fl.getFluidInTank(0).isEmpty(), "water left over");
         });
     }
+
+    /** A lit Campfire Stand under a vat is passive heat (x1); doused, the vat has none. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void campfireStandHeatsVat(GameTestHelper h) {
+        BlockPos stand = new BlockPos(4, 2, 4);
+        h.setBlock(stand, ModBlocks.COPPER_CAMPFIRE_STAND.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.FIRE, com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.CAMPFIRE)
+                .setValue(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.LIT, true));
+        h.setBlock(stand.above(), ModBlocks.FERMENTING_VAT.get());
+        h.runAfterDelay(40, () -> {
+            var vat = (com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity) h.getBlockEntity(stand.above());
+            h.assertTrue(vat.speed() == 1F, "lit stand gave heat " + vat.speed());
+            h.setBlock(stand, h.getBlockState(stand).setValue(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.LIT, false));
+        });
+        h.runAfterDelay(80, () -> h.succeedWhen(() -> {
+            var vat = (com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity) h.getBlockEntity(stand.above());
+            h.assertTrue(vat.speed() == 0F, "doused stand still gives heat " + vat.speed());
+        }));
+    }
 }

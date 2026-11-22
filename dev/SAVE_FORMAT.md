@@ -64,3 +64,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.9.4
 - `fermenting_vat` no longer has the north / east / south / west states (feet removed); old worlds just drop them.
+
+## 0.9.5
+- New blocks `andesite_campfire_stand`, `brass_campfire_stand`, `copper_campfire_stand` (states fire = none / campfire / soul, lit).

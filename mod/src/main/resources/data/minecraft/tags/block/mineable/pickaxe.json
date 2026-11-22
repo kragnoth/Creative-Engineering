@@ -11,6 +11,9 @@
     "creativeengineering:diesel_crankcase",
     "creativeengineering:diesel_cylinder",
     "creativeengineering:diesel_flywheel",
-    "creativeengineering:fermenting_vat"
+    "creativeengineering:fermenting_vat",
+    "creativeengineering:andesite_campfire_stand",
+    "creativeengineering:brass_campfire_stand",
+    "creativeengineering:copper_campfire_stand"
   ]
 }

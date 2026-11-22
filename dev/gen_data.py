@@ -650,6 +650,31 @@ for e in vat_item['elements']:
 put('%s/models/item/fermenting_vat.json' % A, vat_item)
 simple_loot('fermenting_vat')
 
+# Campfire Stands: Create's own scaffolding model (parent, referenced) with Create's per-metal textures, and the
+# vanilla campfire / soul campfire model inside. Drops itself, plus the fitted campfire.
+for metal, label, extra in (('andesite', 'Andesite', 'create:andesite_alloy'), ('brass', 'Brass', 'create:brass_sheet'),
+                            ('copper', 'Copper', 'create:copper_sheet')):
+    name = metal + '_campfire_stand'
+    put('%s/models/block/%s.json' % (A, name), {'parent': 'create:block/scaffold/block', 'render_type': 'minecraft:cutout',
+        'textures': {'top': 'create:block/funnel/%s_funnel_frame' % metal, 'inside': 'create:block/scaffold/%s_scaffold_inside' % metal,
+                     'side': 'create:block/scaffold/%s_scaffold' % metal, 'casing': 'create:block/%s_casing' % metal,
+                     'particle': 'create:block/scaffold/%s_scaffold' % metal}})
+    parts = [{'apply': {'model': ce('block/' + name)}}]
+    for fire, lit, model in (('campfire', 'true', 'minecraft:block/campfire'), ('campfire', 'false', 'minecraft:block/campfire_off'),
+                             ('soul', 'true', 'minecraft:block/soul_campfire'), ('soul', 'false', 'minecraft:block/campfire_off')):
+        parts.append({'when': {'fire': fire, 'lit': lit}, 'apply': {'model': model}})
+    put('%s/blockstates/%s.json' % (A, name), {'multipart': parts})
+    put('%s/models/item/%s.json' % (A, name), {'parent': ce('block/' + name)})
+    put('%s/data/%s/loot_table/blocks/%s.json' % (RES, MODID, name), {'type': 'minecraft:block', 'pools': [
+        {'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': ce(name)}], 'conditions': [{'condition': 'minecraft:survives_explosion'}]},
+        {'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': 'minecraft:campfire'}], 'conditions': [
+            {'condition': 'minecraft:block_state_property', 'block': ce(name), 'properties': {'fire': 'campfire'}}]},
+        {'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': 'minecraft:soul_campfire'}], 'conditions': [
+            {'condition': 'minecraft:block_state_property', 'block': ce(name), 'properties': {'fire': 'soul'}}]}]})
+    shapeless(name, [item('create:%s_scaffolding' % metal), item(extra)], ce(name))
+    LANG['block.%s.%s' % (MODID, name)] = '%s Campfire Stand' % label
+
+
 # Engine blockstates: models are drawn for engine axis X / facing south (cylinder leans +Z); rotate the rest.
 FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}          # cylinder model leans +Z (south)
 OUT_Y = {'east': 0, 'south': 90, 'west': 180, 'north': 270}            # crankcase model's output end is +X (east)
@@ -770,7 +795,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'fermenting_vat')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'fermenting_vat', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

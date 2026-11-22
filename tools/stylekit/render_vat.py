@@ -66,7 +66,10 @@ def vat(sc, w, h, d, heat='campfire', working=False):
             sc.add(GROUND, (x, -1, z))
     for x in range(w):
         for z in range(d):
-            if heat == 'campfire':
+            if heat.endswith('_stand'):
+                sc.add(stand_model(heat), (x, 0, z))
+                sc.add('minecraft:block/campfire', (x, 0, z))
+            elif heat == 'campfire':
                 sc.add('minecraft:block/campfire', (x, 0, z))
             else:
                 sc.add('create:block/blaze_burner/block', (x, 0, z))
@@ -93,16 +96,37 @@ def vat(sc, w, h, d, heat='campfire', working=False):
 
 
 SHOTS = [
+    ('6_on_andesite_stands', dict(w=2, h=2, d=2, heat='andesite_campfire_stand', working=True)),
+    ('7_on_copper_stand', dict(w=1, h=2, d=1, heat='copper_campfire_stand')),
     ('1_single', dict(w=1, h=1, d=1)),
     ('2_tall', dict(w=1, h=3, d=1, heat='idle')),
     ('3_2x2x2_working', dict(w=2, h=2, d=2, heat='active', working=True)),
     ('4_3x3x4', dict(w=3, h=4, d=3, heat='campfire', working=True)),
 ]
 
+def stand_model(name):
+    """The renderer doesn't follow 'parent': merge Create's scaffold elements with the stand's textures."""
+    m = json.load(open(os.path.join(REPO, 'mod/src/main/resources/assets/creativeengineering/models/block', name + '.json')))
+    parent = render_scene.load_model(m['parent'])
+    return {'textures': m['textures'], 'elements': parent['elements']}
+
+
+def stands():
+    sc = Scene(yaw=-35, pitch=26, scale=12)
+    for x in range(-1, 6):
+        for z in range(-1, 2):
+            sc.add(GROUND, (x, -1, z))
+    for i, (metal, fire) in enumerate((('andesite', 'campfire'), ('brass', 'campfire'), ('copper', 'campfire_off'))):
+        sc.add(stand_model(metal + '_campfire_stand'), (i * 2, 0, 0))
+        sc.add('minecraft:block/' + fire, (i * 2, 0, 0))
+    print(sc.render(os.path.join(OUT, '8_stands.png')))
+
+
 if __name__ == '__main__':
     for f in os.listdir(OUT):
         if f.endswith('.png') and f[0].isdigit():
             os.remove(os.path.join(OUT, f))
+    stands()
     for name, kw in SHOTS:
         sc = Scene(yaw=-35, pitch=26, scale=10 if kw['h'] < 3 else 8)
         vat(sc, **kw)

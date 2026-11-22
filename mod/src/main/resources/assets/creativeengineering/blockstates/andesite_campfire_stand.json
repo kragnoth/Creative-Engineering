@@ -1,0 +1,45 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativeengineering:block/andesite_campfire_stand"
+      }
+    },
+    {
+      "when": {
+        "fire": "campfire",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "minecraft:block/campfire"
+      }
+    },
+    {
+      "when": {
+        "fire": "campfire",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "minecraft:block/campfire_off"
+      }
+    },
+    {
+      "when": {
+        "fire": "soul",
+        "lit": "true"
+      },
+      "apply": {
+        "model": "minecraft:block/soul_campfire"
+      }
+    },
+    {
+      "when": {
+        "fire": "soul",
+        "lit": "false"
+      },
+      "apply": {
+        "model": "minecraft:block/campfire_off"
+      }
+    }
+  ]
+}
