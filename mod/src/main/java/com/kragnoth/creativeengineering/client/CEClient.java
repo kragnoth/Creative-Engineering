@@ -40,5 +40,14 @@ public final class CEClient {
                 .factory(com.kragnoth.creativeengineering.client.engine.CylinderVisual::new)
                 .skipVanillaRender(be -> false)
                 .apply());
+        // the flywheel spins as an instanced visual (Create's renderer skips itself when instancing is on); its model
+        // is built along X, so it rotates from EAST, like Create's pump cog uses ofZ
+        event.enqueueWork(() -> dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
+                .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get())
+                .factory((ctx, be, pt) -> new com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual<>(ctx, be, pt,
+                        net.minecraft.core.Direction.EAST,
+                        dev.engine_room.flywheel.lib.model.Models.partial(com.kragnoth.creativeengineering.client.engine.CEPartials.FLYWHEEL)))
+                .skipVanillaRender(be -> false)
+                .apply());
     }
 }

@@ -517,7 +517,7 @@ for z0, z1, z2, z3 in ((15, 15.6, 13.5, 14.1), (0.4, 1, 1.9, 2.5)):   # ribs, lo
         cc.append(box([x, 3, z0], [x + 1.5, 8, z1], 'dark'))
         cc.append(box([x, 8, z2], [x + 1.5, 13, z3], 'dark'))
 cc += [box([5, 3.5, 15], [11, 7.5, 15.6], 'casing'), box([5, 3.5, 0.4], [11, 7.5, 1], 'casing')]   # access doors
-cc += oct_x(0, 1, 9, 2.5, 'casing') + oct_x(15, 16, 9, 2.5, 'casing')                               # bearing rings
+cc += oct_x(1, 2, 9, 2.5, 'casing') + oct_x(14, 15, 9, 2.5, 'casing')   # bearing rings, 1 px in: the crankshaft shows past them
 cc += [box([0.5, 11, 11], [15.5, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 'axis': 'x', 'angle': 45}),
        box([0.5, 11, -1], [15.5, 14, 5], 'dark', rot={'origin': [8, 12.5, 2], 'axis': 'x', 'angle': -45}),
        box([0, 13, 5.5], [16, 15, 10.5], 'casing'), box([0, 15, 6.5], [16, 16, 9.5], 'casing')]      # cam cover

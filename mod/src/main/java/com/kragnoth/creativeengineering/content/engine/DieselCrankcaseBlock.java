@@ -17,6 +17,9 @@ import net.minecraft.world.level.block.state.BlockState;
  * never joins the running engine's network.
  */
 public class DieselCrankcaseBlock extends HorizontalKineticBlock implements IBE<DieselEngineBlockEntity> {
+    /** Ghost-preview cylinder placement (Create's placement helpers, like girders and shafts). */
+    private static final int CYLINDER_HELPER = net.createmod.catnip.placement.PlacementHelpers.register(new CylinderPlacementHelper());
+
     public DieselCrankcaseBlock(Properties p) {
         super(p);
     }
@@ -24,6 +27,17 @@ public class DieselCrankcaseBlock extends HorizontalKineticBlock implements IBE<
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return defaultBlockState().setValue(HORIZONTAL_FACING, ctx.getHorizontalDirection());
+    }
+
+    @Override
+    protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state,
+            net.minecraft.world.level.Level level, BlockPos pos, net.minecraft.world.entity.player.Player player,
+            net.minecraft.world.InteractionHand hand, net.minecraft.world.phys.BlockHitResult hit) {
+        net.createmod.catnip.placement.IPlacementHelper helper = net.createmod.catnip.placement.PlacementHelpers.get(CYLINDER_HELPER);
+        if (helper.matchesItem(stack) && stack.getItem() instanceof net.minecraft.world.item.BlockItem item) {
+            return helper.getOffset(player, level, state, pos, hit).placeInWorld(level, item, player, hand, hit);
+        }
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 
     @Override

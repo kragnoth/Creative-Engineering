@@ -5,6 +5,11 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.6-alpha: engine fixes from Kragnoth's test (2026-11-22) - test in game
+- [ ] Flywheel renders and spins with Flywheel instancing on (cause in latest.log: backend flywheel:indirect active, so Create's classic kinetic renderer skips itself and there was no instanced visual). Also with `/flywheel backend off`.
+- [ ] Crankshaft sticks out 1 px past the bearing rings at both ends (and shows between joined crankcases).
+- [ ] Holding a Diesel Cylinder and looking at a crankcase: ghost preview on the bank nearest where you look; right-click places it diagonally above, already facing out; other bank if that one's taken. No support block needed.
+
 ## 0.8.5-alpha: plant oil (2026-11-22) - test in game
 - [ ] Mechanical Press over a Basin with seeds: 4 seeds -> 250 mB Plant Oil (golden). Bucketable, placeable, flows like water.
 - [ ] Plant oil runs the diesel engine (15,360 SU per cylinder). Other mods' plant/seed oil (tagged c:plantoil) mixes in.
