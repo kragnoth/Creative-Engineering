@@ -1,25 +1,24 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "wall": "create:block/basin",
-    "iron": "create:block/industrial_iron_block",
+    "wall": "creativeengineering:block/fermenting_vat",
+    "lid": "creativeengineering:block/fermenting_vat_lid",
+    "under": "creativeengineering:block/fermenting_vat_bottom",
     "dark": "create:block/dark_metal_block",
-    "lid": "create:block/copper_casing",
+    "iron": "create:block/industrial_iron_block",
     "brass": "create:block/brass_block",
-    "shaft": "create:block/axis",
-    "shaft_end": "create:block/axis_top",
-    "particle": "create:block/basin"
+    "particle": "creativeengineering:block/fermenting_vat"
   },
   "elements": [
     {
       "from": [
         7,
-        17.5,
+        16,
         7
       ],
       "to": [
         9,
-        20,
+        18.5,
         9
       ],
       "faces": {
@@ -46,12 +45,12 @@
     {
       "from": [
         5,
-        20,
+        18.5,
         7.5
       ],
       "to": [
         11,
-        20.75,
+        19.25,
         8.5
       ],
       "faces": {
@@ -78,12 +77,12 @@
     {
       "from": [
         7.5,
-        20,
+        18.5,
         5
       ],
       "to": [
         8.5,
-        20.75,
+        19.25,
         11
       ],
       "faces": {
@@ -110,12 +109,12 @@
     {
       "from": [
         7.25,
-        20.75,
+        19.25,
         7.25
       ],
       "to": [
         8.75,
-        21.5,
+        20,
         8.75
       ],
       "faces": {
@@ -142,12 +141,12 @@
     {
       "from": [
         9,
-        18,
+        16.5,
         7.5
       ],
       "to": [
         11.5,
-        19,
+        17.5,
         8.5
       ],
       "faces": {

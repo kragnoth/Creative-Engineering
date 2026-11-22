@@ -35,7 +35,7 @@ vanilla water textures + tint, runtime bucket model), tagged `c:plantoil`, in th
 - **Hand use:** buckets fill / empty like a tank; any ingredient goes in; an empty hand takes the ingredients back.
 - **Heat:** averaged over the footprint below the bottom layer. Campfire or unlit Blaze Burner (passive) x1, lit x2, superheated x3, nothing 0 (stops).
 - **Batches:** one recipe at a time, run as many times at once as the vat has blocks (ingredients, fluid and output room allowing).
-- **Look:** Create textures. Basin walls, a copper-casing lid on the top layer, iron feet on the bottom layer, one brass pressure-release valve top-middle that puffs and hisses softly while working.
+- **Look (0.9.1, connected textures):** own RECTANGLE sheets in Create's style (tools/stylekit/make_textures_excalibur.py `vat`). Dark steel plate walls with a riveted copper strap and a copper lid with a steel rim, both running only round the OUTSIDE of the formed vat. Walls between vat blocks don't draw. Iron feet only on the vat's outer corners. One brass pressure-release valve (Create textures) top-middle, which puffs and hisses softly while working.
 - **Recipe type `creativeengineering:fermenting`:** `ingredients` (1–4 counted), `fluid` (sized fluid ingredient), `result` (fluid stack), `time` (ticks at x1 heat, default 400).
 - **Default recipes (250 mB water each, giving 250 mB product):**
 

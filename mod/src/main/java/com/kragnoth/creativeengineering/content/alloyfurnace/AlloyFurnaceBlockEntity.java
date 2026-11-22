@@ -649,8 +649,7 @@ public class AlloyFurnaceBlockEntity extends SmartBlockEntity implements IHaveGo
             }
         } else if (level != null && !java.util.Objects.equals(old, controller)) {
             // connected textures depend on which furnace this brick belongs to: re-render
-            requestModelDataUpdate();
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_IMMEDIATE);
+            com.kragnoth.creativeengineering.content.shared.CTRefresh.onClientController(this, old, controller);
         }
     }
 }

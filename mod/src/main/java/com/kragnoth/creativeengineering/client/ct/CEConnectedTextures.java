@@ -24,9 +24,11 @@ public final class CEConnectedTextures {
         wrap(event.getModels(), ModBlocks.COKE_OVEN_BRICKS.get(), new FurnaceCTBehaviour("coke_oven_bricks"));
         wrap(event.getModels(), ModBlocks.BLAST_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("blast_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
+        wrap(event.getModels(), ModBlocks.FERMENTING_VAT.get(), new VatCTBehaviour());
     }
 
-    private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block, FurnaceCTBehaviour behaviour) {
+    private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block,
+            com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour behaviour) {
         for (BlockState state : block.getStateDefinition().getPossibleStates()) {
             ModelResourceLocation loc = BlockModelShaper.stateToModelLocation(state);
             BakedModel model = models.get(loc);

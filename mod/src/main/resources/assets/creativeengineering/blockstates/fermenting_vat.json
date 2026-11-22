@@ -10,7 +10,8 @@
     },
     {
       "when": {
-        "bottom": "true"
+        "bottom": "true",
+        "top": "false"
       },
       "apply": {
         "model": "creativeengineering:block/fermenting_vat_body_bottom"
@@ -18,10 +19,11 @@
     },
     {
       "when": {
+        "bottom": "true",
         "top": "true"
       },
       "apply": {
-        "model": "creativeengineering:block/fermenting_vat_lid"
+        "model": "creativeengineering:block/fermenting_vat_body_single"
       }
     },
     {
@@ -30,6 +32,50 @@
       },
       "apply": {
         "model": "creativeengineering:block/fermenting_vat_valve"
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "north": "true",
+        "west": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/fermenting_vat_foot",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "north": "true",
+        "east": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/fermenting_vat_foot",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "south": "true",
+        "east": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/fermenting_vat_foot",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "bottom": "true",
+        "south": "true",
+        "west": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/fermenting_vat_foot",
+        "y": 270
       }
     }
   ]

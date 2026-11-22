@@ -350,6 +350,21 @@ def connected(made):
     alloy = recolour_all(BLOCK + 'polished_blackstone_bricks.png', 'R', lift=1.3)
     ct_set(made, 'alloy_furnace_bricks', alloy, recolour_all(alloy, 'R', lift=0.8), 'S')
 
+
+# ---------------------------------------------------------------------------------------- fermenting vat
+# Connected sheets for the vat (RECTANGLE, same layout as the furnaces): dark steel plate walls with a riveted
+# copper strap only around the OUTER edge of the formed vat, and a copper lid with a steel rim, so a 1x1 and a
+# 3x3x4 read as one vessel. Create's basin is the reference for the look; nothing of it is copied.
+def vat(made):
+    wall = recolour_all(BLOCK + 'iron_block.png', 'S', lift=0.62)
+    lid = recolour_all(BLOCK + 'cut_copper.png', 'U', lift=0.95)
+    for name, base, band in (('fermenting_vat', wall, 'U'), ('fermenting_vat_lid', lid, 'S')):
+        sheet = ct_sheet(base, band)
+        save(sheet, 'block/%s_connected' % name)
+        made.append(save(sheet.crop((48, 48, 64, 64)), 'block/%s' % name))
+    bottom = recolour_all(BLOCK + 'iron_block.png', 'S', lift=0.4)
+    made.append(save(bottom, 'block/fermenting_vat_bottom'))
+
 # ---------------------------------------------------------------------------------------- metalworking
 RAMPS['U'] = ['#1d0d07', '#33160b', '#4d2410', '#6a3416', '#87451c', '#a35a26', '#bb7034', '#d08a48', '#e3a866']
 RAMPS['I'] = RAMPS.get('I', ['#18181a', '#26272a', '#36383b', '#484a4e', '#5b5e62', '#707377', '#878a8e', '#a0a3a6', '#c2c4c6'])
@@ -556,6 +571,7 @@ if __name__ == '__main__':
     connected(made)
     metalworking(made)
     timber(made)
+    vat(made)
     made = [m for m in made if m]
     layers = []
     for n in (1, 2):

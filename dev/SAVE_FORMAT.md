@@ -58,3 +58,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
   - BE NBT: Controller, Size[3], Item, Input, Product, Speed, Active, Batches, Progress.
 - New fluids and buckets: ethanol, hooch, wine, cider, mead, ale (`<name>`, `flowing_<name>`, `<name>_bucket`).
 - New recipe type `creativeengineering:fermenting`.
+
+## 0.9.1
+- `fermenting_vat` gains block states north / east / south / west (outer edges, for feet). They are recomputed on load.

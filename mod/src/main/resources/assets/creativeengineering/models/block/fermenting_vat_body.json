@@ -1,14 +1,13 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "wall": "create:block/basin",
-    "iron": "create:block/industrial_iron_block",
+    "wall": "creativeengineering:block/fermenting_vat",
+    "lid": "creativeengineering:block/fermenting_vat_lid",
+    "under": "creativeengineering:block/fermenting_vat_bottom",
     "dark": "create:block/dark_metal_block",
-    "lid": "create:block/copper_casing",
+    "iron": "create:block/industrial_iron_block",
     "brass": "create:block/brass_block",
-    "shaft": "create:block/axis",
-    "shaft_end": "create:block/axis_top",
-    "particle": "create:block/basin"
+    "particle": "creativeengineering:block/fermenting_vat"
   },
   "elements": [
     {
@@ -28,42 +27,60 @@
           "uv": [
             0,
             0,
-            8,
-            7
-          ]
+            16,
+            16
+          ],
+          "cullface": "north"
         },
         "south": {
           "texture": "#wall",
           "uv": [
             0,
             0,
-            8,
-            7
-          ]
+            16,
+            16
+          ],
+          "cullface": "south"
         },
         "east": {
           "texture": "#wall",
           "uv": [
             0,
             0,
-            8,
-            7
-          ]
+            16,
+            16
+          ],
+          "cullface": "east"
         },
         "west": {
           "texture": "#wall",
           "uv": [
             0,
             0,
-            8,
-            7
-          ]
+            16,
+            16
+          ],
+          "cullface": "west"
         },
         "up": {
-          "texture": "#iron"
+          "texture": "#lid",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "up"
         },
         "down": {
-          "texture": "#dark"
+          "texture": "#under",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "down"
         }
       }
     }

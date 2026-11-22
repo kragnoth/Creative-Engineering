@@ -490,7 +490,11 @@ public class BlastFurnaceBlockEntity extends SmartBlockEntity implements IMultiB
         super.read(tag, registries, clientPacket);
         updateConnectivity = tag.contains("Uninitialized");
         lastKnownPos = tag.contains("LastKnownPos") ? NbtUtils.readBlockPos(tag, "LastKnownPos").orElse(null) : null;
+        BlockPos oldController = controller;
         controller = tag.contains("Controller") ? NbtUtils.readBlockPos(tag, "Controller").orElse(null) : null;
+        if (clientPacket) {
+            com.kragnoth.creativeengineering.content.shared.CTRefresh.onClientController(this, oldController, controller);
+        }
         if (isController()) {
             width = Math.max(1, tag.getInt("Width"));
             height = Math.max(1, tag.getInt("Height"));

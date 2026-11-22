@@ -228,3 +228,8 @@ Convention (borrowed from Tarbound):
 - [ ] JEI: Fermenting tab with every drink; vat, campfire and blaze burner as catalysts.
 - [ ] Display link: status / progress.
 - [ ] Each drink's bucket runs the diesel engine at ethanol output.
+
+## 0.9.1 — vat connected textures + instant furnace CT
+- [ ] Vat: 1x1, 1x3, 2x2x2 and 3x3x4 each read as one vessel (strap / lid rim on the outside only; no inner seams; feet on the outer corners only).
+- [ ] Two separate vats side by side stay two framed vessels.
+- [ ] Coke oven, blast furnace, alloy furnace and vat join their connected textures instantly when formed or extended (they used to lag up to ~5 s).

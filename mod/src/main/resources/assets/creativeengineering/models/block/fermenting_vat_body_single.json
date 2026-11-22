@@ -1,0 +1,87 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "wall": "creativeengineering:block/fermenting_vat",
+    "lid": "creativeengineering:block/fermenting_vat_lid",
+    "under": "creativeengineering:block/fermenting_vat_bottom",
+    "dark": "create:block/dark_metal_block",
+    "iron": "create:block/industrial_iron_block",
+    "brass": "create:block/brass_block",
+    "particle": "creativeengineering:block/fermenting_vat"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#wall",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#wall",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#wall",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#wall",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#lid",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#under",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}
