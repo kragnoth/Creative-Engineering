@@ -507,23 +507,32 @@ ENG_T = {'iron': CR('industrial_iron_block'), 'iron_top': CR('industrial_iron_bl
 # to both banks, a rounded camshaft cover with brass oil cups. The crankshaft (Create's shaft) runs through: front =
 # starting input, back = output.
 cc = [box([0, 0, 0], [16, 2, 16], 'dark'), box([0, 2, 0.5], [16, 3, 15.5], 'dark'),
-      box([0, 3, 1], [16, 8, 15], 'iron', {'up': 'iron_top', 'down': 'dark'}),
-      box([0, 8, 2.5], [16, 13, 13.5], 'iron', {'up': 'iron_top', 'down': 'dark'})]
+      box([2, 3, 1], [14, 8, 15], 'iron', {'up': 'iron_top', 'down': 'dark'}),          # housing recessed 2 px at the
+      box([2, 8, 2.5], [14, 13, 13.5], 'iron', {'up': 'iron_top', 'down': 'dark'})]     # ends: the crankshaft shows
 for x in (1.5, 13):                                            # hold-down bolts
     for z in (0.75, 14):
         cc.append(box([x, 2, z], [x + 1.5, 3, z + 1.25], 'shaft', {'up': 'shaft_end', 'down': 'shaft_end'}))
 for z0, z1, z2, z3 in ((15, 15.6, 13.5, 14.1), (0.4, 1, 1.9, 2.5)):   # ribs, lower and upper, both sides
-    for x in (1, 13.5):
+    for x in (2, 12.5):
         cc.append(box([x, 3, z0], [x + 1.5, 8, z1], 'dark'))
         cc.append(box([x, 8, z2], [x + 1.5, 13, z3], 'dark'))
 cc += [box([5, 3.5, 15], [11, 7.5, 15.6], 'casing'), box([5, 3.5, 0.4], [11, 7.5, 1], 'casing')]   # access doors
-cc += oct_x(1, 2, 9, 2.5, 'casing') + oct_x(14, 15, 9, 2.5, 'casing')   # bearing rings, 1 px in: the crankshaft shows past them
+cc += oct_x(1, 2, 9, 2.5, 'casing') + oct_x(14, 15, 9, 2.5, 'casing')   # bearing rings against the recessed housing
 cc += [box([0.5, 11, 11], [15.5, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 'axis': 'x', 'angle': 45}),
        box([0.5, 11, -1], [15.5, 14, 5], 'dark', rot={'origin': [8, 12.5, 2], 'axis': 'x', 'angle': -45}),
        box([0, 13, 5.5], [16, 15, 10.5], 'casing'), box([0, 15, 6.5], [16, 16, 9.5], 'casing')]      # cam cover
 for x in (3, 11):                                                                                      # oil cups
     cc += [box([x + 0.5, 16, 7.5], [x + 1.5, 16.5, 8.5], 'brass'), box([x, 16.5, 7], [x + 2, 18, 9], 'brass')]
 cc.append(axis_x())
+# Crankshaft stubs poking 2 px past both faces. A hair thinner than a shaft (3.5 vs 4), so with anything attached
+# (crankcase, Create shaft, flywheel, hand crank) they sit inside its shaft: hidden, no z-fighting.
+for x0, x1 in ((-2, 0), (16, 18)):
+    st = box([x0, 6.25, 6.25], [x1, 9.75, 9.75], 'shaft', {'east': 'shaft_end', 'west': 'shaft_end'})
+    for d in ('north', 'south', 'up', 'down'):
+        st['faces'][d].update({'uv': [6.25, 0, 9.75, 2], 'rotation': 90})
+    for d in ('east', 'west'):
+        st['faces'][d]['uv'] = [6.25, 6.25, 9.75, 9.75]
+    cc.append(st)
 eng('diesel_crankcase', ENG_T, cc)
 
 # Cylinder: octagonal flange with bolts, octagonal barrel with cooling bands, octagonal head with studs, domed rocker

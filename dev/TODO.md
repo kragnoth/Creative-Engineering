@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.8-alpha: crankshaft stub (2026-11-22) - look in game
+- [ ] The crankshaft pokes 2 px out of both crankcase ends when nothing's attached (housing also recessed 2 px). With a crankcase / Create shaft / flywheel / hand crank attached the stub hides inside it: check there's no flicker at those joints.
+
 ## 0.8.7-alpha: engine running sound (2026-11-22) - listen in game
 - [ ] One sound per engine, from the output-end crankcase: a low muffled thump per firing (bass drum pitched down, quiet). Single cylinder ~every 2 s; V8 ~4/s, blurring into a thrum. No per-cylinder sounds. Stops with the engine.
 - [ ] Tell me if it should be lower / quieter / more continuous (a looped hum under the thumps is the next step if needed).
