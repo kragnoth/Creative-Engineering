@@ -373,3 +373,6 @@ Convention (borrowed from Tarbound):
 - [ ] Wellhead alone pumps nothing; pipes on any side fill without a pump.
 - [ ] Distilling Tank short of a batch says "Filling the boiler: n / 100 mB" instead of "a level is full".
 - [ ] `/test runrefinery` still fills diesel, kerosene and gasoline.
+
+## 0.15.1 — fast pumpjack check
+- [ ] Refinery at high RPM: crude keeps flowing; if the boiler shows 1000 / 1000 the 1x1 column is the bottleneck (crude backs up into the wellhead's 8 B tank), not a fault. Game test `refineryRunsFast` (128 RPM) covers it.

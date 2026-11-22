@@ -651,4 +651,29 @@ public final class CEPlaytests {
             com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(new net.minecraft.world.level.ChunkPos(h.absolutePos(o.offset(0, 0, 2))));
         }));
     }
+
+    /** Kragnoth: past 16 RPM the crude stopped climbing. The same demo with the motor turned up to 128 RPM must still run. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 1200)
+    public static void refineryRunsFast(GameTestHelper h) {
+        open(h);
+        BlockPos o = new BlockPos(3, 1, 3);
+        com.kragnoth.creativeengineering.demo.DemoCommands.buildRefinery(h.getLevel(), h.absolutePos(o));
+        h.runAfterDelay(5, () -> {
+            var m = (com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity) h.getBlockEntity(o.offset(1, 0, 1));
+            m.generatedSpeed.setValue(128);
+        });
+        h.runAfterDelay(40, () -> h.succeedWhen(() -> {
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(o.offset(0, 0, 1));
+            var w = (com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity) h.getBlockEntity(o.offset(0, 0, 2));
+            String diag = " | pumpjack " + pj.getSpeed() + " rpm overstressed " + pj.isOverStressed() + " | wellhead tank " + w.tank().getFluidAmount();
+            if (h.getBlockEntity(o.offset(3, 1, 2)) instanceof com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity t) {
+                var b = t.blocker();
+                diag += " | boiler " + t.layerFluid(0).getAmount() + " blocker " + (b == null ? "none" : b.getString())
+                        + " L1 " + t.layerFluid(1).getAmount() + " L2 " + t.layerFluid(2).getAmount() + " L3 " + t.layerFluid(3).getAmount();
+            }
+            var f = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(com.kragnoth.creativeengineering.demo.DemoCommands.GASOLINE_TANK)), Direction.UP).getFluidInTank(0);
+            h.assertTrue(f.getAmount() >= 300, "gasoline tank at 128 RPM: " + f.getAmount() + diag);
+            com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(new net.minecraft.world.level.ChunkPos(h.absolutePos(o.offset(0, 0, 2))));
+        }));
+    }
 }
