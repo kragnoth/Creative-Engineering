@@ -82,3 +82,4 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
   - Ratios: flywheel to sprocket 4x, sprocket to flywheel 1/4, like to like 1:1.
   - Each wheel takes up to two chains, so a sprocket can relay rotation onward.
   - Each chain is drawn by its lower-position end. Saves: `Chains` list; the old single `BeltPartner` is still read.
+- **0.11.4:** Tarbound tar joins the biodiesel tier (optional; docs/tarbound-compat.md). A separate crude-oil tier is still undecided (proposed 12,288 SU at 2.5 mB/s) for the petroleum phase.

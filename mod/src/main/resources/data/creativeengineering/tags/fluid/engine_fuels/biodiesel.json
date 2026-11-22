@@ -12,6 +12,10 @@
     {
       "id": "immersiveengineering:biodiesel",
       "required": false
+    },
+    {
+      "id": "tarbound:tar",
+      "required": false
     }
   ]
 }

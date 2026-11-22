@@ -52,3 +52,5 @@ None of T1–T7 adds a screen, a power type, a dependency or any player-facing c
 ## Testing
 - CE game tests (see `dev/`) verify T1–T5 with hoppers and Create funnels. That covers Tarbound by construction.
 - Tarbound's own playtests get CE cases (A1–A2) only when both mods are present in dev.
+
+- **Engine fuel (0.11.4, Kragnoth 2026-11-22):** `tarbound:tar` burns in the diesel engine at biodiesel level (24,576 SU per cylinder, 1.5 mB/s) "since it contains spirits". It is an optional entry in `engine_fuels/biodiesel`, ignored without Tarbound. Crankcases pull it from any touching container or pipe run (e.g. a Pitch Cask), not from tar pools in the world.

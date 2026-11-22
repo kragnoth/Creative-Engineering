@@ -299,3 +299,6 @@ Convention (borrowed from Tarbound):
 - [ ] Break a relay sprocket: both chains drop, both other wheels keep working.
 - [ ] 0.11.x worlds: existing chains still connected after updating.
 - [ ] `/test runall`: 16 pass (new: driveChainSideways, driveChainSprocketToSprocket, driveChainRelay).
+
+## 0.11.4
+- [ ] With Tarbound: tar in a Pitch Cask / tank piped to a crankcase runs the engine at 24,576 SU per cylinder; JEI Engine Fuel shows tar under biodiesel. Without Tarbound: no errors.

@@ -809,7 +809,8 @@ FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 12288, 2
                         'immersiveengineering:plantoil'], 15360, 2),
          ('ethanol', [ce('ethanol'), ce('hooch'), ce('wine'), ce('cider'), ce('mead'), ce('ale'), '#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
                       'immersiveengineering:ethanol'], 18432, 2),
-         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel'], 24576, 1.5),
+         # Tarbound's tar burns at biodiesel level: "it contains spirits" (Kragnoth, 2026-11-22). Optional entry.
+         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel', 'tarbound:tar'], 24576, 1.5),
          ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 30720, 1),
          ('gasoline', ['#c:gasoline', 'createdieselgenerators:gasoline', 'immersivepetroleum:gasoline'], 24576, 2)]
 values = {}
