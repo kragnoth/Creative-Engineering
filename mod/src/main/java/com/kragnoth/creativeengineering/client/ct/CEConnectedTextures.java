@@ -24,13 +24,7 @@ public final class CEConnectedTextures {
         wrap(event.getModels(), ModBlocks.COKE_OVEN_BRICKS.get(), new FurnaceCTBehaviour("coke_oven_bricks"));
         wrap(event.getModels(), ModBlocks.BLAST_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("blast_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
-        for (BlockState state : ModBlocks.FERMENTING_VAT.get().getStateDefinition().getPossibleStates()) {
-            ModelResourceLocation loc = BlockModelShaper.stateToModelLocation(state);
-            BakedModel model = event.getModels().get(loc);
-            if (model != null && !(model instanceof VatModel)) {
-                event.getModels().put(loc, new VatModel(model));
-            }
-        }
+        wrap(event.getModels(), ModBlocks.FERMENTING_VAT.get(), new VatCTBehaviour());
     }
 
     private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block,

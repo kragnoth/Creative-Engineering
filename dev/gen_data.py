@@ -621,40 +621,29 @@ for ang in (0, 45):
            box([6.5, 0, 6.5], [9.5, 16, 9.5], 'iron', rot=rr), box([6.5, 6.5, 0], [9.5, 9.5, 16], 'iron', rot=rr)]
 eng('diesel_flywheel', ENG_T, fw)
 
-# Fermenting Vat models. Walls and lid are the vat's own connected sheets (VatCTBehaviour: the copper strap and
-# steel lid rim run round the outside of the formed vat only); feet sit on the vat's outer corners only (edge
-# states); one brass pressure-release valve top-middle, Create textures. Every face is cull-tagged: the block's
-# skipRendering hides walls between vat blocks.
-VAT_T = {'wall': ce('block/fermenting_vat'), 'lid': ce('block/fermenting_vat_lid'), 'under': ce('block/fermenting_vat_bottom'),
-         'dark': CR('dark_metal_block'), 'iron': CR('industrial_iron_block'), 'brass': CR('brass_block')}
-def vat_body(y0, uv_v0):
-    faces = {d: {'texture': '#wall', 'uv': [0, uv_v0, 16, 16], 'cullface': d} for d in ('north', 'south', 'east', 'west')}
-    faces['up'] = {'texture': '#lid', 'uv': [0, 0, 16, 16], 'cullface': 'up'}
-    faces['down'] = {'texture': '#under', 'uv': [0, 0, 16, 16]} if y0 else {'texture': '#under', 'uv': [0, 0, 16, 16], 'cullface': 'down'}
-    return {'from': [0, y0, 0], 'to': [16, 16, 16], 'faces': faces}
-eng('fermenting_vat_body', VAT_T, [vat_body(0, 0)])
-eng('fermenting_vat_body_bottom', VAT_T, [vat_body(2, 2)])      # bottom of a taller vat: keep the lower strap
-eng('fermenting_vat_body_single', VAT_T, [vat_body(2, 0)])      # one layer tall: whole tile, both straps
-eng('fermenting_vat_foot', VAT_T, [box([0, 0, 0], [3, 2, 3], 'dark', {'up': 'iron'})])
+# Fermenting Vat (Kragnoth, 2026-11-22: "start over from Create's tanks, colour-shifted to industrial steel").
+# vat_tank* are NOT shipped: the client atlas source creativeengineering:recolor makes them at load time from Create's
+# own fluid tank textures (desaturated, cool steel tint), so no Create pixels are in the jar and resource packs that
+# restyle Create's tanks restyle the vat too. Connected exactly like Create's tank (VatCTBehaviour). One brass
+# pressure-release valve top-middle. Every face is cull-tagged: skipRendering hides walls between vat blocks.
+VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_connected', 'vat_tank_connected'),
+            ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected')]
+put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
+    'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
+    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
+VAT_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'dark': CR('dark_metal_block'), 'brass': CR('brass_block')}
+eng('fermenting_vat_body', VAT_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
+    d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
+    for d in ('north', 'south', 'east', 'west', 'up', 'down')}}])
 eng('fermenting_vat_valve', VAT_T, [box([7, 16, 7], [9, 18.5, 9], 'brass'),
                                     box([5, 18.5, 7.5], [11, 19.25, 8.5], 'dark'), box([7.5, 18.5, 5], [8.5, 19.25, 11], 'dark'),
                                     box([7.25, 19.25, 7.25], [8.75, 20, 8.75], 'brass'),
                                     box([9, 16.5, 7.5], [11.5, 17.5, 8.5], 'brass')])          # vent spout
-FEET = [('north', 'west', 0), ('north', 'east', 90), ('south', 'east', 180), ('south', 'west', 270)]
 put('%s/blockstates/fermenting_vat.json' % A, {'multipart': [
-    {'when': {'bottom': 'false'}, 'apply': {'model': ce('block/fermenting_vat_body')}},
-    {'when': {'bottom': 'true', 'top': 'false'}, 'apply': {'model': ce('block/fermenting_vat_body_bottom')}},
-    {'when': {'bottom': 'true', 'top': 'true'}, 'apply': {'model': ce('block/fermenting_vat_body_single')}},
-    {'when': {'valve': 'true'}, 'apply': {'model': ce('block/fermenting_vat_valve')}}]
-    + [{'when': {'bottom': 'true', a: 'true', b: 'true'}, 'apply': {'model': ce('block/fermenting_vat_foot'), 'y': r}}
-       for a, b, r in FEET]})
-vat_item = load_json('%s/models/block/fermenting_vat_body_single.json' % A)
-for extra in ('fermenting_vat_valve',):
-    vat_item['elements'] += load_json('%s/models/block/%s.json' % (A, extra))['elements']
-foot = load_json('%s/models/block/fermenting_vat_foot.json' % A)['elements'][0]
-for fx, fz in ((0, 0), (13, 0), (0, 13), (13, 13)):
-    e = json.loads(json.dumps(foot)); e['from'] = [fx, 0, fz]; e['to'] = [fx + 3, 2, fz + 3]
-    vat_item['elements'].append(e)
+    {'apply': {'model': ce('block/fermenting_vat_body')}},
+    {'when': {'valve': 'true'}, 'apply': {'model': ce('block/fermenting_vat_valve')}}]})
+vat_item = load_json('%s/models/block/fermenting_vat_body.json' % A)
+vat_item['elements'] += load_json('%s/models/block/fermenting_vat_valve.json' % A)['elements']
 for e in vat_item['elements']:
     for f in e['faces'].values():
         f.pop('cullface', None)

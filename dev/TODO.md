@@ -237,3 +237,8 @@ Convention (borrowed from Tarbound):
 
 ## 0.9.3
 - [ ] Vat look: riveted steel walls and copper lid read as one real tank at every size, with no visible repeat.
+
+## 0.9.4 — vat restarted as steel-shifted Create tank
+- [ ] Vat looks like a steel Create tank at 1x1, 1x3, 2x2x2 and 3x3x4, connecting like a tank. No missing textures (purple/black); check the log for "recolor:" warnings.
+- [ ] With a resource pack that changes Create's tanks, the vat follows.
+- [ ] Two vats side by side stay separate.

@@ -61,3 +61,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.9.1
 - `fermenting_vat` gains block states north / east / south / west (outer edges, for feet). They are recomputed on load.
+
+## 0.9.4
+- `fermenting_vat` no longer has the north / east / south / west states (feet removed); old worlds just drop them.

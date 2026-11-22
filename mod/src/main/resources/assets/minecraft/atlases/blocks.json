@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "type": "creativeengineering:recolor",
+      "tint": "#C9D3DE",
+      "saturation": 0.12,
+      "contrast": 1.1,
+      "brightness": -0.04,
+      "sprites": [
+        {
+          "source": "create:block/fluid_tank",
+          "target": "creativeengineering:block/vat_tank"
+        },
+        {
+          "source": "create:block/fluid_tank_connected",
+          "target": "creativeengineering:block/vat_tank_connected"
+        },
+        {
+          "source": "create:block/fluid_tank_top",
+          "target": "creativeengineering:block/vat_tank_top"
+        },
+        {
+          "source": "create:block/fluid_tank_top_connected",
+          "target": "creativeengineering:block/vat_tank_top_connected"
+        }
+      ]
+    }
+  ]
+}

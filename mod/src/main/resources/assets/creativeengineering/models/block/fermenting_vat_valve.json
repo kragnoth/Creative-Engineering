@@ -1,13 +1,11 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "wall": "creativeengineering:block/fermenting_vat",
-    "lid": "creativeengineering:block/fermenting_vat_lid",
-    "under": "creativeengineering:block/fermenting_vat_bottom",
+    "side": "creativeengineering:block/vat_tank",
+    "top": "creativeengineering:block/vat_tank_top",
     "dark": "create:block/dark_metal_block",
-    "iron": "create:block/industrial_iron_block",
     "brass": "create:block/brass_block",
-    "particle": "creativeengineering:block/fermenting_vat"
+    "particle": "creativeengineering:block/vat_tank"
   },
   "elements": [
     {

@@ -198,9 +198,7 @@ public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveG
             boolean valve = top && rel.getX() == x / 2 && rel.getZ() == z / 2;   // one pressure valve, top middle
             BlockState st = getBlockState()
                     .setValue(FermentingVatBlock.TOP, top).setValue(FermentingVatBlock.BOTTOM, bottom)
-                    .setValue(FermentingVatBlock.VALVE, valve)
-                    .setValue(FermentingVatBlock.WEST, rel.getX() == 0).setValue(FermentingVatBlock.EAST, rel.getX() == x - 1)
-                    .setValue(FermentingVatBlock.NORTH, rel.getZ() == 0).setValue(FermentingVatBlock.SOUTH, rel.getZ() == z - 1);
+                    .setValue(FermentingVatBlock.VALVE, valve);
             if (st != getBlockState()) {
                 level.setBlock(worldPosition, st, Block.UPDATE_CLIENTS);
             }
@@ -657,11 +655,6 @@ public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveG
             // connected textures depend on which vat this block belongs to: re-render
             com.kragnoth.creativeengineering.content.shared.CTRefresh.onClientController(this, old, controller);
         }
-    }
-
-    /** Client-safe: this block's copy of its vat's size {w, h, d} (synced to every member). */
-    public int[] clientSize() {
-        return new int[]{sx, sy, sz};
     }
 
     /** Client-safe: the formed vat's controller this block belongs to (for connected textures). */

@@ -28,6 +28,13 @@ public final class CEClient {
                 com.kragnoth.creativeengineering.client.engine.CylinderRenderer::new);
     }
 
+    /** Atlas source that steel-shifts Create's tank textures for the Fermenting Vat (assets/minecraft/atlases/blocks.json). */
+    @SubscribeEvent
+    static void spriteSources(net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent event) {
+        com.kragnoth.creativeengineering.client.texture.RecolorSpriteSource.TYPE = event.register(
+                CreativeEngineering.id("recolor"), com.kragnoth.creativeengineering.client.texture.RecolorSpriteSource.CODEC);
+    }
+
     @SubscribeEvent
     static void clientSetup(FMLClientSetupEvent event) {
         // Ponder ships with Create; PonderCompat is only touched behind this check (same pattern as Tarbound).

@@ -1,7 +1,6 @@
-"""Look-approval renders for the Fermenting Vat (docs/fermentation-spec.md). Create textures only in local previews.
-The renderer has no connected textures, so this picks each face's tile from the vat's RECTANGLE sheets the way
-Create's CTModel would (preview tiles cached under out/vat/ct)."""
-import copy
+"""Look-approval renders for the Fermenting Vat (docs/fermentation-spec.md). Previews only (out/ is git-ignored).
+Mirrors the game: Create's fluid tank textures run through the same recolour as client/texture/RecolorSpriteSource
+(settings read from the generated atlas JSON), then RECTANGLE connected tiles picked like Create's CTModel."""
 import json
 import os
 import sys
@@ -13,28 +12,51 @@ import render_scene  # noqa: E402
 from render_scene import Scene, cube  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.join(HERE, '..', '..')
 OUT = os.path.join(HERE, 'out', 'vat')
 CT = os.path.join(OUT, 'ct')
 os.makedirs(os.path.join(CT, 'textures'), exist_ok=True)
 render_scene.ROOTS['preview'] = CT
-TEX = os.path.join(HERE, '..', '..', 'mod', 'src', 'main', 'resources', 'assets', 'creativeengineering', 'textures', 'block')
-MODELS = os.path.join(HERE, '..', '..', 'mod', 'src', 'main', 'resources', 'assets', 'creativeengineering', 'models', 'block')
+CREATE = os.path.expanduser('~/ref/create/src/main/resources/assets/create/textures/block/')
+ATLAS = json.load(open(os.path.join(REPO, 'mod/src/main/resources/assets/minecraft/atlases/blocks.json')))['sources'][0]
 CE = 'creativeengineering:block/'
 GROUND = cube('minecraft:block/smooth_stone', frm=(0, 15, 0), to=(16, 16, 16))
 
 
-def tile(sheet, px, py):
-    """16x16 slice at (px, py) of a big-picture sheet, as the client VatModel picks it."""
-    name = '%s_%d_%d' % (sheet, px, py)
+def recolor(im):
+    t = int(ATLAS['tint'].lstrip('#'), 16)
+    tint = ((t >> 16 & 255) / 255, (t >> 8 & 255) / 255, (t & 255) / 255)
+    sat, con, bri = ATLAS['saturation'], ATLAS['contrast'], ATLAS['brightness']
+    im = im.convert('RGBA')
+    px = im.load()
+    for y in range(im.height):
+        for x in range(im.width):
+            r, g, b, a = px[x, y]
+            if not a:
+                continue
+            r, g, b = r / 255, g / 255, b / 255
+            l2 = min(1, max(0, ((0.299 * r + 0.587 * g + 0.114 * b) - 0.5) * con + 0.5 + bri))
+            px[x, y] = tuple(min(255, max(0, round((l2 * (1 - sat) + c * sat) * k * 255))) for c, k in zip((r, g, b), tint)) + (a,)
+    return im
+
+
+SHEETS = {n: recolor(Image.open(CREATE + n + '.png')) for n in ('fluid_tank_connected', 'fluid_tank_top_connected')}
+
+
+def tile(sheet, L, R, T, B):
+    """RECTANGLE tile for a face with neighbours left / right / up / down (True = connected)."""
+    tx = {(False, False): 0, (False, True): 1, (True, True): 2, (True, False): 3}[(L, R)]
+    ty = {(False, True): 0, (True, True): 1, (True, False): 2, (False, False): 3}[(T, B)]
+    name = '%s_%d_%d' % (sheet, tx, ty)
     path = os.path.join(CT, 'textures', name + '.png')
     if not os.path.exists(path):
-        Image.open(os.path.join(TEX, sheet + '.png')).crop((px, py, px + 16, py + 16)).save(path)
+        SHEETS[sheet].crop((tx * 16, ty * 16, tx * 16 + 16, ty * 16 + 16)).save(path)
     return 'preview:' + name
 
 
-# face -> (left, right, up, down) neighbour offsets, as seen from outside the face
 SIDES = {'north': ((1, 0, 0), (-1, 0, 0)), 'south': ((-1, 0, 0), (1, 0, 0)),
          'east': ((0, 0, 1), (0, 0, -1)), 'west': ((0, 0, -1), (0, 0, 1))}
+NORMAL = {'north': (0, 0, -1), 'south': (0, 0, 1), 'east': (1, 0, 0), 'west': (-1, 0, 0)}
 
 
 def vat(sc, w, h, d, heat='campfire', working=False):
@@ -50,32 +72,19 @@ def vat(sc, w, h, d, heat='campfire', working=False):
                 sc.add('create:block/blaze_burner/block', (x, 0, z))
                 sc.add('create:block/blaze_burner/blaze/' + heat, (x, 0, z))
             for y in range(h):
-                body = 'fermenting_vat_body' + ('' if y else '_bottom' if h > 1 else '_single')
-                with open(os.path.join(MODELS, body + '.json')) as f:
-                    m = json.load(f)
-                e = m['elements'][0]
+                faces, tex = {}, {}
                 for face, (l, r) in SIDES.items():
-                    n = {'north': (0, 0, -1), 'south': (0, 0, 1), 'east': (1, 0, 0), 'west': (-1, 0, 0)}[face]
+                    n = NORMAL[face]
                     if inside(x + n[0], y, z + n[2]):
-                        e['faces'].pop(face)          # skipRendering: walls between vat blocks don't draw
                         continue
-                    key = 'f_' + face
-                    col, width = {'north': (w - 1 - x, w), 'south': (x, w), 'east': (d - 1 - z, d), 'west': (z, d)}[face]
-                    m['textures'][key] = tile('fermenting_vat_big', (width - 1) * 48 + col * 16, (h - 1) * 64 + (h - 1 - y) * 16)
-                    e['faces'][face]['texture'] = '#' + key
-                if y < h - 1:
-                    e['faces'].pop('up')
-                else:
-                    m['textures']['f_up'] = tile('fermenting_vat_lid_big', (w - 1) * 48 + x * 16, (d - 1) * 48 + z * 16)
-                    e['faces']['up']['texture'] = '#f_up'
-                if y > 0:
-                    e['faces'].pop('down')
-                m['textures'] = {k: (v if ':' in v else v) for k, v in m['textures'].items()}
-                sc.add(m, (x, 1 + y, z))
-            for (a, b), r in ((('north', 'west'), 0), (('north', 'east'), 90), (('south', 'east'), 180), (('south', 'west'), 270)):
-                edge = {'north': z == 0, 'south': z == d - 1, 'west': x == 0, 'east': x == w - 1}
-                if edge[a] and edge[b]:
-                    sc.add(CE + 'fermenting_vat_foot', (x, 1, z), yrot=r)
+                    tex[face] = tile('fluid_tank_connected', inside(x + l[0], y, z + l[2]), inside(x + r[0], y, z + r[2]),
+                                     inside(x, y + 1, z), inside(x, y - 1, z))
+                    faces[face] = {'texture': '#' + face}
+                if y == h - 1:
+                    tex['up'] = tile('fluid_tank_top_connected', inside(x - 1, y, z), inside(x + 1, y, z),
+                                     inside(x, y, z - 1), inside(x, y, z + 1))
+                    faces['up'] = {'texture': '#up'}
+                sc.add({'textures': tex, 'elements': [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': faces}]}, (x, 1 + y, z))
     sc.add(CE + 'fermenting_vat_valve', (w // 2, h, d // 2))
     if working:
         cx, cy, cz = w // 2 + 0.5 + 0.17, h + 1 + 0.05, d // 2 + 0.5
@@ -88,10 +97,12 @@ SHOTS = [
     ('2_tall', dict(w=1, h=3, d=1, heat='idle')),
     ('3_2x2x2_working', dict(w=2, h=2, d=2, heat='active', working=True)),
     ('4_3x3x4', dict(w=3, h=4, d=3, heat='campfire', working=True)),
-    ('5_3x1x2', dict(w=3, h=1, d=2, heat='campfire')),
 ]
 
 if __name__ == '__main__':
+    for f in os.listdir(OUT):
+        if f.endswith('.png') and f[0].isdigit():
+            os.remove(os.path.join(OUT, f))
     for name, kw in SHOTS:
         sc = Scene(yaw=-35, pitch=26, scale=10 if kw['h'] < 3 else 8)
         vat(sc, **kw)

@@ -33,19 +33,15 @@ public class FermentingVatBlock extends Block implements IBE<FermentingVatBlockE
     public static final BooleanProperty BOTTOM = BooleanProperty.create("bottom");
     public static final BooleanProperty VALVE = BooleanProperty.create("valve");
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
-    /** Outer edges of the formed vat on the bottom layer: feet go only on its outer corners. */
-    public static final BooleanProperty NORTH = BooleanProperty.create("north"), EAST = BooleanProperty.create("east"),
-            SOUTH = BooleanProperty.create("south"), WEST = BooleanProperty.create("west");
 
     public FermentingVatBlock(Properties p) {
         super(p);
-        registerDefaultState(defaultBlockState().setValue(TOP, true).setValue(BOTTOM, true).setValue(VALVE, true).setValue(WORKING, false)
-                .setValue(NORTH, true).setValue(EAST, true).setValue(SOUTH, true).setValue(WEST, true));
+        registerDefaultState(defaultBlockState().setValue(TOP, true).setValue(BOTTOM, true).setValue(VALVE, true).setValue(WORKING, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) {
-        b.add(TOP, BOTTOM, VALVE, WORKING, NORTH, EAST, SOUTH, WEST);
+        b.add(TOP, BOTTOM, VALVE, WORKING);
     }
 
     /** Walls between vat blocks never draw (one vessel inside); every face of the model is cull-tagged for this. */

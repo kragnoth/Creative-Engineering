@@ -1,13 +1,11 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "wall": "creativeengineering:block/fermenting_vat",
-    "lid": "creativeengineering:block/fermenting_vat_lid",
-    "under": "creativeengineering:block/fermenting_vat_bottom",
+    "side": "creativeengineering:block/vat_tank",
+    "top": "creativeengineering:block/vat_tank_top",
     "dark": "create:block/dark_metal_block",
-    "iron": "create:block/industrial_iron_block",
     "brass": "create:block/brass_block",
-    "particle": "creativeengineering:block/fermenting_vat"
+    "particle": "creativeengineering:block/vat_tank"
   },
   "elements": [
     {
@@ -23,7 +21,7 @@
       ],
       "faces": {
         "north": {
-          "texture": "#wall",
+          "texture": "#side",
           "uv": [
             0,
             0,
@@ -33,7 +31,7 @@
           "cullface": "north"
         },
         "south": {
-          "texture": "#wall",
+          "texture": "#side",
           "uv": [
             0,
             0,
@@ -43,7 +41,7 @@
           "cullface": "south"
         },
         "east": {
-          "texture": "#wall",
+          "texture": "#side",
           "uv": [
             0,
             0,
@@ -53,7 +51,7 @@
           "cullface": "east"
         },
         "west": {
-          "texture": "#wall",
+          "texture": "#side",
           "uv": [
             0,
             0,
@@ -63,7 +61,7 @@
           "cullface": "west"
         },
         "up": {
-          "texture": "#lid",
+          "texture": "#top",
           "uv": [
             0,
             0,
@@ -73,7 +71,7 @@
           "cullface": "up"
         },
         "down": {
-          "texture": "#under",
+          "texture": "#top",
           "uv": [
             0,
             0,
