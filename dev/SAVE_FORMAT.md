@@ -81,3 +81,7 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 ## 0.12.0
 - New block / BE `distilling_tank` (states valve, working, boiler, tap_north/east/south/west). BE NBT: Controller, Size, Tank, Residue, Speed, Heat, Active, Batches, Progress.
 - New fluids and buckets: vodka, brandy, whiskey, applejack. New recipe type `creativeengineering:distilling`.
+
+## 0.12.2
+- `distilling_tank` states are now only `valve`, `working` (0.12.0's boiler / tap_* removed; old blocks load with defaults and reform).
+- New blocks `andesite_catwalk`, `brass_catwalk`, `copper_catwalk` (states north/east/south/west railings; drop the matching Create scaffolding).

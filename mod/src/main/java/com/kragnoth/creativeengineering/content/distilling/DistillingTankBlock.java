@@ -24,39 +24,22 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
 
 /**
- * Distilling Tank block: copper-shifted Create tank, connected like one. The greebles come from the formed column
- * (Kragnoth, 2026-11-22: "something in between" a plain tank and IP's tower): a brass tap on the middle of each outside
- * face of every fraction layer (TAP_*), a pressure gauge there on the boiler layer instead (BOILER), and the relief
- * valve with a vapour gooseneck top-middle (VALVE). Buckets fill the boiler / take a fraction from the layer clicked.
+ * Distilling Tank block: the vat's steel Create tank, connected like one. Its dressing (pipe runs, collars, gauge,
+ * relief valve with gooseneck) is drawn by the client from the formed column (Plumbing), so the block keeps just
+ * VALVE (vapour puffs, top-middle) and WORKING. Placed Create scaffolding beside a column becomes Catwalks. Buckets
+ * fill the boiler / take a fraction from the level clicked.
  */
 public class DistillingTankBlock extends Block implements IBE<DistillingTankBlockEntity>, IWrenchable {
     public static final BooleanProperty VALVE = BooleanProperty.create("valve");
     public static final BooleanProperty WORKING = BooleanProperty.create("working");
-    public static final BooleanProperty BOILER = BooleanProperty.create("boiler");
-    public static final BooleanProperty TAP_NORTH = BooleanProperty.create("tap_north"), TAP_EAST = BooleanProperty.create("tap_east"),
-            TAP_SOUTH = BooleanProperty.create("tap_south"), TAP_WEST = BooleanProperty.create("tap_west");
-
-    public static BooleanProperty tap(Direction d) {
-        return switch (d) {
-            case NORTH -> TAP_NORTH;
-            case EAST -> TAP_EAST;
-            case SOUTH -> TAP_SOUTH;
-            default -> TAP_WEST;
-        };
-    }
-
     public DistillingTankBlock(Properties p) {
         super(p);
-        BlockState s = defaultBlockState().setValue(VALVE, false).setValue(WORKING, false).setValue(BOILER, true);
-        for (Direction d : Direction.Plane.HORIZONTAL) {
-            s = s.setValue(tap(d), false);
-        }
-        registerDefaultState(s);
+        registerDefaultState(defaultBlockState().setValue(VALVE, false).setValue(WORKING, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) {
-        b.add(VALVE, WORKING, BOILER, TAP_NORTH, TAP_EAST, TAP_SOUTH, TAP_WEST);
+        b.add(VALVE, WORKING);
     }
 
     /** Walls between column blocks never draw. */
@@ -76,6 +59,9 @@ public class DistillingTankBlock extends Block implements IBE<DistillingTankBloc
     protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, BlockPos from, boolean moving) {
         if (neighbor == this || level.getBlockState(from).is(this)) {
             withBlockEntityDo(level, pos, DistillingTankBlockEntity::requestRecheck);
+        }
+        if (!level.isClientSide && from.getY() == pos.getY()) {
+            CatwalkBlock.convertIfScaffolding(level, from);   // scaffolding placed beside the column becomes catwalk
         }
     }
 
@@ -106,7 +92,7 @@ public class DistillingTankBlock extends Block implements IBE<DistillingTankBloc
             return;
         }
         // vapour from the gooseneck's mouth now and then
-        double x = pos.getX() + 0.5 + 0.34, y = pos.getY() + 1.28, z = pos.getZ() + 0.5;
+        double x = pos.getX() + 0.5 + 0.34, y = pos.getY() + 1.28, z = pos.getZ() + 0.5;   // gooseneck mouth
         level.addParticle(ParticleTypes.WHITE_SMOKE, x, y, z, 0.01, 0.03, 0);
         if (random.nextInt(3) == 0) {
             level.playLocalSound(pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS,

@@ -712,10 +712,7 @@ VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_c
             ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected')]
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
-    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]},
-    # Distilling Tank: the same Create tank, shifted to copper (stills are copper)
-    {'type': ce('recolor'), 'tint': '#F0A47A', 'saturation': 0.35, 'contrast': 1.1, 'brightness': -0.02,
-     'sprites': [{'source': src, 'target': ce('block/' + dst.replace('vat_', 'still_'))} for src, dst in VAT_TANK]}]})
+    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
 VAT_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'dark': CR('dark_metal_block'), 'brass': CR('brass_block')}
 eng('fermenting_vat_body', VAT_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
     d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
@@ -735,46 +732,87 @@ for e in vat_item['elements']:
 put('%s/models/item/fermenting_vat.json' % A, vat_item)
 simple_loot('fermenting_vat')
 
-# Distilling Tank (docs/distilling-spec.md): the copper tank body, plus greebles from the formed column (Kragnoth:
-# "something in between" a plain tank and IP's tower): brass taps on fraction levels, a pressure gauge on the boiler,
-# a gooseneck vapour pipe off the relief valve. Greebles point north and are turned for the other faces.
-ST_T = {'side': ce('block/still_tank'), 'top': ce('block/still_tank_top'), 'brass': CR('brass_block'),
-        'dark': CR('dark_metal_block'), 'valve': CR('fluid_valve'), 'dial': CR('boiler_gauge'),
-        'copper': 'minecraft:block/copper_block', 'casing': CR('copper_casing')}
+# Distilling Tank (docs/distilling-spec.md, 0.12.1): the vat's steel Create tank, plus industrial plumbing greebles
+# picked per column (Plumbing.java): vertical steel pipe lanes against the left / right edge of a face block, bending
+# into the wall at the boiler and over the roof edge at the top, header pipes across a face, a relief valve with a
+# gooseneck top-middle. Greebles are modelled on the north face and turned for the others.
+ST_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'pipe': CR('pipes'),   # Create's own copper pipes
+        'brass': CR('brass_block'), 'dark': CR('dark_metal_block'), 'iron': CR('industrial_iron_block')}
+PIPE_SIDE, PIPE_END = [0, 0, 4, 8], [1, 11, 6, 16]   # Create's pipe sheet: straight body / end disc
+def pipe_box(frm, to, along):
+    """A steel pipe segment; 'along' is its axis (y, x or z) so the body texture runs the right way."""
+    faces = {}
+    for d in ('north', 'south', 'east', 'west', 'up', 'down'):
+        end = (along == 'y' and d in ('up', 'down')) or (along == 'x' and d in ('east', 'west')) or (along == 'z' and d in ('north', 'south'))
+        f = {'texture': '#pipe', 'uv': PIPE_END if end else PIPE_SIDE}
+        if not end and (along == 'x' or (along == 'z' and d in ('up', 'down'))):
+            f['rotation'] = 90
+        faces[d] = f
+    return {'from': frm, 'to': to, 'faces': faces}
+def clamp(x0, y, x1):   # pipe bracket bolted to the wall
+    return box([x0, y, -1], [x1, y + 1, 0], 'dark')
+LANES = {'left': (2, 5), 'right': (11, 14)}
+for lane, (x0, x1) in LANES.items():
+    eng('distilling_tank_pipe_%s' % lane, ST_T, [pipe_box([x0, 0, -3.5], [x1, 16, -0.5], 'y'),
+                                                 clamp(x0 - 0.5, 5, x1 + 0.5), clamp(x0 - 0.5, 12, x1 + 0.5)])
+    eng('distilling_tank_pipe_%s_top' % lane, ST_T, [pipe_box([x0, 0, -3.5], [x1, 15.5, -0.5], 'y'),
+                                                     pipe_box([x0 - 0.25, 15.5, -3.75], [x1 + 0.25, 18.5, -0.25], 'y'),   # elbow
+                                                     pipe_box([x0, 15.5, -0.25], [x1, 18.5, 4], 'z'),                     # over the edge
+                                                     pipe_box([x0 - 0.5, 15.75, 4], [x1 + 0.5, 16.75, 5], 'y'),            # roof flange
+                                                     clamp(x0 - 0.5, 6, x1 + 0.5)])
+    eng('distilling_tank_pipe_%s_boiler' % lane, ST_T, [pipe_box([x0, 7, -3.5], [x1, 16, -0.5], 'y'),
+                                                        pipe_box([x0 - 0.25, 4, -3.75], [x1 + 0.25, 7, -0.25], 'y'),     # elbow
+                                                        pipe_box([x0, 4.25, -0.25], [x1, 6.75, 0], 'z'),
+                                                        box([x0 - 1, 3.5, -0.75], [x1 + 1, 7.5, 0], 'iron'),               # wall flange
+                                                        clamp(x0 - 0.5, 12, x1 + 0.5)])
+eng('distilling_tank_pipe_band', ST_T, [pipe_box([0, 9, -4], [16, 12.5, -0.5], 'x'),
+                                        box([3.5, 8.5, -1], [5, 13, 0], 'dark'), box([11, 8.5, -1], [12.5, 13, 0], 'dark')])
+# brass collar band round the column every few levels, and one gauge high up (as in Kragnoth's reference picture)
+eng('distilling_tank_collar', ST_T, [box([0, 6, -0.75], [16, 10, 0], 'brass'),
+                                     box([3.5, 7.5, -1], [4.5, 8.5, -0.75], 'dark'), box([11.5, 7.5, -1], [12.5, 8.5, -0.75], 'dark')])
+_g = box([4.5, 4.5, -1.25], [11.5, 11.5, 0], 'brass', {'north': 'dial'})
+_g['faces']['north']['uv'] = [0, 8, 8, 16]   # the dial quadrant of Create's boiler_gauge sheet
+eng('distilling_tank_gauge', dict(ST_T, dial=CR('boiler_gauge')), [_g, box([7.75, 7.75, -1.5], [8.25, 10.5, -1.25], 'dark'),
+                                                                   box([7.5, 11.5, -0.75], [8.5, 13.5, -0.25], 'brass')])
 eng('distilling_tank_body', ST_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
     d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
     for d in ('north', 'south', 'east', 'west', 'up', 'down')}}])
-eng('distilling_tank_tap', ST_T, [box([6.5, 6.5, -1], [9.5, 9.5, 0], 'brass'),                  # flange
-                                  box([7, 7, -3.5], [9, 9, -1], 'brass'),                      # spout
-                                  box([7, 4.5, -4], [9, 7.5, -2], 'brass', {'down': 'dark'}),  # downturned nozzle
-                                  box([7.5, 9, -2.75], [8.5, 11, -1.75], 'dark'),              # handle stem
-                                  box([6, 11, -3], [10, 11.75, -1.5], 'valve')])               # handle
-_g = box([4.5, 4.5, -1.25], [11.5, 11.5, 0], 'brass', {'north': 'dial'})
-_g['faces']['north']['uv'] = [0, 8, 8, 16]                      # just the dial quadrant of Create's boiler_gauge sheet
-eng('distilling_tank_gauge', ST_T, [_g,
-                                    box([7.75, 7.75, -1.5], [8.25, 10.5, -1.25], 'dark'),       # needle
-                                    box([7.5, 11.5, -0.75], [8.5, 13.5, -0.25], 'brass')])      # gauge stem
 eng('distilling_tank_valve', ST_T, [box([7, 16, 7], [9, 18.5, 9], 'brass'),                    # relief valve
                                     box([5, 18.5, 7.5], [11, 19.25, 8.5], 'dark'), box([7.5, 18.5, 5], [8.5, 19.25, 11], 'dark'),
                                     box([7.25, 19.25, 7.25], [8.75, 20, 8.75], 'brass'),
-                                    box([9, 16, 6.75], [11.5, 21.5, 9.25], 'copper'),           # gooseneck: riser
-                                    box([11.5, 19.5, 6.75], [14, 22, 9.25], 'copper'),          # elbow
-                                    box([12, 16.5, 7], [14, 19.5, 9], 'copper'),                # downcomer
-                                    box([11.75, 16, 6.75], [14.25, 16.75, 9.25], 'brass')])     # collar
-parts = [{'apply': {'model': ce('block/distilling_tank_body')}},
-         {'when': {'valve': 'true'}, 'apply': {'model': ce('block/distilling_tank_valve')}}]
-for face, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
-    parts.append({'when': {'tap_' + face: 'true', 'boiler': 'false'}, 'apply': {'model': ce('block/distilling_tank_tap'), 'y': rot}})
-    parts.append({'when': {'tap_' + face: 'true', 'boiler': 'true'}, 'apply': {'model': ce('block/distilling_tank_gauge'), 'y': rot}})
+                                    pipe_box([9, 16, 6.75], [11.5, 21.5, 9.25], 'y'),          # gooseneck: riser
+                                    pipe_box([11.5, 19.5, 6.75], [14, 22, 9.25], 'x'),         # elbow
+                                    pipe_box([12, 16.5, 7], [14, 19.5, 9], 'y'),               # downcomer
+                                    box([11.75, 16, 6.75], [14.25, 16.75, 9.25], 'iron')])     # collar
+# The dressing is drawn by the client from Plumbing.java (block states would need ~65k combinations): the block
+# itself is just the connected steel body.
+parts = [{'apply': {'model': ce('block/distilling_tank_body')}}]
 put('%s/blockstates/distilling_tank.json' % A, {'multipart': parts})
 still_item = load_json('%s/models/block/distilling_tank_body.json' % A)
-for extra in ('distilling_tank_valve', 'distilling_tank_tap'):
+for extra in ('distilling_tank_valve', 'distilling_tank_pipe_left', 'distilling_tank_pipe_band'):
     still_item['elements'] += load_json('%s/models/block/%s.json' % (A, extra))['elements']
 for e in still_item['elements']:
     for f in e['faces'].values():
         f.pop('cullface', None)
 put('%s/models/item/distilling_tank.json' % A, still_item)
 simple_loot('distilling_tank')
+
+# Catwalks: Create metal scaffolding beside a Distilling Tank becomes one (CatwalkBlock): a grate deck (Create's funnel
+# frame of that metal) with railings in its casing on every open side. Drops the scaffolding back. No item of its own.
+for metal, label in (('andesite', 'Andesite'), ('brass', 'Brass'), ('copper', 'Copper')):
+    CW_T = {'grate': 'create:block/funnel/%s_funnel_frame' % metal, 'casing': 'create:block/%s_casing' % metal}
+    eng('%s_catwalk_deck' % metal, CW_T, [box([0, 0, 0], [16, 1.5, 16], 'casing')])   # Create has no mesh grate: casing plate
+    eng('%s_catwalk_rail' % metal, CW_T, [box([0, 1.5, 0], [1.5, 16, 1.5], 'casing'), box([14.5, 1.5, 0], [16, 16, 1.5], 'casing'),
+                                          box([0, 14.5, 0.25], [16, 16, 1.25], 'casing'), box([0, 8, 0.25], [16, 9, 1.25], 'casing'),
+                                          box([0, 1.5, 0], [16, 3, 0.5], 'casing')])
+    cw_parts = [{'apply': {'model': ce('block/%s_catwalk_deck' % metal)}}]
+    for face, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
+        cw_parts.append({'when': {face: 'true'}, 'apply': {'model': ce('block/%s_catwalk_rail' % metal), 'y': rot}})
+    put('%s/blockstates/%s_catwalk.json' % (A, metal), {'multipart': cw_parts})
+    put('%s/data/%s/loot_table/blocks/%s_catwalk.json' % (RES, MODID, metal), {'type': 'minecraft:block', 'pools': [
+        {'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': 'create:%s_scaffolding' % metal}],
+         'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
+    LANG['block.%s.%s_catwalk' % (MODID, metal)] = '%s Catwalk' % label
 shaped('distilling_tank', [' V ', 'PTP', 'PBP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
        'P': tag('c:plates/copper'), 'B': item('create:blaze_burner')}, ce('distilling_tank'), category='misc')
 
@@ -960,7 +998,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'andesite_catwalk', 'brass_catwalk', 'copper_catwalk', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

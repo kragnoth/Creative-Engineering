@@ -1,0 +1,45 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativeengineering:block/andesite_catwalk_deck"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/andesite_catwalk_rail",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/andesite_catwalk_rail",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/andesite_catwalk_rail",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/andesite_catwalk_rail",
+        "y": 270
+      }
+    }
+  ]
+}

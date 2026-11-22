@@ -317,3 +317,10 @@ Convention (borrowed from Tarbound):
 ## 0.12.1 — tank layer placing
 - [ ] On a formed 2x2 or 3x3 vat (or distilling tank), place one on top (or under it): the whole layer fills in, using that many items; with too few in hand, just the one goes down; sneak places one.
 - [ ] `/test runall`: 18 pass (new: vatPlacesWholeLayer).
+
+## 0.12.2 — Distilling Tank restyle, outlets, catwalks
+- [ ] Steel column (no copper): copper pipe lanes up at least two faces, bending into the boiler and over the roof; header pipes on some faces; brass collars every 3rd level; gauge near the top; gooseneck valve. Same tower always looks the same; different towers differ.
+- [ ] With Flywheel instancing on and off; dressing updates when the column grows or shrinks.
+- [ ] Create fluid tank against a fraction level fills with that fraction (no pump); boiler doesn't push; a second column's boiler can be fed this way.
+- [ ] Create scaffolding beside the column (incl. corners) turns into catwalk of the same metal; railings only on open sides; climb through from below; sneak down; breaking gives scaffolding back.
+- [ ] Scaffolding away from a column stays scaffolding.

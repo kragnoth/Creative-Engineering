@@ -23,6 +23,9 @@ public final class CEClient {
         // the flywheel is drawn spinning about its shaft, like any Create kinetic block
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get(),
                 com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);
+        // distilling tank dressing: fallback renderer (instanced visual below)
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DISTILLING_TANK.get(),
+                com.kragnoth.creativeengineering.client.distilling.DistillingTankRenderer::new);
         // drive pulley: same renderer (wheel fallback; the belt itself is drawn by the flywheel end)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DRIVE_PULLEY.get(),
                 com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);
@@ -59,6 +62,12 @@ public final class CEClient {
                 .factory((ctx, be, pt) -> new com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual<>(ctx, be, pt,
                         net.minecraft.core.Direction.EAST,
                         dev.engine_room.flywheel.lib.model.Models.partial(com.kragnoth.creativeengineering.client.engine.CEPartials.CRANKSHAFT)))
+                .skipVanillaRender(be -> false)
+                .apply());
+        // the distilling tank's pipes, collars, gauge and valve: static instances
+        event.enqueueWork(() -> dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
+                .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.DISTILLING_TANK.get())
+                .factory(com.kragnoth.creativeengineering.client.distilling.DistillingTankVisual::new)
                 .skipVanillaRender(be -> false)
                 .apply());
         // the drive sprocket is Create's own small cogwheel (modelled upright), spun like any Create cog

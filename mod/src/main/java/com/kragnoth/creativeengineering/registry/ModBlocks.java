@@ -87,6 +87,16 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.COPPER).noOcclusion()));
 
+    /** Catwalks: Create scaffolding turned into Distilling Tank platforms (docs/distilling-spec.md). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> ANDESITE_CATWALK = catwalk("andesite");
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> BRASS_CATWALK = catwalk("brass");
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> COPPER_CATWALK = catwalk("copper");
+
+    private static DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> catwalk(String metal) {
+        return BLOCKS.register(metal + "_catwalk", () -> new com.kragnoth.creativeengineering.content.distilling.CatwalkBlock(metal,
+                BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2F, 6F).sound(SoundType.SCAFFOLDING).noOcclusion()));
+    }
+
     /** Chemistry: Fermenting Vat (docs/fermentation-spec.md). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock> FERMENTING_VAT = BLOCKS.register("fermenting_vat",
             () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()

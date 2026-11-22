@@ -50,7 +50,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  */
 public class DistillingTankBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, MachineReadout, FormedTank {
     public static final int MAX_WIDTH = 3, MIN_HEIGHT = 2, MAX_HEIGHT = 8, TANK_PER_BLOCK = 1000;
-    private static final int CHECK_TICKS = 20;
+    private static final int CHECK_TICKS = 20, PUSH_TICKS = 5, PUSH_MB = 100;
 
     @Nullable protected BlockPos controller;
     protected int sx = 1, sy = 1, sz = 1;
@@ -200,14 +200,8 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
             BlockPos rel = worldPosition.subtract(c);
             boolean top = rel.getY() == y - 1;
             boolean valve = top && rel.getX() == x / 2 && rel.getZ() == z / 2;
-            // greebles: taps on the middle of each outside face of a fraction layer, the gauge there on the boiler
             boolean formed = y >= MIN_HEIGHT;
-            BlockState st = getBlockState().setValue(DistillingTankBlock.VALVE, valve && formed)
-                    .setValue(DistillingTankBlock.BOILER, rel.getY() == 0)
-                    .setValue(DistillingTankBlock.TAP_NORTH, formed && rel.getZ() == 0 && rel.getX() == x / 2)
-                    .setValue(DistillingTankBlock.TAP_SOUTH, formed && rel.getZ() == z - 1 && rel.getX() == x / 2)
-                    .setValue(DistillingTankBlock.TAP_WEST, formed && rel.getX() == 0 && rel.getZ() == z / 2)
-                    .setValue(DistillingTankBlock.TAP_EAST, formed && rel.getX() == x - 1 && rel.getZ() == z / 2);
+            BlockState st = getBlockState().setValue(DistillingTankBlock.VALVE, valve && formed);
             if (st != getBlockState()) {
                 level.setBlock(worldPosition, st, Block.UPDATE_CLIENTS);
             }
@@ -215,6 +209,12 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
                 active = null;
                 batches = 0;
                 progress = 0;
+            }
+            if (formed) {   // scaffolding already standing beside the column becomes catwalk
+                for (Direction d : Direction.Plane.HORIZONTAL) {
+                    CatwalkBlock.convertIfScaffolding(level, worldPosition.relative(d));
+                    CatwalkBlock.convertIfScaffolding(level, worldPosition.relative(d).relative(d.getClockWise()));
+                }
             }
         }
         setChanged();
@@ -239,6 +239,9 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
         if (++checkTimer >= CHECK_TICKS) {
             checkTimer = 0;
             refreshHeat();
+        }
+        if (checkTimer % PUSH_TICKS == 0 && sy >= MIN_HEIGHT) {
+            pushOutputs();
         }
         if (speed <= 0 || sy < MIN_HEIGHT) {
             return;
@@ -273,6 +276,37 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
             }
         }
         setChanged();
+    }
+
+    /**
+     * Outlets without pumps (Kragnoth, 2026-11-22: "each layer of distilling easily pumped and put into storage"): every
+     * fraction level pushes its fluid into any container touching its outside faces (a Create fluid tank, another
+     * column's boiler...). Pumps and pipes work on any side too. The boiler never pushes.
+     */
+    private void pushOutputs() {
+        for (int y = 1; y < sy; y++) {
+            for (DistillingTankBlockEntity m : layerMembers(y)) {
+                if (m.tank.isEmpty()) {
+                    continue;
+                }
+                for (Direction d : Direction.Plane.HORIZONTAL) {
+                    BlockPos n = m.worldPosition.relative(d);
+                    if (m.tank.isEmpty() || level.getBlockEntity(n) instanceof DistillingTankBlockEntity o && o.controller != null
+                            && o.controller.equals(controller)) {
+                        continue;
+                    }
+                    IFluidHandler h = level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK, n, d.getOpposite());
+                    if (h == null) {
+                        continue;
+                    }
+                    FluidStack offer = m.tank.getFluid().copyWithAmount(Math.min(PUSH_MB, m.tank.getFluidAmount()));
+                    int took = h.fill(offer, IFluidHandler.FluidAction.EXECUTE);
+                    if (took > 0) {
+                        m.tank.drain(took, IFluidHandler.FluidAction.EXECUTE);
+                    }
+                }
+            }
+        }
     }
 
     private void refreshHeat() {
@@ -612,7 +646,24 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
         batches = tag.getInt("Batches");
         progress = tag.getFloat("Progress");
         if (clientPacket && level != null) {
-            CTRefresh.onClientController(this, oldSize != sx * 100 + sy * 10 + sz ? null : old, controller);
+            boolean reshaped = oldSize != sx * 100 + sy * 10 + sz || !Objects.equals(old, controller);
+            CTRefresh.onClientController(this, reshaped ? null : old, controller);
+            if (reshaped) {
+                greebles = null;
+                if (level.isClientSide) {
+                    dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(this);   // rebuild the dressing
+                }
+            }
         }
+    }
+
+    @Nullable private List<Plumbing.Part> greebles;
+
+    /** Client: the pipes, collars, gauge and valve to draw on this block (Plumbing), cached until the column reshapes. */
+    public List<Plumbing.Part> greebles() {
+        if (greebles == null) {
+            greebles = controller == null ? List.of() : Plumbing.parts(controller, sx, sy, sz, worldPosition.subtract(controller));
+        }
+        return greebles;
     }
 }

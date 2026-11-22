@@ -1,15 +1,14 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "side": "creativeengineering:block/still_tank",
-    "top": "creativeengineering:block/still_tank_top",
+    "side": "creativeengineering:block/vat_tank",
+    "top": "creativeengineering:block/vat_tank_top",
+    "pipe": "create:block/pipes",
     "brass": "create:block/brass_block",
     "dark": "create:block/dark_metal_block",
-    "valve": "create:block/fluid_valve",
+    "iron": "create:block/industrial_iron_block",
     "dial": "create:block/boiler_gauge",
-    "copper": "minecraft:block/copper_block",
-    "casing": "create:block/copper_casing",
-    "particle": "creativeengineering:block/still_tank"
+    "particle": "creativeengineering:block/vat_tank"
   },
   "elements": [
     {

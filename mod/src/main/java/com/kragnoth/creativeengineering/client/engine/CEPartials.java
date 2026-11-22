@@ -9,6 +9,12 @@ public final class CEPartials {
     public static final PartialModel FLYWHEEL = PartialModel.of(CreativeEngineering.id("block/diesel_flywheel"));
     /** Crankshaft through the crankcase (built along X): shaft, crank webs and pin, end stubs. */
     public static final PartialModel CRANKSHAFT = PartialModel.of(CreativeEngineering.id("block/diesel_crankshaft"));
+    /** Distilling Tank dressing (content/distilling/Plumbing part names -> models). */
+    public static final java.util.Map<String, PartialModel> STILL = java.util.stream.Stream.of(
+            "distilling_tank_pipe_left", "distilling_tank_pipe_left_top", "distilling_tank_pipe_left_boiler",
+            "distilling_tank_pipe_right", "distilling_tank_pipe_right_top", "distilling_tank_pipe_right_boiler",
+            "distilling_tank_pipe_band", "distilling_tank_collar", "distilling_tank_gauge", "distilling_tank_valve")
+            .collect(java.util.stream.Collectors.toMap(n -> n, n -> PartialModel.of(CreativeEngineering.id("block/" + n))));
     public static final PartialModel CYLINDER_ROCKER = PartialModel.of(CreativeEngineering.id("block/diesel_cylinder_rocker"));
 
     private CEPartials() {}

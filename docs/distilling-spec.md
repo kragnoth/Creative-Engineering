@@ -4,7 +4,7 @@ Kragnoth, 2026-11-22: "work on the distilling tank next". Chosen: **one machine 
 **column on a heater**, with **greebles** ("something in between" a plain tank and the IP tower).
 
 ## Build
-- Block `creativeengineering:distilling_tank`. Recipe: fluid valve over a Create fluid tank, between copper plates, over a Blaze Burner.
+- Block `creativeengineering:distilling_tank`. Recipe: fluid valve over a Create fluid tank, between copper plates, over a Blaze Burner. Places whole layers like Create tanks (0.12.1).
 - Any box 1–3 wide and 2–8 tall forms one column (flood fill like the vat; min corner = controller). Shapes that aren't a box, or a single layer, just hold fluid.
 - **Bottom layer = boiler** (fluid in). **Layer n above it collects fraction n-1** of the running recipe: heaviest low, lightest high. A recipe needs `fractions + 1` layers.
 - Every block keeps its own 1000 mB tank, so reshaping loses nothing. Automation and buckets see one tank per layer, from any side of that layer: the boiler is fill-only (recipe inputs only, one fluid at a time), fraction layers are drain-only. Residue items (bitumen) wait in the controller and are extracted from the boiler layer.
@@ -14,12 +14,31 @@ Kragnoth, 2026-11-22: "work on the distilling tank next". Chosen: **one machine 
 - A recipe's `heat` (minimum) must be met under the **whole** footprint: drinks 1, crude 2.
 - Batches run as many times at once as the column has footprint blocks (fuel and output room allowing).
 
-## Look
-- Create's fluid tank, copper-shifted at load time by the `creativeengineering:recolor` atlas source (second entry in `assets/minecraft/atlases/blocks.json`: tint #F0A47A, saturation 0.35). Connected like a Create tank (VatCTBehaviour "still_tank"). No Create pixels are shipped.
-- Greebles, from block states set by forming:
-  - a brass tap on the middle of each outside face of every fraction layer (`tap_*`);
-  - a pressure gauge (Create's boiler-gauge dial) there on the boiler instead;
-  - a relief valve with a copper gooseneck vapour pipe top-middle (`valve`), puffing white smoke with a soft bubbling while working.
+## Look (0.12.2, restyled; Kragnoth: "steel tank look, with proper greebling, like industrial pipes routing around")
+- The vat's steel Create tank (load-time recolour of Create's fluid tank), connected like a Create tank. The 0.12.0 copper body, taps and side gauge are gone.
+- **Dressing**, drawn by the client from the formed column (`Plumbing.java`; static Flywheel instances, fallback renderer). Block states would have needed about 65k combinations.
+  - Create copper pipe lanes run up the outside, against the left or right edge of chosen face blocks. They bend into the wall at the boiler and over the roof edge at the top.
+  - Header pipes cross some faces, off the block seams.
+  - Brass collars every third level, and a gauge high up on the north face.
+  - The relief valve with its copper gooseneck sits top-middle (vapour puffs while working).
+  - The routing is seeded by the column's position and size: every tower looks plumbed by hand and always the same. At least two faces get a lane.
+- **Catwalks**: Create metal scaffolding (andesite, brass or copper) placed beside a formed column, corners included, becomes a matching Catwalk.
+  - Look: a casing-plate deck with railings on every open side.
+  - Climbable and passable from below like scaffolding: the deck holds you only from above; sneak to go down.
+  - Breaking one gives the scaffolding back.
+
+## How to build
+1. Lay the footprint as heat (Blaze Burners, lit for crude; campfires or Campfire Stands for drinks).
+2. Place Distilling Tanks on it and keep placing on top. Like Create tanks, one placement fills the whole layer (sneak for one). Up to 8 tall; drinks need 3, IP crude 5.
+3. The dressing appears by itself once the column is 2+ tall.
+4. Optional: place Create scaffolding around it wherever you want platforms; it becomes catwalks.
+5. Fill the boiler (bottom level) by pipe or bucket from any side.
+
+## Getting the fractions out (Kragnoth: "each layer easily pumped and put into storage tanks")
+- **No pump needed:** every fraction level pushes its fluid (100 mB every 5 ticks per block) into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.
+- **Pumped lines:** Create pipes connect to every side of every level; a pump pulls that level's fraction.
+- A catwalk occupies the space beside the column on its level, so put storage and pipes on levels without catwalks.
+- No other mods needed: Create's own pipes, pumps and tanks do it.
 
 ## Recipe type `creativeengineering:distilling`
 `input` (sized fluid ingredient), `fractions` (1–7 fluid stacks, bottom to top), optional `residue` item + `chance`,
@@ -43,4 +62,4 @@ fractions come with the petroleum phase.
 - Drinkable bottles with effects come in the drinks pass.
 
 ## Integrations
-JEI "Distilling" (column layout with levels, minimum height and heat), Jade (every level, highlighting the one looked at, progress, why it's stopped), goggles, display links (status, progress), advancement "Fractions of a Fraction", game test `distillingTankSplitsHooch`.
+JEI "Distilling" (column layout with levels, minimum height and heat), Jade (every level, highlighting the one looked at, progress, why it's stopped), goggles, display links (status, progress), advancement "Fractions of a Fraction", game test `distillingTankSplitsHooch` (also checks the pump-free outlet into a Create tank and scaffolding becoming catwalk).
