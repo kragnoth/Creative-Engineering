@@ -39,7 +39,7 @@ Op level 2, in any world with cheats. It clears a space a few blocks in front of
 ## Steel Storage Tank (0.13.0; Kragnoth: "work in the extra storage tanks as a new tank type and make it look better when combined")
 - Block `creativeengineering:steel_tank`: Create's own fluid tank under its own block entity type. It does everything Create's tank does:
   - merges into 1–3 wide, tall multiblocks; windows that the wrench toggles; fluid shown inside; boiler use.
-- The look is the column's steel: Create's tank, window and inner sheets recoloured at load time. The models are Create's tank models with the textures re-pointed. No Create pixels ship.
+- The look is the column's steel: Create's tank, window and inner sheets recoloured at load time. The models are Create's tank models with the textures re-pointed, rendered cutout like Create's so the windows show the fluid (0.13.2). No Create pixels ship.
 - Recipe: a Create fluid tank + an iron sheet (shapeless).
 - Joining the column: wherever any fluid container touches a fraction level, the column draws a bolted flange coupling at the join (outlet bits computed on the server, synced, drawn with the rest of the dressing).
 - Catwalks were tried in 0.12.2 and removed in 0.13.0 (Kragnoth: unneeded).
@@ -54,6 +54,7 @@ Op level 2, in any world with cheats. It clears a space a few blocks in front of
 - **Steel Pipe** (`creativeengineering:steel_pipe`; recipe: 2 Create fluid pipes + iron sheet -> 2). Create's fluid pipe under its own block entity type, re-skinned steel by the load-time recolour.
   - Connects and carries flow exactly like Create's: pumps, valves, taps.
   - No window form (the wrench does nothing; Kragnoth: these "won't have windows"), and it can't be encased.
+  - Drawn like Create's pipe: `SteelPipeModel` adds arms / rims / drains per side from steel children of Create's attachment partials (0.13.2).
 
 ## Getting the fractions out (Kragnoth: "each layer easily pumped and put into storage tanks")
 - **No pump needed:** every fraction level pushes its fluid, as one tank (100 mB every 5 ticks per touching face), into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.

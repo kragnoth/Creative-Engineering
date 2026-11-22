@@ -11,6 +11,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 public final class CEClient {
     static {
         com.kragnoth.creativeengineering.client.engine.CEPartials.init();   // partial models must exist before baking
+        com.kragnoth.creativeengineering.client.storage.SteelPipeModel.PARTS.size();   // (steel pipe arms too)
     }
 
     private CEClient() {}

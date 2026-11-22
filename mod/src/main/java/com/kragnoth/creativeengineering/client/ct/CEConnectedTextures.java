@@ -26,6 +26,14 @@ public final class CEConnectedTextures {
         wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.FERMENTING_VAT.get(), new VatCTBehaviour());
         wrap(event.getModels(), ModBlocks.DISTILLING_TANK.get(), new VatCTBehaviour("vat_tank"));
+        // steel pipe: arms / rims / drains drawn like Create's pipe, in steel
+        for (BlockState state : ModBlocks.STEEL_PIPE.get().getStateDefinition().getPossibleStates()) {
+            ModelResourceLocation loc = BlockModelShaper.stateToModelLocation(state);
+            BakedModel model = event.getModels().get(loc);
+            if (model != null && !(model instanceof com.kragnoth.creativeengineering.client.storage.SteelPipeModel)) {
+                event.getModels().put(loc, new com.kragnoth.creativeengineering.client.storage.SteelPipeModel(model));
+            }
+        }
         // steel storage tank: Create's own tank connection rules on the steel sheets
         wrap(event.getModels(), ModBlocks.STEEL_TANK.get(), new com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour(
                 VatCTBehaviour.shift("vat_tank"), VatCTBehaviour.shift("vat_tank_top"), VatCTBehaviour.shift("vat_tank_inner")));

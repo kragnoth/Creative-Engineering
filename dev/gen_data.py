@@ -816,7 +816,9 @@ if _cjar:
         tank_bs = json.loads(z.read('assets/create/blockstates/fluid_tank.json'))
     for v in tank_bs['variants'].values():
         name = v['model'].split('/')[-1]
-        put('%s/models/block/steel_tank/%s.json' % (A, name), {'parent': 'create:block/fluid_tank/' + name, 'textures': STEEL_TANK_TEX})
+        # cutout like Create's tank: the window glass is see-through (solid drew it black and hid the fluid)
+        put('%s/models/block/steel_tank/%s.json' % (A, name), {'parent': 'create:block/fluid_tank/' + name,
+            'render_type': 'minecraft:cutout_mipped', 'textures': STEEL_TANK_TEX})
         v['model'] = ce('block/steel_tank/' + name)
     put('%s/blockstates/steel_tank.json' % A, tank_bs)
 put('%s/models/item/steel_tank.json' % A, {'parent': ce('block/steel_tank/block_single_window')})
@@ -839,6 +841,12 @@ if _cjar:
                     'render_type': 'minecraft:cutout_mipped', 'textures': {'0': ce('block/steel_pipes_connected'), 'particle': ce('block/steel_pipes')}})
             a['model'] = ce('block/steel_pipe/' + name)
     put('%s/blockstates/steel_pipe.json' % A, pipe_bs)
+# the pipe's arms, rims and drains: Create draws these through PipeAttachmentModel from partials; ours are steel
+# children of Create's, used by client/storage/SteelPipeModel (without them the pipe is just its core: broken bits)
+for kind in ('connection', 'rim', 'rim_connector', 'drain'):
+    for d in ('north', 'south', 'east', 'west', 'up', 'down'):
+        put('%s/models/block/steel_pipe/%s/%s.json' % (A, kind, d), {'parent': 'create:block/fluid_pipe/%s/%s' % (kind, d),
+            'render_type': 'minecraft:cutout_mipped', 'textures': {'0': ce('block/steel_pipes'), 'particle': ce('block/steel_pipes')}})
 put('%s/models/item/steel_pipe.json' % A, {'parent': 'create:block/fluid_pipe/item', 'textures': {'0': ce('block/steel_pipes_connected'),
                                                                                                   '1': ce('block/steel_pipes')}})
 simple_loot('steel_pipe')

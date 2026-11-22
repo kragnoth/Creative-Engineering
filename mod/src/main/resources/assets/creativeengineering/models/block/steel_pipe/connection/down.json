@@ -1,0 +1,8 @@
+{
+  "parent": "create:block/fluid_pipe/connection/down",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "0": "creativeengineering:block/steel_pipes",
+    "particle": "creativeengineering:block/steel_pipes"
+  }
+}

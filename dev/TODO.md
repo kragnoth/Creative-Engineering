@@ -344,3 +344,7 @@ Convention (borrowed from Tarbound):
 - [ ] A closed Create valve in the line stops the feed.
 - [ ] `/test rundistill`: taps and steel pipes (a level run for water, a drop for vodka).
 - [ ] `/test runall`: 20 pass (new: tapGravityFeeds).
+
+## 0.13.2 — steel tank / steel pipe render fixes
+- [ ] Steel Storage Tank windows are see-through: empty tanks show the steel inside, filled ones show the fluid (were solid black).
+- [ ] Steel Pipe draws whole: arms to every connected side, rims and drains where it meets tanks / taps (was only core pieces).
