@@ -32,6 +32,10 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
 - **Starting:** no starter block. The crankcase's front shaft is an input; any rotation turns it over (a Create Hand Crank on that shaft is the classic way). It can take any stress input.
 - **Create methods:** models built from JSON elements like Create's, with **Create's own textures** (industrial iron, dark metal, railway casing, brass, axis), so a resource pack that reskins Create reskins the engine. Moving parts (pistons, linkage) later via partial models, as Create's steam engine does.
 
+- **Exhaust particles:** vanilla `CAMPFIRE_COSY_SMOKE` from the cylinder's client `animateTick` (like the coke oven): occasional, rate rising with RPM, hard-capped per engine, so no server cost and no custom particle.
+- **Power out:** off the flywheel / back end of the crankshaft **only** (for now). Going under the floor or sideways is left to Create's Mechanical Belt, Encased Chain Drive and Gearbox (authentic too: 1890s mills belted the flywheel down to basement line shafts).
+- **Starting:** the front crankshaft end is a **read-only starter port**: the crankcase does not connect kinetically to the front block, it only reads whether that block turns (e.g. a Hand Crank). Two rotation sources on one network at different speeds would break Create's network, so the starter never joins the output network.
+
 ## First-pass blocks (0.7.0)
 `diesel_crankcase` (axis), `diesel_cylinder` (facing = bank it leans to), `diesel_flywheel` (axis, 3-block wheel). 0.7.1: detail pass (octagonal barrels/heads/hub from crossed boxes, cooling bands, studs, ribs, doors, bearing rings, oil cups); exhaust blocks removed. Renders: `python3 tools/stylekit/render_engine_stages.py` (writes to tools/stylekit/out/engine/, git-ignored; uses `render_scene.py`).
 
