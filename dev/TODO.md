@@ -285,3 +285,8 @@ Convention (borrowed from Tarbound):
 
 ## 0.11.1
 - [ ] runClient `/test runall`: test builds have no invisible barrier walls or roof; you can walk in and interact during the demo.
+
+## 0.11.2 — Drive Chain + Drive Sprocket (replaces belt look)
+- [ ] The sprocket looks and spins like a Create cogwheel on the right axis (X and Z), instanced and fallback.
+- [ ] The chain shows vanilla chain links, unstretched at any gap, wrapping the rim and the cog teeth.
+- [ ] The chain moves with the wheels: same direction as the rim and teeth, both axes, sprocket above and below, forward and reverse rotation. (If it runs backwards in any case, note which.)

@@ -3,7 +3,10 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "create:belt_connector"
+      "item": "minecraft:chain"
+    },
+    {
+      "item": "minecraft:chain"
     },
     {
       "item": "create:andesite_alloy"

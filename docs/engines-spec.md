@@ -72,3 +72,8 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
   - Breaking either wheel (or turning it so it no longer matches) drops the belt and frees the other wheel.
   - The belt is cosmetic and passes through blocks (Kragnoth's call). It's drawn by the flywheel's renderer every frame (`DriveBeltRenderer`: tangent runs plus wraps, Create's `block/belt` texture). The pulley drum spins as an instanced visual like the flywheel.
   - Pulley look: dark-oak drum like Create's belt pulley, railway-casing flanges, on Create's shaft.
+- **0.11.2 (Kragnoth: belt "stretchy", pulley "too square"):** the belt became a **Drive Chain** and the pulley a **Drive Sprocket**. Same ids (`drive_belt`, `drive_pulley`) so placed blocks survive.
+  - The sprocket is Create's own small cogwheel (`AllPartialModels.COGWHEEL`, laid on the block's axis).
+  - The chain is Create's chain-conveyor chain (`ChainConveyorRenderer.renderChain`: vanilla chain texture, repeating, never stretched). It runs round the loop at the flywheel's surface speed, in the same direction as the wheels.
+  - The chain sits on the rim (23 px) and in the cog's teeth (8 px). Kinetics stay exactly 4:1.
+  - Recipes: sprocket = Create cogwheel + iron nugget; chain = 2 chains + andesite alloy.

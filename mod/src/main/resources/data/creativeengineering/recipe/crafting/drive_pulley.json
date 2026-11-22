@@ -1,19 +1,14 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "redstone",
-  "pattern": [
-    " P ",
-    "PSP",
-    " P "
-  ],
-  "key": {
-    "P": {
-      "tag": "minecraft:planks"
+  "ingredients": [
+    {
+      "item": "create:cogwheel"
     },
-    "S": {
-      "item": "create:shaft"
+    {
+      "item": "minecraft:iron_nugget"
     }
-  },
+  ],
   "result": {
     "id": "creativeengineering:drive_pulley",
     "count": 1

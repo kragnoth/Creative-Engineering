@@ -9,8 +9,6 @@ public final class CEPartials {
     public static final PartialModel FLYWHEEL = PartialModel.of(CreativeEngineering.id("block/diesel_flywheel"));
     /** Crankshaft through the crankcase (built along X): shaft, crank webs and pin, end stubs. */
     public static final PartialModel CRANKSHAFT = PartialModel.of(CreativeEngineering.id("block/diesel_crankshaft"));
-    /** Drive Pulley drum on its shaft (built along X). */
-    public static final PartialModel DRIVE_PULLEY = PartialModel.of(CreativeEngineering.id("block/drive_pulley"));
     public static final PartialModel CYLINDER_ROCKER = PartialModel.of(CreativeEngineering.id("block/diesel_cylinder_rocker"));
 
     private CEPartials() {}

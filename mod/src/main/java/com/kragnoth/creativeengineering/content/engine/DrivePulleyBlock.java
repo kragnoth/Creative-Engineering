@@ -13,9 +13,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-/** Drive Pulley: a small belt drum on a horizontal shaft; belt it to a flywheel for 4x speed. */
+/** Drive Sprocket (id drive_pulley): Create's small cogwheel on a horizontal shaft; chain it to a flywheel for 4x speed. */
 public class DrivePulleyBlock extends HorizontalAxisKineticBlock implements IBE<DrivePulleyBlockEntity> {
-    private static final VoxelShape X = Block.box(0, 2, 2, 16, 14, 14), Z = Block.box(2, 2, 0, 14, 14, 16);
+    private static final VoxelShape X = Block.box(5, 0, 0, 11, 16, 16), Z = Block.box(0, 0, 5, 16, 16, 11);   // the cog's disc
 
     public DrivePulleyBlock(Properties p) {
         super(p);

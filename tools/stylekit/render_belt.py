@@ -1,5 +1,5 @@
-"""Look-approval render for the Drive Belt (flywheel -> Drive Pulley). The belt path mirrors
-client/engine/DriveBeltRenderer.loop(); it is drawn here as small boxes along the path."""
+"""Look-approval render for the Drive Chain (flywheel -> Drive Sprocket = Create cogwheel). The chain path mirrors
+client/engine/DriveBeltRenderer.loop(); in game it is Create's chain-conveyor chain, here small boxes in the chain texture."""
 import math
 import os
 import sys
@@ -10,7 +10,7 @@ from render_scene import Scene, cube  # noqa: E402
 OUT = os.path.join(os.path.dirname(__file__), 'out', 'engine')
 CE = 'creativeengineering:block/'
 GROUND = cube('minecraft:block/smooth_stone', frm=(0, 15, 0), to=(16, 16, 16))
-R1, R2, LIFT = 22.4, 5.6, 0.25
+R1, R2, LIFT = 23, 8, 0
 
 
 def loop(r1, r2, dy):
@@ -41,9 +41,9 @@ def belt(sc, gap):
         n = max(1, int(math.hypot(w1 - w0, y1 - y0)))
         for k in range(n):
             w, y = w0 + (w1 - w0) * k / n, y0 + (y1 - y0) * k / n
-            els.append({'from': [5.75, 8 + y - 0.6, 8 + w - 0.6], 'to': [10.25, 8 + y + 0.6, 8 + w + 0.6],
+            els.append({'from': [7, 8 + y - 0.75, 8 + w - 0.75], 'to': [9, 8 + y + 0.75, 8 + w + 0.75],
                         'faces': {d: {'texture': '#b'} for d in ('north', 'south', 'east', 'west', 'up', 'down')}})
-    sc.add({'textures': {'b': 'create:block/belt'}, 'elements': els}, (0, 0, 0))
+    sc.add({'textures': {'b': 'create:block/dark_metal_block'}, 'elements': els}, (0, 0, 0))
 
 
 if __name__ == '__main__':
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             for z in range(-3, 4):
                 sc.add(GROUND, (x, -3, z))
         sc.add(CE + 'diesel_flywheel', (0, 0, 0))
-        sc.add(CE + 'drive_pulley', (0, gap, 0))
+        sc.add('create:block/cogwheel', (0, gap, 0), zrot=90)
         sc.add('create:block/shaft', (1, gap, 0), zrot=90)
         belt(sc, gap)
-        print(sc.render(os.path.join(OUT, 'drive_belt_gap%d.png' % gap)))
+        print(sc.render(os.path.join(OUT, 'drive_chain_gap%d.png' % gap)))
