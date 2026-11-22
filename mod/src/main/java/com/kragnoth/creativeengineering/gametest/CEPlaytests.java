@@ -737,4 +737,23 @@ public final class CEPlaytests {
             com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(new net.minecraft.world.level.ChunkPos(h.absolutePos(o.offset(0, 0, 2))));
         }));
     }
+
+    /** Every drink bottle drinks like a potion: its buff plus nausea, and the glass bottle back. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 20)
+    public static void drinkBottlesApplyEffects(GameTestHelper h) {
+        open(h);
+        for (var e : ModItems.DRINKS.entrySet()) {
+            var player = h.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+            ItemStack bottle = new ItemStack(e.getValue().get());
+            ItemStack left = bottle.finishUsingItem(h.getLevel(), player);
+            h.assertTrue(player.hasEffect(net.minecraft.world.effect.MobEffects.CONFUSION), e.getKey() + ": no nausea");
+            h.assertTrue(player.getActiveEffects().size() >= 2, e.getKey() + ": no buff, effects " + player.getActiveEffects());
+            boolean bottleBack = left.is(Items.GLASS_BOTTLE) || player.getInventory().contains(new ItemStack(Items.GLASS_BOTTLE));
+            h.assertTrue(bottleBack, e.getKey() + ": no glass bottle back, got " + left);
+        }
+        var rm = h.getLevel().getRecipeManager();
+        h.assertTrue(rm.byKey(CreativeEngineering.id("filling/vodka_bottle")).isPresent() && rm.byKey(CreativeEngineering.id("emptying/wine_bottle")).isPresent(),
+                "spout / drain recipes");
+        h.succeed();
+    }
 }

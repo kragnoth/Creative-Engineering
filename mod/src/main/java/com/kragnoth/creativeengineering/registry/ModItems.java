@@ -116,6 +116,41 @@ public final class ModItems {
                 new Item.Properties().durability(type.getDurability(ModArmorMaterials.BLISTER_STEEL_DURABILITY))));
     }
 
+    // ------------------------------------------------------------------------------------------------ drinks
+    /**
+     * A bottle (250 mB) of each alcoholic drink: fermented drinks give a light buff and a little nausea, distilled
+     * spirits a stronger buff and more of it. Drink it like a potion; it leaves the glass bottle.
+     */
+    public static final java.util.Map<String, DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem>> DRINKS = new java.util.LinkedHashMap<>();
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> HOOCH_BOTTLE = drink("hooch", 1, e(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 1200, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 200, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> WINE_BOTTLE = drink("wine", 2, e(net.minecraft.world.effect.MobEffects.REGENERATION, 200, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 100, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> CIDER_BOTTLE = drink("cider", 2, e(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 1200, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 100, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> MEAD_BOTTLE = drink("mead", 3, e(net.minecraft.world.effect.MobEffects.ABSORPTION, 2400, 0), e(net.minecraft.world.effect.MobEffects.REGENERATION, 100, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 100, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> ALE_BOTTLE = drink("ale", 3, e(net.minecraft.world.effect.MobEffects.DIG_SPEED, 1800, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 100, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> VODKA_BOTTLE = drink("vodka", 0, e(net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 1200, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 300, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> BRANDY_BOTTLE = drink("brandy", 0, e(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 1800, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 300, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> WHISKEY_BOTTLE = drink("whiskey", 0, e(net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 900, 1), e(net.minecraft.world.effect.MobEffects.CONFUSION, 300, 0));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> APPLEJACK_BOTTLE = drink("applejack", 0, e(net.minecraft.world.effect.MobEffects.MOVEMENT_SPEED, 900, 1), e(net.minecraft.world.effect.MobEffects.JUMP, 900, 0), e(net.minecraft.world.effect.MobEffects.CONFUSION, 300, 0));
+
+    private static java.util.function.Supplier<net.minecraft.world.effect.MobEffectInstance> e(net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> effect, int ticks, int amp) {
+        return () -> new net.minecraft.world.effect.MobEffectInstance(effect, ticks, amp);
+    }
+
+    @SafeVarargs
+    private static DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> drink(String fluid, int nutrition,
+                                                                                                 java.util.function.Supplier<net.minecraft.world.effect.MobEffectInstance>... effects) {
+        DeferredItem<com.kragnoth.creativeengineering.content.drinks.DrinkItem> item = ITEMS.register(fluid + "_bottle", () -> {
+            net.minecraft.world.food.FoodProperties.Builder food = new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(nutrition).saturationModifier(0.1F).alwaysEdible().usingConvertsTo(net.minecraft.world.item.Items.GLASS_BOTTLE);
+            for (var effect : effects) {
+                food.effect(effect, 1F);
+            }
+            return new com.kragnoth.creativeengineering.content.drinks.DrinkItem(fluid, new Item.Properties().stacksTo(16).food(food.build()));
+        });
+        DRINKS.put(fluid, item);
+        return item;
+    }
+
     /** Every item, in creative-tab order. */
     public static List<DeferredItem<? extends Item>> tabOrder() {
         return List.of(CARBON_PACKED_IRON, BLISTER_STEEL_NUGGET, BLISTER_STEEL_INGOT, BLISTER_STEEL_SHEET, BLISTER_STEEL_BLOCK,
@@ -127,6 +162,7 @@ public final class ModItems {
                 com.kragnoth.creativeengineering.registry.ModFluids.MEAD.bucket, com.kragnoth.creativeengineering.registry.ModFluids.ALE.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.VODKA.bucket, com.kragnoth.creativeengineering.registry.ModFluids.BRANDY.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.WHISKEY.bucket, com.kragnoth.creativeengineering.registry.ModFluids.APPLEJACK.bucket,
+                HOOCH_BOTTLE, WINE_BOTTLE, CIDER_BOTTLE, MEAD_BOTTLE, ALE_BOTTLE, VODKA_BOTTLE, BRANDY_BOTTLE, WHISKEY_BOTTLE, APPLEJACK_BOTTLE,
                 com.kragnoth.creativeengineering.registry.ModFluids.CRUDE_OIL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.DIESEL.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.KEROSENE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.bucket,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,

@@ -392,3 +392,9 @@ Convention (borrowed from Tarbound):
 - [ ] Reach 6 on a 2-high column says "column too short" and doesn't pump; at 5 high it runs (stroke 6x, 48 SU/RPM).
 - [ ] Gearbox empty-hand outline shows the column, bearing and well spots; holding a bearing (column built) or Wellhead places it.
 - [ ] `/test runrefinery` builds the girder version and runs.
+
+## 0.18.0 — Drink bottles
+- [ ] Nine bottles in the tab, each tinted like its fluid (Excalibur bottle).
+- [ ] Drinking: buff + nausea per docs/fermentation-spec.md, glass bottle back; drinkable when full.
+- [ ] Spout fills a glass bottle from 250 mB of each drink; Item Drain empties it; bucket + 4 bottles crafts 4 (bucket returned). JEI shows all three.
+- [ ] "One for the Road" advancement on the first bottle.

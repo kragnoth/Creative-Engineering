@@ -116,3 +116,7 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - Removed `samson_post` (block, item, BE; placed ones disappear). New block / item / BE `walking_beam_bearing` (state `facing`, no saved data).
 - New block tag `creativeengineering:pumpjack_column` (Create metal girder, industrial / weathered iron, our steel and cast iron blocks).
 - New partial `pumpjack_bridle`; `pumpjack_pitman` and `pumpjack_rod` are now 16 px segments.
+
+## 0.18.0 — Drink bottles
+- Items `hooch_bottle`, `wine_bottle`, `cider_bottle`, `mead_bottle`, `ale_bottle`, `vodka_bottle`, `brandy_bottle`, `whiskey_bottle`, `applejack_bottle`.
+- Fluid tags `c:hooch`, `c:wine`, `c:cider`, `c:mead`, `c:ale`. Recipes `filling/*_bottle`, `emptying/*_bottle`, `crafting/*_bottle_from_bucket`. Advancement `drink`.

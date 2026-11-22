@@ -62,3 +62,29 @@ vanilla water textures + tint, runtime bucket model), tagged `c:plantoil`, in th
 - **Not yet:** connected scaffold textures between adjacent stands (Create's scaffold CT behaviour).
 
 - **0.12.1:** like Create tanks, placing a vat on the top or bottom face of a formed vat wider than 1 fills that whole layer (enough items in hand; sneak for one). Shared with the Distilling Tank (`LayerPlacingBlockItem`).
+
+## Drink bottles (0.18.0)
+Kragnoth: "add a drink for each alcoholic drink". One bottle (250 mB) per drink:
+- the fermented drinks: hooch, wine, cider, mead, ale;
+- the distilled spirits (docs/distilling-spec.md): vodka, brandy, whiskey, applejack.
+
+You drink it like a potion (always drinkable) and get the glass bottle back. Stacks of 16.
+
+| Bottle | Effect | Nausea | Food |
+|---|---|---|---|
+| Hooch | Strength I 60 s | 10 s | 1 |
+| Wine | Regeneration I 10 s | 5 s | 2 |
+| Cider | Speed I 60 s | 5 s | 2 |
+| Mead | Absorption I 120 s, Regeneration I 5 s | 5 s | 3 |
+| Ale | Haste I 90 s | 5 s | 3 |
+| Vodka | Resistance I 60 s | 15 s | 0 |
+| Brandy | Fire Resistance 90 s | 15 s | 0 |
+| Whiskey | Strength II 45 s | 15 s | 0 |
+| Applejack | Speed II 45 s, Jump Boost I 45 s | 15 s | 0 |
+
+- **Filling:** Create's Spout puts 250 mB of `c:<drink>` into a glass bottle. The Item Drain empties a bottle.
+- **By hand:** a bucket and 4 glass bottles make 4 bottles, and the bucket comes back.
+- **Look:** vanilla's potion bottle with its liquid overlay tinted from the fluid. No textures of our own, so resource
+  packs (Excalibur) restyle it.
+- New fluid tags: `c:hooch`, `c:wine`, `c:cider`, `c:mead`, `c:ale`.
+- Advancement "One for the Road": drink any bottle.

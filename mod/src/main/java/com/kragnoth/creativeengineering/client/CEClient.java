@@ -46,6 +46,24 @@ public final class CEClient {
                 com.kragnoth.creativeengineering.client.engine.CylinderRenderer::new);
     }
 
+    /** Drink bottles: the liquid layer (tint 0, vanilla's potion overlay) takes the drink's fluid colour. */
+    @SubscribeEvent
+    static void itemColors(net.neoforged.neoforge.client.event.RegisterColorHandlersEvent.Item event) {
+        for (var drink : com.kragnoth.creativeengineering.registry.ModItems.DRINKS.values()) {
+            event.register((stack, layer) -> {
+                if (layer != 0) {
+                    return -1;
+                }
+                for (var t : com.kragnoth.creativeengineering.registry.ModFluids.ALL) {
+                    if (t.name.equals(((com.kragnoth.creativeengineering.content.drinks.DrinkItem) stack.getItem()).fluid)) {
+                        return 0xFF000000 | t.tint;
+                    }
+                }
+                return -1;
+            }, drink.get());
+        }
+    }
+
     /** Atlas source that steel-shifts Create's tank textures for the Fermenting Vat (assets/minecraft/atlases/blocks.json). */
     @SubscribeEvent
     static void spriteSources(net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent event) {

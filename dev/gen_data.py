@@ -992,6 +992,8 @@ for _n in ('crude_oil', 'diesel', 'kerosene', 'gasoline'):
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
 tagfile('c', 'fluid', 'ethanol', [ce('ethanol'), ce('flowing_ethanol')])
+for _n in ('hooch', 'wine', 'cider', 'mead', 'ale'):
+    tagfile('c', 'fluid', _n, [ce(_n), ce('flowing_' + _n)])
 tagfile('c', 'fluid', 'vodka', [ce('vodka'), ce('flowing_vodka')])
 tagfile('c', 'fluid', 'brandy', [ce('brandy'), ce('flowing_brandy')])
 tagfile('c', 'fluid', 'whiskey', [ce('whiskey'), ce('flowing_whiskey')])
@@ -1249,6 +1251,28 @@ LANG['advancements.%s.crude_oil.title' % MODID] = 'Black Gold'
 LANG['advancements.%s.crude_oil.description' % MODID] = 'Bucket some crude oil from a desert pool'
 LANG['advancements.%s.pumpjack.title' % MODID] = 'Nodding Donkey'
 LANG['advancements.%s.pumpjack.description' % MODID] = 'Stroke a Wellhead with a Pumpjack'
+
+# ---------------------------------------------------------------------------------------- drink bottles
+# One 250 mB bottle per alcoholic drink (ModItems.DRINKS). Model: vanilla's potion bottle with its liquid overlay
+# tinted from the fluid (CEClient.itemColors), so resource packs restyle it. Create's Spout fills a glass bottle,
+# the Item Drain empties it; by hand: a bucket and four glass bottles make four bottles (the bucket comes back).
+DRINKS = [('hooch', 'Bottle of Hooch'), ('wine', 'Bottle of Wine'), ('cider', 'Bottle of Cider'), ('mead', 'Bottle of Mead'),
+          ('ale', 'Bottle of Ale'), ('vodka', 'Bottle of Vodka'), ('brandy', 'Bottle of Brandy'), ('whiskey', 'Bottle of Whiskey'),
+          ('applejack', 'Bottle of Applejack')]
+for n, label in DRINKS:
+    b = n + '_bottle'
+    LANG['item.%s.%s' % (MODID, b)] = label
+    put('%s/models/item/%s.json' % (A, b), {'parent': 'minecraft:item/generated',
+        'textures': {'layer0': 'minecraft:item/potion_overlay', 'layer1': 'minecraft:item/potion'}})
+    put(R + '/filling/%s.json' % b, {'type': 'create:filling', 'ingredients': [item('minecraft:glass_bottle'),
+        {'type': 'neoforge:tag', 'tag': 'c:' + n, 'amount': 250}], 'results': [{'id': ce(b)}]})
+    put(R + '/emptying/%s.json' % b, {'type': 'create:emptying', 'ingredients': [item(ce(b))],
+        'results': [{'id': 'minecraft:glass_bottle'}, {'id': ce(n), 'amount': 250}]})
+    shapeless(b + '_from_bucket', [item(ce(n + '_bucket'))] + [item('minecraft:glass_bottle')] * 4, ce(b), count=4, category='misc')
+adv('drink', 'fermenting', ce('wine_bottle'), {n: {'trigger': 'minecraft:consume_item', 'conditions': {'item': {'items': ce(n + '_bottle')}}}
+                                              for n, _ in DRINKS})
+LANG['advancements.%s.drink.title' % MODID] = 'One for the Road'
+LANG['advancements.%s.drink.description' % MODID] = 'Drink a bottle of something you brewed'
 
 # ---------------------------------------------------------------------------------------- lang
 lang_path = '%s/lang/en_us.json' % A

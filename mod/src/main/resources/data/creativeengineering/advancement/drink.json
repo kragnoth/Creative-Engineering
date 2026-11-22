@@ -1,0 +1,105 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:wine_bottle"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.drink.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.drink.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hooch": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:hooch_bottle"
+        }
+      }
+    },
+    "wine": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:wine_bottle"
+        }
+      }
+    },
+    "cider": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:cider_bottle"
+        }
+      }
+    },
+    "mead": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:mead_bottle"
+        }
+      }
+    },
+    "ale": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:ale_bottle"
+        }
+      }
+    },
+    "vodka": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:vodka_bottle"
+        }
+      }
+    },
+    "brandy": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:brandy_bottle"
+        }
+      }
+    },
+    "whiskey": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:whiskey_bottle"
+        }
+      }
+    },
+    "applejack": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": "creativeengineering:applejack_bottle"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hooch",
+      "wine",
+      "cider",
+      "mead",
+      "ale",
+      "vodka",
+      "brandy",
+      "whiskey",
+      "applejack"
+    ]
+  ],
+  "parent": "creativeengineering:fermenting"
+}
