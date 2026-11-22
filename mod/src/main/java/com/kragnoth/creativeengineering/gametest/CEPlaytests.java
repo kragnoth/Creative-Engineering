@@ -538,12 +538,21 @@ public final class CEPlaytests {
     // ------------------------------------------------------------------------------------------------ petroleum
     private static final String PJ = "com.kragnoth.creativeengineering.content.petroleum";
 
-    /** Pumpjack drive at g facing south with a creative motor on its east side; returns where the Wellhead goes. */
-    private static BlockPos pumpjack(GameTestHelper h, BlockPos g) {
+    /** Crank Gearbox at g facing south with a creative motor on its east side, a Samson Post `a` blocks on; returns the post. */
+    private static BlockPos pumpjack(GameTestHelper h, BlockPos g, int a) {
         h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, Direction.SOUTH));
         h.setBlock(g.east(), net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "creative_motor"))
                 .defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
-        return g.south();
+        BlockPos post = g.south(a);
+        var ps = ModBlocks.SAMSON_POST.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock.FACING, Direction.SOUTH);
+        h.setBlock(post, ps);
+        h.setBlock(post.above(), ps.setValue(com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock.HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
+        return post;
+    }
+
+    /** The short rig (rear arm 1, reach 1): returns where its Wellhead goes. */
+    private static BlockPos pumpjack(GameTestHelper h, BlockPos g) {
+        return pumpjack(h, g, 1).south();
     }
 
     private static com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity wellhead(GameTestHelper h, BlockPos rel) {
@@ -593,7 +602,29 @@ public final class CEPlaytests {
         h.runAfterDelay(100, () -> h.succeedWhen(() -> {
             h.assertTrue(wellhead(h, lone).tank().isEmpty(), "lone wellhead pumped " + wellhead(h, lone).tank().getFluidAmount());
             var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(g);
-            h.assertTrue(pj.getSpeed() != 0 && pj.target() == null, "pumpjack should turn with nothing to stroke");
+            h.assertTrue(pj.getSpeed() != 0 && pj.rig() != null && pj.rig().well() == null, "pumpjack should turn with nothing to stroke");
+            h.assertTrue(pj.calculateStressApplied() == com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity.IDLE_SU_PER_RPM, "idle stress");
+        }));
+    }
+
+    /** Reach 2 past the post doubles the stroke: twice the draw and twice the stress of the short rig. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void longReachDoublesStroke(GameTestHelper h) {
+        open(h);
+        BlockPos g = new BlockPos(4, 2, 2);
+        BlockPos post = pumpjack(h, g, 1);
+        BlockPos well = post.south(2);
+        h.setBlock(well, ModBlocks.WELLHEAD.get());
+        net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 40);
+        h.runAfterDelay(60, () -> h.succeedWhen(() -> {
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(g);
+            var w = wellhead(h, well);
+            h.assertTrue(pj.rig() != null && pj.rig().b() == 2 && pj.rig().stroke() == 2F, "rig " + pj.rig());
+            float expected = 40 * pj.power() * 2;
+            h.assertTrue(Math.abs(w.pumpRate() - expected) < 0.01F, "draw " + w.pumpRate() + " expected " + expected);
+            h.assertTrue(pj.calculateStressApplied() == 2 * com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity.SU_PER_RPM, "stress " + pj.calculateStressApplied());
+            com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
         }));
     }
 
@@ -635,7 +666,7 @@ public final class CEPlaytests {
                 diag = " | heat " + t.speed() + " blocker " + (b == null ? "none" : b.getString()) + " boiler " + t.layerFluid(0).getAmount()
                         + " " + t.layerFluid(0).getFluid();
             }
-            if (h.getBlockEntity(o.offset(0, 0, 1)) instanceof com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity pj) {
+            if (h.getBlockEntity(o) instanceof com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity pj) {
                 diag += " | pumpjack " + pj.getSpeed() + " rpm";
             }
             if (h.getBlockEntity(o.offset(0, 0, 2)) instanceof com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity w) {
@@ -659,11 +690,11 @@ public final class CEPlaytests {
         BlockPos o = new BlockPos(3, 1, 3);
         com.kragnoth.creativeengineering.demo.DemoCommands.buildRefinery(h.getLevel(), h.absolutePos(o));
         h.runAfterDelay(5, () -> {
-            var m = (com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity) h.getBlockEntity(o.offset(1, 0, 1));
+            var m = (com.simibubi.create.content.kinetics.motor.CreativeMotorBlockEntity) h.getBlockEntity(o.offset(1, 0, 0));
             m.generatedSpeed.setValue(128);
         });
         h.runAfterDelay(40, () -> h.succeedWhen(() -> {
-            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(o.offset(0, 0, 1));
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(o);
             var w = (com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity) h.getBlockEntity(o.offset(0, 0, 2));
             String diag = " | pumpjack " + pj.getSpeed() + " rpm overstressed " + pj.isOverStressed() + " | wellhead tank " + w.tank().getFluidAmount();
             if (h.getBlockEntity(o.offset(3, 1, 2)) instanceof com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity t) {

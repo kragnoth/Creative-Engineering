@@ -17,9 +17,12 @@ public final class CEPartials {
             .collect(java.util.stream.Collectors.toMap(n -> n, n -> PartialModel.of(CreativeEngineering.id("block/" + n))));
     public static final PartialModel CYLINDER_ROCKER = PartialModel.of(CreativeEngineering.id("block/diesel_cylinder_rocker"));
 
-    /** Pumpjack linkage (docs/petroleum-spec.md): beam + horsehead (frame-block space), cranks, pitman arm, polished rod. */
-    public static final PartialModel PUMPJACK_BEAM = PartialModel.of(CreativeEngineering.id("block/pumpjack_beam"));
+    /** Pumpjack linkage (docs/petroleum-spec.md): cranks (gearbox), and on the Samson Post the beam pieces, pitman, rod. */
     public static final PartialModel PUMPJACK_CRANK = PartialModel.of(CreativeEngineering.id("block/pumpjack_crank"));
+    public static final PartialModel PUMPJACK_BEAM = PartialModel.of(CreativeEngineering.id("block/pumpjack_beam"));
+    public static final PartialModel PUMPJACK_HORSEHEAD = PartialModel.of(CreativeEngineering.id("block/pumpjack_horsehead"));
+    public static final PartialModel PUMPJACK_EQUALIZER = PartialModel.of(CreativeEngineering.id("block/pumpjack_equalizer"));
+    public static final PartialModel PUMPJACK_SADDLE = PartialModel.of(CreativeEngineering.id("block/pumpjack_saddle"));
     public static final PartialModel PUMPJACK_PITMAN = PartialModel.of(CreativeEngineering.id("block/pumpjack_pitman"));
     public static final PartialModel PUMPJACK_ROD = PartialModel.of(CreativeEngineering.id("block/pumpjack_rod"));
 

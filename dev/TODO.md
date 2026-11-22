@@ -376,3 +376,11 @@ Convention (borrowed from Tarbound):
 
 ## 0.15.1 — fast pumpjack check
 - [ ] Refinery at high RPM: crude keeps flowing; if the boiler shows 1000 / 1000 the 1x1 column is the bottleneck (crude backs up into the wellhead's 8 B tank), not a fault. Game test `refineryRunsFast` (128 RPM) covers it.
+
+## 0.16.0 — Pumpjack from parts, pipe-size wellhead
+- [ ] Crank Gearbox, Samson Post (2 tall, door-style) and Wellhead each place, wrench (turn / sneak pick-up) and break on their own; breaking either post half takes the post, one drop.
+- [ ] Empty-hand right-click on the gearbox outlines the post and well spots (green when present); right-click with a Samson Post / Wellhead places it there.
+- [ ] Beam nods ~2.5 blocks up; pitman arms stay on the crank pins and the equalizer; the rod rides in the stuffing box; no missing-texture cubes in any facing.
+- [ ] Post 2 blocks from the gearbox and/or well 2 past the post: beam lengthens; goggles show rear arm / reach / stroke; reach 2 doubles draw and stress.
+- [ ] Create pipes meet the Wellhead's four ports square (centred 8 px flanges).
+- [ ] `/test runrefinery` still runs (gearbox, post, wellhead).

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "G G",
+    "G G"
+  ],
+  "key": {
+    "P": {
+      "tag": "c:plates/steel"
+    },
+    "G": {
+      "item": "create:metal_girder"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:samson_post",
+    "count": 1
+  }
+}

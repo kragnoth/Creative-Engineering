@@ -101,6 +101,12 @@ public final class ModBlockEntities {
                     .build(null));
 
     @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlockEntity>> SAMSON_POST =
+            BLOCK_ENTITIES.register("samson_post", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlockEntity(ModBlockEntities.SAMSON_POST.get(), pos, state),
+                            ModBlocks.SAMSON_POST.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity>> WELLHEAD =
             BLOCK_ENTITIES.register("wellhead", () -> BlockEntityType.Builder
                     .of((pos, state) -> new com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity(ModBlockEntities.WELLHEAD.get(), pos, state),

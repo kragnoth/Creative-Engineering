@@ -1,4 +1,4 @@
-# Petroleum: crude, veins, pumpjack, fuels (0.14.0, pumpjack split 0.15.0)
+# Petroleum: crude, veins, pumpjack, fuels (0.14.0; pumpjack rebuilt from parts 0.15.0-0.16.0)
 
 Kragnoth, 2026-11-22: "a way to get proper diesel, kerosene and gas now. Small pools that spawn in the desert, a way
 to prospect for infinite veins that make it so one can place down a nodding donkey in a chunk and create oil."
@@ -32,35 +32,48 @@ kerosene / gasoline join through the `c:` tags and the optional tier entries.
   rounded to 8 blocks with an 8-way compass direction, or "No oil within 128 blocks".
 - Recipe: electron tube, brass sheet, steel rod (diagonal).
 
-## Pumpjack and Wellhead (0.15.0: two blocks, the Create way)
-Kragnoth, 2026-11-22: keep it "Create-centric, not magical multiblock", no glue or contraptions, and true to Create's
-ethos in each part. 0.14.0's one-item, three-block pumpjack is gone. The pattern now is Create's steam engine: a drive
-block whose linkage hangs outside its own block and does its work on a separate block you place yourself.
-Nothing forms, nothing is hidden. Every piece is placed, wrenched (turn / pick up) and broken on its own.
+## Pumpjack: Crank Gearbox + Samson Post + Wellhead (0.16.0)
+Kragnoth, 2026-11-22:
+- keep it "Create-centric, not magical multiblock", with no glue or contraptions, true to Create's ethos in each part;
+- then: scale it up so the well's outlets line up with Create pipes (look at Oritech / IE, stay Create).
 
-### Pumpjack (`pumpjack`)
-- One kinetic block. Its model is the skid, a reduction gearbox on Create's shaft line and the samson post.
-- The walking beam, horsehead, cranks and pitman arms are partials. The beam overhangs the block in front
-  (`horizontal_facing`, away from you when placed; sneak to flip).
-- **Power:** a shaft on either side (the crank axle runs across the machine). Stress 8 SU per RPM. One crank turn is
-  four shaft turns, so 64 RPM gives 16 strokes a minute.
-- **Driving:** every tick it turns, it strokes the block in front if that block is `StrokeDriven`, with power
-  min(1, RPM / 64). With nothing there it still nods (no rod fitted), and its goggles say so.
-- **Look:** Create textures referenced, never copied.
-  - Skid, post and beam: industrial iron. Gearbox: andesite casing. Horsehead: steel. Bearings: brass.
-  - One linkage (`PumpjackBlockEntity.pose`): crank radius 2.5 px on the shaft; the beam pivots on the post
-    (y 28, z 15); pitman arms run from the pins to the equalizer; the polished rod hangs from the horsehead lip over
-    the centre of the block in front.
-  - Drawn by `PumpjackVisual` (Flywheel, with Create's shaft), or by `PumpjackRenderer` when instancing is off.
-  - Preview: `tools/stylekit/render_pumpjack.py`.
+0.14.0's one-item, three-block pumpjack is gone. Each part is its own block, placed, wrenched and broken on its own. The
+parts find each other by where they stand (`PumpjackRig`), like Create's steam engine finding its boiler. Nothing
+forms and nothing is hidden.
 
-### Wellhead (`wellhead`)
-- A casing head on the ground, with a flow cross giving outlets on all four sides. It does nothing on its own, like a
-  steam engine with no boiler.
-- **While stroked** it brings up its well source x power into an 8 B tank.
-- **Output:** it pushes down any pipe run leaving its sides (`PipeRuns`: line pressure, no pump needed), up to 250 mB
-  per 10 ticks. It also drains to pumps (drain-only capability).
-- **Goggles:** what is below and its rate, idle or drawing, a hint below 64 RPM, and the tank.
+### Layout (in a row along the gearbox's facing)
+| Part | Where | Does |
+|---|---|---|
+| Crank Gearbox (`pumpjack`) | the start; faces away from you when placed | Kinetic: shaft on either side, crank and counterweights at 1/4 shaft speed |
+| Samson Post (`samson_post`) | 1 or 2 blocks on (the **rear arm**, a) | 1x2 tall (placed like a door); carries the walking beam, pivot 41 px up |
+| Wellhead (`wellhead`), or any `StrokeDriven` block | 1 or 2 blocks past the post (the **reach**, b) | Brings up its well source while stroked |
+
+- **Stroke** = b / a, from 0.5 to 2. Draw = well rate x min(1, RPM / 64) x stroke. Stress = 8 SU per RPM per unit of
+  stroke; 2 SU per RPM when no well is on the beam.
+- Bigger build, more out: reach 2 doubles both the draw and the stress, the Create way to scale.
+- **Look:** gearbox in andesite casing on an industrial-iron skid. The post is a four-legged industrial-iron trestle
+  with dark rails and a brass saddle bearing. Beam: industrial iron. Horsehead: steel.
+  - Moving parts are partials posed by `PumpjackRig.pose`:
+    - crank radius 4 px on the shaft;
+    - the beam drawn one 16 px piece per block of a + b;
+    - the equalizer over the crank;
+    - pitman arms stretched pin to equalizer;
+    - polished rod hanging from the horsehead lip into the stuffing box.
+  - Drawn by `PumpjackVisual` (shaft + crank) and `SamsonPostVisual` (beam and linkage), with renderer fallbacks.
+  - Every model stays inside vanilla's -16..32 (`eng()` asserts it; 0.15.0's rod broke this).
+- **Oritech-style guidance, no assembly:**
+  - Right-click the gearbox with an empty hand: Create's outliner shows where the post and well go. Green means
+    already in place.
+  - Right-click the gearbox holding a Samson Post or Wellhead: it places that part in the next spot (short rig).
+- **Goggles** on the gearbox or the post show which parts are found, a and b with the stroke, and what is stroked.
+
+### Wellhead
+- A full block. The casing head has a flow cross whose four ports are **Create pipe size** (8 px, centred, flanged),
+  so a pipe on any side meets one square.
+- Bonnet and brass stuffing box on top, for the rod.
+- While stroked it fills its 8 B tank. It pushes into pipe runs on its sides (`PipeRuns`, no pump needed, up to 500 mB
+  per 10 ticks) and drains to pumps.
+- Goggles show what is below, the draw, and the tank.
 
 ### Well sources (data-driven: `data/<ns>/well_sources/*.json`)
 Fields: `fluid`, `rate` (mB/s at full stroke) or `oil_vein: true`, optional `dimension`, `biomes` (ids or `#tags`) and
@@ -88,7 +101,7 @@ Pools are finite. Drain them the Create way: a hose pulley or a pump, or by buck
 
 ## Demo
 `/test runrefinery` (op 2) builds the whole chain in front of you:
-- a Pumpjack on a creative motor stroking a Wellhead, whose vein is forced to 60 mB/s until restart;
+- a Crank Gearbox on a creative motor, a Samson Post and a Wellhead (short rig), with the vein forced to 60 mB/s until restart;
 - Steel Pipe up into a 1x1x4 Distilling Tank on a creative Blaze Burner;
 - three taps into tall Steel Storage Tanks.
 

@@ -1,0 +1,152 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "iron": "create:block/industrial_iron_block",
+    "iron_top": "create:block/industrial_iron_block_top",
+    "dark": "create:block/dark_metal_block",
+    "casing": "create:block/andesite_casing",
+    "brass": "create:block/brass_block",
+    "shaft": "create:block/axis",
+    "shaft_end": "create:block/axis_top",
+    "steel": "creativeengineering:block/steel_block",
+    "particle": "create:block/industrial_iron_block"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        -3,
+        -2
+      ],
+      "to": [
+        10,
+        -1,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            6,
+            1,
+            10,
+            3
+          ]
+        },
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            6,
+            1,
+            10,
+            3
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            1,
+            4,
+            3
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            1,
+            4,
+            3
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            6,
+            0,
+            10,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        -1.5,
+        -0.5
+      ],
+      "to": [
+        11,
+        0.5,
+        0.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            5,
+            0,
+            11,
+            2.0
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            5,
+            0,
+            11,
+            2.0
+          ]
+        },
+        "east": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2.0
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            0,
+            1.0,
+            2.0
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            5,
+            0,
+            11,
+            1.0
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            5,
+            0,
+            11,
+            1.0
+          ]
+        }
+      }
+    }
+  ]
+}

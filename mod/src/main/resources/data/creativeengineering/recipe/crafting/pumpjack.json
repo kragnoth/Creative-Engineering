@@ -2,22 +2,22 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    " S ",
-    "GCS",
-    "III"
+    " G ",
+    "SAS",
+    "PPP"
   ],
   "key": {
-    "S": {
-      "tag": "c:plates/steel"
-    },
     "G": {
       "tag": "c:gears/steel"
     },
-    "C": {
+    "S": {
+      "item": "create:shaft"
+    },
+    "A": {
       "item": "create:andesite_casing"
     },
-    "I": {
-      "item": "create:industrial_iron_block"
+    "P": {
+      "tag": "c:plates/steel"
     }
   },
   "result": {

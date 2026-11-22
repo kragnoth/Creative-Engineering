@@ -106,3 +106,8 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - Removed blocks `pumpjack_frame`, `pumpjack_wellhead` (placed ones disappear). `pumpjack` is now one block (state `horizontal_facing`); its BE keeps only Create kinetic data (`Tank`, `Vein`, `Carry` dropped).
 - New block / item / BE `wellhead` (no states): NBT `Tank`, `Carry`.
 - New data folder `well_sources` (`oil_vein`, `dry_ground`, `water`, `nether_lava`).
+
+## 0.16.0 — Pumpjack from parts
+- New block / item / BE `samson_post` (states `facing`, `half`; BE on the lower half only, no saved data).
+- `pumpjack` is now the Crank Gearbox (same id; BE keeps only Create kinetic data). `wellhead` model and shape change (pipe-size ports); NBT unchanged.
+- New partial models `pumpjack_horsehead`, `pumpjack_equalizer`, `pumpjack_saddle`; `pumpjack_beam` is now one block of beam.

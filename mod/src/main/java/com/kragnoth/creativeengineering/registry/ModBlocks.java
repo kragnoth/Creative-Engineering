@@ -106,9 +106,11 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
-    /** Petroleum (docs/petroleum-spec.md): the Pumpjack drive and the Wellhead it strokes, two separate blocks. */
+    /** Petroleum (docs/petroleum-spec.md): the Pumpjack's Crank Gearbox, Samson Post and the Wellhead it strokes: separate blocks. */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.PumpjackBlock> PUMPJACK = BLOCKS.register("pumpjack",
             () -> new com.kragnoth.creativeengineering.content.petroleum.PumpjackBlock(pumpjackProps()));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock> SAMSON_POST = BLOCKS.register("samson_post",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock(pumpjackProps()));
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.WellheadBlock> WELLHEAD = BLOCKS.register("wellhead",
             () -> new com.kragnoth.creativeengineering.content.petroleum.WellheadBlock(pumpjackProps()));
 

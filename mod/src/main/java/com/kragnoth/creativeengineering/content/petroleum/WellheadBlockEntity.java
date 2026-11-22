@@ -24,12 +24,13 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 
 /**
- * The Wellhead's work: each tick a Pumpjack strokes it (StrokeDriven), it brings up its WellSources yield x power into
+ * The Wellhead's work: each tick a Pumpjack strokes it (StrokeDriven), it brings up its WellSources yield x power (up to
+ * 2 with a long reach) into
  * an 8 B tank, and every PUSH_TICKS it pushes that down any pipe run leaving its four sides (PipeRuns: line pressure,
  * no pump needed). Pumps may also drain it (drain-only capability). Goggles tell what's below and whether it's driven.
  */
 public class WellheadBlockEntity extends SmartBlockEntity implements StrokeDriven, IHaveGoggleInformation {
-    public static final int CAPACITY = 8000, PUSH_TICKS = 10, PUSH_RATE = 250, RESAMPLE = 100;
+    public static final int CAPACITY = 8000, PUSH_TICKS = 10, PUSH_RATE = 500, RESAMPLE = 100;
 
     private final FluidTank tank = new FluidTank(CAPACITY);
     private final IFluidHandler output = new DrainOnly();
@@ -179,9 +180,6 @@ public class WellheadBlockEntity extends SmartBlockEntity implements StrokeDrive
                 tooltip.add(line(Component.translatable("creativeengineering.wellhead.idle"), ChatFormatting.GRAY));
             } else {
                 tooltip.add(line(Component.translatable("creativeengineering.wellhead.rate", String.format("%.1f", pumpRate())), ChatFormatting.AQUA));
-                if (power < 1) {
-                    tooltip.add(line(Component.translatable("creativeengineering.wellhead.slow", PumpjackBlockEntity.FULL_RPM), ChatFormatting.DARK_GRAY));
-                }
             }
         }
         FluidStack in = tank.getFluid();
