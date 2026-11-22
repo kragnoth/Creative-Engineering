@@ -27,13 +27,13 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
 ## Decisions (Kragnoth, 2026-11-22)
 - **Fuels:** creosote, plant oil and ethanol to start (diesel/biodiesel from refining later). Read by fluid **tags** shared with Create Crafts & Additions, Create Diesel Generators and Immersive Engineering (to verify per mod when fuels are built), so their fluids work too. Values in a data map.
 - **Output scales with fuel quality.** The weakest fuel starts about as good as or better than lava (which is easily renewable), and better fuels scale up from there.
-- **Flywheel:** cosmetic, but sits on the output shaft and passes rotation on to further machinery.
-- **Exhaust:** particles only, out of cosmetic exhaust parts laid out like real engines of this type: each head branches into a manifold along the outside of its bank, ending in a silencer and one stack.
+- **Flywheel:** cosmetic, but sits on the output shaft and passes rotation on; its shaft is Create's exactly (4x4 at 6..10, axis textures and UVs) so it mates like any modded flywheel.
+- **Exhaust:** particles only, straight off each running cylinder's head. No exhaust blocks (tried in 0.7.0, removed: Kragnoth).
 - **Starting:** no starter block. The crankcase's front shaft is an input; any rotation turns it over (a Create Hand Crank on that shaft is the classic way). It can take any stress input.
 - **Create methods:** models built from JSON elements like Create's, with **Create's own textures** (industrial iron, dark metal, railway casing, brass, axis), so a resource pack that reskins Create reskins the engine. Moving parts (pistons, linkage) later via partial models, as Create's steam engine does.
 
 ## First-pass blocks (0.7.0)
-`diesel_crankcase` (axis), `diesel_cylinder` (facing = bank it leans to), `diesel_exhaust` (manifold segment), `diesel_exhaust_stack` (manifold end + silencer + stack, 2 tall), `diesel_flywheel` (axis, 3-block wheel). Renders: `python3 tools/stylekit/render_engine_stages.py` (writes to tools/stylekit/out/engine/, git-ignored; uses `render_scene.py`).
+`diesel_crankcase` (axis), `diesel_cylinder` (facing = bank it leans to), `diesel_flywheel` (axis, 3-block wheel). 0.7.1: detail pass (octagonal barrels/heads/hub from crossed boxes, cooling bands, studs, ribs, doors, bearing rings, oil cups); exhaust blocks removed. Renders: `python3 tools/stylekit/render_engine_stages.py` (writes to tools/stylekit/out/engine/, git-ignored; uses `render_scene.py`).
 
 ## Still open
 1. **Fuel before oil exists:** creosote at a poor rate (proposed: gives the coke oven another payoff), plant oil or ethanol (IE biodiesel), or nothing until refining. Fuel values go in a data map either way, so packs can change them.

@@ -63,12 +63,8 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing> DIESEL_CYLINDER = BLOCKS.register("diesel_cylinder",
             () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing> DIESEL_EXHAUST = BLOCKS.register("diesel_exhaust",
-            () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
             () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing> DIESEL_EXHAUST_STACK = BLOCKS.register("diesel_exhaust_stack",
-            () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
     public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));

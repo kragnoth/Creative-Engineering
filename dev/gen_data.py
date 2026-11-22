@@ -84,8 +84,6 @@ LANG = collections.OrderedDict([
     ('item.%s.rod_die' % MODID, 'Rod Die'),
     ('block.%s.diesel_crankcase' % MODID, 'Diesel Crankcase'),
     ('block.%s.diesel_cylinder' % MODID, 'Diesel Cylinder'),
-    ('block.%s.diesel_exhaust' % MODID, 'Exhaust Manifold'),
-    ('block.%s.diesel_exhaust_stack' % MODID, 'Exhaust Stack'),
     ('block.%s.diesel_flywheel' % MODID, 'Flywheel'),
     ('block.%s.treated_planks' % MODID, 'Treated Planks'),
     ('block.%s.treated_stairs' % MODID, 'Treated Stairs'),
@@ -452,78 +450,102 @@ def box(f, t, tex, faces=None, rot=None):
     if rot:
         e['rotation'] = rot
     return e
-def axis_x(f, t, tex='shaft', end='shaft_end'):
-    """A shaft-like bar along X using Create's axis texture turned to run lengthwise (as Create's own models do)."""
-    e = box(f, t, tex, {'east': end, 'west': end})
+def axis_x(x0=0, x1=16):
+    """Create's shaft, laid along X: 4x4 at 6..10 with axis / axis_top and Create's own UVs, so it mates with any Create
+    shaft or kinetic block exactly."""
+    e = box([x0, 6, 6], [x1, 10, 10], 'shaft', {'east': 'shaft_end', 'west': 'shaft_end'})
     for d in ('north', 'south', 'up', 'down'):
-        e['faces'][d]['rotation'] = 90
+        e['faces'][d].update({'uv': [6, 16 - x1, 10, 16 - x0], 'rotation': 90})
+    for d in ('east', 'west'):
+        e['faces'][d]['uv'] = [6, 6, 10, 10]
     return e
 
-ENG_T = {'iron': CR('industrial_iron_block'), 'iron_top': CR('industrial_iron_block_top'), 'dark': CR('dark_metal_block'),
-         'casing': CR('railway_casing'), 'brass': CR('brass_block'), 'shaft': CR('axis'), 'shaft_end': CR('axis_top'),
-         'weathered': CR('weathered_iron_block'), 'weathered_top': CR('weathered_iron_block_top')}
+def oct_y(c, y0, y1, w, ch, tex, faces=None, rot=None):
+    """An octagonal prism along Y (two crossed boxes), centred on (c, c) in X/Z."""
+    h = w / 2
+    return [box([c - h, y0, c - h + ch], [c + h, y1, c + h - ch], tex, faces, rot),
+            box([c - h + ch, y0, c - h], [c + h - ch, y1, c + h], tex, faces, rot)]
 
-# Crankcase: dark bedplate, stepped cast-iron housing, cylinder saddles leaning to both banks, riveted camshaft
-# cover with brass oilers; the crankshaft shows at both ends (front = starting input, back = output).
-eng('diesel_crankcase', ENG_T, [
-    box([0, 0, 0], [16, 3, 16], 'dark'),
-    box([0, 3, 0.5], [16, 8, 15.5], 'iron', {'up': 'iron_top', 'down': 'dark'}),
-    box([0, 8, 2], [16, 14, 14], 'iron', {'up': 'iron_top', 'down': 'dark'}),
-    box([0, 11, 11], [16, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 'axis': 'x', 'angle': 45}),
-    box([0, 11, -1], [16, 14, 5], 'dark', rot={'origin': [8, 12.5, 2], 'axis': 'x', 'angle': -45}),
-    box([0, 14, 5.5], [16, 16, 10.5], 'casing'),
-    box([3, 16, 7], [5, 17.5, 9], 'brass'), box([11, 16, 7], [13, 17.5, 9], 'brass'),
-    axis_x([-0.01, 6, 6], [16.01, 10, 10]),
-])
-# Cylinder: dark flange, cast-iron barrel, heavy dark head, riveted rocker cover, brass injector, pushrod tube.
-# Built upright, then leaned 45 deg about X through the block centre.
+def oct_x(x0, x1, w, ch, tex, faces=None, rot=None, cy=8, cz=8):
+    """An octagonal prism along X (two crossed boxes), centred on (cy, cz)."""
+    h = w / 2
+    return [box([x0, cy - h, cz - h + ch], [x1, cy + h, cz + h - ch], tex, faces, rot),
+            box([x0, cy - h + ch, cz - h], [x1, cy + h - ch, cz + h], tex, faces, rot)]
+
+ENG_T = {'iron': CR('industrial_iron_block'), 'iron_top': CR('industrial_iron_block_top'), 'dark': CR('dark_metal_block'),
+         'casing': CR('railway_casing'), 'brass': CR('brass_block'), 'shaft': CR('axis'), 'shaft_end': CR('axis_top')}
+
+# Crankcase: stepped bedplate with hold-down bolts, cast-iron housing with strengthening ribs and riveted access doors,
+# octagonal bearing rings at both ends (two crankcases side by side read as a flanged joint), cylinder saddles leaning
+# to both banks, a rounded camshaft cover with brass oil cups. The crankshaft (Create's shaft) runs through: front =
+# starting input, back = output.
+cc = [box([0, 0, 0], [16, 2, 16], 'dark'), box([0, 2, 0.5], [16, 3, 15.5], 'dark'),
+      box([0, 3, 1], [16, 8, 15], 'iron', {'up': 'iron_top', 'down': 'dark'}),
+      box([0, 8, 2.5], [16, 13, 13.5], 'iron', {'up': 'iron_top', 'down': 'dark'})]
+for x in (1.5, 13):                                            # hold-down bolts
+    for z in (0.75, 14):
+        cc.append(box([x, 2, z], [x + 1.5, 3, z + 1.25], 'shaft', {'up': 'shaft_end', 'down': 'shaft_end'}))
+for z0, z1, z2, z3 in ((15, 15.6, 13.5, 14.1), (0.4, 1, 1.9, 2.5)):   # ribs, lower and upper, both sides
+    for x in (1, 13.5):
+        cc.append(box([x, 3, z0], [x + 1.5, 8, z1], 'dark'))
+        cc.append(box([x, 8, z2], [x + 1.5, 13, z3], 'dark'))
+cc += [box([5, 3.5, 15], [11, 7.5, 15.6], 'casing'), box([5, 3.5, 0.4], [11, 7.5, 1], 'casing')]   # access doors
+cc += oct_x(0, 1, 9, 2.5, 'casing') + oct_x(15, 16, 9, 2.5, 'casing')                               # bearing rings
+cc += [box([0.5, 11, 11], [15.5, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 'axis': 'x', 'angle': 45}),
+       box([0.5, 11, -1], [15.5, 14, 5], 'dark', rot={'origin': [8, 12.5, 2], 'axis': 'x', 'angle': -45}),
+       box([0, 13, 5.5], [16, 15, 10.5], 'casing'), box([0, 15, 6.5], [16, 16, 9.5], 'casing')]      # cam cover
+for x in (3, 11):                                                                                      # oil cups
+    cc += [box([x + 0.5, 16, 7.5], [x + 1.5, 16.5, 8.5], 'brass'), box([x, 16.5, 7], [x + 2, 18, 9], 'brass')]
+cc.append(axis_x())
+eng('diesel_crankcase', ENG_T, cc)
+
+# Cylinder: octagonal flange with bolts, octagonal barrel with cooling bands, octagonal head with studs, domed rocker
+# cover, brass injector and fuel line, pushrod tube. Built upright, then leaned 45 deg about X through the block centre
+# (the axis runs through the crankshaft diagonally below). Smoke comes off the head while running (particles).
 def cylinder(angle):
     r = {'origin': [8, 8, 8], 'axis': 'x', 'angle': angle}
-    return [box([2.5, -5, 2.5], [13.5, -3, 13.5], 'dark', rot=r),
-            box([4, -3, 4], [12, 13, 12], 'iron', {'up': 'dark', 'down': 'dark'}, rot=r),
-            box([2.5, 13, 2.5], [13.5, 17, 13.5], 'dark', rot=r),
-            box([4, 17, 4], [12, 19, 12], 'casing', rot=r),
-            box([7, 19, 7], [9, 20.5, 9], 'brass', rot=r),
-            box([12, -3, 7], [13.5, 13, 8.5], 'shaft', rot=r)]
+    e = oct_y(8, -5, -3, 12, 2.5, 'dark', rot=r)
+    for x, z in ((3, 3), (12, 3), (3, 12), (12, 12)):
+        e.append(box([x - 0.5, -3, z - 0.5], [x + 0.5, -2.5, z + 0.5], 'shaft', rot=r))
+    e += oct_y(8, -3, 13, 9, 2, 'iron', {'up': 'dark', 'down': 'dark'}, rot=r)
+    for y in (0, 4.5, 9):
+        e += oct_y(8, y, y + 1, 10, 2.5, 'dark', rot=r)
+    e += oct_y(8, 13, 17, 12, 2.5, 'dark', rot=r)
+    for x, z in ((4, 4), (11, 4), (4, 11), (11, 11)):
+        e.append(box([x - 0.75, 17, z - 0.75], [x + 0.75, 18, z + 0.75], 'shaft', {'up': 'shaft_end'}, rot=r))
+    e += [box([5, 17, 4.5], [11, 19, 11.5], 'casing', rot=r), box([6, 19, 5.5], [10, 20, 10.5], 'casing', rot=r),
+          box([7.25, 20, 7.25], [8.75, 21.5, 8.75], 'brass', rot=r),
+          box([7.5, 15.5, 11.5], [8.5, 20.5, 12.5], 'brass', rot=r),
+          box([12.5, -3, 7.5], [13.5, 17, 8.5], 'shaft', rot=r)]
+    return e
 eng('diesel_cylinder', ENG_T, cylinder(45))            # leans toward +Z (south bank)
 eng('diesel_cylinder_mirrored', ENG_T, cylinder(-45))  # leans toward -Z (north bank)
-# Exhaust, as on real engines of this type: each cylinder head has a short branch into a manifold that runs along the
-# outside of its bank; the manifold ends in an elbow, a cast-iron silencer drum and one stack.
-# The manifold sits in the block diagonally outside-above the cylinder (x, 2, +2 for the +Z bank). The head's top is at
-# this block's lower-inner corner, so the branch drops 45 deg from the manifold into it.
-branch = {'origin': [8, 3, 3], 'axis': 'x', 'angle': 45}
-eng('diesel_exhaust', ENG_T, [
-    box([0, 3, 3], [16, 8, 8], 'dark'),
-    box([0, 2.5, 2.5], [1.5, 8.5, 8.5], 'casing'), box([14.5, 2.5, 2.5], [16, 8.5, 8.5], 'casing'),   # flanges
-    box([6, -1, 1], [10, 5, 5], 'dark', rot=branch),
-])
-# Stack end: the manifold turns up into a banded cast-iron silencer drum, then the stack with a flared cap (2 blocks tall).
-eng('diesel_exhaust_stack', ENG_T, [
-    box([0, 3, 3], [8, 8, 8], 'dark'),
-    box([3, 3, 3], [8, 12, 8], 'dark'),
-    box([1, 12, 0.5], [10, 24, 10.5], 'iron', {'up': 'dark', 'down': 'dark'}),
-    box([0.5, 13, 0], [10.5, 14.5, 11], 'dark'), box([0.5, 21.5, 0], [10.5, 23, 11], 'dark'),
-    box([3.5, 24, 3.5], [7.5, 31, 7.5], 'dark'),
-    box([2.5, 30, 2.5], [8.5, 32, 8.5], 'dark'),
-])
-# Flywheel: 3-block wheel on the output shaft (cosmetic; passes rotation on). Dark iron rim, 16 segments, 8 spokes.
-fw = [axis_x([0, 6.5, 6.5], [16, 9.5, 9.5]), box([5, 4, 4], [11, 12, 12], 'casing')]
-for base in (([6, 26, 3.5], [10, 30, 12.5]), ([6, -14, 3.5], [10, -10, 12.5]), ([6, 3.5, 26], [10, 12.5, 30]), ([6, 3.5, -14], [10, 12.5, -10])):
-    for ang in (-22.5, 0, 22.5, 45):
-        fw.append(box(base[0], base[1], 'dark', rot={'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None))
-for spoke in (([7, -11, 7], [9, 27, 9]), ([7, 7, -11], [9, 9, 27])):
-    for ang in (0, 45):
-        fw.append(box(spoke[0], spoke[1], 'iron', rot={'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None))
+
+# Flywheel: 3-block cast-iron wheel on Create's shaft (mates exactly; passes rotation on). Octagonal hub with boss rings,
+# 8 spokes with thick roots, 16-segment rim with an inner lip.
+fw = [axis_x()] + oct_x(5, 11, 9, 2.5, 'dark') + oct_x(4, 5, 7, 2, 'casing') + oct_x(11, 12, 7, 2, 'casing')
+def ring(y0, y1, x0, x1, half, tex):
+    out = []
+    for base in (([x0, 8 + y0, 8 - half], [x1, 8 + y1, 8 + half]), ([x0, 8 - y1, 8 - half], [x1, 8 - y0, 8 + half]),
+                 ([x0, 8 - half, 8 + y0], [x1, 8 + half, 8 + y1]), ([x0, 8 - half, 8 - y1], [x1, 8 + half, 8 - y0])):
+        for ang in (-22.5, 0, 22.5, 45):
+            out.append(box(base[0], base[1], tex, rot={'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None))
+    return out
+fw += ring(18, 22, 5.5, 10.5, 4.6, 'dark') + ring(17, 18, 6.5, 9.5, 3.8, 'casing')
+for ang in (0, 45):
+    rr = {'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None
+    fw += [box([7, -10, 7], [9, 26, 9], 'iron', rot=rr), box([7, 7, -10], [9, 9, 26], 'iron', rot=rr),
+           box([6.5, 0, 6.5], [9.5, 16, 9.5], 'iron', rot=rr), box([6.5, 6.5, 0], [9.5, 9.5, 16], 'iron', rot=rr)]
 eng('diesel_flywheel', ENG_T, fw)
 
 # Engine blockstates: models are drawn for engine axis X / facing south (cylinder leans +Z); rotate the rest.
 FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}
-for n in ('diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack'):
+for n in ('diesel_cylinder',):
     put('%s/blockstates/%s.json' % (A, n), {'variants': {'facing=%s' % f: dict({'model': ce('block/' + n)}, **({'y': y} if y else {}))
                                                      for f, y in FACE_Y.items()}})
 for n in ('diesel_crankcase', 'diesel_flywheel'):
     put('%s/blockstates/%s.json' % (A, n), {'variants': {'axis=x': {'model': ce('block/' + n)}, 'axis=z': {'model': ce('block/' + n), 'y': 90}}})
-for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack', 'diesel_flywheel'):
+for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel'):
     put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
     simple_loot(n)
 
@@ -583,7 +605,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack', 'diesel_flywheel')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

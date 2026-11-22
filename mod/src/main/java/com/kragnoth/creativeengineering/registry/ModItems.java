@@ -60,9 +60,7 @@ public final class ModItems {
     // Diesel engine (first pass, look only)
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CYLINDER = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CYLINDER);
-    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_EXHAUST = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_EXHAUST);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_FLYWHEEL = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_FLYWHEEL);
-    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_EXHAUST_STACK = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_EXHAUST_STACK);
 
     // Metalworking: press dies and what they make
     public static final DeferredItem<Item> ROD_DIE = ITEMS.registerSimpleItem("rod_die", new Item.Properties().stacksTo(16));
@@ -109,7 +107,7 @@ public final class ModItems {
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_EXHAUST, DIESEL_FLYWHEEL, DIESEL_EXHAUST_STACK);
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */

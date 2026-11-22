@@ -5,6 +5,11 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.7.1-alpha: engine detail pass (2026-11-22) - look in game
+- [ ] Exhaust Manifold / Stack are gone. Three parts: Crankcase, Cylinder, Flywheel.
+- [ ] Cylinders: octagonal barrel with cooling bands, studded head, domed rocker cover, brass injector + fuel line. Crankcase: ribs, doors, bearing rings (a flanged joint between two), rounded cam cover, oil cups.
+- [ ] Flywheel lines up exactly with a Create shaft placed next to it (same size, same texture).
+
 ## 0.7.0-alpha: diesel engine, first pass (look only) (2026-11-22) - look in game
 - [ ] Five placeable parts in the creative tab: Diesel Crankcase, Diesel Cylinder, Exhaust Manifold, Exhaust Stack, Flywheel. No engine behaviour yet.
 - [ ] All use Create textures (try a Create resource pack: the engine should follow it).
