@@ -49,6 +49,7 @@ public final class CEPlaytests {
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 100)
     public static void cokeOvenForms2x2x2(GameTestHelper h) {
+        open(h);
         oven(h, 2, false);
         h.succeedWhen(() -> {
             CokeOvenBlockEntity be = (CokeOvenBlockEntity) h.getBlockEntity(new BlockPos(5, 4, 5));
@@ -59,6 +60,7 @@ public final class CEPlaytests {
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 100)
     public static void cokeOvenInputIsInsertOnly(GameTestHelper h) {
+        open(h);
         oven(h, 1, false);
         h.runAfterDelay(5, () -> {
             IItemHandler view = items(h, new BlockPos(4, 3, 4), Direction.NORTH);
@@ -73,6 +75,7 @@ public final class CEPlaytests {
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 1200)
     public static void cokeOvenMakesCokeAndLights(GameTestHelper h) {
+        open(h);
         oven(h, 1, true);
         h.runAfterDelay(5, () -> items(h, new BlockPos(4, 3, 4), Direction.UP).insertItem(0, new ItemStack(Items.COAL, 4), false));
         h.succeedWhen(() -> {
@@ -85,12 +88,22 @@ public final class CEPlaytests {
     /** A 1x1x1 oven holds 1000 mB; 8 coal make 2000 mB. It must keep coking (creosote vents, never stalls). */
     @GameTest(template = PLAYGROUND, timeoutTicks = 2400)
     public static void cokeOvenVentsInsteadOfStalling(GameTestHelper h) {
+        open(h);
         oven(h, 1, true);
         h.runAfterDelay(5, () -> items(h, new BlockPos(4, 3, 4), Direction.UP).insertItem(0, new ItemStack(Items.COAL, 8), false));
         h.succeedWhen(() -> {
             ItemStack out = items(h, new BlockPos(4, 3, 4), Direction.DOWN).getStackInSlot(1);
             h.assertTrue(out.getCount() == 8, "oven stalled at " + out.getCount() + " coke");
         });
+    }
+
+    /**
+     * Vanilla walls every test structure in barrier blocks before the test runs; they get in the way when the tests
+     * are run in runClient as live demonstrations (Kragnoth, 2026-11-22), and nothing here needs containing. Every
+     * test strips them first.
+     */
+    private static void open(GameTestHelper h) {
+        net.minecraft.gametest.framework.StructureUtils.removeBarriers(h.getBounds(), h.getLevel());
     }
 
     private static net.minecraft.world.level.block.Block block(String id) {
@@ -104,6 +117,7 @@ public final class CEPlaytests {
      */
     @GameTest(template = PLAYGROUND, timeoutTicks = 200)
     public static void dieselEngineStartsAndDrivesShaft(GameTestHelper h) {
+        open(h);
         BlockPos cc = new BlockPos(5, 3, 5);
         h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
                 .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
@@ -134,6 +148,7 @@ public final class CEPlaytests {
     /** A cylinder added while the engine runs joins in (RUNNING set, capacity up) within the 1 s rescan. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 300)
     public static void dieselCylinderAddedWhileRunningJoins(GameTestHelper h) {
+        open(h);
         BlockPos cc = new BlockPos(5, 3, 5);
         h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
                 .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
@@ -159,6 +174,7 @@ public final class CEPlaytests {
     /** 2x2x2 vat over campfires forms one vat; water + sugar cane ferments to ethanol, all four batches at once. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 1200)
     public static void fermentingVatFormsAndFerments(GameTestHelper h) {
+        open(h);
         BlockPos base = new BlockPos(4, 2, 4);
         for (int x = 0; x < 2; x++) {
             for (int z = 0; z < 2; z++) {
@@ -193,6 +209,7 @@ public final class CEPlaytests {
     /** A lit Campfire Stand under a vat is passive heat (x1); doused, the vat has none. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 200)
     public static void campfireStandHeatsVat(GameTestHelper h) {
+        open(h);
         BlockPos stand = new BlockPos(4, 2, 4);
         h.setBlock(stand, ModBlocks.COPPER_CAMPFIRE_STAND.get().defaultBlockState()
                 .setValue(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.FIRE, com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.CAMPFIRE)
@@ -212,6 +229,7 @@ public final class CEPlaytests {
     /** Stands are fan catalysts: air passes through; lit campfire = smoking, lit soul = haunting, unlit / empty = neither. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 40)
     public static void campfireStandIsFanCatalyst(GameTestHelper h) {
+        open(h);
         var smoke = com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes.SMOKING;
         var haunt = com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes.HAUNTING;
         BlockPos p = new BlockPos(4, 2, 4);
@@ -236,6 +254,7 @@ public final class CEPlaytests {
     /** No pump: a crankcase pulls fuel out of a tank through a 3-pipe run into its reservoir, and the engine starts. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 300)
     public static void crankcasePullsFuelThroughPipes(GameTestHelper h) {
+        open(h);
         BlockPos cc = new BlockPos(5, 3, 6);
         h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
                 .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
@@ -280,6 +299,7 @@ public final class CEPlaytests {
     /** Drive Belt: motor on the flywheel's shaft; the belted pulley 4 blocks up turns at 4x. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 100)
     public static void driveBeltQuadruplesSpeed(GameTestHelper h) {
+        open(h);
         BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(4);
         beltRig(h, fly, pulley, fly.west(), Direction.EAST);
         h.runAfterDelay(2, () -> h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
@@ -294,6 +314,7 @@ public final class CEPlaytests {
     /** Driving the pulley turns the flywheel at a quarter of its speed. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 100)
     public static void driveBeltReverseQuarters(GameTestHelper h) {
+        open(h);
         BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(3);
         beltRig(h, fly, pulley, pulley.east(), Direction.WEST);
         h.runAfterDelay(2, () -> com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
@@ -308,6 +329,7 @@ public final class CEPlaytests {
     /** Breaking the pulley drops the belt, frees the flywheel, and the pulley side stops. */
     @GameTest(template = PLAYGROUND, timeoutTicks = 100)
     public static void driveBeltDropsWhenWheelBroken(GameTestHelper h) {
+        open(h);
         BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(2);
         beltRig(h, fly, pulley, fly.west(), Direction.EAST);
         h.runAfterDelay(2, () -> com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(

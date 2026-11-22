@@ -282,3 +282,6 @@ Convention (borrowed from Tarbound):
 - [ ] Break either wheel: the belt drops, the other wheel keeps working on its own.
 - [ ] Belt through blocks renders fine; with Flywheel instancing on and off.
 - [ ] `/test runall`: 13 pass (new: driveBeltQuadruplesSpeed, driveBeltReverseQuarters, driveBeltDropsWhenWheelBroken).
+
+## 0.11.1
+- [ ] runClient `/test runall`: test builds have no invisible barrier walls or roof; you can walk in and interact during the demo.
