@@ -26,7 +26,7 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 /**
  * Distilling Tank block: the vat's steel Create tank, connected like one. Its dressing (pipe runs, collars, gauge,
  * relief valve with gooseneck) is drawn by the client from the formed column (Plumbing), so the block keeps just
- * VALVE (vapour puffs, top-middle) and WORKING. Placed Create scaffolding beside a column becomes Catwalks. Buckets
+ * VALVE (vapour puffs, top-middle) and WORKING. Buckets
  * fill the boiler / take a fraction from the level clicked.
  */
 public class DistillingTankBlock extends Block implements IBE<DistillingTankBlockEntity>, IWrenchable {
@@ -60,8 +60,8 @@ public class DistillingTankBlock extends Block implements IBE<DistillingTankBloc
         if (neighbor == this || level.getBlockState(from).is(this)) {
             withBlockEntityDo(level, pos, DistillingTankBlockEntity::requestRecheck);
         }
-        if (!level.isClientSide && from.getY() == pos.getY()) {
-            CatwalkBlock.convertIfScaffolding(level, from);   // scaffolding placed beside the column becomes catwalk
+        if (!level.isClientSide) {
+            withBlockEntityDo(level, pos, DistillingTankBlockEntity::refreshOutlets);   // a tank put against a level: fit a coupling
         }
     }
 

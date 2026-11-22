@@ -22,7 +22,8 @@ public final class Plumbing {
 
     private static final int[] ROT = {0, 90, 180, 270};   // north, east, south, west
 
-    public static List<Part> parts(BlockPos controller, int sx, int sy, int sz, BlockPos rel) {
+    /** outlets: faces (N, E, S, W bits) of this block touching a container, each drawn with a bolted coupling. */
+    public static List<Part> parts(BlockPos controller, int sx, int sy, int sz, BlockPos rel, int outlets) {
         List<Part> out = new ArrayList<>();
         if (sy < DistillingTankBlockEntity.MIN_HEIGHT) {
             return out;
@@ -51,6 +52,9 @@ public final class Plumbing {
         int[] along = {rel.getX(), rel.getZ(), sx - 1 - rel.getX(), sz - 1 - rel.getZ()};
         String suffix = y == 0 ? "_boiler" : y == sy - 1 ? "_top" : "";
         for (int f = 0; f < 4; f++) {
+            if ((outlets & (1 << f)) != 0) {
+                out.add(new Part("distilling_tank_outlet", ROT[f]));
+            }
             if (!on[f]) {
                 continue;
             }

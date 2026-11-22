@@ -1,6 +1,5 @@
 package com.kragnoth.creativeengineering.demo;
 
-import com.kragnoth.creativeengineering.content.distilling.CatwalkBlock;
 import com.kragnoth.creativeengineering.content.heat.CampfireStandBlock;
 import com.kragnoth.creativeengineering.registry.ModBlocks;
 import com.kragnoth.creativeengineering.registry.ModFluids;
@@ -32,8 +31,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
  * <ul>
  *   <li>Input: a Create creative fluid tank of hooch -> pipe -> mechanical pump (powered by a cogwheel on a creative
  *       motor) -> the boiler.</li>
- *   <li>Column: 2x2x4 Distilling Tank on four lit copper Campfire Stands (heat x1), catwalk ring on the top level.</li>
- *   <li>Outputs, no pumps: a Create fluid tank against level 1 fills with water, one against level 2 with vodka.</li>
+ *   <li>Column: 2x2x4 Distilling Tank on four lit copper Campfire Stands (heat x1).</li>
+ *   <li>Outputs, no pumps: a Steel Storage Tank against level 1 fills with water, a 2-high one against level 2 with vodka;
+ *       each join gets the column's bolted coupling.</li>
  * </ul>
  */
 public final class DemoCommands {
@@ -107,25 +107,9 @@ public final class DemoCommands {
         set(level, o.offset(1, 2, 2), create("cogwheel").setValue(BlockStateProperties.AXIS, Direction.Axis.X));
         set(level, o.offset(0, 2, 2), create("creative_motor").setValue(BlockStateProperties.FACING, Direction.EAST));
         // outputs, no pumps: storage tanks touching level 1 (east side) and level 2 (south side)
-        set(level, o.offset(WATER_TANK), create("fluid_tank"));
-        set(level, o.offset(VODKA_TANK), create("fluid_tank"));
-        // catwalk ring on the top level
-        for (int x = 1; x <= 4; x++) {
-            for (int z = 1; z <= 4; z++) {
-                if (x == 1 || x == 4 || z == 1 || z == 4) {
-                    BlockPos c = o.offset(x, 4, z);
-                    set(level, c, ModBlocks.ANDESITE_CATWALK.get().withRails(level, c));
-                }
-            }
-        }
-        for (int x = 1; x <= 4; x++) {   // railings again now the whole ring is down
-            for (int z = 1; z <= 4; z++) {
-                BlockPos c = o.offset(x, 4, z);
-                if (level.getBlockState(c).getBlock() instanceof CatwalkBlock cw) {
-                    level.setBlock(c, cw.withRails(level, c), Block.UPDATE_ALL);
-                }
-            }
-        }
+        set(level, o.offset(WATER_TANK), ModBlocks.STEEL_TANK.get().defaultBlockState());
+        set(level, o.offset(VODKA_TANK), ModBlocks.STEEL_TANK.get().defaultBlockState());
+        set(level, o.offset(VODKA_TANK).above(), ModBlocks.STEEL_TANK.get().defaultBlockState());   // a 2-high tank: they merge like Create's
         // labels
         sign(level, o.offset(-2, 1, 2), Direction.WEST, "Hooch in", "(creative tank)");
         sign(level, o.offset(1, 1, 1), Direction.NORTH, "Pump", "into the boiler");

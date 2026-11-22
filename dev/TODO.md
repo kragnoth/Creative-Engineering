@@ -329,3 +329,10 @@ Convention (borrowed from Tarbound):
 - [ ] `/test rundistill` in runClient builds the demo in front of you: hooch is pumped in, water and vodka fill their tanks within a minute; signs label the parts; the catwalk ring is walkable.
 - [ ] 2x2 and wider columns push from every block of a level (fixed: only the touching block used to push).
 - [ ] `/test runall`: 19 pass (new: distillDemoRuns).
+
+## 0.13.0 — Steel Storage Tank, couplings, catwalks removed
+- [ ] Craft Steel Storage Tanks; they merge like Create tanks (2x2, 3x3, tall), windows toggle with the wrench, fluid shows inside, all in steel.
+- [ ] Put one against a fraction level: it fills without a pump, and a bolted coupling appears at the join; remove it and the coupling goes.
+- [ ] The Distilling Tank column's connected textures join again (since 0.12.2 every block drew its own frame).
+- [ ] `/test rundistill`: steel tanks (a 2-high one for vodka) with couplings; no catwalk ring.
+- [ ] Catwalks are gone (andesite/brass/copper_catwalk blocks vanish from 0.12.2 worlds).

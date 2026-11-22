@@ -22,6 +22,22 @@
         {
           "source": "create:block/fluid_tank_top_connected",
           "target": "creativeengineering:block/vat_tank_top_connected"
+        },
+        {
+          "source": "create:block/fluid_tank_inner",
+          "target": "creativeengineering:block/vat_tank_inner"
+        },
+        {
+          "source": "create:block/fluid_tank_inner_connected",
+          "target": "creativeengineering:block/vat_tank_inner_connected"
+        },
+        {
+          "source": "create:block/fluid_tank_window",
+          "target": "creativeengineering:block/vat_tank_window"
+        },
+        {
+          "source": "create:block/fluid_tank_window_single",
+          "target": "creativeengineering:block/vat_tank_window_single"
         }
       ]
     }

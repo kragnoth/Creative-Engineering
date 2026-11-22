@@ -22,29 +22,31 @@ Kragnoth, 2026-11-22: "work on the distilling tank next". Chosen: **one machine 
   - Brass collars every third level, and a gauge high up on the north face.
   - The relief valve with its copper gooseneck sits top-middle (vapour puffs while working).
   - The routing is seeded by the column's position and size: every tower looks plumbed by hand and always the same. At least two faces get a lane.
-- **Catwalks**: Create metal scaffolding (andesite, brass or copper) placed beside a formed column, corners included, becomes a matching Catwalk.
-  - Look: a casing-plate deck with railings on every open side.
-  - Climbable and passable from below like scaffolding: the deck holds you only from above; sneak to go down.
-  - Breaking one gives the scaffolding back.
 
 ## How to build
 1. Lay the footprint as heat (Blaze Burners, lit for crude; campfires or Campfire Stands for drinks).
 2. Place Distilling Tanks on it and keep placing on top. Like Create tanks, one placement fills the whole layer (sneak for one). Up to 8 tall; drinks need 3, IP crude 5.
 3. The dressing appears by itself once the column is 2+ tall.
-4. Optional: place Create scaffolding around it wherever you want platforms; it becomes catwalks.
-5. Fill the boiler (bottom level) by pipe or bucket from any side.
+4. Fill the boiler (bottom level) by pipe or bucket from any side.
 
 ## Demo: `/test rundistill`
 Op level 2, in any world with cheats. It clears a space a few blocks in front of you and builds a running example:
 - **Input:** a Create creative fluid tank of hooch -> pipe -> mechanical pump (cogwheel on a creative motor) -> the boiler.
-- **Column:** 2x2x4 Distilling Tank on four lit copper Campfire Stands, with a catwalk ring on the top level.
-- **Outputs:** a Create fluid tank against level 1 (water) and one against level 2 (vodka), with no output pumps. Signs label each part.
+- **Column:** 2x2x4 Distilling Tank on four lit copper Campfire Stands.
+- **Outputs:** a Steel Storage Tank against level 1 (water) and a 2-high one against level 2 (vodka), with no output pumps. Signs label each part.
 - The game test `distillDemoRuns` builds the same thing and checks both storage tanks fill (`DemoCommands.buildDistiller`).
+
+## Steel Storage Tank (0.13.0; Kragnoth: "work in the extra storage tanks as a new tank type and make it look better when combined")
+- Block `creativeengineering:steel_tank`: Create's own fluid tank under its own block entity type. It does everything Create's tank does:
+  - merges into 1–3 wide, tall multiblocks; windows that the wrench toggles; fluid shown inside; boiler use.
+- The look is the column's steel: Create's tank, window and inner sheets recoloured at load time. The models are Create's tank models with the textures re-pointed. No Create pixels ship.
+- Recipe: a Create fluid tank + an iron sheet (shapeless).
+- Joining the column: wherever any fluid container touches a fraction level, the column draws a bolted flange coupling at the join (outlet bits computed on the server, synced, drawn with the rest of the dressing).
+- Catwalks were tried in 0.12.2 and removed in 0.13.0 (Kragnoth: unneeded).
 
 ## Getting the fractions out (Kragnoth: "each layer easily pumped and put into storage tanks")
 - **No pump needed:** every fraction level pushes its fluid, as one tank (100 mB every 5 ticks per touching face), into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.
 - **Pumped lines:** Create pipes connect to every side of every level; a pump pulls that level's fraction.
-- A catwalk occupies the space beside the column on its level, so put storage and pipes on levels without catwalks.
 - No other mods needed: Create's own pipes, pumps and tanks do it.
 
 ## Recipe type `creativeengineering:distilling`

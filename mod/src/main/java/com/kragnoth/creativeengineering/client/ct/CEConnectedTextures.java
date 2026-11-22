@@ -25,7 +25,10 @@ public final class CEConnectedTextures {
         wrap(event.getModels(), ModBlocks.BLAST_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("blast_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.FERMENTING_VAT.get(), new VatCTBehaviour());
-        wrap(event.getModels(), ModBlocks.DISTILLING_TANK.get(), new VatCTBehaviour("still_tank"));
+        wrap(event.getModels(), ModBlocks.DISTILLING_TANK.get(), new VatCTBehaviour("vat_tank"));
+        // steel storage tank: Create's own tank connection rules on the steel sheets
+        wrap(event.getModels(), ModBlocks.STEEL_TANK.get(), new com.simibubi.create.content.fluids.tank.FluidTankCTBehaviour(
+                VatCTBehaviour.shift("vat_tank"), VatCTBehaviour.shift("vat_tank_top"), VatCTBehaviour.shift("vat_tank_inner")));
     }
 
     private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block,

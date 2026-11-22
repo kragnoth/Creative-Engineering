@@ -87,15 +87,11 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.COPPER).noOcclusion()));
 
-    /** Catwalks: Create scaffolding turned into Distilling Tank platforms (docs/distilling-spec.md). */
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> ANDESITE_CATWALK = catwalk("andesite");
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> BRASS_CATWALK = catwalk("brass");
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> COPPER_CATWALK = catwalk("copper");
-
-    private static DeferredBlock<com.kragnoth.creativeengineering.content.distilling.CatwalkBlock> catwalk(String metal) {
-        return BLOCKS.register(metal + "_catwalk", () -> new com.kragnoth.creativeengineering.content.distilling.CatwalkBlock(metal,
-                BlockBehaviour.Properties.of().mapColor(MapColor.METAL).strength(2F, 6F).sound(SoundType.SCAFFOLDING).noOcclusion()));
-    }
+    /** Steel Storage Tank: Create's fluid tank in the Distilling Tank's steel (content/storage). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.storage.SteelTankBlock> STEEL_TANK = BLOCKS.register("steel_tank",
+            () -> new com.kragnoth.creativeengineering.content.storage.SteelTankBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()
+                    .isRedstoneConductor((s, l, p) -> true)));
 
     /** Chemistry: Fermenting Vat (docs/fermentation-spec.md). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock> FERMENTING_VAT = BLOCKS.register("fermenting_vat",

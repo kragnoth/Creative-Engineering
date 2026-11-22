@@ -63,6 +63,8 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DRIVE_PULLEY = ITEMS.registerSimpleBlockItem(ModBlocks.DRIVE_PULLEY);
     public static final DeferredItem<com.kragnoth.creativeengineering.content.engine.DriveBeltItem> DRIVE_BELT = ITEMS.register("drive_belt",
             () -> new com.kragnoth.creativeengineering.content.engine.DriveBeltItem(new net.minecraft.world.item.Item.Properties()));
+    public static final DeferredItem<com.simibubi.create.content.fluids.tank.FluidTankItem> STEEL_TANK = ITEMS.register("steel_tank",
+            () -> new com.simibubi.create.content.fluids.tank.FluidTankItem(ModBlocks.STEEL_TANK.get(), new net.minecraft.world.item.Item.Properties()));
     public static final DeferredItem<com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem> DISTILLING_TANK = ITEMS.register("distilling_tank",
             () -> new com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem(ModBlocks.DISTILLING_TANK.get(), new net.minecraft.world.item.Item.Properties()));
     public static final DeferredItem<com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem> FERMENTING_VAT = ITEMS.register("fermenting_vat",
@@ -122,7 +124,7 @@ public final class ModItems {
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK,
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK, STEEL_TANK,
             ANDESITE_CAMPFIRE_STAND, BRASS_CAMPFIRE_STAND, COPPER_CAMPFIRE_STAND);
     }
 

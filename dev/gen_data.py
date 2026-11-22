@@ -709,7 +709,10 @@ for k, v in (('block.%s.drive_pulley', 'Drive Sprocket'), ('item.%s.drive_belt',
 # restyle Create's tanks restyle the vat too. Connected exactly like Create's tank (VatCTBehaviour). One brass
 # pressure-release valve top-middle. Every face is cull-tagged: skipRendering hides walls between vat blocks.
 VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_connected', 'vat_tank_connected'),
-            ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected')]
+            ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected'),
+            # the Steel Storage Tank's window and inner sheets
+            ('create:block/fluid_tank_inner', 'vat_tank_inner'), ('create:block/fluid_tank_inner_connected', 'vat_tank_inner_connected'),
+            ('create:block/fluid_tank_window', 'vat_tank_window'), ('create:block/fluid_tank_window_single', 'vat_tank_window_single')]
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
     'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
@@ -774,6 +777,9 @@ _g = box([4.5, 4.5, -1.25], [11.5, 11.5, 0], 'brass', {'north': 'dial'})
 _g['faces']['north']['uv'] = [0, 8, 8, 16]   # the dial quadrant of Create's boiler_gauge sheet
 eng('distilling_tank_gauge', dict(ST_T, dial=CR('boiler_gauge')), [_g, box([7.75, 7.75, -1.5], [8.25, 10.5, -1.25], 'dark'),
                                                                    box([7.5, 11.5, -0.75], [8.5, 13.5, -0.25], 'brass')])
+# coupling where a tank touches a fraction level: bolted flange ring in the seam (the tank hides the rest)
+eng('distilling_tank_outlet', ST_T, [box([3, 3, -1], [13, 13, 0], 'iron'), box([5, 5, -1.5], [11, 11, -1], 'brass')]
+    + [box([x, y, -1.25], [x + 1, y + 1, -1], 'dark') for x, y in ((3.5, 3.5), (11.5, 3.5), (3.5, 11.5), (11.5, 11.5))])
 eng('distilling_tank_body', ST_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
     d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
     for d in ('north', 'south', 'east', 'west', 'up', 'down')}}])
@@ -797,22 +803,24 @@ for e in still_item['elements']:
 put('%s/models/item/distilling_tank.json' % A, still_item)
 simple_loot('distilling_tank')
 
-# Catwalks: Create metal scaffolding beside a Distilling Tank becomes one (CatwalkBlock): a grate deck (Create's funnel
-# frame of that metal) with railings in its casing on every open side. Drops the scaffolding back. No item of its own.
-for metal, label in (('andesite', 'Andesite'), ('brass', 'Brass'), ('copper', 'Copper')):
-    CW_T = {'grate': 'create:block/funnel/%s_funnel_frame' % metal, 'casing': 'create:block/%s_casing' % metal}
-    eng('%s_catwalk_deck' % metal, CW_T, [box([0, 0, 0], [16, 1.5, 16], 'casing')])   # Create has no mesh grate: casing plate
-    eng('%s_catwalk_rail' % metal, CW_T, [box([0, 1.5, 0], [1.5, 16, 1.5], 'casing'), box([14.5, 1.5, 0], [16, 16, 1.5], 'casing'),
-                                          box([0, 14.5, 0.25], [16, 16, 1.25], 'casing'), box([0, 8, 0.25], [16, 9, 1.25], 'casing'),
-                                          box([0, 1.5, 0], [16, 3, 0.5], 'casing')])
-    cw_parts = [{'apply': {'model': ce('block/%s_catwalk_deck' % metal)}}]
-    for face, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
-        cw_parts.append({'when': {face: 'true'}, 'apply': {'model': ce('block/%s_catwalk_rail' % metal), 'y': rot}})
-    put('%s/blockstates/%s_catwalk.json' % (A, metal), {'multipart': cw_parts})
-    put('%s/data/%s/loot_table/blocks/%s_catwalk.json' % (RES, MODID, metal), {'type': 'minecraft:block', 'pools': [
-        {'rolls': 1, 'entries': [{'type': 'minecraft:item', 'name': 'create:%s_scaffolding' % metal}],
-         'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
-    LANG['block.%s.%s_catwalk' % (MODID, metal)] = '%s Catwalk' % label
+# Steel Storage Tank (content/storage): Create's own tank models re-pointed at the steel sheets (vat_tank*, made at load
+# time from Create's textures). The blockstate mirrors Create's generated fluid_tank one (read from the Create jar).
+STEEL_TANK_TEX = {'0': ce('block/vat_tank_top'), '1': ce('block/vat_tank'), '3': ce('block/vat_tank_window'),
+                  '4': ce('block/vat_tank_inner'), '5': ce('block/vat_tank_window_single'), 'particle': ce('block/vat_tank')}
+import glob as _glob, zipfile as _zip
+_cjar = sorted(p for p in _glob.glob(os.path.expanduser('~/.gradle/caches/**/create-6.0.10*.jar'), recursive=True) if 'sources' not in p)
+if _cjar:
+    with _zip.ZipFile(_cjar[0]) as z:
+        tank_bs = json.loads(z.read('assets/create/blockstates/fluid_tank.json'))
+    for v in tank_bs['variants'].values():
+        name = v['model'].split('/')[-1]
+        put('%s/models/block/steel_tank/%s.json' % (A, name), {'parent': 'create:block/fluid_tank/' + name, 'textures': STEEL_TANK_TEX})
+        v['model'] = ce('block/steel_tank/' + name)
+    put('%s/blockstates/steel_tank.json' % A, tank_bs)
+put('%s/models/item/steel_tank.json' % A, {'parent': ce('block/steel_tank/block_single_window')})
+simple_loot('steel_tank')
+shapeless('steel_tank', [item('create:fluid_tank'), item('create:iron_sheet')], ce('steel_tank'), category='misc')
+LANG['block.%s.steel_tank' % MODID] = 'Steel Storage Tank'
 shaped('distilling_tank', [' V ', 'PTP', 'PBP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
        'P': tag('c:plates/copper'), 'B': item('create:blaze_burner')}, ce('distilling_tank'), category='misc')
 
@@ -998,7 +1006,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'andesite_catwalk', 'brass_catwalk', 'copper_catwalk', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

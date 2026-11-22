@@ -406,7 +406,7 @@ public final class CEPlaytests {
         }));
     }
 
-    /** A 1x1x3 Distilling Tank on a campfire splits hooch (water on level 1, vodka on level 2, pushed into a tank beside it); scaffolding beside it becomes catwalk. */
+    /** A 1x1x3 Distilling Tank on a campfire splits hooch (water on level 1, vodka on level 2, pushed into a Steel Storage Tank beside it, which gets a coupling). */
     @GameTest(template = PLAYGROUND, timeoutTicks = 600)
     public static void distillingTankSplitsHooch(GameTestHelper h) {
         open(h);
@@ -425,18 +425,16 @@ public final class CEPlaytests {
             h.assertTrue(up.fill(hooch, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE) == 0, "a fraction level took input");
             h.assertBlockProperty(lvl2, com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock.VALVE, true);
             // pump-free outlet: a Create fluid tank touching level 2 fills with the vodka
-            h.setBlock(lvl2.east(), block("create:fluid_tank"));
-            // Create scaffolding placed beside the column becomes a catwalk
-            h.setBlock(base.north(), net.minecraft.world.level.block.Blocks.STONE);
-            h.setBlock(boiler.north(), block("create:andesite_scaffolding"));
+            h.setBlock(lvl2.east(), ModBlocks.STEEL_TANK.get());
         });
         h.runAfterDelay(30, () -> h.succeedWhen(() -> {
             var L = h.getLevel();
-            h.assertBlockPresent(ModBlocks.ANDESITE_CATWALK.get(), boiler.north());
             var w = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl1), Direction.NORTH).getFluidInTank(0);
             var v = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl2), Direction.NORTH).getFluidInTank(0);
             h.assertTrue(w.getFluid() == net.minecraft.world.level.material.Fluids.WATER && w.getAmount() >= 150, "level 1: " + w.getAmount() + " " + w.getFluid());
             var out = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl2.east()), Direction.WEST).getFluidInTank(0);
+            var col = (com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity) h.getBlockEntity(lvl2);
+            h.assertTrue(col.greebles().stream().anyMatch(p -> p.model().equals("distilling_tank_outlet")), "no coupling drawn where the tank touches level 2");
             h.assertTrue(out.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.VODKA.source.get() && out.getAmount() >= 100,
                     "storage tank beside level 2: " + out.getAmount() + " " + out.getFluid());
         }));

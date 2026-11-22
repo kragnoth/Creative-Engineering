@@ -210,12 +210,7 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
                 batches = 0;
                 progress = 0;
             }
-            if (formed) {   // scaffolding already standing beside the column becomes catwalk
-                for (Direction d : Direction.Plane.HORIZONTAL) {
-                    CatwalkBlock.convertIfScaffolding(level, worldPosition.relative(d));
-                    CatwalkBlock.convertIfScaffolding(level, worldPosition.relative(d).relative(d.getClockWise()));
-                }
-            }
+            refreshOutlets();
         }
         setChanged();
         sendData();
@@ -625,6 +620,7 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
         }
         tag.putInt("Batches", batches);
         tag.putFloat("Progress", progress);
+        tag.putByte("Outlets", (byte) outlets);
         super.write(tag, registries, clientPacket);
     }
 
@@ -632,7 +628,8 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
     protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
         BlockPos old = controller;
-        int oldSize = sx * 100 + sy * 10 + sz;
+        int oldSize = sx * 100 + sy * 10 + sz, oldOutlets = outlets;
+        outlets = tag.getByte("Outlets");
         controller = tag.contains("Controller") ? NbtUtils.readBlockPos(tag, "Controller").orElse(null) : null;
         int[] s = tag.getIntArray("Size");
         if (s.length == 3) {
@@ -648,7 +645,7 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
         if (clientPacket && level != null) {
             boolean reshaped = oldSize != sx * 100 + sy * 10 + sz || !Objects.equals(old, controller);
             CTRefresh.onClientController(this, reshaped ? null : old, controller);
-            if (reshaped) {
+            if (reshaped || oldOutlets != outlets) {
                 greebles = null;
                 if (level.isClientSide) {
                     dev.engine_room.flywheel.lib.visualization.VisualizationHelper.queueUpdate(this);   // rebuild the dressing
@@ -658,11 +655,37 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
     }
 
     @Nullable private List<Plumbing.Part> greebles;
+    /** Faces (N, E, S, W bits) of this fraction-level block that touch a container: drawn with a bolted coupling. */
+    protected int outlets;
+
+    /** Server: which outside faces of a fraction level touch a fluid container (another of this column doesn't count). */
+    public void refreshOutlets() {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        int bits = 0;
+        if (controller != null && layer() >= 1 && sy >= MIN_HEIGHT) {
+            Direction[] order = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+            for (int i = 0; i < 4; i++) {
+                BlockPos n = worldPosition.relative(order[i]);
+                if (level.getBlockEntity(n) instanceof DistillingTankBlockEntity o && Objects.equals(o.controller, controller)) {
+                    continue;
+                }
+                if (level.getCapability(net.neoforged.neoforge.capabilities.Capabilities.FluidHandler.BLOCK, n, order[i].getOpposite()) != null) {
+                    bits |= 1 << i;
+                }
+            }
+        }
+        if (bits != outlets) {
+            outlets = bits;
+            sendData();
+        }
+    }
 
     /** Client: the pipes, collars, gauge and valve to draw on this block (Plumbing), cached until the column reshapes. */
     public List<Plumbing.Part> greebles() {
         if (greebles == null) {
-            greebles = controller == null ? List.of() : Plumbing.parts(controller, sx, sy, sz, worldPosition.subtract(controller));
+            greebles = controller == null ? List.of() : Plumbing.parts(controller, sx, sy, sz, worldPosition.subtract(controller), outlets);
         }
         return greebles;
     }

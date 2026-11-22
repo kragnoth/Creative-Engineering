@@ -85,3 +85,8 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 ## 0.12.2
 - `distilling_tank` states are now only `valve`, `working` (0.12.0's boiler / tap_* removed; old blocks load with defaults and reform).
 - New blocks `andesite_catwalk`, `brass_catwalk`, `copper_catwalk` (states north/east/south/west railings; drop the matching Create scaffolding).
+
+## 0.13.0
+- New block / BE `steel_tank` (Create fluid-tank states and NBT).
+- Removed `andesite_catwalk`, `brass_catwalk`, `copper_catwalk` (placed ones disappear).
+- `distilling_tank` BE gains `Outlets` (byte, faces touching containers).

@@ -13,7 +13,7 @@ public final class CEPartials {
     public static final java.util.Map<String, PartialModel> STILL = java.util.stream.Stream.of(
             "distilling_tank_pipe_left", "distilling_tank_pipe_left_top", "distilling_tank_pipe_left_boiler",
             "distilling_tank_pipe_right", "distilling_tank_pipe_right_top", "distilling_tank_pipe_right_boiler",
-            "distilling_tank_pipe_band", "distilling_tank_collar", "distilling_tank_gauge", "distilling_tank_valve")
+            "distilling_tank_pipe_band", "distilling_tank_collar", "distilling_tank_gauge", "distilling_tank_valve", "distilling_tank_outlet")
             .collect(java.util.stream.Collectors.toMap(n -> n, n -> PartialModel.of(CreativeEngineering.id("block/" + n))));
     public static final PartialModel CYLINDER_ROCKER = PartialModel.of(CreativeEngineering.id("block/diesel_cylinder_rocker"));
 

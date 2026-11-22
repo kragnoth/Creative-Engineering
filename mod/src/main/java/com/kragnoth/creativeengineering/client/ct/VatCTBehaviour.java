@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * Tank-style connected textures exactly like Create's fluid tank (HorizontalCTBehaviour, RECTANGLE sheets) on
  * recoloured copies of Create's tank textures (RecolorSpriteSource): steel for the Fermenting Vat (vat_tank*), copper
- * for the Distilling Tank (still_tank*). Joins only within one formed multiblock (same controller).
+ * for the Distilling Tank too (both vat_tank*). Joins only within one formed multiblock (same controller).
  */
 public class VatCTBehaviour extends HorizontalCTBehaviour {
     public VatCTBehaviour() {
@@ -26,7 +26,7 @@ public class VatCTBehaviour extends HorizontalCTBehaviour {
         super(shift(prefix), shift(prefix + "_top"));
     }
 
-    private static CTSpriteShiftEntry shift(String tex) {
+    public static CTSpriteShiftEntry shift(String tex) {
         return CTSpriteShifter.getCT(AllCTTypes.RECTANGLE, CreativeEngineering.id("block/" + tex),
                 CreativeEngineering.id("block/" + tex + "_connected"));
     }

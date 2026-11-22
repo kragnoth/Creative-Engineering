@@ -23,6 +23,9 @@ public final class CEClient {
         // the flywheel is drawn spinning about its shaft, like any Create kinetic block
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get(),
                 com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);
+        // steel storage tank: Create's own tank renderer (fluid inside)
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.STEEL_TANK.get(),
+                ctx -> (net.minecraft.client.renderer.blockentity.BlockEntityRenderer) new com.simibubi.create.content.fluids.tank.FluidTankRenderer(ctx));
         // distilling tank dressing: fallback renderer (instanced visual below)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DISTILLING_TANK.get(),
                 com.kragnoth.creativeengineering.client.distilling.DistillingTankRenderer::new);
