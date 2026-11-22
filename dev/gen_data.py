@@ -82,6 +82,11 @@ LANG = collections.OrderedDict([
     ('advancements.%s.steel.title' % MODID, 'Proper Steel'),
     ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
     ('item.%s.rod_die' % MODID, 'Rod Die'),
+    ('block.%s.diesel_crankcase' % MODID, 'Diesel Crankcase'),
+    ('block.%s.diesel_cylinder' % MODID, 'Diesel Cylinder'),
+    ('block.%s.diesel_exhaust' % MODID, 'Exhaust Manifold'),
+    ('block.%s.diesel_exhaust_stack' % MODID, 'Exhaust Stack'),
+    ('block.%s.diesel_flywheel' % MODID, 'Flywheel'),
     ('block.%s.treated_planks' % MODID, 'Treated Planks'),
     ('block.%s.treated_stairs' % MODID, 'Treated Stairs'),
     ('block.%s.treated_slab' % MODID, 'Treated Slab'),
@@ -431,6 +436,97 @@ shaped('treated_stairs', ['#  ', '## ', '###'], {'#': item(ce('treated_planks'))
 shaped('treated_slab', ['###'], {'#': item(ce('treated_planks'))}, ce('treated_slab'), count=6, category='building')
 shaped('treated_beam', ['T', 'N', 'T'], {'T': tag(ce('treated_logs')), 'N': tag('c:nuggets/iron')}, ce('treated_beam'), count=4, category='building')
 
+# Module 1: diesel engine (docs/engines-spec.md). FIRST PASS: blocks + models for Kragnoth's look approval; no
+# behaviour yet. Engine axis = X. Cylinders sit in the block diagonally above the crankcase and lean 45 degrees
+# outward (+Z bank and -Z bank), their axis passing through the crankshaft. ALL textures are Create's own (Kragnoth,
+# 2026-11-22): a resource pack that reskins Create reskins the engine too. Starting: any rotation into the crankcase's
+# front shaft (e.g. Create's Hand Crank); there is no starter block.
+CR = lambda t: 'create:block/' + t
+def eng(name, textures, elements):
+    t = dict(textures)
+    t.setdefault('particle', t[next(iter(t))])
+    put('%s/models/block/%s.json' % (A, name), {'parent': 'minecraft:block/block', 'textures': t, 'elements': elements})
+def box(f, t, tex, faces=None, rot=None):
+    fs = {d: {'texture': '#' + (faces.get(d, tex) if faces else tex)} for d in ('north', 'south', 'east', 'west', 'up', 'down')}
+    e = {'from': f, 'to': t, 'faces': fs}
+    if rot:
+        e['rotation'] = rot
+    return e
+def axis_x(f, t, tex='shaft', end='shaft_end'):
+    """A shaft-like bar along X using Create's axis texture turned to run lengthwise (as Create's own models do)."""
+    e = box(f, t, tex, {'east': end, 'west': end})
+    for d in ('north', 'south', 'up', 'down'):
+        e['faces'][d]['rotation'] = 90
+    return e
+
+ENG_T = {'iron': CR('industrial_iron_block'), 'iron_top': CR('industrial_iron_block_top'), 'dark': CR('dark_metal_block'),
+         'casing': CR('railway_casing'), 'brass': CR('brass_block'), 'shaft': CR('axis'), 'shaft_end': CR('axis_top'),
+         'weathered': CR('weathered_iron_block'), 'weathered_top': CR('weathered_iron_block_top')}
+
+# Crankcase: dark bedplate, stepped cast-iron housing, cylinder saddles leaning to both banks, riveted camshaft
+# cover with brass oilers; the crankshaft shows at both ends (front = starting input, back = output).
+eng('diesel_crankcase', ENG_T, [
+    box([0, 0, 0], [16, 3, 16], 'dark'),
+    box([0, 3, 0.5], [16, 8, 15.5], 'iron', {'up': 'iron_top', 'down': 'dark'}),
+    box([0, 8, 2], [16, 14, 14], 'iron', {'up': 'iron_top', 'down': 'dark'}),
+    box([0, 11, 11], [16, 14, 17], 'dark', rot={'origin': [8, 12.5, 14], 'axis': 'x', 'angle': 45}),
+    box([0, 11, -1], [16, 14, 5], 'dark', rot={'origin': [8, 12.5, 2], 'axis': 'x', 'angle': -45}),
+    box([0, 14, 5.5], [16, 16, 10.5], 'casing'),
+    box([3, 16, 7], [5, 17.5, 9], 'brass'), box([11, 16, 7], [13, 17.5, 9], 'brass'),
+    axis_x([-0.01, 6, 6], [16.01, 10, 10]),
+])
+# Cylinder: dark flange, cast-iron barrel, heavy dark head, riveted rocker cover, brass injector, pushrod tube.
+# Built upright, then leaned 45 deg about X through the block centre.
+def cylinder(angle):
+    r = {'origin': [8, 8, 8], 'axis': 'x', 'angle': angle}
+    return [box([2.5, -5, 2.5], [13.5, -3, 13.5], 'dark', rot=r),
+            box([4, -3, 4], [12, 13, 12], 'iron', {'up': 'dark', 'down': 'dark'}, rot=r),
+            box([2.5, 13, 2.5], [13.5, 17, 13.5], 'dark', rot=r),
+            box([4, 17, 4], [12, 19, 12], 'casing', rot=r),
+            box([7, 19, 7], [9, 20.5, 9], 'brass', rot=r),
+            box([12, -3, 7], [13.5, 13, 8.5], 'shaft', rot=r)]
+eng('diesel_cylinder', ENG_T, cylinder(45))            # leans toward +Z (south bank)
+eng('diesel_cylinder_mirrored', ENG_T, cylinder(-45))  # leans toward -Z (north bank)
+# Exhaust, as on real engines of this type: each cylinder head has a short branch into a manifold that runs along the
+# outside of its bank; the manifold ends in an elbow, a cast-iron silencer drum and one stack.
+# The manifold sits in the block diagonally outside-above the cylinder (x, 2, +2 for the +Z bank). The head's top is at
+# this block's lower-inner corner, so the branch drops 45 deg from the manifold into it.
+branch = {'origin': [8, 3, 3], 'axis': 'x', 'angle': 45}
+eng('diesel_exhaust', ENG_T, [
+    box([0, 3, 3], [16, 8, 8], 'dark'),
+    box([0, 2.5, 2.5], [1.5, 8.5, 8.5], 'casing'), box([14.5, 2.5, 2.5], [16, 8.5, 8.5], 'casing'),   # flanges
+    box([6, -1, 1], [10, 5, 5], 'dark', rot=branch),
+])
+# Stack end: the manifold turns up into a banded cast-iron silencer drum, then the stack with a flared cap (2 blocks tall).
+eng('diesel_exhaust_stack', ENG_T, [
+    box([0, 3, 3], [8, 8, 8], 'dark'),
+    box([3, 3, 3], [8, 12, 8], 'dark'),
+    box([1, 12, 0.5], [10, 24, 10.5], 'iron', {'up': 'dark', 'down': 'dark'}),
+    box([0.5, 13, 0], [10.5, 14.5, 11], 'dark'), box([0.5, 21.5, 0], [10.5, 23, 11], 'dark'),
+    box([3.5, 24, 3.5], [7.5, 31, 7.5], 'dark'),
+    box([2.5, 30, 2.5], [8.5, 32, 8.5], 'dark'),
+])
+# Flywheel: 3-block wheel on the output shaft (cosmetic; passes rotation on). Dark iron rim, 16 segments, 8 spokes.
+fw = [axis_x([0, 6.5, 6.5], [16, 9.5, 9.5]), box([5, 4, 4], [11, 12, 12], 'casing')]
+for base in (([6, 26, 3.5], [10, 30, 12.5]), ([6, -14, 3.5], [10, -10, 12.5]), ([6, 3.5, 26], [10, 12.5, 30]), ([6, 3.5, -14], [10, 12.5, -10])):
+    for ang in (-22.5, 0, 22.5, 45):
+        fw.append(box(base[0], base[1], 'dark', rot={'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None))
+for spoke in (([7, -11, 7], [9, 27, 9]), ([7, 7, -11], [9, 9, 27])):
+    for ang in (0, 45):
+        fw.append(box(spoke[0], spoke[1], 'iron', rot={'origin': [8, 8, 8], 'axis': 'x', 'angle': ang} if ang else None))
+eng('diesel_flywheel', ENG_T, fw)
+
+# Engine blockstates: models are drawn for engine axis X / facing south (cylinder leans +Z); rotate the rest.
+FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}
+for n in ('diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack'):
+    put('%s/blockstates/%s.json' % (A, n), {'variants': {'facing=%s' % f: dict({'model': ce('block/' + n)}, **({'y': y} if y else {}))
+                                                     for f, y in FACE_Y.items()}})
+for n in ('diesel_crankcase', 'diesel_flywheel'):
+    put('%s/blockstates/%s.json' % (A, n), {'variants': {'axis=x': {'model': ce('block/' + n)}, 'axis=z': {'model': ce('block/' + n), 'y': 90}}})
+for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack', 'diesel_flywheel'):
+    put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
+    simple_loot(n)
+
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
     put('%s/data/%s/tags/%s/%s.json' % (RES, ns, kind, path), {'replace': replace, 'values': values})
@@ -486,7 +582,8 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')])
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_exhaust', 'diesel_exhaust_stack', 'diesel_flywheel')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

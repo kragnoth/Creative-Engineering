@@ -5,6 +5,12 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.7.0-alpha: diesel engine, first pass (look only) (2026-11-22) - look in game
+- [ ] Five placeable parts in the creative tab: Diesel Crankcase, Diesel Cylinder, Exhaust Manifold, Exhaust Stack, Flywheel. No engine behaviour yet.
+- [ ] All use Create textures (try a Create resource pack: the engine should follow it).
+- [ ] Build the stage-5 layout by hand: crankcases in a row (place along X), cylinders on the blocks diagonally above (they lean toward the way you face when placing), manifolds diagonally outside-above the cylinders, a stack at each bank's end, flywheel on the back, a Create shaft + Hand Crank on the front. Compare with the renders.
+- [ ] Wrench rotates parts.
+
 ## 0.6.6-alpha: alloy furnace has no fuel (2026-11-18) - test in game
 - [ ] The alloy furnace burns nothing: heated (or superheated) Blaze Burners under every column are the only running cost. Iron + coke → blister steel just runs; all coke fed in is ingredient.
 - [ ] JEI page: no coke slot; tooltip says the burners are the cost. Jade: "Ingredients / Output" only; no "No fuel" message.

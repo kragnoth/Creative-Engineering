@@ -522,6 +522,8 @@ def timber(made):
     made.append(save(beam.rotate(90), 'block/treated_beam_horizontal'))
     made.append(save(soot_ends(top, 0.75), 'block/treated_beam_end'))
 
+# Engines (module 1) use Create's own textures only (Kragnoth, 2026-11-22): nothing to generate here.
+
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOUR = ['helmet', 'chestplate', 'leggings', 'boots']
 

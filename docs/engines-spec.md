@@ -1,6 +1,6 @@
 # Module 1: Fuels & Engines — the diesel engine (design, 2026-11-20)
 
-Status: **design agreed by Kragnoth, not built.** Build starts next session.
+Status: **first pass (0.7.0): blocks + models only, for look approval.** No behaviour yet.
 
 ## Kragnoth's brief (2026-11-20)
 - A **self-contained multiblock in the essence of Create's steam engine**: no fixed shape, built from parts.
@@ -24,7 +24,18 @@ Status: **design agreed by Kragnoth, not built.** Build starts next session.
 ## Feedback (the "visibly working" rule)
 Pistons stroke in time with the crank, exhaust puffs per firing, and a thump that speeds up with RPM. Goggles and Jade show cylinders, fuel, burn rate and stress capacity. Display Link sources as for the furnaces.
 
-## Still open (decide before building)
+## Decisions (Kragnoth, 2026-11-22)
+- **Fuels:** creosote, plant oil and ethanol to start (diesel/biodiesel from refining later). Read by fluid **tags** shared with Create Crafts & Additions, Create Diesel Generators and Immersive Engineering (to verify per mod when fuels are built), so their fluids work too. Values in a data map.
+- **Output scales with fuel quality.** The weakest fuel starts about as good as or better than lava (which is easily renewable), and better fuels scale up from there.
+- **Flywheel:** cosmetic, but sits on the output shaft and passes rotation on to further machinery.
+- **Exhaust:** particles only, out of cosmetic exhaust parts laid out like real engines of this type: each head branches into a manifold along the outside of its bank, ending in a silencer and one stack.
+- **Starting:** no starter block. The crankcase's front shaft is an input; any rotation turns it over (a Create Hand Crank on that shaft is the classic way). It can take any stress input.
+- **Create methods:** models built from JSON elements like Create's, with **Create's own textures** (industrial iron, dark metal, railway casing, brass, axis), so a resource pack that reskins Create reskins the engine. Moving parts (pistons, linkage) later via partial models, as Create's steam engine does.
+
+## First-pass blocks (0.7.0)
+`diesel_crankcase` (axis), `diesel_cylinder` (facing = bank it leans to), `diesel_exhaust` (manifold segment), `diesel_exhaust_stack` (manifold end + silencer + stack, 2 tall), `diesel_flywheel` (axis, 3-block wheel). Renders: `python3 tools/stylekit/render_engine_stages.py` (writes to tools/stylekit/out/engine/, git-ignored; uses `render_scene.py`).
+
+## Still open
 1. **Fuel before oil exists:** creosote at a poor rate (proposed: gives the coke oven another payoff), plant oil or ethanol (IE biodiesel), or nothing until refining. Fuel values go in a data map either way, so packs can change them.
 2. **Output:** fixed RPM with stress capacity per cylinder (steam-engine style), or better fuel giving more SU per cylinder (fuel tiers make refining worth it).
 3. **Flywheel:** cosmetic, functional, or not at all.

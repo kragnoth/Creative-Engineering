@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "creativeengineering:block/diesel_crankcase"
+    },
+    "axis=z": {
+      "model": "creativeengineering:block/diesel_crankcase",
+      "y": 90
+    }
+  }
+}

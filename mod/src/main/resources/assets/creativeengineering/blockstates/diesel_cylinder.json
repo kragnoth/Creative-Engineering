@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "creativeengineering:block/diesel_cylinder"
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/diesel_cylinder",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "creativeengineering:block/diesel_cylinder",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "creativeengineering:block/diesel_cylinder",
+      "y": 270
+    }
+  }
+}

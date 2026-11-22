@@ -57,6 +57,13 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_WOOD = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_WOOD);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TREATED_BEAM = ITEMS.registerSimpleBlockItem(ModBlocks.TREATED_BEAM);
 
+    // Diesel engine (first pass, look only)
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CYLINDER = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CYLINDER);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_EXHAUST = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_EXHAUST);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_FLYWHEEL = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_FLYWHEEL);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_EXHAUST_STACK = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_EXHAUST_STACK);
+
     // Metalworking: press dies and what they make
     public static final DeferredItem<Item> ROD_DIE = ITEMS.registerSimpleItem("rod_die", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> GEAR_DIE = ITEMS.registerSimpleItem("gear_die", new Item.Properties().stacksTo(16));
@@ -101,7 +108,8 @@ public final class ModItems {
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
-                TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM);
+                TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_EXHAUST, DIESEL_FLYWHEEL, DIESEL_EXHAUST_STACK);
     }
 
     /** Blister steel gear carries a one-line "shear-forged" flavour tooltip. */
