@@ -1,6 +1,6 @@
 # Module 1: Fuels & Engines — the diesel engine (design, 2026-11-20)
 
-Status: **first pass (0.7.0): blocks + models only, for look approval.** No behaviour yet.
+Status: **0.8.0: running engine** (look approved through 0.7.1; game test `dieselEngineStartsAndDrivesShaft` passes headless). Still to do: animated pistons/con-rods (partial models, as Create's steam engine), Ponder scene, Jade, display-link sources.
 
 ## Kragnoth's brief (2026-11-20)
 - A **self-contained multiblock in the essence of Create's steam engine**: no fixed shape, built from parts.
@@ -44,3 +44,11 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
 2. **Output:** fixed RPM with stress capacity per cylinder (steam-engine style), or better fuel giving more SU per cylinder (fuel tiers make refining worth it).
 3. **Flywheel:** cosmetic, functional, or not at all.
 4. **Exhaust:** particles only, or a cosmetic exhaust or chimney block.
+
+## As built (0.8.0)
+- `DieselCrankcaseBlock` (Create `HorizontalKineticBlock`, FACING = output end) + `DieselEngineBlockEntity` (`GeneratingKineticBlockEntity`). The output-end crankcase is the controller; scans every second: up to 8 crankcases, cylinders diagonally above leaning out (FACING = their side), `IFluidHandler`s on crankcase sides.
+- Start: stopped + cylinders + fuel + the block in front has a kinetic BE with speed != 0. The front face has no shaft (`hasShaftTowards`), so the starter never joins the network.
+- Running: 64 RPM; capacity per RPM = cylinders x fuel stress / 64; burns `burn` mB/cylinder/s from the tanks; stops when dry. Sounds on start/stop; cylinders get `running` (campfire smoke + soft thump client-side).
+- Fuels: data map `creativeengineering:engine_fuel` keyed by `#creativeengineering:engine_fuels/<fuel>` fluid tags (each lists `#c:` tags and other mods' fluids as optional). Defaults (SU per cylinder / mB per s): creosote 16384/2, plant oil 20480/2, ethanol 24576/2, biodiesel 32768/1.5, diesel 40960/1, gasoline 32768/2. Creosote ~ one boiler level of steam (assumed lava baseline; tune after play).
+- Flywheel: `DieselFlywheelBlock` (Create `HorizontalAxisKineticBlock`), drawn spinning by `KineticBlockEntityRenderer`.
+- Recipes: crankcase = steel sheet, steel gear, cast iron, Create shaft; cylinder = brass, steel sheet, piston, cast iron, steel rod; flywheel = cast iron around a Create shaft. JEI "Diesel Engine Fuel" page.

@@ -16,6 +16,9 @@ public final class CEClient {
     static void renderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.ALLOY_FURNACE.get(),
                 com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer::new);
+        // the flywheel is drawn spinning about its shaft, like any Create kinetic block
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get(),
+                com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer::new);
     }
 
     @SubscribeEvent

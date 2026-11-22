@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:diesel",
+      "required": false
+    },
+    {
+      "id": "createdieselgenerators:diesel",
+      "required": false
+    },
+    {
+      "id": "immersivepetroleum:diesel",
+      "required": false
+    },
+    {
+      "id": "immersivepetroleum:diesel_sulfur",
+      "required": false
+    }
+  ]
+}

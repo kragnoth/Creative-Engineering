@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "SGS",
+    "CXC",
+    "CCC"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "G": {
+      "tag": "c:gears/steel"
+    },
+    "C": {
+      "tag": "c:ingots/cast_iron"
+    },
+    "X": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:diesel_crankcase",
+    "count": 1
+  }
+}

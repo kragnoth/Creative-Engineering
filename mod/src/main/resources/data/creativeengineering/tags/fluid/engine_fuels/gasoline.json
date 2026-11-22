@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:gasoline",
+      "required": false
+    },
+    {
+      "id": "createdieselgenerators:gasoline",
+      "required": false
+    },
+    {
+      "id": "immersivepetroleum:gasoline",
+      "required": false
+    }
+  ]
+}

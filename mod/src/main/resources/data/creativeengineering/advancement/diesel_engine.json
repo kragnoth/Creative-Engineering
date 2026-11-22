@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:diesel_cylinder"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.diesel_engine.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.diesel_engine.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "cylinder": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:diesel_cylinder"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cylinder"
+    ]
+  ],
+  "parent": "creativeengineering:press_die"
+}

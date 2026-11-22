@@ -1,11 +1,19 @@
 {
   "variants": {
-    "axis=x": {
+    "facing=east": {
       "model": "creativeengineering:block/diesel_crankcase"
     },
-    "axis=z": {
+    "facing=south": {
       "model": "creativeengineering:block/diesel_crankcase",
       "y": 90
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/diesel_crankcase",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "creativeengineering:block/diesel_crankcase",
+      "y": 270
     }
   }
 }

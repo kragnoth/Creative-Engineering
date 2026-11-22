@@ -92,4 +92,42 @@ public final class CEPlaytests {
             h.assertTrue(out.getCount() == 8, "oven stalled at " + out.getCount() + " coke");
         });
     }
+
+    private static net.minecraft.world.level.block.Block block(String id) {
+        return net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.parse(id));
+    }
+
+    /**
+     * Diesel engine fires up: one crankcase (output east) with one cylinder, a Create Fluid Tank of creosote against
+     * its north side, a Create Creative Motor at the front as the starter (read-only: not connected), a Create shaft
+     * on the back. Expect: running, output shaft at 64 RPM, stress capacity, cylinder RUNNING, creosote burning.
+     */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void dieselEngineStartsAndDrivesShaft(GameTestHelper h) {
+        BlockPos cc = new BlockPos(5, 3, 5);
+        h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
+        h.setBlock(cc.above().south(), ModBlocks.DIESEL_CYLINDER.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.FACING, Direction.SOUTH));
+        h.setBlock(cc.north(), block("create:fluid_tank"));
+        h.setBlock(cc.east(), block("create:shaft").defaultBlockState()
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS, Direction.Axis.X));
+        h.runAfterDelay(2, () -> {
+            var tank = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(cc.north()), Direction.SOUTH);
+            h.assertTrue(tank != null, "no tank capability");
+            tank.fill(new net.neoforged.neoforge.fluids.FluidStack(com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE.get(), 4000),
+                    net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+            h.setBlock(cc.west(), block("create:creative_motor").defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.EAST));
+        });
+        h.succeedWhen(() -> {
+            var shaft = (com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(cc.east());
+            h.assertTrue(Math.abs(shaft.getSpeed()) == 64, "output shaft turning at " + shaft.getSpeed());
+            var engine = (com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity) h.getBlockEntity(cc);
+            h.assertTrue(engine.calculateAddedStressCapacity() > 0, "engine gives no stress capacity");
+            h.assertBlockProperty(cc.above().south(), com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.RUNNING, true);
+            var tank = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(cc.north()), Direction.SOUTH);
+            h.assertTrue(tank.getFluidInTank(0).getAmount() < 4000, "no creosote burnt");
+        });
+    }
 }

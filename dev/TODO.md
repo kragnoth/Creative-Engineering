@@ -5,6 +5,16 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.0-alpha: the diesel engine runs (2026-11-22) - test in game
+- [ ] Craft: Crankcase (steel sheets, steel gear, cast iron, shaft), Cylinder (brass, steel sheets, piston, cast iron, steel rod), Flywheel (cast iron around a shaft).
+- [ ] Place crankcases in a row facing away from you (the back is the output end). Cylinders on the blocks diagonally above, placed facing outward. A Create Fluid Tank of creosote against a crankcase side.
+- [ ] Goggles on the back crankcase: crankcases/cylinders, fuel, "Stopped: turn the front shaft". Hand Crank against the front: it fires (sound), then runs on its own at 64 RPM; the crank isn't connected to the output.
+- [ ] Output shaft/flywheel spins; stress capacity = cylinders x 16384 SU for creosote (goggles show it). Overstress behaves like any Create source.
+- [ ] Smoke puffs off running heads (vanilla campfire smoke, occasional); empty the tank: it stops (fizz) and needs cranking again.
+- [ ] JEI "Diesel Engine Fuel" lists creosote (and other mods' plant oil / ethanol / biodiesel / diesel if installed). Advancement "Compression Ignition".
+- [ ] `/test runall`: 5 tests pass (incl. dieselEngineStartsAndDrivesShaft).
+- Not yet: animated pistons, Ponder, Jade, display-link sources.
+
 ## 0.7.1-alpha: engine detail pass (2026-11-22) - look in game
 - [ ] Exhaust Manifold / Stack are gone. Three parts: Crankcase, Cylinder, Flywheel.
 - [ ] Cylinders: octagonal barrel with cooling bands, studded head, domed rocker cover, brass injector + fuel line. Crankcase: ribs, doors, bearing rings (a flanged joint between two), rounded cam cover, oil cups.

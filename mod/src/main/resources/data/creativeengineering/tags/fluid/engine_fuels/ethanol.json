@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:ethanol",
+      "required": false
+    },
+    {
+      "id": "#c:bioethanol",
+      "required": false
+    },
+    {
+      "id": "createaddition:bioethanol",
+      "required": false
+    },
+    {
+      "id": "createdieselgenerators:ethanol",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:ethanol",
+      "required": false
+    }
+  ]
+}

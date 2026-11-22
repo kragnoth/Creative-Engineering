@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "creativeengineering:creosote",
+    {
+      "id": "#c:creosote",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:creosote",
+      "required": false
+    }
+  ]
+}

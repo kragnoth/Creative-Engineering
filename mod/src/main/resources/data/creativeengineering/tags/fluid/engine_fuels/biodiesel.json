@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:biodiesel",
+      "required": false
+    },
+    {
+      "id": "createdieselgenerators:biodiesel",
+      "required": false
+    },
+    {
+      "id": "immersiveengineering:biodiesel",
+      "required": false
+    }
+  ]
+}

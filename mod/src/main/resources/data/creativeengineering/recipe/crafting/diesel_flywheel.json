@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "CCC",
+    "CXC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "tag": "c:ingots/cast_iron"
+    },
+    "X": {
+      "item": "create:shaft"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:diesel_flywheel",
+    "count": 1
+  }
+}

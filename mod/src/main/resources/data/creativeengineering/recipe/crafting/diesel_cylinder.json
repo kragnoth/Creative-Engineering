@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " B ",
+    "SPS",
+    "CRC"
+  ],
+  "key": {
+    "B": {
+      "tag": "c:ingots/brass"
+    },
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "P": {
+      "item": "minecraft:piston"
+    },
+    "C": {
+      "tag": "c:ingots/cast_iron"
+    },
+    "R": {
+      "tag": "c:rods/steel"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:diesel_cylinder",
+    "count": 1
+  }
+}

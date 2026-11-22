@@ -38,6 +38,19 @@ public final class ModBlockEntities {
                             ModBlocks.ALLOY_FURNACE_BRICKS.get())
                     .build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity>> DIESEL_ENGINE =
+            BLOCK_ENTITIES.register("diesel_engine", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity(ModBlockEntities.DIESEL_ENGINE.get(), pos, state),
+                            ModBlocks.DIESEL_CRANKCASE.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.simibubi.create.content.kinetics.base.KineticBlockEntity>> DIESEL_FLYWHEEL =
+            BLOCK_ENTITIES.register("diesel_flywheel", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.simibubi.create.content.kinetics.base.KineticBlockEntity(ModBlockEntities.DIESEL_FLYWHEEL.get(), pos, state),
+                            ModBlocks.DIESEL_FLYWHEEL.get())
+                    .build(null));
+
     /** Same compact view on every face and on the side-less query (spec section 0, tarbound-compat T1/T5). */
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationItems());

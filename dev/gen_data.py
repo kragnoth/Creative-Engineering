@@ -85,6 +85,20 @@ LANG = collections.OrderedDict([
     ('block.%s.diesel_crankcase' % MODID, 'Diesel Crankcase'),
     ('block.%s.diesel_cylinder' % MODID, 'Diesel Cylinder'),
     ('block.%s.diesel_flywheel' % MODID, 'Flywheel'),
+    ('%s.engine.title' % MODID, 'Diesel Engine'),
+    ('%s.jei.engine_fuel' % MODID, 'Diesel Engine Fuel'),
+    ('%s.jei.engine_fuel.stress' % MODID, '%s SU per cylinder'),
+    ('%s.jei.engine_fuel.burn' % MODID, '%s mB/s per cylinder'),
+    ('%s.jei.engine_fuel.rpm' % MODID, 'at 64 RPM'),
+    ('advancements.%s.diesel_engine.title' % MODID, 'Compression Ignition'),
+    ('advancements.%s.diesel_engine.description' % MODID, 'Make a Diesel Cylinder'),
+    ('%s.engine.layout' % MODID, '%s crankcase(s), %s cylinder(s)'),
+    ('%s.engine.fuel' % MODID, 'Fuel: %s'),
+    ('%s.engine.no_fuel' % MODID, 'none (touch a tank of creosote, plant oil, ethanol... to a crankcase side)'),
+    ('%s.engine.state.running' % MODID, 'Running'),
+    ('%s.engine.state.needs_start' % MODID, 'Stopped: turn the front shaft (e.g. a Hand Crank) to start'),
+    ('%s.engine.state.no_cylinders' % MODID, 'No cylinders: place them diagonally above, leaning out'),
+    ('%s.engine.state.no_fuel_state' % MODID, 'No fuel'),
     ('block.%s.treated_planks' % MODID, 'Treated Planks'),
     ('block.%s.treated_stairs' % MODID, 'Treated Stairs'),
     ('block.%s.treated_slab' % MODID, 'Treated Slab'),
@@ -539,15 +553,26 @@ for ang in (0, 45):
 eng('diesel_flywheel', ENG_T, fw)
 
 # Engine blockstates: models are drawn for engine axis X / facing south (cylinder leans +Z); rotate the rest.
-FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}
-for n in ('diesel_cylinder',):
-    put('%s/blockstates/%s.json' % (A, n), {'variants': {'facing=%s' % f: dict({'model': ce('block/' + n)}, **({'y': y} if y else {}))
-                                                     for f, y in FACE_Y.items()}})
-for n in ('diesel_crankcase', 'diesel_flywheel'):
-    put('%s/blockstates/%s.json' % (A, n), {'variants': {'axis=x': {'model': ce('block/' + n)}, 'axis=z': {'model': ce('block/' + n), 'y': 90}}})
+FACE_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}          # cylinder model leans +Z (south)
+OUT_Y = {'east': 0, 'south': 90, 'west': 180, 'north': 270}            # crankcase model's output end is +X (east)
+put('%s/blockstates/diesel_cylinder.json' % A, {'variants': {'facing=%s' % f: dict({'model': ce('block/diesel_cylinder')}, **({'y': y} if y else {}))
+                                                            for f, y in FACE_Y.items()}})
+put('%s/blockstates/diesel_crankcase.json' % A, {'variants': {'facing=%s' % f: dict({'model': ce('block/diesel_crankcase')}, **({'y': y} if y else {}))
+                                                             for f, y in OUT_Y.items()}})
+put('%s/blockstates/diesel_flywheel.json' % A, {'variants': {'axis=x': {'model': ce('block/diesel_flywheel')},
+                                                            'axis=z': {'model': ce('block/diesel_flywheel'), 'y': 90}}})
+
 for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel'):
     put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
     simple_loot(n)
+
+# Diesel engine recipes: cast iron bodies, steel sheet, and the metalworking parts (gears in the crankcase, rods in the
+# cylinder), so the press dies feed straight into the engine.
+shaped('diesel_crankcase', ['SGS', 'CXC', 'CCC'], {'S': tag('c:plates/steel'), 'G': tag('c:gears/steel'), 'C': tag('c:ingots/cast_iron'),
+       'X': item('create:shaft')}, ce('diesel_crankcase'), category='redstone')
+shaped('diesel_cylinder', [' B ', 'SPS', 'CRC'], {'B': tag('c:ingots/brass'), 'S': tag('c:plates/steel'), 'P': item('minecraft:piston'),
+       'C': tag('c:ingots/cast_iron'), 'R': tag('c:rods/steel')}, ce('diesel_cylinder'), category='redstone')
+shaped('diesel_flywheel', ['CCC', 'CXC', 'CCC'], {'C': tag('c:ingots/cast_iron'), 'X': item('create:shaft')}, ce('diesel_flywheel'), category='redstone')
 
 # ---------------------------------------------------------------------------------------- tags
 def tagfile(ns, kind, path, values, replace=False):
@@ -569,6 +594,27 @@ tagfile('c', 'item', 'dusts', ['#c:dusts/coal_coke'])
 tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
+
+# Engine fuels (data map creativeengineering:engine_fuel on fluids, keyed by our fuel tags). Each tag lists the common
+# c: tag and other mods' fluids as OPTIONAL entries (Crafts & Additions, Create Diesel Generators, Immersive
+# Engineering / Petroleum), so they work when present and nothing errors when they aren't.
+# stress = SU each cylinder adds; burn = mB per cylinder per second. Creosote (weakest) ~ one boiler level of steam
+# (16384 SU, what a passive lava-heated boiler gives); better fuels scale up from there.
+opt = lambda i: {'id': i, 'required': False}
+FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 16384, 2),
+         ('plant_oil', ['#c:plantoil', '#c:plant_oil', '#c:seed_oil', 'createaddition:seed_oil', 'createdieselgenerators:plant_oil',
+                        'immersiveengineering:plantoil'], 20480, 2),
+         ('ethanol', ['#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
+                      'immersiveengineering:ethanol'], 24576, 2),
+         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel'], 32768, 1.5),
+         ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 40960, 1),
+         ('gasoline', ['#c:gasoline', 'createdieselgenerators:gasoline', 'immersivepetroleum:gasoline'], 32768, 2)]
+values = {}
+for name, members, stress, burn in FUELS:
+    entries = [ce('creosote')] if name == 'creosote' else []
+    tagfile(MODID, 'fluid', 'engine_fuels/' + name, entries + [opt(m) for m in members])
+    values['#%s:engine_fuels/%s' % (MODID, name)] = {'stress': stress, 'burn': burn}
+put('%s/data/%s/data_maps/fluid/engine_fuel.json' % (RES, MODID), {'values': values})
 # Tarbound (optional, soft): jobs may burn coke (docs/tarbound-compat.md A3). Ignored when Tarbound is absent.
 put('%s/data/tarbound/tags/item/pool_fuel.json' % RES, {'replace': False, 'values': [{'id': '#c:coal_coke', 'required': False}]})
 # Grade tags (docs/steelworks-spec.md 1): higher grades join these as they arrive.
@@ -635,6 +681,7 @@ adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot')
 adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
 adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die')})
 adv('treated_wood', 'coke_oven', ce('treated_planks'), {n: has(ce(n)) for n in ('treated_planks', 'treated_log', 'treated_wood')})
+adv('diesel_engine', 'press_die', ce('diesel_cylinder'), {'cylinder': has(ce('diesel_cylinder'))}, 'goal')
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

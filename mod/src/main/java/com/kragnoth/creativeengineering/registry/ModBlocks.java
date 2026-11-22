@@ -58,13 +58,13 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.timber.TreatedBeamBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.TERRACOTTA_BROWN).strength(2.5F, 5.0F).sound(SoundType.WOOD).noOcclusion()));
 
-    // Module 1, diesel engine: FIRST PASS (look only, no behaviour yet). docs/engines-spec.md
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial> DIESEL_CRANKCASE = BLOCKS.register("diesel_crankcase",
-            () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing> DIESEL_CYLINDER = BLOCKS.register("diesel_cylinder",
-            () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Facing(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
-    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
-            () -> new com.kragnoth.creativeengineering.content.engine.EnginePartBlock.Axial(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
+    // Module 1, diesel engine (docs/engines-spec.md)
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock> DIESEL_CRANKCASE = BLOCKS.register("diesel_crankcase",
+            () -> new com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock> DIESEL_CYLINDER = BLOCKS.register("diesel_cylinder",
+            () -> new com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
+            () -> new com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
     public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));
