@@ -234,3 +234,6 @@ Convention (borrowed from Tarbound):
 - [ ] Extend a vat (e.g. 2x2 to 3x3): every block swaps to the new picture at once.
 - [ ] Two separate vats side by side stay two framed vessels.
 - [ ] Coke oven, blast furnace, alloy furnace and vat join their connected textures instantly when formed or extended (they used to lag up to ~5 s).
+
+## 0.9.3
+- [ ] Vat look: riveted steel walls and copper lid read as one real tank at every size, with no visible repeat.

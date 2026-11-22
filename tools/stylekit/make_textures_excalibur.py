@@ -400,16 +400,6 @@ def _frame(img, band, t=3):
                 img.putpixel((cx + x, cy + y), b[1] if outer else b[5])
         rivet(cx + 2 - (cx > 0), cy + 2 - (cy > 0))
 
-def _hoop(img, y0, band):
-    b = [hexrgb(h) for h in RAMPS[band]]
-    W, _ = img.size
-    for x in range(3, W - 3):
-        img.putpixel((x, y0 - 1), _darker(img.getpixel((x, y0 - 1)), 0.8))
-        img.putpixel((x, y0), b[6]); img.putpixel((x, y0 + 1), b[4]); img.putpixel((x, y0 + 2), b[2])
-        img.putpixel((x, y0 + 3), _darker(img.getpixel((x, y0 + 3)), 0.6))
-    for x in range(11, W - 8, 16):
-        img.putpixel((x, y0), b[8]); img.putpixel((x, y0 + 1), b[5])
-
 def _sight_glass(img):
     """Brass-framed sight glass centred on the wall, height scaled to the wall."""
     y_ = [hexrgb(h) for h in RAMPS['Y']]
@@ -431,34 +421,128 @@ def _sight_glass(img):
     for y in (y0 - 2, y0 + gh + 3):                        # mounting bolts above and below
         img.putpixel((W // 2 - 1, y), y_[7]); img.putpixel((W // 2, y), y_[4])
 
+def _field(W, H, rnd, base, amp, lf=10.0, grain=0.35):
+    """Smooth low-frequency value field (a few random sine waves) plus fine grain: no repeating pattern."""
+    import math
+    waves = [(rnd.uniform(0.5, 1.6) / lf, rnd.uniform(0.5, 1.6) / lf, rnd.uniform(0, 6.3), rnd.uniform(0.5, 1.0)) for _ in range(4)]
+    tot = sum(w[3] for w in waves)
+    return [[base + amp * sum(wa * math.sin(fx * x + fy * y + ph) for fx, fy, ph, wa in waves) / tot + rnd.uniform(-grain, grain)
+             for x in range(W)] for y in range(H)]
+
+def _paint(img, field, ramp):
+    r = [hexrgb(h) for h in RAMPS[ramp]]
+    for y, row in enumerate(field):
+        for x, v in enumerate(row):
+            img.putpixel((x, y), r[max(0, min(8, int(round(v))))])
+
+def _rivet(img, ramp, x, y):
+    r = [hexrgb(h) for h in RAMPS[ramp]]
+    W, H = img.size
+    if 0 <= x < W - 1 and 0 <= y < H - 1:
+        img.putpixel((x, y), r[7]); img.putpixel((x + 1, y + 1), r[1])
+
 def vat_wall_picture(base, W, H):
-    img = _tiled(base, W * 16, H * 16)
-    n = 0 if H == 1 else 1 if H == 2 else 2
-    for k in range(1, n + 1):
-        _hoop(img, round(H * 16 * k / (n + 1)) - 2, 'U')
+    """Riveted steel tank wall (real-world reference: riveted plate tanks and boilers): plate courses with lapped
+    riveted seams and staggered vertical butt joints, angle-iron corners, top curb, bolted base flange, soot toward
+    the bottom and a few rust streaks. Drawn per size, never tiled."""
+    import random
+    rnd = random.Random(1000 + W * 10 + H)
+    PW, PH = W * 16, H * 16
+    img = Image.new('RGBA', (PW, PH))
+    f = _field(PW, PH, rnd, 3.6, 0.9, lf=7.0)
+    for y in range(PH):                                     # soot near the fire, faint light near the top
+        for x in range(PW):
+            f[y][x] += -1.4 * max(0, (y - (PH - 9)) / 9) + 0.5 * max(0, (6 - y) / 6)
+    _paint(img, f, 'S')
+    st = [hexrgb(h) for h in RAMPS['S']]
+    # plate courses: seams off the block seams, so the wall reads as plates, not blocks
+    courses = max(1, round(PH / 22))
+    seams = [round(PH * k / courses) - 5 for k in range(1, courses)]
+    bounds = [3] + seams + [PH - 4]
+    for y in seams:                                         # lap seam: upper plate's lit edge, shadow line, rivet row above
+        for x in range(2, PW - 2):
+            img.putpixel((x, y - 1), st[6]); img.putpixel((x, y), st[1]); img.putpixel((x, y + 1), _darker(img.getpixel((x, y + 1)), 0.8))
+        for x in range(4 + (y % 3), PW - 4, 4):
+            _rivet(img, 'S', x, y - 3)
+    for i in range(len(bounds) - 1):                        # staggered vertical butt joints per course, ~26 px plates
+        y0, y1 = bounds[i] + 1, bounds[i + 1] - 1
+        x = 13 + (i % 2) * 13
+        while x < PW - 8:
+            if abs(x - PW // 2) > 6:                         # keep clear of the sight glass
+                for y in range(y0, y1):
+                    img.putpixel((x, y), st[1]); img.putpixel((x + 1, y), st[5])
+                for y in range(y0 + 2, y1 - 1, 4):
+                    _rivet(img, 'S', x - 2, y); _rivet(img, 'S', x + 3, y)
+            x += 26
+    for x in range(PW):                                     # top curb angle and bolted base flange
+        img.putpixel((x, 0), st[1]); img.putpixel((x, 1), st[7]); img.putpixel((x, 2), st[5]); img.putpixel((x, 3), st[2])
+        for y in range(PH - 3, PH):
+            img.putpixel((x, y), st[1] if y == PH - 1 else st[4] if y == PH - 3 else st[2])
+    for x in range(5, PW - 4, 6):
+        img.putpixel((x, PH - 2), st[7]); img.putpixel((x + 1, PH - 2), st[0])
+    for y in range(PH):                                     # angle-iron corners, riveted
+        for x, c in ((0, st[1]), (1, st[6]), (2, st[4]), (PW - 1, st[1]), (PW - 2, st[3]), (PW - 3, st[2])):
+            img.putpixel((x, y), c)
+    for y in range(6, PH - 5, 4):
+        _rivet(img, 'S', 3, y); _rivet(img, 'S', PW - 5, y)
+    rust = [hexrgb('#5a2e18'), hexrgb('#7a4020'), hexrgb('#93552a')]
+    for _ in range(W * H):                                  # a few rust streaks running down from seams
+        x = rnd.randrange(5, PW - 6)
+        y = rnd.choice(seams) + 1 if seams and rnd.random() < 0.7 else rnd.randrange(5, PH - 8)
+        for k in range(rnd.randrange(2, 6)):
+            if y + k < PH - 4:
+                c = img.getpixel((x, y + k))
+                rc = rust[min(2, k // 2)]
+                img.putpixel((x, y + k), tuple(int(c[j] * 0.55 + rc[j] * 0.45) for j in range(3)) + (255,))
     _sight_glass(img)
-    _frame(img, 'U')
     return img
 
 def vat_lid_picture(base, W, D):
-    img = _tiled(base, W * 16, D * 16)
-    s = [hexrgb(h) for h in RAMPS['S']]
-    cx, cy = (W // 2) * 16 + 8, (D // 2) * 16 + 8         # hatch under the valve (block W//2, D//2)
-    r = min(6 if min(W, D) == 1 else 10, cx - 2, cy - 2, W * 16 - cx - 2, D * 16 - cy - 2)
-    for y in range(D * 16):
-        for x in range(W * 16):
-            dist = ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2) ** 0.5
+    """Copper lid (reference: copper brewing vessels): hammered copper sheet with soldered seams, faint patina,
+    riveted steel rim and a bolted manway under the valve. Drawn per size, never tiled."""
+    import math, random
+    rnd = random.Random(2000 + W * 10 + D)
+    PW, PD = W * 16, D * 16
+    img = Image.new('RGBA', (PW, PD))
+    _paint(img, _field(PW, PD, rnd, 4.9, 0.9, lf=9.0, grain=0.15), 'U')
+    cu = [hexrgb(h) for h in RAMPS['U']]
+    for _ in range(PW * PD // 48):                          # hammer dents: small lit / shaded pairs
+        x, y = rnd.randrange(2, PW - 3), rnd.randrange(2, PD - 3)
+        img.putpixel((x, y), cu[6]); img.putpixel((x + 1, y + 1), cu[3])
+    sheets = max(1, round(PD / 20))                         # soldered sheet seams across the lid, off the block seams
+    for k in range(1, sheets):
+        y = round(PD * k / sheets) - 4
+        for x in range(2, PW - 2):
+            img.putpixel((x, y), cu[2]); img.putpixel((x, y + 1), cu[7])
+    patina = [hexrgb('#3f7f6a'), hexrgb('#5aa58a')]
+    for _ in range(W * D):
+        x, y = rnd.randrange(2, PW - 2), rnd.choice((2, 3, PD - 3, PD - 4)) if rnd.random() < 0.6 else rnd.randrange(2, PD - 2)
+        c = img.getpixel((x, y)); pc = rnd.choice(patina)
+        img.putpixel((x, y), tuple(int(c[j] * 0.4 + pc[j] * 0.6) for j in range(3)) + (255,))
+    st = [hexrgb(h) for h in RAMPS['S']]
+    cx, cy = (W // 2) * 16 + 8, (D // 2) * 16 + 8          # manway under the valve (block W//2, D//2)
+    r = min(6 if min(W, D) == 1 else 9, cx - 3, cy - 3, PW - cx - 3, PD - cy - 3)
+    for y in range(PD):
+        for x in range(PW):
+            dist = math.hypot(x + 0.5 - cx, y + 0.5 - cy)
             if r - 2 <= dist < r:
-                lit = (x < cx and y < cy)
-                img.putpixel((x, y), s[6] if lit else s[4] if dist < r - 1 else s[2])
+                img.putpixel((x, y), st[6] if (x < cx and y < cy) else st[4] if dist < r - 1 else st[2])
             elif r <= dist < r + 1:
                 img.putpixel((x, y), _darker(img.getpixel((x, y)), 0.7))
-    import math
-    for k in range(8):                                      # hatch bolts
-        a = k * math.pi / 4
-        bx, by = int(cx + math.cos(a) * (r - 1)), int(cy + math.sin(a) * (r - 1))
-        img.putpixel((bx, by), s[8])
-    _frame(img, 'S', t=2)
+    for k in range(8):
+        a = k * math.pi / 4 + math.pi / 8
+        img.putpixel((int(cx + math.cos(a) * (r - 1)), int(cy + math.sin(a) * (r - 1))), st[8])
+    for y in range(PD):                                      # riveted steel rim
+        for x in range(PW):
+            d = min(x, y, PW - 1 - x, PD - 1 - y)
+            if d < 2:
+                img.putpixel((x, y), st[1] if d == 0 else (st[6] if (x == 1 or y == 1) else st[3]))
+            elif d == 2:
+                img.putpixel((x, y), _darker(img.getpixel((x, y)), 0.75))
+    for x in range(4, PW - 3, 4):
+        img.putpixel((x, 1), st[8]); img.putpixel((x, PD - 2), st[7])
+    for y in range(4, PD - 3, 4):
+        img.putpixel((1, y), st[8]); img.putpixel((PW - 2, y), st[7])
     return img
 
 def vat(made):
