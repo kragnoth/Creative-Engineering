@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.2-alpha: engine Ponder + Jade (2026-11-22) - test in game
+- [ ] Ponder "diesel_engine" (from Crankcase, Cylinder or Flywheel): line of crankcases, cylinders diagonally above, tank on the side, hand crank at the front, flywheel + shaft at the back; rockers and smoke once running.
+- [ ] Jade on ANY crankcase of a line: status (Running / Stopped: turn the front shaft / No cylinders / No fuel), crankcases + cylinders, fuel, and "Stress capacity: N SU at 64 RPM" while running.
+
 ## 0.8.1-alpha: engine valve gear (2026-11-22) - test in game
 - [ ] Running cylinders: the rocker arm on top of each head nods a few pixels once per firing (~every 2 s), cylinders out of step with each other. Stopped engine: still.
 - [ ] Config `config/creativeengineering-client.toml` → `[visuals] animateEngines = false`: rockers freeze; engine output unchanged.

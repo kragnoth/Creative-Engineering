@@ -55,6 +55,8 @@
   "block.creativeengineering.diesel_flywheel": "Flywheel",
   "creativeengineering.engine.title": "Diesel Engine",
   "creativeengineering.jei.engine_fuel": "Diesel Engine Fuel",
+  "creativeengineering.jade.engine_su": "Stress capacity: %s SU at 64 RPM",
+  "config.jade.plugin_creativeengineering.diesel_engine": "Diesel Engine",
   "creativeengineering.jei.engine_fuel.stress": "%s SU per cylinder",
   "creativeengineering.jei.engine_fuel.burn": "%s mB/s per cylinder",
   "creativeengineering.jei.engine_fuel.rpm": "at 64 RPM",
@@ -187,6 +189,12 @@
   "creativeengineering.ponder.press_dies.text_1": "Right-click a Mechanical Press with a die to fit it. Sneak-right-click with an empty hand takes it out",
   "creativeengineering.ponder.press_dies.text_2": "With a die fitted, the press only shapes what that die makes: rods or gears. It works on belts and depots as usual",
   "creativeengineering.ponder.press_dies.text_3": "Dies never wear out. Without a die the press is an ordinary press again",
+  "creativeengineering.ponder.diesel_engine.header": "Building and Starting a Diesel Engine",
+  "creativeengineering.ponder.diesel_engine.text_1": "Crankcases in a line, all facing the same way, make one engine. The back end is where power comes out",
+  "creativeengineering.ponder.diesel_engine.text_2": "Cylinders sit diagonally above, leaning out: up to two per crankcase. Each one adds stress capacity",
+  "creativeengineering.ponder.diesel_engine.text_3": "A tank against a crankcase side feeds it directly, no pump. Creosote works; plant oil, ethanol and better fuels give more",
+  "creativeengineering.ponder.diesel_engine.text_4": "To start it, turn whatever is at the front: a Hand Crank works. The front never connects to the output",
+  "creativeengineering.ponder.diesel_engine.text_5": "Once it fires it runs on its own at 64 RPM. Take power off the flywheel shaft; it stops when the fuel runs out",
   "creativeengineering.ponder.tag.creativeengineering": "Creative Engineering",
   "creativeengineering.ponder.tag.creativeengineering.description": "Steel and heavy industry, the Create way"
 }

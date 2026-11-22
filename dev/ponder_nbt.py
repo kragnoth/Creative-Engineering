@@ -111,7 +111,21 @@ def press_dies():
         put(b, (2, 3, z), ('create:shaft', {'axis': 'z', 'waterlogged': 'false'}))
     return structure((5, 4, 5), b)
 
-SCENES = [cementation, coke_oven, blast_furnace, alloy_furnace, press_dies]
+def diesel_engine():
+    """Module 1: a 3-crankcase V6 along X (output east), tank on the north side, hand crank at the front (west),
+    flywheel and a Create shaft at the back."""
+    b = plate(7)
+    for x in (2, 3, 4):
+        put(b, (x, 1, 3), (MODID + ':diesel_crankcase', {'facing': 'east'}))
+        put(b, (x, 2, 4), (MODID + ':diesel_cylinder', {'facing': 'south', 'running': 'false'}))
+        put(b, (x, 2, 2), (MODID + ':diesel_cylinder', {'facing': 'north', 'running': 'false'}))
+    put(b, (3, 1, 2), ('create:fluid_tank', {'top': 'true', 'bottom': 'true', 'shape': 'window'}))
+    put(b, (1, 1, 3), ('create:hand_crank', {'facing': 'west', 'waterlogged': 'false'}))
+    put(b, (5, 1, 3), (MODID + ':diesel_flywheel', {'axis': 'x'}))
+    put(b, (6, 1, 3), ('create:shaft', {'axis': 'x', 'waterlogged': 'false'}))
+    return structure((7, 4, 7), b)
+
+SCENES = [cementation, coke_oven, blast_furnace, alloy_furnace, press_dies, diesel_engine]
 
 if __name__ == '__main__':
     os.makedirs(OUT, exist_ok=True)

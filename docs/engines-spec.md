@@ -1,6 +1,6 @@
 # Module 1: Fuels & Engines — the diesel engine (design, 2026-11-20)
 
-Status: **0.8.0: running engine** (look approved through 0.7.1; game test `dieselEngineStartsAndDrivesShaft` passes headless). 0.8.1: valve-gear animation done. Still to do: Ponder + Jade (next pass), then display-link sources.
+Status: **0.8.0: running engine** (look approved through 0.7.1; game test `dieselEngineStartsAndDrivesShaft` passes headless). 0.8.1: valve-gear animation. 0.8.2: Ponder + Jade. Still to do: display-link sources.
 
 ## Kragnoth's brief (2026-11-20)
 - A **self-contained multiblock in the essence of Create's steam engine**: no fixed shape, built from parts.

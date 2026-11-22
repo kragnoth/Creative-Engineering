@@ -203,6 +203,36 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
         }
     }
 
+    /** The output-end crankcase of this line (this one if it is the controller), for goggles / Jade from any part. */
+    @Nullable
+    public DieselEngineBlockEntity controller() {
+        if (level == null) {
+            return null;
+        }
+        Direction out = out();
+        BlockPos p = worldPosition;
+        for (int i = 0; i < MAX_LENGTH && isCrankcase(p.relative(out), out); i++) {
+            p = p.relative(out);
+        }
+        return level.getBlockEntity(p) instanceof DieselEngineBlockEntity c ? c : null;
+    }
+
+    public boolean isRunning() { return running; }
+    public int cylinderCount() { return cylinders; }
+    public int lineLength() { return length; }
+    @Nullable public Fluid fuelFluid() { return fuelFluid; }
+
+    /** Total stress capacity while running (SU), 0 when stopped. */
+    public float totalCapacity() {
+        EngineFuel f = fuelFluid == null ? null : EngineFuel.of(new FluidStack(fuelFluid, 1));
+        return running && f != null ? cylinders * f.stress() : 0;
+    }
+
+    /** Status key: running / needs_start / no_cylinders / no_fuel_state. */
+    public String statusKey() {
+        return running ? "running" : cylinders == 0 ? "no_cylinders" : fuelFluid == null ? "no_fuel_state" : "needs_start";
+    }
+
     @Override
     public float getGeneratedSpeed() {
         if (!running || !isController()) {
@@ -240,7 +270,7 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
         Component fuel = fuelFluid == null ? Component.translatable("creativeengineering.engine.no_fuel").withStyle(ChatFormatting.RED)
                 : new FluidStack(fuelFluid, 1).getHoverName().copy().withStyle(ChatFormatting.GOLD);
         tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.engine.fuel", fuel)).withStyle(ChatFormatting.GRAY));
-        String state = running ? "running" : cylinders == 0 ? "no_cylinders" : fuelFluid == null ? "no_fuel_state" : "needs_start";
+        String state = statusKey();
         tooltip.add(Component.literal("     ").append(Component.translatable("creativeengineering.engine.state." + state))
                 .withStyle(running ? ChatFormatting.GREEN : ChatFormatting.YELLOW));
         super.addToGoggleTooltip(tooltip, sneaking);

@@ -311,4 +311,59 @@ public final class CEScenes {
         scene.idle(90);
         scene.markAsFinished();
     }
+
+    /**
+     * "diesel_engine" (7x7): crankcases (2..4,1,3) facing east; cylinders (2..4,2,4) south and (2..4,2,2) north;
+     * Create tank (3,1,2); Create hand crank (1,1,3); flywheel (5,1,3); Create shaft (6,1,3).
+     */
+    public static void dieselEngine(SceneBuilder builder, SceneBuildingUtil util) {
+        com.simibubi.create.foundation.ponder.CreateSceneBuilder scene = new com.simibubi.create.foundation.ponder.CreateSceneBuilder(builder);
+        scene.title("diesel_engine", "Building and Starting a Diesel Engine");
+        scene.configureBasePlate(0, 0, 7);
+        scene.showBasePlate();
+        scene.idle(10);
+        Selection crank = util.select().fromTo(2, 1, 3, 4, 1, 3);
+        scene.world().showSection(crank, Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(90)
+                .text("Crankcases in a line, all facing the same way, make one engine. The back end is where power comes out")
+                .pointAt(util.vector().topOf(4, 1, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().fromTo(2, 2, 4, 4, 2, 4), Direction.DOWN);
+        scene.world().showSection(util.select().fromTo(2, 2, 2, 4, 2, 2), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(90)
+                .text("Cylinders sit diagonally above, leaning out: up to two per crankcase. Each one adds stress capacity")
+                .pointAt(util.vector().centerOf(3, 2, 4)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().position(3, 1, 2), Direction.SOUTH);
+        scene.idle(15);
+        scene.overlay().showText(100)
+                .text("A tank against a crankcase side feeds it directly, no pump. Creosote works; plant oil, ethanol and better fuels give more")
+                .pointAt(util.vector().centerOf(3, 1, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.world().showSection(util.select().position(1, 1, 3), Direction.EAST);
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(1, 1, 3), Pointing.DOWN, 40).rightClick();
+        scene.overlay().showText(90)
+                .text("To start it, turn whatever is at the front: a Hand Crank works. The front never connects to the output")
+                .pointAt(util.vector().centerOf(1, 1, 3)).placeNearTarget().attachKeyFrame();
+        scene.world().setKineticSpeed(util.select().position(1, 1, 3), 32);
+        scene.idle(40);
+        scene.world().setKineticSpeed(util.select().position(1, 1, 3), 0);
+        for (int x = 2; x <= 4; x++) {
+            for (int z : new int[]{2, 4}) {
+                scene.world().modifyBlock(new BlockPos(x, 2, z),
+                        st -> st.setValue(com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.RUNNING, true), false);
+            }
+        }
+        scene.world().showSection(util.select().fromTo(5, 1, 3, 6, 1, 3), Direction.WEST);
+        scene.world().setKineticSpeed(util.select().fromTo(2, 1, 3, 6, 1, 3), 64);
+        scene.idle(60);
+        scene.overlay().showText(100)
+                .text("Once it fires it runs on its own at 64 RPM. Take power off the flywheel shaft; it stops when the fuel runs out")
+                .pointAt(util.vector().centerOf(6, 1, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.markAsFinished();
+    }
 }

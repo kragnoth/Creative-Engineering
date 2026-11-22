@@ -87,6 +87,8 @@ LANG = collections.OrderedDict([
     ('block.%s.diesel_flywheel' % MODID, 'Flywheel'),
     ('%s.engine.title' % MODID, 'Diesel Engine'),
     ('%s.jei.engine_fuel' % MODID, 'Diesel Engine Fuel'),
+    ('%s.jade.engine_su' % MODID, 'Stress capacity: %s SU at 64 RPM'),
+    ('config.jade.plugin_%s.diesel_engine' % MODID, 'Diesel Engine'),
     ('%s.jei.engine_fuel.stress' % MODID, '%s SU per cylinder'),
     ('%s.jei.engine_fuel.burn' % MODID, '%s mB/s per cylinder'),
     ('%s.jei.engine_fuel.rpm' % MODID, 'at 64 RPM'),
