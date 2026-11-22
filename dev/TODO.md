@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.5-alpha: plant oil (2026-11-22) - test in game
+- [ ] Mechanical Press over a Basin with seeds: 4 seeds -> 250 mB Plant Oil (golden). Bucketable, placeable, flows like water.
+- [ ] Plant oil runs the diesel engine (15,360 SU per cylinder). Other mods' plant/seed oil (tagged c:plantoil) mixes in.
+
 ## 0.8.4-alpha: fuel rebalance (2026-11-22) - test in game
 - [ ] One crankcase + one cylinder on creosote = 12,288 SU (3/4 of a lava-fed blaze-burner steam engine, 16,384). V8 (4 crankcases x 2) on creosote = 98,304 SU.
 - [ ] Other fuels per cylinder: plant oil 15,360, ethanol 18,432, biodiesel 24,576, diesel 30,720, gasoline 24,576. JEI fuel page shows the new numbers.

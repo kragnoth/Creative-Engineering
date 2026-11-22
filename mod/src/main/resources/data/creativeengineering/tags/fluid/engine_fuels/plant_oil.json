@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     {
+      "id": "creativeengineering:plant_oil",
+      "required": false
+    },
+    {
       "id": "#c:plantoil",
       "required": false
     },

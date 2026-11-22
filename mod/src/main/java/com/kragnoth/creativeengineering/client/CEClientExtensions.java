@@ -28,5 +28,25 @@ public final class CEClientExtensions {
                 return flow;
             }
         }, ModFluids.CREOSOTE_TYPE.get());
+        ResourceLocation waterStill = ResourceLocation.withDefaultNamespace("block/water_still");
+        ResourceLocation waterFlow = ResourceLocation.withDefaultNamespace("block/water_flow");
+        for (ModFluids.Tinted f : ModFluids.ALL) {
+            event.registerFluidType(new IClientFluidTypeExtensions() {
+                @Override
+                public ResourceLocation getStillTexture() {
+                    return waterStill;
+                }
+
+                @Override
+                public ResourceLocation getFlowingTexture() {
+                    return waterFlow;
+                }
+
+                @Override
+                public int getTintColor() {
+                    return f.tint;
+                }
+            }, f.type.get());
+        }
     }
 }

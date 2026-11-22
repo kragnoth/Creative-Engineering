@@ -155,6 +155,9 @@ LANG = collections.OrderedDict([
     ('advancements.%s.alloy_furnace.description' % MODID, 'Make Alloy Furnace Bricks'),
     ('advancements.%s.steel.description' % MODID, 'Blow air into a Blast Furnace to make steel'),
     ('item.%s.creosote_bucket' % MODID, 'Creosote Bucket'),
+    ('fluid_type.%s.plant_oil' % MODID, 'Plant Oil'),
+    ('block.%s.plant_oil' % MODID, 'Plant Oil'),
+    ('item.%s.plant_oil_bucket' % MODID, 'Plant Oil Bucket'),
     ('block.%s.coke_oven_bricks' % MODID, 'Coke Oven Bricks'),
     ('block.%s.coke_block' % MODID, 'Block of Coal Coke'),
     ('block.%s.creosote' % MODID, 'Creosote Oil'),
@@ -233,6 +236,12 @@ put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
     'random_sequence': ce('blocks/blast_furnace_bricks')})
 # Creosote bucket: built at runtime by NeoForge from whatever bucket texture is loaded (vanilla, Excalibur, any
 # pack) with our creosote texture masked into it. No bucket texture of our own.
+# Tinted fluids (ModFluids.Tinted): bucket models fill from the fluid at runtime, like creosote's.
+TINTED = [('plant_oil', 'Plant Oil')]
+for n, _ in TINTED:
+    put('%s/models/item/%s_bucket.json' % (A, n), {'parent': 'neoforge:item/bucket_drip', 'loader': 'neoforge:fluid_container', 'fluid': ce(n)})
+    put('%s/blockstates/%s.json' % (A, n), {'variants': {'': {'model': ce('block/' + n)}}})
+    put('%s/models/block/%s.json' % (A, n), {'textures': {'particle': 'minecraft:block/water_still'}})
 put('%s/models/item/creosote_bucket.json' % A, {'parent': 'neoforge:item/bucket_drip',
     'loader': 'neoforge:fluid_container', 'fluid': ce('creosote')})
 # Creosote fluid block: model only carries the particle texture
@@ -605,6 +614,10 @@ tagfile('c', 'item', 'dusts', ['#c:dusts/coal_coke'])
 tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
+tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
+# Plant oil: seeds pressed in a Basin under a Mechanical Press (Create compacting). 4 seeds -> 250 mB.
+put(R + '/compacting/plant_oil.json', {'type': 'create:compacting', 'ingredients': [tag('c:seeds')] * 4,
+    'results': [{'id': ce('plant_oil'), 'amount': 250}]})
 
 # Engine fuels (data map creativeengineering:engine_fuel on fluids, keyed by our fuel tags). Each tag lists the common
 # c: tag and other mods' fluids as OPTIONAL entries (Crafts & Additions, Create Diesel Generators, Immersive
@@ -614,7 +627,7 @@ tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 # 12288. Better fuels keep their ratios above creosote.
 opt = lambda i: {'id': i, 'required': False}
 FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 12288, 2),
-         ('plant_oil', ['#c:plantoil', '#c:plant_oil', '#c:seed_oil', 'createaddition:seed_oil', 'createdieselgenerators:plant_oil',
+         ('plant_oil', [ce('plant_oil'), '#c:plantoil', '#c:plant_oil', '#c:seed_oil', 'createaddition:seed_oil', 'createdieselgenerators:plant_oil',
                         'immersiveengineering:plantoil'], 15360, 2),
          ('ethanol', ['#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
                       'immersiveengineering:ethanol'], 18432, 2),
