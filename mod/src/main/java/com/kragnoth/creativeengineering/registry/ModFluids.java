@@ -113,6 +113,11 @@ public final class ModFluids {
     public static final Tinted BRANDY = new Tinted("brandy", 0xE89A4A1C, 950, 950, MapColor.TERRACOTTA_ORANGE);
     public static final Tinted WHISKEY = new Tinted("whiskey", 0xE8B0621C, 950, 950, MapColor.COLOR_ORANGE);
     public static final Tinted APPLEJACK = new Tinted("applejack", 0xE8C98A34, 950, 950, MapColor.GOLD);
+    // Petroleum (docs/petroleum-spec.md): crude from desert pools and pumpjacks; distilled into the fuels.
+    public static final Tinted CRUDE_OIL = new Tinted("crude_oil", 0xFF1C1712, 1200, 6000, MapColor.COLOR_BLACK);
+    public static final Tinted DIESEL = new Tinted("diesel", 0xF0C79B34, 850, 1500, MapColor.COLOR_YELLOW);
+    public static final Tinted KEROSENE = new Tinted("kerosene", 0xC8D7E7EE, 800, 1100, MapColor.SNOW);
+    public static final Tinted GASOLINE = new Tinted("gasoline", 0xD8E3C24A, 740, 900, MapColor.GOLD);
 
     /** Called from the mod constructor so the holders above are created before registration fires. */
     public static void init() {}

@@ -106,6 +106,21 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
+    /** Petroleum: Pumpjack (gearbox, placed) with its Frame and Wellhead (docs/petroleum-spec.md). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.PumpjackBlock> PUMPJACK = BLOCKS.register("pumpjack",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.PumpjackBlock(pumpjackProps()));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock> PUMPJACK_FRAME = BLOCKS.register("pumpjack_frame",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock(pumpjackProps(), 1, net.minecraft.world.phys.shapes.Shapes.or(
+                    Block.box(0, 0, 0, 16, 2, 16), Block.box(2, 0, 5, 4, 16, 11), Block.box(12, 0, 5, 14, 16, 11))));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock> PUMPJACK_WELLHEAD = BLOCKS.register("pumpjack_wellhead",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock(pumpjackProps(), 2, net.minecraft.world.phys.shapes.Shapes.or(
+                    Block.box(2, 0, 2, 14, 1, 14), Block.box(4, 1, 4, 12, 12, 12), Block.box(0, 5, 6, 16, 8, 10))));
+
+    private static BlockBehaviour.Properties pumpjackProps() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.5F, 6.0F)
+                .sound(SoundType.NETHERITE_BLOCK).noOcclusion();
+    }
+
     public static final DeferredBlock<Block> CAST_IRON_BLOCK = BLOCKS.registerSimpleBlock("cast_iron_block",
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL));
     public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerSimpleBlock("steel_block",

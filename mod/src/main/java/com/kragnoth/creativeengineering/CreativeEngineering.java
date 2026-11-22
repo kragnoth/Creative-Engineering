@@ -41,6 +41,8 @@ public final class CreativeEngineering {
         com.kragnoth.creativeengineering.compat.create.CEDisplaySources.register(modBus);
         // Campfire Stands are passive heat for Create boilers and the Fermenting Vat while lit
         modBus.addListener(net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent.class, e -> e.enqueueWork(() -> {
+            // Pumpjack: 8 SU per RPM (512 SU at its full-rate 64 RPM)
+            com.simibubi.create.api.stress.BlockStressValues.IMPACTS.register(ModBlocks.PUMPJACK.get(), () -> 8.0);
             for (var stand : java.util.List.of(ModBlocks.ANDESITE_CAMPFIRE_STAND, ModBlocks.BRASS_CAMPFIRE_STAND, ModBlocks.COPPER_CAMPFIRE_STAND)) {
                 com.simibubi.create.api.boiler.BoilerHeater.REGISTRY.register(stand.get(),
                         com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.HEATER);

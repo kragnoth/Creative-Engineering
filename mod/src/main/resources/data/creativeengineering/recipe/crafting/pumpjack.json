@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SSS",
+    "GCP",
+    "I I"
+  ],
+  "key": {
+    "S": {
+      "tag": "c:plates/steel"
+    },
+    "G": {
+      "tag": "c:gears/steel"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    },
+    "P": {
+      "item": "create:mechanical_pump"
+    },
+    "I": {
+      "item": "create:industrial_iron_block"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:pumpjack",
+    "count": 1
+  }
+}

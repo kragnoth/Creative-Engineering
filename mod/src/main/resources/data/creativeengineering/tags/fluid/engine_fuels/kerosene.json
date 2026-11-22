@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:kerosene",
+      "required": false
+    },
+    {
+      "id": "immersivepetroleum:kerosene",
+      "required": false
+    }
+  ]
+}

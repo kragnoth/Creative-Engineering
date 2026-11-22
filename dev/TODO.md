@@ -354,3 +354,13 @@ Convention (borrowed from Tarbound):
 
 ## 0.13.4 — Tap side plates
 - [ ] Tap sides show bolted steel cover plates, not Create's black shaft sockets; Create's own fluid valve is unchanged.
+
+## 0.14.0 — Petroleum (docs/petroleum-spec.md)
+- [ ] `/test runrefinery`: pumpjack nods on its creative motor, crude climbs the steel pipe into the column on the blaze burner, the three taps fill diesel / kerosene / gasoline tanks.
+- [ ] Pumpjack looks right in all four facings: beam nods over the frame, cranks turn with the shaft, pitman arms stay on the pins, the rod dips into the wellhead; the shaft through the gearbox spins.
+- [ ] Placing a Pumpjack puts gearbox, frame and wellhead in a row away from you; a blocked row refuses with a message; breaking any piece removes all three and drops one Pumpjack.
+- [ ] Goggles on the gearbox: vein rate (or "no oil"), pumping rate, "full rate at 64 RPM" hint, crude tank.
+- [ ] Seismic Probe: thump + dust; "vein right here" on a vein chunk, else rough distance + direction, else "no oil within 128 blocks". Walk to a reported vein and confirm.
+- [ ] Desert crude pools appear in new desert chunks (black lakes in sandstone); bucket works.
+- [ ] Crude, kerosene, diesel, gasoline run the diesel engine (JEI fuel page lists them).
+- [ ] Drop-in with Flywheel instancing off (backend off): the pumpjack still animates via the renderer fallback.

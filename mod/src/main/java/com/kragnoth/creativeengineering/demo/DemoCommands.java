@@ -42,6 +42,8 @@ public final class DemoCommands {
     public static void register(RegisterCommandsEvent event) {
         event.getDispatcher().register(Commands.literal("test").then(Commands.literal("rundistill")
                 .requires(s -> s.hasPermission(2)).executes(DemoCommands::distiller)));
+        event.getDispatcher().register(Commands.literal("test").then(Commands.literal("runrefinery")
+                .requires(s -> s.hasPermission(2)).executes(DemoCommands::refinery)));
     }
 
     private static BlockState create(String id) {
@@ -60,6 +62,72 @@ public final class DemoCommands {
                 + "gravity-feed water and vodka through Steel Pipe into Steel Storage Tanks, no pumps. One batch every 10 s on campfire heat.")
                 .withStyle(ChatFormatting.GOLD), true);
         return 1;
+    }
+
+    private static int refinery(CommandContext<CommandSourceStack> ctx) {
+        CommandSourceStack src = ctx.getSource();
+        ServerLevel level = src.getLevel();
+        Direction facing = src.getEntity() != null ? src.getEntity().getDirection() : Direction.NORTH;
+        BlockPos front = BlockPos.containing(src.getPosition()).relative(facing, 6);
+        buildRefinery(level, front.offset(-2, 0, -2));
+        src.sendSuccess(() -> Component.literal("Refinery demo built: a Pumpjack on a creative motor draws crude (vein forced to 60 mB/s "
+                + "under its well until restart) and pushes it up Steel Pipe into a Distilling Tank on a creative Blaze Burner; taps "
+                + "drain diesel, kerosene and gasoline into Steel Storage Tanks. Goggles on the gearbox show the vein.")
+                .withStyle(ChatFormatting.GOLD), true);
+        return 1;
+    }
+
+    /** Storage tanks (tops, from the origin) for the refinery demo's diesel, kerosene and gasoline levels. */
+    public static final BlockPos DIESEL_TANK = new BlockPos(5, 2, 2), KEROSENE_TANK = new BlockPos(3, 3, 0), GASOLINE_TANK = new BlockPos(3, 4, 4);
+
+    /**
+     * Pumpjack -> Distilling Tank -> three storage tanks, origin o (pumpjack gearbox), machine facing south.
+     * Gearbox (0,0,0) with a creative motor east of it, frame (0,0,1), wellhead (0,0,2); Steel Pipe from the wellhead's
+     * east side up into the boiler of a 1x1x4 column at (3,1..4,2) on a creative Blaze Burner. Taps on the three levels
+     * (east, north, south) feed tall Steel Storage Tanks standing on the floor.
+     */
+    public static void buildRefinery(ServerLevel level, BlockPos o) {
+        for (int x = -2; x <= 7; x++) {
+            for (int z = -2; z <= 6; z++) {
+                level.setBlock(o.offset(x, -1, z), Blocks.SMOOTH_SANDSTONE.defaultBlockState(), Block.UPDATE_CLIENTS);
+                for (int y = 0; y <= 6; y++) {
+                    level.setBlock(o.offset(x, y, z), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
+                }
+            }
+        }
+        Direction f = Direction.SOUTH;
+        set(level, o, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, f));
+        set(level, o.offset(0, 0, 1), ModBlocks.PUMPJACK_FRAME.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
+        set(level, o.offset(0, 0, 2), ModBlocks.PUMPJACK_WELLHEAD.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
+        set(level, o.offset(1, 0, 0), create("creative_motor").setValue(BlockStateProperties.FACING, Direction.WEST));
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(new net.minecraft.world.level.ChunkPos(o.offset(0, 0, 2)), 60);
+        // crude line: wellhead east -> up one -> boiler's west face
+        set(level, o.offset(1, 0, 2), steelPipe(Direction.WEST, Direction.EAST));
+        set(level, o.offset(2, 0, 2), steelPipe(Direction.WEST, Direction.UP));
+        set(level, o.offset(2, 1, 2), steelPipe(Direction.DOWN, Direction.EAST));
+        // column on a creative (always lit) Blaze Burner: crude needs heat 2
+        set(level, o.offset(3, 0, 2), create("blaze_burner").setValue(com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HEAT_LEVEL,
+                com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel.KINDLED));
+        if (level.getBlockEntity(o.offset(3, 0, 2)) instanceof com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity b) {
+            b.isCreative = true;
+            b.setChanged();
+        }
+        for (int y = 1; y <= 4; y++) {
+            set(level, o.offset(3, y, 2), ModBlocks.DISTILLING_TANK.get().defaultBlockState());
+        }
+        // taps: diesel (level 1) east, kerosene (2) north, gasoline (3) south, each straight into a floor-standing tank
+        set(level, o.offset(4, 2, 2), tap(Direction.EAST));
+        set(level, o.offset(3, 3, 1), tap(Direction.NORTH));
+        set(level, o.offset(3, 4, 3), tap(Direction.SOUTH));
+        for (BlockPos top : new BlockPos[] {DIESEL_TANK, KEROSENE_TANK, GASOLINE_TANK}) {
+            for (int y = 0; y <= top.getY(); y++) {
+                set(level, o.offset(top.getX(), y, top.getZ()), ModBlocks.STEEL_TANK.get().defaultBlockState());
+            }
+        }
+        sign(level, o.offset(-1, 0, 2), Direction.WEST, "Pumpjack", "crude out");
+        sign(level, o.offset(6, 0, 2), Direction.EAST, "Diesel", "level 1");
+        sign(level, o.offset(3, 0, -1), Direction.NORTH, "Kerosene", "level 2");
+        sign(level, o.offset(3, 0, 5), Direction.SOUTH, "Gasoline", "level 3");
     }
 
     /** Positions (from the origin) of the storage tanks the demo's levels 1 and 2 fill. */

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#c:crude_oil",
+      "required": false
+    },
+    {
+      "id": "createdieselgenerators:crude_oil",
+      "required": false
+    },
+    {
+      "id": "immersivepetroleum:oil",
+      "required": false
+    }
+  ]
+}

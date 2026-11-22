@@ -1,0 +1,23 @@
+{
+  "type": "creativeengineering:distilling",
+  "input": {
+    "tag": "c:crude_oil",
+    "amount": 100
+  },
+  "fractions": [
+    {
+      "id": "creativeengineering:diesel",
+      "amount": 40
+    },
+    {
+      "id": "creativeengineering:kerosene",
+      "amount": 30
+    },
+    {
+      "id": "creativeengineering:gasoline",
+      "amount": 30
+    }
+  ],
+  "heat": 2,
+  "time": 100
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "  E",
+    " B ",
+    "R  "
+  ],
+  "key": {
+    "E": {
+      "item": "create:electron_tube"
+    },
+    "B": {
+      "tag": "c:plates/brass"
+    },
+    "R": {
+      "tag": "c:rods/steel"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:seismic_probe",
+    "count": 1
+  }
+}

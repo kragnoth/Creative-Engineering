@@ -534,4 +534,110 @@ public final class CEPlaytests {
             h.assertTrue(hi.isEmpty(), "tank above the tap got " + hi.getAmount() + " " + hi.getFluid());
         }));
     }
+
+    // ------------------------------------------------------------------------------------------------ petroleum
+    /** Pumpjack gearbox at g facing south (frame and wellhead after it), a creative motor on its east side. */
+    private static BlockPos pumpjack(GameTestHelper h, BlockPos g) {
+        Direction f = Direction.SOUTH;
+        h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, f));
+        h.setBlock(g.relative(f), ModBlocks.PUMPJACK_FRAME.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
+        h.setBlock(g.relative(f, 2), ModBlocks.PUMPJACK_WELLHEAD.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
+        h.setBlock(g.east(), net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "creative_motor")).defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
+        return g.relative(f, 2);
+    }
+
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void pumpjackDrawsCrudeIntoTank(GameTestHelper h) {
+        open(h);
+        BlockPos well = pumpjack(h, new BlockPos(4, 2, 3));
+        net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 60);
+        h.setBlock(well.east(), ModBlocks.STEEL_TANK.get());   // straight off the wellhead's tee
+        h.runAfterDelay(160, () -> h.succeedWhen(() -> {
+            var t = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(well.east()), Direction.WEST).getFluidInTank(0);
+            h.assertTrue(t.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.CRUDE_OIL.source.get() && t.getAmount() >= 10,
+                    "tank by the wellhead: " + t.getAmount() + " " + t.getFluid());
+            com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
+        }));
+    }
+
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void pumpjackDryChunkPumpsNothing(GameTestHelper h) {
+        open(h);
+        BlockPos well = pumpjack(h, new BlockPos(4, 2, 3));
+        net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 0);
+        h.runAfterDelay(120, () -> h.succeedWhen(() -> {
+            var be = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(new BlockPos(4, 2, 3));
+            h.assertTrue(be.getSpeed() != 0, "pumpjack is not turning");
+            h.assertTrue(be.tank().isEmpty(), "dry chunk gave " + be.tank().getFluidAmount() + " mB");
+            com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
+        }));
+    }
+
+    @GameTest(template = PLAYGROUND, timeoutTicks = 60)
+    public static void pumpjackBreaksAsOne(GameTestHelper h) {
+        open(h);
+        BlockPos g = new BlockPos(4, 2, 3);
+        BlockPos well = pumpjack(h, g);
+        h.runAfterDelay(5, () -> {
+            h.destroyBlock(g.south());   // the frame
+            h.succeedWhen(() -> {
+                h.assertBlockNotPresent(ModBlocks.PUMPJACK.get(), g);
+                h.assertBlockNotPresent(ModBlocks.PUMPJACK_WELLHEAD.get(), well);
+            });
+        });
+    }
+
+    @GameTest(template = PLAYGROUND, timeoutTicks = 20)
+    public static void seismicProbeFindsVein(GameTestHelper h) {
+        open(h);
+        BlockPos here = h.absolutePos(new BlockPos(4, 1, 4));
+        net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(here);
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 42);
+        var msg = com.kragnoth.creativeengineering.content.petroleum.SeismicProbeItem.report(h.getLevel(), here);
+        com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
+        h.assertTrue(msg.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tc
+                && tc.getKey().equals("creativeengineering.probe.here") && String.valueOf(tc.getArgs()[0]).equals("42"), "probe said " + msg.getString());
+        h.succeed();
+    }
+
+    @GameTest(template = PLAYGROUND, timeoutTicks = 20)
+    public static void crudeDistilsIntoThreeFuels(GameTestHelper h) {
+        open(h);
+        var r = h.getLevel().getRecipeManager().byKey(CreativeEngineering.id("distilling/crude_oil")).orElseThrow().value();
+        var d = (com.kragnoth.creativeengineering.content.distilling.DistillingRecipe) r;
+        h.assertTrue(d.fractions().size() == 3 && d.minHeight() == 4 && d.heat() == 2, "crude recipe shape");
+        h.assertTrue(d.fractions().get(0).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.DIESEL.source.get()
+                && d.fractions().get(2).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.source.get(), "fraction order");
+        h.succeed();
+    }
+
+    /** The /test runrefinery demo really runs: pumped crude distils into the diesel, kerosene and gasoline tanks. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 1200)
+    public static void refineryDemoRuns(GameTestHelper h) {
+        open(h);
+        BlockPos o = new BlockPos(3, 1, 3);
+        com.kragnoth.creativeengineering.demo.DemoCommands.buildRefinery(h.getLevel(), h.absolutePos(o));
+        h.runAfterDelay(20, () -> h.succeedWhen(() -> {
+            var L = h.getLevel();
+            String diag = "";
+            if (h.getBlockEntity(o.offset(3, 1, 2)) instanceof com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity t) {
+                var b = t.blocker();
+                diag = " | heat " + t.speed() + " blocker " + (b == null ? "none" : b.getString()) + " boiler " + t.layerFluid(0).getAmount()
+                        + " " + t.layerFluid(0).getFluid();
+            }
+            if (h.getBlockEntity(o) instanceof com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity pj) {
+                diag += " | pumpjack " + pj.getSpeed() + " rpm, vein " + pj.veinRate() + ", tank " + pj.tank().getFluidAmount();
+            }
+            for (var e : java.util.List.of(
+                    java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.DIESEL_TANK, com.kragnoth.creativeengineering.registry.ModFluids.DIESEL),
+                    java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.KEROSENE_TANK, com.kragnoth.creativeengineering.registry.ModFluids.KEROSENE),
+                    java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.GASOLINE_TANK, com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE))) {
+                var f = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(e.getKey())), Direction.UP).getFluidInTank(0);
+                h.assertTrue(f.getFluid() == e.getValue().source.get() && f.getAmount() >= 30, e.getValue().name + " tank: " + f.getAmount() + " " + f.getFluid() + diag);
+            }
+            com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(new net.minecraft.world.level.ChunkPos(h.absolutePos(o.offset(0, 0, 2))));
+        }));
+    }
 }

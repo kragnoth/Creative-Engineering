@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "creativeengineering:block/pumpjack_wellhead"
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/pumpjack_wellhead",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "creativeengineering:block/pumpjack_wellhead",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "creativeengineering:block/pumpjack_wellhead",
+      "y": 270
+    }
+  }
+}

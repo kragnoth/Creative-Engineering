@@ -93,3 +93,11 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.13.1
 - New blocks / BEs `tap` (states facing, open, powered, flowing) and `steel_pipe` (Create pipe states; Create pipe BE data).
+
+## 0.14.0 — Petroleum
+- Fluids `crude_oil`, `diesel`, `kerosene`, `gasoline` (+ `flowing_*`, blocks, `*_bucket`); fluid tags `c:crude_oil`, `c:diesel`, `c:kerosene`, `c:gasoline`.
+- Item `seismic_probe` (durability 64).
+- Blocks `pumpjack` (state `horizontal_facing`; BE `pumpjack`, Create kinetic data plus `Tank`, `Vein` (int, -1 = not yet sampled), `Carry` (float mB)), `pumpjack_frame`, `pumpjack_wellhead` (state `facing`, no BE).
+- Worldgen: `configured_feature/crude_pool`, `placed_feature/crude_pool`, biome modifier `crude_pools`.
+- Recipe `distilling/crude_oil`; removed `distilling/crude_immersive_petroleum` and `distilling/crude_create_diesel_generators`.
+- Oil veins are derived from the world seed: nothing saved.

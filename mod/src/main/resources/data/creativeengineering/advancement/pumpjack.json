@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:pumpjack"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.pumpjack.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.pumpjack.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pumpjack": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:pumpjack"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "pumpjack"
+    ]
+  ],
+  "parent": "creativeengineering:crude_oil"
+}
