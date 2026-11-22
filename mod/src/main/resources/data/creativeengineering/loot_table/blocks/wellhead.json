@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "creativeengineering:pumpjack"
+          "name": "creativeengineering:wellhead"
         }
       ],
       "conditions": [
@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "random_sequence": "creativeengineering:blocks/wellhead"
 }

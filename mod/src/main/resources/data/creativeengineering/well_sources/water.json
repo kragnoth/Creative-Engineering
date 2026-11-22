@@ -1,0 +1,6 @@
+{
+  "fluid": "minecraft:water",
+  "rate": 20,
+  "dimension": "minecraft:overworld",
+  "priority": 0
+}

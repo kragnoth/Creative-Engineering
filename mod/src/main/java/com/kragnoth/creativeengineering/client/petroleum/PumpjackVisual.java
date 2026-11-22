@@ -19,6 +19,7 @@ import net.minecraft.core.Direction;
 public class PumpjackVisual extends SingleAxisRotatingVisual<PumpjackBlockEntity> implements SimpleDynamicVisual {
     private final TransformedInstance beam, crank, pitmanL, pitmanR, rod;
     private float last = Float.NaN;
+    private boolean lastTarget;
 
     public PumpjackVisual(VisualizationContext ctx, PumpjackBlockEntity be, float pt) {
         super(ctx, be, pt, Models.partial(AllPartialModels.SHAFT));
@@ -41,17 +42,22 @@ public class PumpjackVisual extends SingleAxisRotatingVisual<PumpjackBlockEntity
 
     private void animate(float pt) {
         float a = blockEntity.crankAngle(pt);
-        if (a == last) {
+        boolean hasTarget = blockEntity.target() != null;
+        if (a == last && hasTarget == lastTarget) {
             return;
         }
         last = a;
+        lastTarget = hasTarget;
         Direction f = blockEntity.facing();
         PumpjackBlockEntity.Pose p = PumpjackBlockEntity.pose(a);
         PumpjackLinkage.beam(beam.setIdentityTransform().translate(getVisualPosition()), f, p).setChanged();
         PumpjackLinkage.crank(crank.setIdentityTransform().translate(getVisualPosition()), f, a).setChanged();
-        PumpjackLinkage.pitman(pitmanL.setIdentityTransform().translate(getVisualPosition()), f, p, 0.5F).setChanged();
-        PumpjackLinkage.pitman(pitmanR.setIdentityTransform().translate(getVisualPosition()), f, p, 15.5F).setChanged();
+        PumpjackLinkage.pitman(pitmanL.setIdentityTransform().translate(getVisualPosition()), f, p, PumpjackLinkage.PITMAN_X[0]).setChanged();
+        PumpjackLinkage.pitman(pitmanR.setIdentityTransform().translate(getVisualPosition()), f, p, PumpjackLinkage.PITMAN_X[1]).setChanged();
         PumpjackLinkage.rod(rod.setIdentityTransform().translate(getVisualPosition()), f, p).setChanged();
+        if (!hasTarget) {
+            rod.setZeroTransform().setChanged();   // no wellhead: the rod is not fitted
+        }
     }
 
     @Override

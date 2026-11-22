@@ -364,3 +364,12 @@ Convention (borrowed from Tarbound):
 - [ ] Desert crude pools appear in new desert chunks (black lakes in sandstone); bucket works.
 - [ ] Crude, kerosene, diesel, gasoline run the diesel engine (JEI fuel page lists them).
 - [ ] Drop-in with Flywheel instancing off (backend off): the pumpjack still animates via the renderer fallback.
+
+## 0.15.0 — Pumpjack + Wellhead as separate blocks
+- [ ] Pumpjack places as one block facing away from you (sneak flips it); wrench turns it and picks it up; a shaft on either side drives it.
+- [ ] Wellhead placed in front of it: the polished rod appears and strokes into the stuffing box; without a Wellhead the beam nods with no rod.
+- [ ] No more missing-texture cube over the well (rod model was 2 px out of vanilla's -16..32 range; gen now asserts the range).
+- [ ] Wellhead goggles: on a vein "Crude Oil, N mB/s"; elsewhere water 20 (5 in deserts); lava in the Nether; idle until stroked.
+- [ ] Wellhead alone pumps nothing; pipes on any side fill without a pump.
+- [ ] Distilling Tank short of a batch says "Filling the boiler: n / 100 mB" instead of "a level is full".
+- [ ] `/test runrefinery` still fills diesel, kerosene and gasoline.

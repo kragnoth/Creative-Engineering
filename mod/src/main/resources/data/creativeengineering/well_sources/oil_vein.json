@@ -1,0 +1,6 @@
+{
+  "fluid": "creativeengineering:crude_oil",
+  "oil_vein": true,
+  "dimension": "minecraft:overworld",
+  "priority": 100
+}

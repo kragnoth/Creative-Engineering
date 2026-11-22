@@ -201,6 +201,7 @@ LANG = collections.OrderedDict([
     ('%s.still.blocker.height' % MODID, 'Too short for this: needs %s levels'),
     ('%s.still.blocker.cool' % MODID, 'Not hot enough: needs heat x%s under the whole boiler'),
     ('%s.still.blocker.full' % MODID, 'A level is full or holds another fluid: drain the taps'),
+    ('%s.still.blocker.input' % MODID, 'Filling the boiler: %s / %s mB for a batch'),
     ('%s.jei.distilling' % MODID, 'Distilling'),
     ('%s.jei.distilling.level' % MODID, 'Level %s'),
     ('%s.jei.distilling.needs' % MODID, '%s+ levels, heat x%s'),
@@ -563,6 +564,8 @@ def _auto_uv(e, d):
 
 def eng(name, textures, elements):
     for e in elements:
+        for v in e['from'] + e['to']:
+            assert -16 <= v <= 32, '%s: element coordinate %s outside -16..32 (vanilla drops the whole model)' % (name, v)
         for d, f in e['faces'].items():
             if 'uv' not in f:
                 f['uv'] = _auto_uv(e, d)
@@ -1076,7 +1079,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')] + [ce('pumpjack'), ce('pumpjack_frame'), ce('pumpjack_wellhead')]
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')] + [ce('pumpjack'), ce('wellhead')]
         + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'steel_pipe', 'tap', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
@@ -1123,15 +1126,17 @@ for k, v in (('item.%s.seismic_probe', 'Seismic Probe'),
              ('%s.probe.dir.north', 'north'), ('%s.probe.dir.north_east', 'north-east'), ('%s.probe.dir.east', 'east'),
              ('%s.probe.dir.south_east', 'south-east'), ('%s.probe.dir.south', 'south'), ('%s.probe.dir.south_west', 'south-west'),
              ('%s.probe.dir.west', 'west'), ('%s.probe.dir.north_west', 'north-west'),
-             ('block.%s.pumpjack', 'Pumpjack'), ('block.%s.pumpjack_frame', 'Pumpjack Frame'),
-             ('block.%s.pumpjack_wellhead', 'Pumpjack Wellhead'),
-             ('%s.pumpjack.header', 'Pumpjack'),
-             ('%s.pumpjack.vein', 'Vein under the well: %s mB/s'),
-             ('%s.pumpjack.no_vein', 'No oil under this chunk: probe for a vein'),
-             ('%s.pumpjack.rate', 'Pumping %s mB/s'),
-             ('%s.pumpjack.slow', 'Full rate at %s RPM'),
-             ('%s.pumpjack.tank', 'Crude: %s / %s mB'),
-             ('%s.pumpjack.blocked', 'Needs room: three free blocks in a row, away from you')):
+             ('block.%s.pumpjack', 'Pumpjack'), ('block.%s.wellhead', 'Wellhead'),
+             ('%s.pumpjack.driving', 'Stroking: %s'),
+             ('%s.pumpjack.no_target', 'Nothing under the horsehead: place a Wellhead in front'),
+             ('%s.pumpjack.slow', 'Full stroke at %s RPM'),
+             ('%s.wellhead.yield', 'Below: %s, %s mB/s'),
+             ('%s.wellhead.dry', 'Nothing to draw here'),
+             ('%s.wellhead.idle', 'Idle: needs a turning Pumpjack over it'),
+             ('%s.wellhead.rate', 'Drawing %s mB/s'),
+             ('%s.wellhead.slow', 'Full rate at %s RPM'),
+             ('%s.wellhead.tank', '%s: %s / %s mB'),
+             ('%s.wellhead.empty', 'Empty: 0 / %s mB')):
     LANG[k % MODID] = v
 for n, label in (('crude_oil', 'Crude Oil'), ('diesel', 'Diesel'), ('kerosene', 'Kerosene'), ('gasoline', 'Gasoline')):
     LANG['fluid_type.%s.%s' % (MODID, n)] = label
@@ -1143,62 +1148,72 @@ put('%s/models/item/seismic_probe.json' % A, {'parent': 'minecraft:item/handheld
 shaped('seismic_probe', ['  E', ' B ', 'R  '], {'E': item('create:electron_tube'), 'B': tag('c:plates/brass'),
        'R': tag('c:rods/steel')}, ce('seismic_probe'), category='equipment')
 
-# Pumpjack: gearbox (the placed block, kinetic input on its sides) -> frame (samson post) -> wellhead, along FACING.
-# Modelled facing south; the walking beam, cranks, pitman arms and polished rod are partials animated by
-# client/petroleum/PumpjackVisual (and its renderer fallback). Create textures referenced, never copied.
+# Pumpjack and Wellhead: two separate blocks, the Create way (Kragnoth: "Create-centric, not magical multiblock").
+# The Pumpjack is one kinetic block (skid, reduction gearbox on Create's shaft line, samson post); its walking beam
+# overhangs the block in front and the horsehead strokes whatever is there. Modelled facing south. The beam, cranks,
+# pitman arms and polished rod are partials posed by PumpjackBlockEntity.pose (client/petroleum/PumpjackVisual).
+# Every element stays inside -16..32 (eng() asserts it). Create textures referenced, never copied.
 PJ_T = dict(ENG_T, steel=ce('block/steel_block'), casing=CR('andesite_casing'))
-eng('pumpjack_gearbox', PJ_T, [
+_post = lambda x0, x1, rot=None: box([x0, 2, 13.5], [x1, 26, 15.5], 'iron', rot=rot)
+eng('pumpjack', PJ_T, [
     box([0, 0, 0], [16, 2, 16], 'iron', {'up': 'iron_top'}),                          # skid
-    box([4, 2, 3], [12, 12, 13], 'casing'),                                         # reduction gearbox
-    box([3.5, 12, 3.5], [12.5, 13, 12.5], 'iron', {'up': 'iron_top'}),               # cover
-    box([5, 2, 2], [11, 4, 3], 'dark'), box([5, 2, 13], [11, 4, 14], 'dark')])        # hold-down feet
-_leg = lambda x0, x1, a: box([x0, 0, 7], [x1, 26, 9], 'iron', rot={'angle': a, 'axis': 'x', 'origin': [8, 26, 8]})
-eng('pumpjack_frame', PJ_T, [
-    box([0, 0, 0], [16, 2, 16], 'iron', {'up': 'iron_top'}),                          # skid
-    _leg(2, 4, 22.5), _leg(2, 4, -22.5), _leg(12, 14, 22.5), _leg(12, 14, -22.5),   # A-frame (samson post)
-    box([2, 24, 6.5], [14, 26.5, 9.5], 'iron', {'up': 'iron_top'}),                   # crossbar
-    box([5, 24, 6], [6.5, 27, 10], 'brass'), box([9.5, 24, 6], [11, 27, 10], 'brass'),   # saddle bearing cheeks
-    box([2, 11, 7.25], [14, 12.5, 8.75], 'dark')])                                     # brace
-eng('pumpjack_wellhead', PJ_T, [
+    box([4.5, 2, 4], [11.5, 12, 12], 'casing'),                                       # reduction gearbox (shaft through y 8)
+    box([4, 12, 4.5], [12, 13, 11.5], 'iron', {'up': 'iron_top'}),                     # its cover
+    box([5, 2, 2.5], [11, 4, 4], 'dark'), box([5, 2, 12], [11, 4, 13.5], 'dark'),     # hold-down feet
+    _post(0, 1.25), _post(14.75, 16),                                                  # samson post: front legs
+    _post(0, 1.25, {'angle': 22.5, 'axis': 'x', 'origin': [0.6, 26, 14.5]}),           #   and back braces
+    _post(14.75, 16, {'angle': 22.5, 'axis': 'x', 'origin': [15.4, 26, 14.5]}),
+    box([0, 24, 13], [16, 26.5, 16], 'iron', {'up': 'iron_top'}),                      # crossbar
+    box([5, 24, 13], [6.5, 27, 17], 'brass'), box([9.5, 24, 13], [11, 27, 17], 'brass')])   # saddle bearing cheeks
+eng('wellhead', PJ_T, [
     box([2, 0, 2], [14, 1, 14], 'iron', {'up': 'iron_top'}),                          # pad
     box([4, 1, 4], [12, 3, 12], 'dark'),                                               # flange
     box([5, 3, 5], [11, 9, 11], 'steel'),                                              # casing head
-    box([0, 5, 6], [16, 8, 10], 'steel'),                                              # flow tee, both sides
-    box([0, 4.5, 5.5], [1, 8.5, 10.5], 'dark'), box([15, 4.5, 5.5], [16, 8.5, 10.5], 'dark'),   # tee flanges
+    box([0, 5, 6], [16, 8, 10], 'steel'), box([6, 5, 0], [10, 8, 16], 'steel'),       # flow cross: outlets on all sides
+    box([0, 4.5, 5.5], [1, 8.5, 10.5], 'dark'), box([15, 4.5, 5.5], [16, 8.5, 10.5], 'dark'),
+    box([5.5, 4.5, 0], [10.5, 8.5, 1], 'dark'), box([5.5, 4.5, 15], [10.5, 8.5, 16], 'dark'),   # outlet flanges
     box([6, 9, 6], [10, 12, 10], 'brass')])                                            # stuffing box
-# animated partials
-eng('pumpjack_beam', PJ_T, [                    # frame-block space, pivot (8, 28, 8)
-    box([6.5, 27, -9], [9.5, 30, 20], 'iron', {'up': 'iron_top', 'down': 'iron_top'}),   # walking beam
-    box([6, 25.5, 6], [10, 27, 10], 'brass'),                                             # saddle
-    box([5.5, 22, 19], [10.5, 31, 23.5], 'steel'),                                        # horsehead
-    box([5, 21.5, 23], [11, 31.5, 23.5], 'dark'),                                         # its arc face
-    box([0, 26, -9.5], [16, 28, -7.5], 'iron', {'up': 'iron_top'})])                      # equalizer
+# animated partials (pumpjack block space)
+eng('pumpjack_beam', PJ_T, [                    # pivot (8, 28, 15); rear pin z 8, horsehead lip (22, 24)
+    box([6.5, 27, 6.5], [9.5, 30, 20], 'iron', {'up': 'iron_top', 'down': 'iron_top'}),   # walking beam
+    box([6, 25.5, 13], [10, 27, 17], 'brass'),                                             # saddle
+    box([5.5, 22, 19.5], [10.5, 31, 23.5], 'steel'),                                       # horsehead
+    box([5, 21.5, 23], [11, 31.5, 23.5], 'dark'),                                          # its arc face
+    box([1.25, 26, 7], [14.75, 28, 9], 'iron', {'up': 'iron_top'})])                       # equalizer
 def _crank(x0, x1, pin):
-    return [box([x0, 7, 6.75], [x1, 13, 9.25], 'iron'),                 # web, out to the pin
-            box([x0, 1.5, 4.5], [x1, 6.5, 11.5], 'dark'),               # counterweight
-            box([pin, 11, 7], [pin + 1, 13, 9], 'brass')]               # crank pin
-eng('pumpjack_crank', PJ_T, _crank(1, 3.5, 0) + _crank(12.5, 15, 15))   # gearbox space, axis (y 8, z 8) along X
+    return [box([x0, 8, 7], [x1, 11, 9], 'iron'),                       # web, out to the pin (radius 2.5)
+            box([x0, 3, 5], [x1, 7, 11], 'dark'),                       # counterweight
+            box([pin, 9.5, 7], [pin + 1, 11.5, 9], 'brass')]            # crank pin
+eng('pumpjack_crank', PJ_T, _crank(2.75, 4, 1.5) + _crank(12, 13.25, 13.5))   # axis (y 8, z 8) along X
 eng('pumpjack_pitman', PJ_T, [box([-0.75, 0, -0.75], [0.75, 18, 0.75], 'iron'),      # built upright, 18 long
                               box([-1, 0, -1], [1, 1.5, 1], 'brass'), box([-1, 16.5, -1], [1, 18, 1], 'brass')])
-eng('pumpjack_rod', PJ_T, [box([7.5, -18, 7.5], [8.5, 0, 8.5], 'steel'),              # polished rod, top at 0
-                           box([6, 0, 7.25], [10, 1, 8.75], 'dark'),                  # carrier bar
-                           box([6.5, 1, 7.75], [7, 8, 8.25], 'dark'), box([9, 1, 7.75], [9.5, 8, 8.25], 'dark')])   # bridle
+eng('pumpjack_rod', PJ_T, [box([7.5, -2, 7.5], [8.5, 16, 8.5], 'steel'),              # polished rod, top at y 16
+                           box([6, 16, 7.25], [10, 17, 8.75], 'dark'),                # carrier bar
+                           box([6.5, 17, 7.75], [7, 24, 8.25], 'dark'), box([9, 17, 7.75], [9.5, 24, 8.25], 'dark')])   # bridle
 _PJ_Y = {'south': 0, 'west': 90, 'north': 180, 'east': 270}
-for b in ('gearbox', 'frame', 'wellhead'):
-    block = 'pumpjack' if b == 'gearbox' else 'pumpjack_' + b
-    put('%s/blockstates/%s.json' % (A, block), {'variants': {'facing=%s' % f: dict({'model': ce('block/pumpjack_' + b)}, **({'y': y} if y else {}))
-                                                         for f, y in _PJ_Y.items()}})
-    # every piece drops the one Pumpjack: breaking any piece removes the other two without drops
-    put('%s/loot_table/blocks/%s.json' % (D, block), {'type': 'minecraft:block', 'pools': [{'rolls': 1, 'bonus_rolls': 0,
-        'entries': [{'type': 'minecraft:item', 'name': ce('pumpjack')}], 'conditions': [{'condition': 'minecraft:survives_explosion'}]}]})
-put('%s/models/item/pumpjack.json' % A, {'parent': ce('block/pumpjack_frame'), 'display': {
-    'gui': {'rotation': [30, 225, 0], 'translation': [0, -3, 0], 'scale': [0.45, 0.45, 0.45]},
+put('%s/blockstates/pumpjack.json' % A, {'variants': {'facing=%s' % f: dict({'model': ce('block/pumpjack')}, **({'y': y} if y else {}))
+                                                     for f, y in _PJ_Y.items()}})
+put('%s/blockstates/wellhead.json' % A, {'variants': {'': {'model': ce('block/wellhead')}}})
+for b in ('pumpjack', 'wellhead'):
+    simple_loot(b)
+put('%s/models/item/pumpjack.json' % A, {'parent': ce('block/pumpjack'), 'display': {
+    'gui': {'rotation': [30, 225, 0], 'translation': [0, -2.5, 0], 'scale': [0.42, 0.42, 0.42]},
     'ground': {'translation': [0, 3, 0], 'scale': [0.25, 0.25, 0.25]},
     'fixed': {'translation': [0, -2, 0], 'scale': [0.5, 0.5, 0.5]},
     'thirdperson_righthand': {'rotation': [75, 45, 0], 'translation': [0, 2.5, 0], 'scale': [0.3, 0.3, 0.3]},
     'firstperson_righthand': {'rotation': [0, 45, 0], 'scale': [0.3, 0.3, 0.3]}}})
-shaped('pumpjack', ['SSS', 'GCP', 'I I'], {'S': tag('c:plates/steel'), 'G': tag('c:gears/steel'), 'C': item('create:andesite_casing'),
-       'P': item('create:mechanical_pump'), 'I': item('create:industrial_iron_block')}, ce('pumpjack'), category='misc')
+put('%s/models/item/wellhead.json' % A, {'parent': ce('block/wellhead')})
+shaped('pumpjack', [' S ', 'GCS', 'III'], {'S': tag('c:plates/steel'), 'G': tag('c:gears/steel'), 'C': item('create:andesite_casing'),
+       'I': item('create:industrial_iron_block')}, ce('pumpjack'), category='misc')
+shaped('wellhead', [' V ', 'PFP', ' S '], {'V': item('create:fluid_valve'), 'P': item(ce('steel_pipe')), 'F': tag('c:plates/steel'),
+       'S': item('create:industrial_iron_block')}, ce('wellhead'), category='misc')
+# What a Wellhead brings up (content/petroleum/WellSources): highest priority that applies wins.
+WS = D + '/well_sources'
+put(WS + '/oil_vein.json', {'fluid': ce('crude_oil'), 'oil_vein': True, 'dimension': 'minecraft:overworld', 'priority': 100})
+put(WS + '/dry_ground.json', {'fluid': 'minecraft:water', 'rate': 5, 'dimension': 'minecraft:overworld',
+                              'biomes': ['#c:is_desert', '#c:is_badlands', '#c:is_dry'], 'priority': 10})
+put(WS + '/water.json', {'fluid': 'minecraft:water', 'rate': 20, 'dimension': 'minecraft:overworld', 'priority': 0})
+put(WS + '/nether_lava.json', {'fluid': 'minecraft:lava', 'rate': 10, 'dimension': 'minecraft:the_nether', 'priority': 0})
 
 # Desert crude pools: vanilla's lake feature filled with crude, walled in sandstone, on desert surfaces (c:is_desert).
 WG = D + '/worldgen'
@@ -1215,7 +1230,7 @@ adv('pumpjack', 'crude_oil', ce('pumpjack'), {'pumpjack': has(ce('pumpjack'))}, 
 LANG['advancements.%s.crude_oil.title' % MODID] = 'Black Gold'
 LANG['advancements.%s.crude_oil.description' % MODID] = 'Bucket some crude oil from a desert pool'
 LANG['advancements.%s.pumpjack.title' % MODID] = 'Nodding Donkey'
-LANG['advancements.%s.pumpjack.description' % MODID] = 'Build a Pumpjack to draw from an endless oil vein'
+LANG['advancements.%s.pumpjack.description' % MODID] = 'Stroke a Wellhead with a Pumpjack'
 
 # ---------------------------------------------------------------------------------------- lang
 lang_path = '%s/lang/en_us.json' % A

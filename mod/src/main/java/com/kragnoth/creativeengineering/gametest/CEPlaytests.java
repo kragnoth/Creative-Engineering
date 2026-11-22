@@ -536,23 +536,28 @@ public final class CEPlaytests {
     }
 
     // ------------------------------------------------------------------------------------------------ petroleum
-    /** Pumpjack gearbox at g facing south (frame and wellhead after it), a creative motor on its east side. */
+    private static final String PJ = "com.kragnoth.creativeengineering.content.petroleum";
+
+    /** Pumpjack drive at g facing south with a creative motor on its east side; returns where the Wellhead goes. */
     private static BlockPos pumpjack(GameTestHelper h, BlockPos g) {
-        Direction f = Direction.SOUTH;
-        h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, f));
-        h.setBlock(g.relative(f), ModBlocks.PUMPJACK_FRAME.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
-        h.setBlock(g.relative(f, 2), ModBlocks.PUMPJACK_WELLHEAD.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
-        h.setBlock(g.east(), net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "creative_motor")).defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
-        return g.relative(f, 2);
+        h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, Direction.SOUTH));
+        h.setBlock(g.east(), net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "creative_motor"))
+                .defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
+        return g.south();
+    }
+
+    private static com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity wellhead(GameTestHelper h, BlockPos rel) {
+        return (com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity) h.getBlockEntity(rel);
     }
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 200)
     public static void pumpjackDrawsCrudeIntoTank(GameTestHelper h) {
         open(h);
         BlockPos well = pumpjack(h, new BlockPos(4, 2, 3));
+        h.setBlock(well, ModBlocks.WELLHEAD.get());
         net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
         com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 60);
-        h.setBlock(well.east(), ModBlocks.STEEL_TANK.get());   // straight off the wellhead's tee
+        h.setBlock(well.east(), ModBlocks.STEEL_TANK.get());   // straight off the wellhead's side
         h.runAfterDelay(160, () -> h.succeedWhen(() -> {
             var t = h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(well.east()), Direction.WEST).getFluidInTank(0);
             h.assertTrue(t.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.CRUDE_OIL.source.get() && t.getAmount() >= 10,
@@ -561,32 +566,35 @@ public final class CEPlaytests {
         }));
     }
 
+    /** No vein: the overworld well source is water (data/creativeengineering/well_sources/water.json). */
     @GameTest(template = PLAYGROUND, timeoutTicks = 200)
-    public static void pumpjackDryChunkPumpsNothing(GameTestHelper h) {
+    public static void pumpjackWithoutVeinDrawsWater(GameTestHelper h) {
         open(h);
         BlockPos well = pumpjack(h, new BlockPos(4, 2, 3));
+        h.setBlock(well, ModBlocks.WELLHEAD.get());
         net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
         com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 0);
         h.runAfterDelay(120, () -> h.succeedWhen(() -> {
-            var be = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(new BlockPos(4, 2, 3));
-            h.assertTrue(be.getSpeed() != 0, "pumpjack is not turning");
-            h.assertTrue(be.tank().isEmpty(), "dry chunk gave " + be.tank().getFluidAmount() + " mB");
+            var w = wellhead(h, well);
+            h.assertTrue(w.tank().getFluid().getFluid() == net.minecraft.world.level.material.Fluids.WATER && w.tank().getFluidAmount() > 0,
+                    "dry-of-oil well gave " + w.tank().getFluidAmount() + " " + w.tank().getFluid().getFluid());
             com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
         }));
     }
 
-    @GameTest(template = PLAYGROUND, timeoutTicks = 60)
-    public static void pumpjackBreaksAsOne(GameTestHelper h) {
+    /** A Wellhead with no Pumpjack, and a Pumpjack with nothing in front, both do nothing (no magic). */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void wellheadNeedsAPumpjack(GameTestHelper h) {
         open(h);
+        BlockPos lone = new BlockPos(9, 2, 9);
+        h.setBlock(lone, ModBlocks.WELLHEAD.get());
         BlockPos g = new BlockPos(4, 2, 3);
-        BlockPos well = pumpjack(h, g);
-        h.runAfterDelay(5, () -> {
-            h.destroyBlock(g.south());   // the frame
-            h.succeedWhen(() -> {
-                h.assertBlockNotPresent(ModBlocks.PUMPJACK.get(), g);
-                h.assertBlockNotPresent(ModBlocks.PUMPJACK_WELLHEAD.get(), well);
-            });
-        });
+        pumpjack(h, g);
+        h.runAfterDelay(100, () -> h.succeedWhen(() -> {
+            h.assertTrue(wellhead(h, lone).tank().isEmpty(), "lone wellhead pumped " + wellhead(h, lone).tank().getFluidAmount());
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(g);
+            h.assertTrue(pj.getSpeed() != 0 && pj.target() == null, "pumpjack should turn with nothing to stroke");
+        }));
     }
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 20)
@@ -627,8 +635,11 @@ public final class CEPlaytests {
                 diag = " | heat " + t.speed() + " blocker " + (b == null ? "none" : b.getString()) + " boiler " + t.layerFluid(0).getAmount()
                         + " " + t.layerFluid(0).getFluid();
             }
-            if (h.getBlockEntity(o) instanceof com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity pj) {
-                diag += " | pumpjack " + pj.getSpeed() + " rpm, vein " + pj.veinRate() + ", tank " + pj.tank().getFluidAmount();
+            if (h.getBlockEntity(o.offset(0, 0, 1)) instanceof com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity pj) {
+                diag += " | pumpjack " + pj.getSpeed() + " rpm";
+            }
+            if (h.getBlockEntity(o.offset(0, 0, 2)) instanceof com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity w) {
+                diag += " | wellhead " + w.yieldRate() + " mB/s, tank " + w.tank().getFluidAmount();
             }
             for (var e : java.util.List.of(
                     java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.DIESEL_TANK, com.kragnoth.creativeengineering.registry.ModFluids.DIESEL),

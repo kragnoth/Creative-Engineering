@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=south": {
-      "model": "creativeengineering:block/pumpjack_gearbox"
+      "model": "creativeengineering:block/pumpjack"
     },
     "facing=west": {
-      "model": "creativeengineering:block/pumpjack_gearbox",
+      "model": "creativeengineering:block/pumpjack",
       "y": 90
     },
     "facing=north": {
-      "model": "creativeengineering:block/pumpjack_gearbox",
+      "model": "creativeengineering:block/pumpjack",
       "y": 180
     },
     "facing=east": {
-      "model": "creativeengineering:block/pumpjack_gearbox",
+      "model": "creativeengineering:block/pumpjack",
       "y": 270
     }
   }

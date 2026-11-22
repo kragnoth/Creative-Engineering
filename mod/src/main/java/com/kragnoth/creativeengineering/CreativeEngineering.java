@@ -23,7 +23,8 @@ public final class CreativeEngineering {
 
     public CreativeEngineering(IEventBus modBus, net.neoforged.fml.ModContainer container) {
         container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, CEConfig.CLIENT_SPEC);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.kragnoth.creativeengineering.demo.DemoCommands::register);   // /test rundistill
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.kragnoth.creativeengineering.demo.DemoCommands::register);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(com.kragnoth.creativeengineering.content.petroleum.WellSources::register);   // data/*/well_sources   // /test rundistill
         ModFluids.init(); // its block and bucket live in the BLOCKS / ITEMS registers below
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);

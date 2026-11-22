@@ -101,3 +101,8 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - Worldgen: `configured_feature/crude_pool`, `placed_feature/crude_pool`, biome modifier `crude_pools`.
 - Recipe `distilling/crude_oil`; removed `distilling/crude_immersive_petroleum` and `distilling/crude_create_diesel_generators`.
 - Oil veins are derived from the world seed: nothing saved.
+
+## 0.15.0 — Pumpjack split (Create-style)
+- Removed blocks `pumpjack_frame`, `pumpjack_wellhead` (placed ones disappear). `pumpjack` is now one block (state `horizontal_facing`); its BE keeps only Create kinetic data (`Tank`, `Vein`, `Carry` dropped).
+- New block / item / BE `wellhead` (no states): NBT `Tank`, `Carry`.
+- New data folder `well_sources` (`oil_vein`, `dry_ground`, `water`, `nether_lava`).

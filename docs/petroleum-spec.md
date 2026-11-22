@@ -1,4 +1,4 @@
-# Petroleum: crude, veins, pumpjack, fuels (0.14.0)
+# Petroleum: crude, veins, pumpjack, fuels (0.14.0, pumpjack split 0.15.0)
 
 Kragnoth, 2026-11-22: "a way to get proper diesel, kerosene and gas now. Small pools that spawn in the desert, a way
 to prospect for infinite veins that make it so one can place down a nodding donkey in a chunk and create oil."
@@ -32,27 +32,53 @@ kerosene / gasoline join through the `c:` tags and the optional tier entries.
   rounded to 8 blocks with an 8-way compass direction, or "No oil within 128 blocks".
 - Recipe: electron tube, brass sheet, steel rod (diagonal).
 
-## Pumpjack (nodding donkey)
-- Place the **Pumpjack** item: the gearbox goes where you click; the Frame (samson post) and the Wellhead follow in
-  a row away from you. The placement fails with a message when the two spaces aren't free.
-- Breaking any of the three breaks the whole machine and drops one Pumpjack.
-- **Power:** a shaft on either side of the gearbox (the crank axle runs across the machine). Stress 8 SU per RPM.
-- **Rate:** vein rate x min(1, RPM / 64). Full rate at 64 RPM; a 16 RPM creative motor gives a quarter.
-- Crude goes into an 8 B internal tank.
-- **Output:**
-  - The Wellhead pushes crude down any pipe run leaving its sides or front. It uses the shared `PipeRuns` tracer, so no
-    pump is needed (line pressure), up to 250 mB per 10 ticks shared between the run's tanks.
-  - Pumps and hoses may also drain the Wellhead directly. Its capability is a block capability, drain-only.
-- **No vein:** it still nods, but nothing comes up. Goggles on the gearbox show the vein, the current rate, a hint when
-  below 64 RPM, and the tank.
+## Pumpjack and Wellhead (0.15.0: two blocks, the Create way)
+Kragnoth, 2026-11-22: keep it "Create-centric, not magical multiblock", no glue or contraptions, and true to Create's
+ethos in each part. 0.14.0's one-item, three-block pumpjack is gone. The pattern now is Create's steam engine: a drive
+block whose linkage hangs outside its own block and does its work on a separate block you place yourself.
+Nothing forms, nothing is hidden. Every piece is placed, wrenched (turn / pick up) and broken on its own.
+
+### Pumpjack (`pumpjack`)
+- One kinetic block. Its model is the skid, a reduction gearbox on Create's shaft line and the samson post.
+- The walking beam, horsehead, cranks and pitman arms are partials. The beam overhangs the block in front
+  (`horizontal_facing`, away from you when placed; sneak to flip).
+- **Power:** a shaft on either side (the crank axle runs across the machine). Stress 8 SU per RPM. One crank turn is
+  four shaft turns, so 64 RPM gives 16 strokes a minute.
+- **Driving:** every tick it turns, it strokes the block in front if that block is `StrokeDriven`, with power
+  min(1, RPM / 64). With nothing there it still nods (no rod fitted), and its goggles say so.
 - **Look:** Create textures referenced, never copied.
-  - Skid: industrial iron. Gearbox: andesite casing. A-frame post and walking beam: industrial iron. Horsehead: steel.
-    Bearings: brass.
-  - Moving parts are partials posed by one linkage (`PumpjackBlockEntity.pose`): crank (radius 4 px, 1/4 of shaft
-    speed), beam (follows the crank pin), pitman arms (stretched between the pin and the beam's rear pin), polished
-    rod (hangs from the horsehead lip into the stuffing box).
+  - Skid, post and beam: industrial iron. Gearbox: andesite casing. Horsehead: steel. Bearings: brass.
+  - One linkage (`PumpjackBlockEntity.pose`): crank radius 2.5 px on the shaft; the beam pivots on the post
+    (y 28, z 15); pitman arms run from the pins to the equalizer; the polished rod hangs from the horsehead lip over
+    the centre of the block in front.
   - Drawn by `PumpjackVisual` (Flywheel, with Create's shaft), or by `PumpjackRenderer` when instancing is off.
   - Preview: `tools/stylekit/render_pumpjack.py`.
+
+### Wellhead (`wellhead`)
+- A casing head on the ground, with a flow cross giving outlets on all four sides. It does nothing on its own, like a
+  steam engine with no boiler.
+- **While stroked** it brings up its well source x power into an 8 B tank.
+- **Output:** it pushes down any pipe run leaving its sides (`PipeRuns`: line pressure, no pump needed), up to 250 mB
+  per 10 ticks. It also drains to pumps (drain-only capability).
+- **Goggles:** what is below and its rate, idle or drawing, a hint below 64 RPM, and the tank.
+
+### Well sources (data-driven: `data/<ns>/well_sources/*.json`)
+Fields: `fluid`, `rate` (mB/s at full stroke) or `oil_vein: true`, optional `dimension`, `biomes` (ids or `#tags`) and
+`priority`. The highest priority that applies wins.
+
+| Source | Fluid | Rate | Where | Priority |
+|---|---|---|---|---|
+| `oil_vein` | crude oil | the vein's 20–60 | Overworld chunks with a vein | 100 |
+| `dry_ground` | water | 5 | deserts, badlands, dry biomes | 10 |
+| `water` | water | 20 | anywhere in the Overworld | 0 |
+| `nether_lava` | lava | 10 | the Nether | 0 |
+
+### StrokeDriven
+`content/petroleum/StrokeDriven` is the interface a block entity implements to be worked by a Pumpjack. It's the hook
+for later stroke machines (a stamp mill on the block below, bellows for the furnaces, a pipeline booster).
+
+### Desert pools
+Pools are finite. Drain them the Create way: a hose pulley or a pump, or by bucket.
 
 ## Refining
 - Distilling recipe `distilling/crude_oil`: 100 mB of any `c:crude_oil` gives diesel 40 (level 1), kerosene 30
@@ -62,7 +88,7 @@ kerosene / gasoline join through the `c:` tags and the optional tier entries.
 
 ## Demo
 `/test runrefinery` (op 2) builds the whole chain in front of you:
-- a pumpjack on a creative motor, with its vein forced to 60 mB/s until restart;
+- a Pumpjack on a creative motor stroking a Wellhead, whose vein is forced to 60 mB/s until restart;
 - Steel Pipe up into a 1x1x4 Distilling Tank on a creative Blaze Burner;
 - three taps into tall Steel Storage Tanks.
 

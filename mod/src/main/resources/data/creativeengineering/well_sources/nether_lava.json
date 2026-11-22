@@ -1,0 +1,6 @@
+{
+  "fluid": "minecraft:lava",
+  "rate": 10,
+  "dimension": "minecraft:the_nether",
+  "priority": 0
+}

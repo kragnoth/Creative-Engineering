@@ -81,8 +81,8 @@ public final class DemoCommands {
     public static final BlockPos DIESEL_TANK = new BlockPos(5, 2, 2), KEROSENE_TANK = new BlockPos(3, 3, 0), GASOLINE_TANK = new BlockPos(3, 4, 4);
 
     /**
-     * Pumpjack -> Distilling Tank -> three storage tanks, origin o (pumpjack gearbox), machine facing south.
-     * Gearbox (0,0,0) with a creative motor east of it, frame (0,0,1), wellhead (0,0,2); Steel Pipe from the wellhead's
+     * Pumpjack -> Distilling Tank -> three storage tanks, origin o. Pumpjack (0,0,1) facing south with a creative motor
+     * east of it, its horsehead over the Wellhead (0,0,2); Steel Pipe from the wellhead's
      * east side up into the boiler of a 1x1x4 column at (3,1..4,2) on a creative Blaze Burner. Taps on the three levels
      * (east, north, south) feed tall Steel Storage Tanks standing on the floor.
      */
@@ -95,11 +95,9 @@ public final class DemoCommands {
                 }
             }
         }
-        Direction f = Direction.SOUTH;
-        set(level, o, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, f));
-        set(level, o.offset(0, 0, 1), ModBlocks.PUMPJACK_FRAME.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
-        set(level, o.offset(0, 0, 2), ModBlocks.PUMPJACK_WELLHEAD.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.FACING, f));
-        set(level, o.offset(1, 0, 0), create("creative_motor").setValue(BlockStateProperties.FACING, Direction.WEST));
+        set(level, o.offset(0, 0, 1), ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, Direction.SOUTH));
+        set(level, o.offset(0, 0, 2), ModBlocks.WELLHEAD.get().defaultBlockState());
+        set(level, o.offset(1, 0, 1), create("creative_motor").setValue(BlockStateProperties.FACING, Direction.WEST));
         com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(new net.minecraft.world.level.ChunkPos(o.offset(0, 0, 2)), 60);
         // crude line: wellhead east -> up one -> boiler's west face
         set(level, o.offset(1, 0, 2), steelPipe(Direction.WEST, Direction.EAST));
@@ -124,7 +122,8 @@ public final class DemoCommands {
                 set(level, o.offset(top.getX(), y, top.getZ()), ModBlocks.STEEL_TANK.get().defaultBlockState());
             }
         }
-        sign(level, o.offset(-1, 0, 2), Direction.WEST, "Pumpjack", "crude out");
+        sign(level, o.offset(-1, 0, 2), Direction.WEST, "Wellhead", "crude out");
+        sign(level, o.offset(-1, 0, 1), Direction.WEST, "Pumpjack", "strokes it");
         sign(level, o.offset(6, 0, 2), Direction.EAST, "Diesel", "level 1");
         sign(level, o.offset(3, 0, -1), Direction.NORTH, "Kerosene", "level 2");
         sign(level, o.offset(3, 0, 5), Direction.SOUTH, "Gasoline", "level 3");

@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "SSS",
-    "GCP",
-    "I I"
+    " S ",
+    "GCS",
+    "III"
   ],
   "key": {
     "S": {
@@ -15,9 +15,6 @@
     },
     "C": {
       "item": "create:andesite_casing"
-    },
-    "P": {
-      "item": "create:mechanical_pump"
     },
     "I": {
       "item": "create:industrial_iron_block"

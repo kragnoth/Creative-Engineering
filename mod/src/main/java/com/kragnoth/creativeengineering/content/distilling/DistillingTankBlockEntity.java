@@ -546,6 +546,9 @@ public class DistillingTankBlockEntity extends SmartBlockEntity implements IHave
                     if (c.heatLevel < h.value().heat()) {
                         return Component.translatable("creativeengineering.still.blocker.cool", h.value().heat());
                     }
+                    if (c.layerFluid(0).getAmount() < h.value().input().amount()) {   // not stuck: still filling
+                        return Component.translatable("creativeengineering.still.blocker.input", c.layerFluid(0).getAmount(), h.value().input().amount());
+                    }
                     return Component.translatable("creativeengineering.still.blocker.full");
                 }
             }

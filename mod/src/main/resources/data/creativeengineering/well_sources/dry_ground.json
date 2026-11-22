@@ -1,0 +1,11 @@
+{
+  "fluid": "minecraft:water",
+  "rate": 5,
+  "dimension": "minecraft:overworld",
+  "biomes": [
+    "#c:is_desert",
+    "#c:is_badlands",
+    "#c:is_dry"
+  ],
+  "priority": 10
+}

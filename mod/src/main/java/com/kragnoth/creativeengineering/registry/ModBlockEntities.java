@@ -100,6 +100,13 @@ public final class ModBlockEntities {
                             ModBlocks.PUMPJACK.get())
                     .build(null));
 
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity>> WELLHEAD =
+            BLOCK_ENTITIES.register("wellhead", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity(ModBlockEntities.WELLHEAD.get(), pos, state),
+                            ModBlocks.WELLHEAD.get())
+                    .build(null));
+
     /** Same compact view on every face and on the side-less query (spec section 0, tarbound-compat T1/T5). */
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationItems());
@@ -113,8 +120,7 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, STEEL_TANK.get(), (be, side) -> be.capability());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, TAP.get(), (be, side) -> be.frontHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DISTILLING_TANK.get(), (be, side) -> be.automationItems());
-        // the Pumpjack's crude comes out at the Wellhead (a plain block: capability without a block entity)
-        event.registerBlock(Capabilities.FluidHandler.BLOCK, (level, pos, state, be, side) ->
-                com.kragnoth.creativeengineering.content.petroleum.PumpjackPartBlock.wellheadFluids(level, pos, state), ModBlocks.PUMPJACK_WELLHEAD.get());
+        // the Wellhead: drain-only, every face (pipes connect anywhere; it pushes into them by itself)
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WELLHEAD.get(), (be, side) -> be.output());
     }
 }

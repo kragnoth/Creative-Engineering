@@ -38,9 +38,12 @@ public class PumpjackRenderer extends KineticBlockEntityRenderer<PumpjackBlockEn
         VertexConsumer vc = buffers.getBuffer(RenderType.solid());
         draw(PumpjackLinkage.beam(CachedBuffers.partial(CEPartials.PUMPJACK_BEAM, s), f, p), light, ms, vc);
         draw(PumpjackLinkage.crank(CachedBuffers.partial(CEPartials.PUMPJACK_CRANK, s), f, a), light, ms, vc);
-        draw(PumpjackLinkage.pitman(CachedBuffers.partial(CEPartials.PUMPJACK_PITMAN, s), f, p, 0.5F), light, ms, vc);
-        draw(PumpjackLinkage.pitman(CachedBuffers.partial(CEPartials.PUMPJACK_PITMAN, s), f, p, 15.5F), light, ms, vc);
-        draw(PumpjackLinkage.rod(CachedBuffers.partial(CEPartials.PUMPJACK_ROD, s), f, p), light, ms, vc);
+        for (float x : PumpjackLinkage.PITMAN_X) {
+            draw(PumpjackLinkage.pitman(CachedBuffers.partial(CEPartials.PUMPJACK_PITMAN, s), f, p, x), light, ms, vc);
+        }
+        if (be.target() != null) {
+            draw(PumpjackLinkage.rod(CachedBuffers.partial(CEPartials.PUMPJACK_ROD, s), f, p), light, ms, vc);
+        }
     }
 
     private static void draw(SuperByteBuffer b, int light, PoseStack ms, VertexConsumer vc) {

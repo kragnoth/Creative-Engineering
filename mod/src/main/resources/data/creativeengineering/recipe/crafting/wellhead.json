@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " V ",
+    "PFP",
+    " S "
+  ],
+  "key": {
+    "V": {
+      "item": "create:fluid_valve"
+    },
+    "P": {
+      "item": "creativeengineering:steel_pipe"
+    },
+    "F": {
+      "tag": "c:plates/steel"
+    },
+    "S": {
+      "item": "create:industrial_iron_block"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:wellhead",
+    "count": 1
+  }
+}

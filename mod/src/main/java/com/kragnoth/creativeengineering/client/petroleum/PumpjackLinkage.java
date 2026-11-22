@@ -18,10 +18,14 @@ final class PumpjackLinkage {
         return t.center().rotateYDegrees(PumpjackBlockEntity.yRot(facing)).uncenter();
     }
 
-    /** Beam partial is modelled in the frame block's space, pivot (8, 28, 8); the pivot sits at (8, 28, 24) here. */
+    /** Beam about its pivot on the samson post. */
     static <T extends Affine<T>> T beam(T t, Direction f, PumpjackBlockEntity.Pose p) {
-        return face(t, f).translate(8 * P, 28 * P, 24 * P).rotateXDegrees(p.beamDeg()).translate(-8 * P, -28 * P, -8 * P);
+        float y = PumpjackBlockEntity.PIVOT_Y * P, z = PumpjackBlockEntity.PIVOT_Z * P;
+        return face(t, f).translate(0, y, z).rotateXDegrees(p.beamDeg()).translate(0, -y, -z);
     }
+
+    /** Pitman arms run from the crank pins at these x (px) to the equalizer. */
+    static final float[] PITMAN_X = {2F, 14F};
 
     static <T extends Affine<T>> T crank(T t, Direction f, float crank) {
         return face(t, f).translate(0, 8 * P, 8 * P).rotateXDegrees(crank * Mth.RAD_TO_DEG).translate(0, -8 * P, -8 * P);
@@ -32,8 +36,8 @@ final class PumpjackLinkage {
         return face(t, f).translate(x * P, p.pinY() * P, p.pinZ() * P).rotateXDegrees(p.pitmanDeg()).scale(1, p.pitmanLen() / 18F, 1);
     }
 
-    /** Polished rod, top at the horsehead's lip, hanging over the wellhead (z 40). */
+    /** Polished rod (modelled with its top at y 16, z 8), hanging from the horsehead's lip over the block in front. */
     static <T extends Affine<T>> T rod(T t, Direction f, PumpjackBlockEntity.Pose p) {
-        return face(t, f).translate(0, p.rodTop() * P, 32 * P);
+        return face(t, f).translate(0, (p.rodTop() - 16) * P, 16 * P);
     }
 }
