@@ -273,3 +273,12 @@ Convention (borrowed from Tarbound):
 - [ ] Pipes connect to the side faces, not the shaft ends.
 - [ ] Break a crankcase with fuel in it: the fuel is lost (no item); acceptable for alpha?
 - [ ] `/test runall`: 10 pass (new: crankcasePullsFuelThroughPipes).
+
+## 0.11.0 — Drive Belt
+- [ ] Craft a Drive Pulley and a Drive Belt. Belt a flywheel to a pulley 2..8 above or below (either click order); the belt draws tangent to both wheels and follows them.
+- [ ] Wrong setups give a clear action-bar message (not aligned, different axis, two flywheels, already belted).
+- [ ] Engine at 64 RPM: the pulley shaft reads 256 RPM (goggles); stress at the pulley side costs 4x (Create's rules).
+- [ ] Drive the pulley instead: the flywheel turns at 1/4.
+- [ ] Break either wheel: the belt drops, the other wheel keeps working on its own.
+- [ ] Belt through blocks renders fine; with Flywheel instancing on and off.
+- [ ] `/test runall`: 13 pass (new: driveBeltQuadruplesSpeed, driveBeltReverseQuarters, driveBeltDropsWhenWheelBroken).

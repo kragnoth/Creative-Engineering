@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "creativeengineering:block/drive_pulley"
+    },
+    "axis=z": {
+      "model": "creativeengineering:block/drive_pulley",
+      "y": 90
+    }
+  }
+}

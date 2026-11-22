@@ -651,6 +651,28 @@ for ang in (0, 45):
     fw += [box([7, -10, 7], [9, 26, 9], 'iron', rot=rr), box([7, 7, -10], [9, 9, 26], 'iron', rot=rr),
            box([6.5, 0, 6.5], [9.5, 16, 9.5], 'iron', rot=rr), box([6.5, 6.5, 0], [9.5, 9.5, 16], 'iron', rot=rr)]
 eng('diesel_flywheel', ENG_T, fw)
+# Drive Pulley (0.11.0): Create-style belt drum (dark oak, like Create's belt pulley) between railway-casing flanges on
+# Create's shaft, built along X like the flywheel and spun the same way. Drum radius 5.6 px vs the flywheel rim's
+# 22.4: the 4:1 Drive Belt ratio.
+PUL_T = dict(ENG_T, drum='minecraft:block/dark_oak_log', drum_end='minecraft:block/dark_oak_log_top')
+pul = [axis_x()] + oct_x(6, 10, 11.2, 1.6, 'drum', {'east': 'drum_end', 'west': 'drum_end'}) \
+      + oct_x(5.25, 6, 12.8, 1.9, 'casing') + oct_x(10, 10.75, 12.8, 1.9, 'casing')
+eng('drive_pulley', PUL_T, pul)
+put('%s/blockstates/drive_pulley.json' % A, {'variants': {'axis=x': {'model': ce('block/drive_pulley')},
+                                                          'axis=z': {'model': ce('block/drive_pulley'), 'y': 90}}})
+put('%s/models/item/drive_pulley.json' % A, {'parent': ce('block/drive_pulley')})
+put('%s/models/item/drive_belt.json' % A, {'parent': 'minecraft:item/generated', 'textures': {'layer0': 'create:item/belt_connector'}})
+simple_loot('drive_pulley')
+shaped('drive_pulley', [' P ', 'PSP', ' P '], {'P': tag('minecraft:planks'), 'S': item('create:shaft')}, ce('drive_pulley'), category='redstone')
+shapeless('drive_belt', [item('create:belt_connector'), item('create:andesite_alloy')], ce('drive_belt'))
+for k, v in (('block.%s.drive_pulley', 'Drive Pulley'), ('item.%s.drive_belt', 'Drive Belt'),
+             ('%s.drive_belt.started', 'Belt started: now click the other wheel'),
+             ('%s.drive_belt.taken', 'That wheel already has a belt'),
+             ('%s.drive_belt.not_wheels', 'A Drive Belt goes between a flywheel and a Drive Pulley'),
+             ('%s.drive_belt.need_both', 'One end on a flywheel, the other on a Drive Pulley'),
+             ('%s.drive_belt.alignment', 'The pulley must be straight above or below the flywheel, 2 to 8 blocks away'),
+             ('%s.drive_belt.axis', 'Both wheels must turn on the same axis')):
+    LANG[k % MODID] = v
 
 # Fermenting Vat (Kragnoth, 2026-11-22: "start over from Create's tanks, colour-shifted to industrial steel").
 # vat_tank* are NOT shipped: the client atlas source creativeengineering:recolor makes them at load time from Create's
@@ -834,7 +856,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'fermenting_vat', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

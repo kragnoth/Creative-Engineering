@@ -57,10 +57,16 @@ public final class ModBlockEntities {
                             ModBlocks.DIESEL_CYLINDER.get())
                     .build(null));
     @SuppressWarnings("DataFlowIssue")
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.simibubi.create.content.kinetics.base.KineticBlockEntity>> DIESEL_FLYWHEEL =
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.FlywheelBlockEntity>> DIESEL_FLYWHEEL =
             BLOCK_ENTITIES.register("diesel_flywheel", () -> BlockEntityType.Builder
-                    .of((pos, state) -> new com.simibubi.create.content.kinetics.base.KineticBlockEntity(ModBlockEntities.DIESEL_FLYWHEEL.get(), pos, state),
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.engine.FlywheelBlockEntity(ModBlockEntities.DIESEL_FLYWHEEL.get(), pos, state),
                             ModBlocks.DIESEL_FLYWHEEL.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.DrivePulleyBlockEntity>> DRIVE_PULLEY =
+            BLOCK_ENTITIES.register("drive_pulley", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.engine.DrivePulleyBlockEntity(ModBlockEntities.DRIVE_PULLEY.get(), pos, state),
+                            ModBlocks.DRIVE_PULLEY.get())
                     .build(null));
 
     /** Same compact view on every face and on the side-less query (spec section 0, tarbound-compat T1/T5). */

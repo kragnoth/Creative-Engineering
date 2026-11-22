@@ -70,3 +70,7 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.10.0
 - Diesel crankcase BE gains `Reservoir` (FluidTank NBT, 1000 mB). Old crankcases load empty and refill from their lines.
+
+## 0.11.0
+- New block / BE `drive_pulley` (axis x/z); new item `drive_belt`.
+- `diesel_flywheel` BE is now FlywheelBlockEntity (same type id); flywheel and pulley BEs store `BeltPartner` (relative BlockPos).

@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /** Cosmetic flywheel on a horizontal shaft. A plain Create kinetic block: spins with the shaft and passes it on. */
-public class DieselFlywheelBlock extends HorizontalAxisKineticBlock implements IBE<KineticBlockEntity> {
+public class DieselFlywheelBlock extends HorizontalAxisKineticBlock implements IBE<FlywheelBlockEntity> {
     public DieselFlywheelBlock(Properties p) {
         super(p);
     }
@@ -20,12 +20,18 @@ public class DieselFlywheelBlock extends HorizontalAxisKineticBlock implements I
     }
 
     @Override
-    public Class<KineticBlockEntity> getBlockEntityClass() {
-        return KineticBlockEntity.class;
+    public void onRemove(BlockState state, net.minecraft.world.level.Level level, net.minecraft.core.BlockPos pos, BlockState newState, boolean moving) {
+        BeltWheels.onRemove(state, level, pos, newState);
+        super.onRemove(state, level, pos, newState, moving);
     }
 
     @Override
-    public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
+    public Class<FlywheelBlockEntity> getBlockEntityClass() {
+        return FlywheelBlockEntity.class;
+    }
+
+    @Override
+    public BlockEntityType<? extends FlywheelBlockEntity> getBlockEntityType() {
         return ModBlockEntities.DIESEL_FLYWHEEL.get();
     }
 }

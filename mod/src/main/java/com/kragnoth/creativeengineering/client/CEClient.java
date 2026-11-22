@@ -22,7 +22,10 @@ public final class CEClient {
                 com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer::new);
         // the flywheel is drawn spinning about its shaft, like any Create kinetic block
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get(),
-                com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer::new);
+                com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);
+        // drive pulley: same renderer (wheel fallback; the belt itself is drawn by the flywheel end)
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DRIVE_PULLEY.get(),
+                com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);
         // crankshaft: renderer fallback (Create's renderer skips itself when Flywheel instancing is on)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_ENGINE.get(),
                 com.kragnoth.creativeengineering.client.engine.CrankshaftRenderer::new);
@@ -56,6 +59,14 @@ public final class CEClient {
                 .factory((ctx, be, pt) -> new com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual<>(ctx, be, pt,
                         net.minecraft.core.Direction.EAST,
                         dev.engine_room.flywheel.lib.model.Models.partial(com.kragnoth.creativeengineering.client.engine.CEPartials.CRANKSHAFT)))
+                .skipVanillaRender(be -> false)
+                .apply());
+        // the drive pulley's drum spins like the flywheel (model built along X)
+        event.enqueueWork(() -> dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
+                .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.DRIVE_PULLEY.get())
+                .factory((ctx, be, pt) -> new com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual<>(ctx, be, pt,
+                        net.minecraft.core.Direction.EAST,
+                        dev.engine_room.flywheel.lib.model.Models.partial(com.kragnoth.creativeengineering.client.engine.CEPartials.DRIVE_PULLEY)))
                 .skipVanillaRender(be -> false)
                 .apply());
         // the flywheel spins as an instanced visual (Create's renderer skips itself when instancing is on); its model

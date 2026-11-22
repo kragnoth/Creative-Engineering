@@ -64,3 +64,11 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
   - Pulling only takes fuels, and only the fuel the reservoir already holds.
   - The side faces expose the reservoir as a fluid capability, so pipes connect visually, pumped lines fill it and Jade shows it. The shaft ends expose nothing.
   - Fuel moves straight from source to reservoir: no flow animation in the pipes (that would mean driving Create's pressure network).
+
+- **0.11.0 Drive Belt (Kragnoth, 2026-11-22):**
+  - A belt runs vertically between the flywheel and a new **Drive Pulley**, quadrupling speed from big to small.
+  - Fitting: the Drive Belt item (Create belt connector + andesite alloy). Click the flywheel, then a pulley 2–8 blocks straight above or below it on the same horizontal axis, in either order.
+  - Kinetics: the link is a real Create kinetic connection (`BeltWheelBlockEntity` adds the partner as a propagation location with ratio 4 / 0.25, an open belt so both turn the same way). Create's own speed and stress rules apply. A 64 RPM engine gives 256 RPM, Create's maximum.
+  - Breaking either wheel (or turning it so it no longer matches) drops the belt and frees the other wheel.
+  - The belt is cosmetic and passes through blocks (Kragnoth's call). It's drawn by the flywheel's renderer every frame (`DriveBeltRenderer`: tangent runs plus wraps, Create's `block/belt` texture). The pulley drum spins as an instanced visual like the flywheel.
+  - Pulley look: dark-oak drum like Create's belt pulley, railway-casing flanges, on Create's shaft.

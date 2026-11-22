@@ -267,4 +267,57 @@ public final class CEPlaytests {
             h.assertBlockProperty(cc.above().south(), com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.RUNNING, true);
         }));
     }
+
+    private static BlockPos beltRig(GameTestHelper h, BlockPos fly, BlockPos pulley, BlockPos motorAt, Direction motorFacing) {
+        var ax = net.minecraft.world.level.block.state.properties.BlockStateProperties.HORIZONTAL_AXIS;
+        h.setBlock(fly, ModBlocks.DIESEL_FLYWHEEL.get().defaultBlockState().setValue(ax, Direction.Axis.X));
+        h.setBlock(pulley, ModBlocks.DRIVE_PULLEY.get().defaultBlockState().setValue(ax, Direction.Axis.X));
+        h.setBlock(motorAt, block("create:creative_motor").defaultBlockState()
+                .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, motorFacing));
+        return motorAt;
+    }
+
+    /** Drive Belt: motor on the flywheel's shaft; the belted pulley 4 blocks up turns at 4x. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveBeltQuadruplesSpeed(GameTestHelper h) {
+        BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(4);
+        beltRig(h, fly, pulley, fly.west(), Direction.EAST);
+        h.runAfterDelay(2, () -> h.assertTrue(com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                h.getLevel(), h.absolutePos(fly), h.absolutePos(pulley)), "belt refused"));
+        h.runAfterDelay(10, () -> h.succeedWhen(() -> {
+            float in = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(fly)).getSpeed();
+            float out = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(pulley)).getSpeed();
+            h.assertTrue(in != 0 && out == in * 4, "flywheel " + in + " rpm, pulley " + out + " rpm");
+        }));
+    }
+
+    /** Driving the pulley turns the flywheel at a quarter of its speed. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveBeltReverseQuarters(GameTestHelper h) {
+        BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(3);
+        beltRig(h, fly, pulley, pulley.east(), Direction.WEST);
+        h.runAfterDelay(2, () -> com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                h.getLevel(), h.absolutePos(pulley), h.absolutePos(fly)));
+        h.runAfterDelay(10, () -> h.succeedWhen(() -> {
+            float in = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(pulley)).getSpeed();
+            float out = ((com.simibubi.create.content.kinetics.base.KineticBlockEntity) h.getBlockEntity(fly)).getSpeed();
+            h.assertTrue(in != 0 && out * 4 == in, "pulley " + in + " rpm, flywheel " + out + " rpm");
+        }));
+    }
+
+    /** Breaking the pulley drops the belt, frees the flywheel, and the pulley side stops. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void driveBeltDropsWhenWheelBroken(GameTestHelper h) {
+        BlockPos fly = new BlockPos(5, 2, 5), pulley = fly.above(2);
+        beltRig(h, fly, pulley, fly.west(), Direction.EAST);
+        h.runAfterDelay(2, () -> com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.link(
+                h.getLevel(), h.absolutePos(fly), h.absolutePos(pulley)));
+        h.runAfterDelay(10, () -> h.destroyBlock(pulley));
+        h.runAfterDelay(14, () -> h.succeedWhen(() -> {
+            h.assertItemEntityPresent(com.kragnoth.creativeengineering.registry.ModItems.DRIVE_BELT.get(), pulley, 2);
+            var w = (com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity) h.getBlockEntity(fly);
+            h.assertFalse(w.hasBelt(), "flywheel still thinks it has a belt");
+            h.assertTrue(w.getSpeed() != 0, "flywheel lost its motor drive");
+        }));
+    }
 }

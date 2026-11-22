@@ -66,6 +66,11 @@ public final class ModBlocks {
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock> DIESEL_FLYWHEEL = BLOCKS.register("diesel_flywheel",
             () -> new com.kragnoth.creativeengineering.content.engine.DieselFlywheelBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).requiresCorrectToolForDrops().strength(4.0F, 6.0F).sound(SoundType.NETHERITE_BLOCK).noOcclusion()));
 
+    /** Drive Pulley: small end of a Drive Belt from the flywheel (4x speed). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.engine.DrivePulleyBlock> DRIVE_PULLEY = BLOCKS.register("drive_pulley",
+            () -> new com.kragnoth.creativeengineering.content.engine.DrivePulleyBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD).strength(1.5F).sound(SoundType.WOOD).noOcclusion()));
+
     /** Campfire Stands: Create scaffolding frames holding a campfire (passive heat on a full block). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> ANDESITE_CAMPFIRE_STAND = stand("andesite", MapColor.STONE);
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.heat.CampfireStandBlock> BRASS_CAMPFIRE_STAND = stand("brass", MapColor.TERRACOTTA_YELLOW);
