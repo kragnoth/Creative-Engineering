@@ -30,10 +30,32 @@ import net.minecraft.util.FastColor;
  * Used from assets/minecraft/atlases/blocks.json (dev/gen_data.py).
  */
 public record RecolorSpriteSource(List<Entry> sprites, int tint, float saturation, float contrast, float brightness) implements SpriteSource {
-    public record Entry(ResourceLocation source, ResourceLocation target) {
+    /**
+     * Optional "fills": flat-paint a rectangle with the colour of one sample pixel, after recolouring. Coordinates are
+     * fractions of the image (0..1) so a higher-resolution resource pack still lines up. Used to blank off Create's
+     * valve shaft socket for the Tap, which has no shaft (Kragnoth: "no giant black holes on the sides").
+     */
+    public record Fill(List<Float> rect, List<Float> from) {
+        static final Codec<Fill> CODEC = RecordCodecBuilder.create(i -> i.group(
+                Codec.FLOAT.listOf().fieldOf("rect").forGetter(Fill::rect),
+                Codec.FLOAT.listOf().fieldOf("from").forGetter(Fill::from)).apply(i, Fill::new));
+
+        void apply(NativeImage img) {
+            int w = img.getWidth(), h = img.getHeight();
+            int col = img.getPixelRGBA(Math.min(w - 1, (int) (from.get(0) * w)), Math.min(h - 1, (int) (from.get(1) * h)));
+            for (int y = Math.round(rect.get(1) * h); y < Math.round(rect.get(3) * h); y++) {
+                for (int x = Math.round(rect.get(0) * w); x < Math.round(rect.get(2) * w); x++) {
+                    img.setPixelRGBA(x, y, col);
+                }
+            }
+        }
+    }
+
+    public record Entry(ResourceLocation source, ResourceLocation target, List<Fill> fills) {
         static final Codec<Entry> CODEC = RecordCodecBuilder.create(i -> i.group(
                 ResourceLocation.CODEC.fieldOf("source").forGetter(Entry::source),
-                ResourceLocation.CODEC.fieldOf("target").forGetter(Entry::target)).apply(i, Entry::new));
+                ResourceLocation.CODEC.fieldOf("target").forGetter(Entry::target),
+                Fill.CODEC.listOf().optionalFieldOf("fills", List.of()).forGetter(Entry::fills)).apply(i, Entry::new));
     }
 
     public static final MapCodec<RecolorSpriteSource> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
@@ -58,7 +80,7 @@ public record RecolorSpriteSource(List<Entry> sprites, int tint, float saturatio
                 continue;
             }
             LazyLoadedImage image = new LazyLoadedImage(file, res.get(), 1);
-            output.add(e.target(), new Supplier(image, e.target(), this));
+            output.add(e.target(), new Supplier(image, e.target(), e.fills(), this));
         }
     }
 
@@ -85,12 +107,15 @@ public record RecolorSpriteSource(List<Entry> sprites, int tint, float saturatio
         return Math.clamp(Math.round(v * 255F), 0, 255);
     }
 
-    private record Supplier(LazyLoadedImage image, ResourceLocation id, RecolorSpriteSource source) implements SpriteSource.SpriteSupplier {
+    private record Supplier(LazyLoadedImage image, ResourceLocation id, List<Fill> fills, RecolorSpriteSource source) implements SpriteSource.SpriteSupplier {
         @Override
         @Nullable
         public SpriteContents apply(SpriteResourceLoader loader) {
             try {
                 NativeImage img = image.get().mappedCopy(source::recolor);
+                for (Fill f : fills) {
+                    f.apply(img);
+                }
                 return new SpriteContents(id, new FrameSize(img.getWidth(), img.getHeight()), img, ResourceMetadata.EMPTY);
             } catch (IOException | IllegalArgumentException ex) {
                 CreativeEngineering.LOGGER.error("recolor: failed for {}", id, ex);

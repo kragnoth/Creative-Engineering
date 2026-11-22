@@ -717,9 +717,15 @@ VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_c
             ('create:block/pipes', 'steel_pipes'), ('create:block/pipes_connected', 'steel_pipes_connected'),
             # Tap: Create's fluid valve sheets
             ('create:block/fluid_valve', 'steel_valve'), ('create:block/valve_open', 'steel_valve_open'), ('create:block/valve_closed', 'steel_valve_closed')]
+# The Tap has no shaft: blank Create's valve shaft socket (the face at px 18..30 x 2..14 of the 32px sheet) into a
+# flat bolted cover plate: rim and bolts in the frame's dark line colour, plate in the frame colour. Fractions of the image.
+_f = lambda x0, y0, x1, y1, fx, fy: {'rect': [x0 / 32, y0 / 32, x1 / 32, y1 / 32], 'from': [fx / 32, fy / 32]}
+VAT_FILLS = {'steel_valve': [_f(20, 3, 28, 12, 19.5, 3.5), _f(21, 4, 27, 11, 24.5, 2.5)]
+             + [_f(x, y, x + 1, y + 1, 19.5, 3.5) for x in (22, 25) for y in (5, 9)]}   # four bolt heads
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
-    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
+    'sprites': [dict({'source': src, 'target': ce('block/' + dst)}, **({'fills': VAT_FILLS[dst]} if dst in VAT_FILLS else {}))
+                for src, dst in VAT_TANK]}]})
 VAT_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'dark': CR('dark_metal_block'), 'brass': CR('brass_block')}
 eng('fermenting_vat_body', VAT_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
     d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}

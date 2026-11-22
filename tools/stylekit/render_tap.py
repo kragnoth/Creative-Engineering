@@ -23,7 +23,16 @@ STEEL = {'steel_valve': 'fluid_valve', 'steel_valve_open': 'valve_open', 'steel_
 def steel(name):
     path = os.path.join(rv.CT, 'textures', name + '.png')
     if not os.path.exists(path):
-        rv.recolor(Image.open(CREATE + 'textures/block/' + STEEL[name] + '.png')).save(path)
+        im = rv.recolor(Image.open(CREATE + 'textures/block/' + STEEL[name] + '.png')).convert('RGBA')
+        for sp in json.load(open(MOD.split('/assets/')[0] + '/assets/minecraft/atlases/blocks.json'))['sources'][0]['sprites']:
+            if sp['target'].endswith('/' + name):
+                for f in sp.get('fills', []):     # same flat fills as RecolorSpriteSource
+                    w, h = im.size
+                    c = im.getpixel((min(w - 1, int(f['from'][0] * w)), min(h - 1, int(f['from'][1] * h))))
+                    for y in range(round(f['rect'][1] * h), round(f['rect'][3] * h)):
+                        for x in range(round(f['rect'][0] * w), round(f['rect'][2] * w)):
+                            im.putpixel((x, y), c)
+        im.save(path)
     return 'preview:' + name
 
 

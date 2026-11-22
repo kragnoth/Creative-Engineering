@@ -351,3 +351,6 @@ Convention (borrowed from Tarbound):
 
 ## 0.13.3 — Tap restyle
 - [ ] Tap looks like a steel Create fluid valve: pipe through it along the tap, glass dial + lever on top, rim on the column, arm to the pipe; lever along the pipe when open, across when shut; all four facings.
+
+## 0.13.4 — Tap side plates
+- [ ] Tap sides show bolted steel cover plates, not Create's black shaft sockets; Create's own fluid valve is unchanged.
