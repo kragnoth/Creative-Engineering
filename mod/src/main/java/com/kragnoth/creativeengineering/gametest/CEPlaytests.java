@@ -130,4 +130,29 @@ public final class CEPlaytests {
             h.assertTrue(tank.getFluidInTank(0).getAmount() < 4000, "no creosote burnt");
         });
     }
+
+    /** A cylinder added while the engine runs joins in (RUNNING set, capacity up) within the 1 s rescan. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 300)
+    public static void dieselCylinderAddedWhileRunningJoins(GameTestHelper h) {
+        BlockPos cc = new BlockPos(5, 3, 5);
+        h.setBlock(cc, ModBlocks.DIESEL_CRANKCASE.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.HORIZONTAL_FACING, Direction.EAST));
+        h.setBlock(cc.above().south(), ModBlocks.DIESEL_CYLINDER.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.FACING, Direction.SOUTH));
+        h.setBlock(cc.north(), block("create:fluid_tank"));
+        h.runAfterDelay(2, () -> {
+            h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(cc.north()), Direction.SOUTH)
+                    .fill(new net.neoforged.neoforge.fluids.FluidStack(com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE.get(), 4000),
+                            net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE);
+            h.setBlock(cc.west(), block("create:creative_motor").defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.EAST));
+        });
+        h.runAfterDelay(80, () -> h.setBlock(cc.above().north(), ModBlocks.DIESEL_CYLINDER.get().defaultBlockState()
+                .setValue(com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.FACING, Direction.NORTH)));
+        h.runAfterDelay(130, () -> h.succeedWhen(() -> {
+            h.assertBlockProperty(cc.above().north(), com.kragnoth.creativeengineering.content.engine.DieselCylinderBlock.RUNNING, true);
+            var engine = (com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity) h.getBlockEntity(cc);
+            h.assertTrue(engine.cylinderCount() == 2, "engine counts " + engine.cylinderCount() + " cylinders");
+        }));
+    }
 }

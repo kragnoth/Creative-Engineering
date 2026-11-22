@@ -85,7 +85,17 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
             scanTimer = SCAN_TICKS;
             int before = cylinders;
             Fluid fuelBefore = fuelFluid;
+            List<BlockPos> wasPart = new ArrayList<>(cylinderPositions);
             scan();
+            // cylinders that left the engine (wrenched, line broken) stop; ones that joined while running start
+            for (BlockPos c : wasPart) {
+                if (!cylinderPositions.contains(c)) {
+                    setCylinder(c, false);
+                }
+            }
+            if (running) {
+                setCylinders(true);
+            }
             if (running && (before != cylinders || fuelBefore != fuelFluid)) {
                 if (cylinders == 0) {
                     stop();
@@ -221,10 +231,14 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
 
     private void setCylinders(boolean on) {
         for (BlockPos c : cylinderPositions) {
-            BlockState s = level.getBlockState(c);
-            if (s.is(ModBlocks.DIESEL_CYLINDER.get()) && s.getValue(DieselCylinderBlock.RUNNING) != on) {
-                level.setBlock(c, s.setValue(DieselCylinderBlock.RUNNING, on), Block.UPDATE_CLIENTS);
-            }
+            setCylinder(c, on);
+        }
+    }
+
+    private void setCylinder(BlockPos c, boolean on) {
+        BlockState s = level.getBlockState(c);
+        if (s.is(ModBlocks.DIESEL_CYLINDER.get()) && s.getValue(DieselCylinderBlock.RUNNING) != on) {
+            level.setBlock(c, s.setValue(DieselCylinderBlock.RUNNING, on), Block.UPDATE_CLIENTS);
         }
     }
 

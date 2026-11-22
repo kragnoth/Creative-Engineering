@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.9-alpha: cylinders added while running (2026-11-22) - test in game
+- [ ] Add a cylinder (or a whole crankcase with cylinders) to a running engine: within a second it nods, smokes and adds its capacity. Wrench one to face the wrong way: it stops animating.
+- [ ] `/test runall`: 6 tests pass (new: dieselCylinderAddedWhileRunningJoins).
+
 ## 0.8.8-alpha: crankshaft stub (2026-11-22) - look in game
 - [ ] The crankshaft pokes 2 px out of both crankcase ends when nothing's attached (housing also recessed 2 px). With a crankcase / Create shaft / flywheel / hand crank attached the stub hides inside it: check there's no flicker at those joints.
 
