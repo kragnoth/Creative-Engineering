@@ -19,10 +19,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * Pumpjack, its Crank Gearbox (docs/petroleum-spec.md): one kinetic block that turns rotation into a crank stroke. A
- * Samson Post 1-2 blocks ahead (HORIZONTAL_FACING) carries the walking beam; the stroked block (a Wellhead) stands 1-2
- * blocks past the post (PumpjackRig). Each part is its own block; nothing forms. Rotation comes in on either side.
- * Oritech-style guidance, without assembly: right-click with an empty hand outlines where the parts go; right-click
- * with a Samson Post or Wellhead places it in the next spot.
+ * player-built column (girders / industrial iron) 1-3 blocks ahead (HORIZONTAL_FACING) carries the Walking Beam
+ * Bearing; the stroked block (a Wellhead) stands 1-6 blocks past the column (PumpjackRig). Each part is its own block;
+ * nothing forms. Rotation comes in on either side. Oritech-style guidance, without assembly: right-click with an empty
+ * hand outlines where the parts go; right-click with a bearing or Wellhead places it in the next spot.
  */
 public class PumpjackBlock extends HorizontalKineticBlock implements IBE<PumpjackBlockEntity> {
     private static final VoxelShaper SHAPE = VoxelShaper.forHorizontal(Shapes.or(Block.box(0, 0, 0, 16, 2, 16),
@@ -42,37 +42,49 @@ public class PumpjackBlock extends HorizontalKineticBlock implements IBE<Pumpjac
         return defaultBlockState().setValue(HORIZONTAL_FACING, f);
     }
 
-    /** Right-click with a Samson Post or a Wellhead: place it where the rig needs it next (1 block on, the short rig). */
+    /**
+     * Right-click with a Walking Beam Bearing or a Wellhead: place it where the rig needs it next. The bearing goes on
+     * top of a 2-6 high column built 1 block on; the Wellhead goes 1 block past the column (the short rig).
+     */
     @Override
     protected net.minecraft.world.ItemInteractionResult useItemOn(net.minecraft.world.item.ItemStack stack, BlockState state, net.minecraft.world.level.Level level,
                                                                BlockPos pos, net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand,
                                                                net.minecraft.world.phys.BlockHitResult hit) {
-        boolean post = stack.is(com.kragnoth.creativeengineering.registry.ModItems.SAMSON_POST.get());
+        boolean bearing = stack.is(com.kragnoth.creativeengineering.registry.ModItems.BEAM_BEARING.get());
         boolean well = stack.is(com.kragnoth.creativeengineering.registry.ModItems.WELLHEAD.get());
-        if (!post && !well) {
+        if (!bearing && !well) {
             return super.useItemOn(stack, state, level, pos, player, hand, hit);
         }
         Direction f = state.getValue(HORIZONTAL_FACING);
         PumpjackRig rig = PumpjackRig.fromGearbox(level, pos, f);
-        BlockPos at = post ? (rig == null ? pos.relative(f) : null) : (rig != null && rig.well() == null ? rig.post().relative(f) : null);
-        if (at == null || !level.getBlockState(at).canBeReplaced() || (post && !level.getBlockState(at.above()).canBeReplaced())) {
+        BlockPos at = null;
+        String why;
+        if (bearing) {
+            int h = PumpjackRig.column(level, pos.relative(f));
+            why = rig != null ? "creativeengineering.pumpjack.has_post" : h < PumpjackRig.MIN_H ? "creativeengineering.pumpjack.no_column" : null;
+            if (why == null) {
+                at = pos.relative(f).above(h);
+            }
+        } else {
+            why = rig == null ? "creativeengineering.pumpjack.post_first" : rig.well() != null ? "creativeengineering.pumpjack.has_well" : null;
+            if (why == null) {
+                at = rig.base().relative(f);
+            }
+        }
+        if (at != null && !level.getBlockState(at).canBeReplaced()) {
+            at = null;
+            why = "creativeengineering.pumpjack.blocked";
+        }
+        if (at == null) {
             if (level.isClientSide) {
-                player.displayClientMessage(net.minecraft.network.chat.Component.translatable(at == null
-                        ? (post ? "creativeengineering.pumpjack.has_post" : rig == null ? "creativeengineering.pumpjack.post_first" : "creativeengineering.pumpjack.has_well")
-                        : "creativeengineering.pumpjack.blocked"), true);
+                player.displayClientMessage(net.minecraft.network.chat.Component.translatable(why), true);
             }
             return net.minecraft.world.ItemInteractionResult.FAIL;
         }
         if (!level.isClientSide) {
-            if (post) {
-                BlockState s = com.kragnoth.creativeengineering.registry.ModBlocks.SAMSON_POST.get().defaultBlockState().setValue(SamsonPostBlock.FACING, f);
-                level.setBlock(at, s, Block.UPDATE_ALL);
-                level.setBlock(at.above(), s.setValue(SamsonPostBlock.HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
-            } else {
-                level.setBlock(at, com.kragnoth.creativeengineering.registry.ModBlocks.WELLHEAD.get().defaultBlockState(), Block.UPDATE_ALL);
-            }
-            BlockState placed = level.getBlockState(at);
-            level.playSound(null, at, placed.getSoundType().getPlaceSound(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 0.8F);
+            level.setBlock(at, bearing ? com.kragnoth.creativeengineering.registry.ModBlocks.BEAM_BEARING.get().defaultBlockState().setValue(BeamBearingBlock.FACING, f)
+                    : com.kragnoth.creativeengineering.registry.ModBlocks.WELLHEAD.get().defaultBlockState(), Block.UPDATE_ALL);
+            level.playSound(null, at, level.getBlockState(at).getSoundType().getPlaceSound(), net.minecraft.sounds.SoundSource.BLOCKS, 1, 0.8F);
             if (!player.isCreative()) {
                 stack.shrink(1);
             }

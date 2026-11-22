@@ -66,8 +66,7 @@ public final class ModItems {
     public static final DeferredItem<com.kragnoth.creativeengineering.content.petroleum.SeismicProbeItem> SEISMIC_PROBE = ITEMS.register("seismic_probe",
             () -> new com.kragnoth.creativeengineering.content.petroleum.SeismicProbeItem(new net.minecraft.world.item.Item.Properties().durability(64)));
     public static final DeferredItem<net.minecraft.world.item.BlockItem> PUMPJACK = ITEMS.registerSimpleBlockItem(ModBlocks.PUMPJACK);
-    public static final DeferredItem<net.minecraft.world.item.DoubleHighBlockItem> SAMSON_POST = ITEMS.register("samson_post",
-            () -> new net.minecraft.world.item.DoubleHighBlockItem(ModBlocks.SAMSON_POST.get(), new net.minecraft.world.item.Item.Properties()));
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BEAM_BEARING = ITEMS.registerSimpleBlockItem(ModBlocks.BEAM_BEARING);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> WELLHEAD = ITEMS.registerSimpleBlockItem(ModBlocks.WELLHEAD);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> STEEL_PIPE = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_PIPE);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TAP = ITEMS.registerSimpleBlockItem(ModBlocks.TAP);
@@ -134,7 +133,7 @@ public final class ModItems {
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK, TAP, STEEL_PIPE, STEEL_TANK, SEISMIC_PROBE, PUMPJACK, SAMSON_POST, WELLHEAD,
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK, TAP, STEEL_PIPE, STEEL_TANK, SEISMIC_PROBE, PUMPJACK, BEAM_BEARING, WELLHEAD,
             ANDESITE_CAMPFIRE_STAND, BRASS_CAMPFIRE_STAND, COPPER_CAMPFIRE_STAND);
     }
 

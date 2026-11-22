@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "creativeengineering:block/walking_beam_bearing"
+    },
+    "facing=west": {
+      "model": "creativeengineering:block/walking_beam_bearing",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "creativeengineering:block/walking_beam_bearing",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "creativeengineering:block/walking_beam_bearing",
+      "y": 270
+    }
+  }
+}

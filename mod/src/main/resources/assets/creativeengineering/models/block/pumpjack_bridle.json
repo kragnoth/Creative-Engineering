@@ -1,0 +1,220 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "iron": "create:block/industrial_iron_block",
+    "iron_top": "create:block/industrial_iron_block_top",
+    "dark": "create:block/dark_metal_block",
+    "casing": "create:block/andesite_casing",
+    "brass": "create:block/brass_block",
+    "shaft": "create:block/axis",
+    "shaft_end": "create:block/axis_top",
+    "steel": "creativeengineering:block/steel_block",
+    "particle": "create:block/industrial_iron_block"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        -0.75
+      ],
+      "to": [
+        10,
+        1,
+        0.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            6,
+            15,
+            10,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            6,
+            15,
+            10,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            15,
+            1.5,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            15,
+            1.5,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            6,
+            0,
+            10,
+            1.5
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            6,
+            0,
+            10,
+            1.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        1,
+        -0.25
+      ],
+      "to": [
+        7,
+        7,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            9,
+            9,
+            9.5,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            6.5,
+            9,
+            7,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            9,
+            0.5,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            9,
+            0.5,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            6.5,
+            0,
+            7,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            6.5,
+            0,
+            7,
+            0.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        9,
+        1,
+        -0.25
+      ],
+      "to": [
+        9.5,
+        7,
+        0.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            6.5,
+            9,
+            7,
+            15
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            9,
+            9,
+            9.5,
+            15
+          ]
+        },
+        "east": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            9,
+            0.5,
+            15
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            0,
+            9,
+            0.5,
+            15
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            9,
+            0,
+            9.5,
+            0.5
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            9,
+            0,
+            9.5,
+            0.5
+          ]
+        }
+      }
+    }
+  ]
+}

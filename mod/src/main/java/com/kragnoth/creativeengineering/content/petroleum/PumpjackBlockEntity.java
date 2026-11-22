@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
 /**
- * Crank Gearbox logic. Every tick it turns it strokes the rig's well (StrokeDriven) with power min(1, RPM / 64) x stroke,
- * where stroke = reach / rear arm (PumpjackRig). Stress follows the stroke: 8 SU per RPM per unit of stroke, 2 with no
+ * Crank Gearbox logic. Every tick it turns it strokes the rig's well (StrokeDriven) with power min(1, RPM / 64) x stroke
+ * (PumpjackRig: throw / rear arm x reach / 4, 1 to 6). Stress follows the stroke: 8 SU per RPM per unit of stroke, 2 with no
  * well on the beam. The rig is looked up again every second (parts are separate blocks and may change).
  */
 public class PumpjackBlockEntity extends KineticBlockEntity {
@@ -53,7 +53,7 @@ public class PumpjackBlockEntity extends KineticBlockEntity {
 
     private float strokeLoad() {
         PumpjackRig r = rig;
-        return r != null && r.well() != null ? r.stroke() : 0;
+        return r != null && r.runs() ? r.stroke() : 0;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class PumpjackBlockEntity extends KineticBlockEntity {
                 }
             }
         }
-        if (getSpeed() != 0 && rig != null && rig.well() != null && level.getBlockEntity(rig.well()) instanceof StrokeDriven d) {
+        if (getSpeed() != 0 && rig != null && rig.runs() && level.getBlockEntity(rig.well()) instanceof StrokeDriven d) {
             d.stroke(power() * rig.stroke());
         }
     }
@@ -103,6 +103,9 @@ public class PumpjackBlockEntity extends KineticBlockEntity {
             tooltip.add(line(Component.translatable("creativeengineering.pumpjack.no_post"), ChatFormatting.RED));
             return true;
         }
+        if (r.h() < PumpjackRig.MIN_H) {
+            tooltip.add(line(Component.translatable("creativeengineering.pumpjack.no_column"), ChatFormatting.RED));
+        }
         if (r.gearbox() == null) {
             tooltip.add(line(Component.translatable("creativeengineering.pumpjack.no_gearbox"), ChatFormatting.RED));
         }
@@ -110,7 +113,10 @@ public class PumpjackBlockEntity extends KineticBlockEntity {
             tooltip.add(line(Component.translatable("creativeengineering.pumpjack.no_target"), ChatFormatting.RED));
         } else {
             tooltip.add(line(Component.translatable("creativeengineering.pumpjack.driving", level.getBlockState(r.well()).getBlock().getName()), ChatFormatting.GOLD));
-            tooltip.add(line(Component.translatable("creativeengineering.pumpjack.stroke", r.a(), r.b(), String.format("%.1f", r.stroke())), ChatFormatting.AQUA));
+            tooltip.add(line(Component.translatable("creativeengineering.pumpjack.stroke", r.h(), r.a(), r.b(), String.format("%.1f", r.stroke())), ChatFormatting.AQUA));
+            if (r.tooShort()) {
+                tooltip.add(line(Component.translatable("creativeengineering.pumpjack.too_short"), ChatFormatting.RED));
+            }
         }
         return true;
     }

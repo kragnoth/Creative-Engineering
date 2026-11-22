@@ -111,3 +111,8 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - New block / item / BE `samson_post` (states `facing`, `half`; BE on the lower half only, no saved data).
 - `pumpjack` is now the Crank Gearbox (same id; BE keeps only Create kinetic data). `wellhead` model and shape change (pipe-size ports); NBT unchanged.
 - New partial models `pumpjack_horsehead`, `pumpjack_equalizer`, `pumpjack_saddle`; `pumpjack_beam` is now one block of beam.
+
+## 0.17.0 — Pumpjack on a built column
+- Removed `samson_post` (block, item, BE; placed ones disappear). New block / item / BE `walking_beam_bearing` (state `facing`, no saved data).
+- New block tag `creativeengineering:pumpjack_column` (Create metal girder, industrial / weathered iron, our steel and cast iron blocks).
+- New partial `pumpjack_bridle`; `pumpjack_pitman` and `pumpjack_rod` are now 16 px segments.

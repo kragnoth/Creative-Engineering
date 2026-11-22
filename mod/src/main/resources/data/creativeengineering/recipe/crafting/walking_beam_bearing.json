@@ -2,20 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "PPP",
-    "G G",
-    "G G"
+    " S ",
+    "B B",
+    "PPP"
   ],
   "key": {
+    "S": {
+      "item": "create:shaft"
+    },
+    "B": {
+      "tag": "c:plates/brass"
+    },
     "P": {
       "tag": "c:plates/steel"
-    },
-    "G": {
-      "item": "create:metal_girder"
     }
   },
   "result": {
-    "id": "creativeengineering:samson_post",
+    "id": "creativeengineering:walking_beam_bearing",
     "count": 1
   }
 }

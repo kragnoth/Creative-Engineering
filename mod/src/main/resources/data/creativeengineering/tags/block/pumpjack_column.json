@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "create:metal_girder",
+    "create:industrial_iron_block",
+    "create:weathered_iron_block",
+    "creativeengineering:steel_block",
+    "creativeengineering:cast_iron_block"
+  ]
+}

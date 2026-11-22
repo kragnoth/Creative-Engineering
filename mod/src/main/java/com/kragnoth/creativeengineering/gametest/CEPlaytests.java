@@ -538,21 +538,28 @@ public final class CEPlaytests {
     // ------------------------------------------------------------------------------------------------ petroleum
     private static final String PJ = "com.kragnoth.creativeengineering.content.petroleum";
 
-    /** Crank Gearbox at g facing south with a creative motor on its east side, a Samson Post `a` blocks on; returns the post. */
-    private static BlockPos pumpjack(GameTestHelper h, BlockPos g, int a) {
-        h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, Direction.SOUTH));
-        h.setBlock(g.east(), net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", "creative_motor"))
-                .defaultBlockState().setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
-        BlockPos post = g.south(a);
-        var ps = ModBlocks.SAMSON_POST.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock.FACING, Direction.SOUTH);
-        h.setBlock(post, ps);
-        h.setBlock(post.above(), ps.setValue(com.kragnoth.creativeengineering.content.petroleum.SamsonPostBlock.HALF, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
-        return post;
+    private static net.minecraft.world.level.block.state.BlockState create(String id) {
+        return net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create", id)).defaultBlockState();
     }
 
-    /** The short rig (rear arm 1, reach 1): returns where its Wellhead goes. */
+    /**
+     * Crank Gearbox at g facing south with a creative motor on its east side, a column of industrial iron `height`
+     * high `a` blocks on with a Walking Beam Bearing on top; returns the column's base.
+     */
+    private static BlockPos pumpjack(GameTestHelper h, BlockPos g, int a, int height) {
+        h.setBlock(g, ModBlocks.PUMPJACK.get().defaultBlockState().setValue(com.simibubi.create.content.kinetics.base.HorizontalKineticBlock.HORIZONTAL_FACING, Direction.SOUTH));
+        h.setBlock(g.east(), create("creative_motor").setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.WEST));
+        BlockPos base = g.south(a);
+        for (int y = 0; y < height; y++) {
+            h.setBlock(base.above(y), create("industrial_iron_block"));
+        }
+        h.setBlock(base.above(height), ModBlocks.BEAM_BEARING.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.BeamBearingBlock.FACING, Direction.SOUTH));
+        return base;
+    }
+
+    /** The smallest rig (column 2, rear arm 1, reach 1): returns where its Wellhead goes. */
     private static BlockPos pumpjack(GameTestHelper h, BlockPos g) {
-        return pumpjack(h, g, 1).south();
+        return pumpjack(h, g, 1, 2).south();
     }
 
     private static com.kragnoth.creativeengineering.content.petroleum.WellheadBlockEntity wellhead(GameTestHelper h, BlockPos rel) {
@@ -612,8 +619,7 @@ public final class CEPlaytests {
     public static void longReachDoublesStroke(GameTestHelper h) {
         open(h);
         BlockPos g = new BlockPos(4, 2, 2);
-        BlockPos post = pumpjack(h, g, 1);
-        BlockPos well = post.south(2);
+        BlockPos well = pumpjack(h, g, 1, 2).south(2);
         h.setBlock(well, ModBlocks.WELLHEAD.get());
         net.minecraft.world.level.ChunkPos chunk = new net.minecraft.world.level.ChunkPos(h.absolutePos(well));
         com.kragnoth.creativeengineering.content.petroleum.OilVeins.force(chunk, 40);
@@ -626,6 +632,30 @@ public final class CEPlaytests {
             h.assertTrue(pj.calculateStressApplied() == 2 * com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity.SU_PER_RPM, "stress " + pj.calculateStressApplied());
             com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(chunk);
         }));
+    }
+
+    /** Reach 6 on a 2-high column would swing the horsehead into the well: it refuses to run until the column is 5 high. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 200)
+    public static void longReachNeedsATallColumn(GameTestHelper h) {
+        open(h);
+        BlockPos g = new BlockPos(2, 1, 1);
+        BlockPos base = pumpjack(h, g, 1, 2);
+        BlockPos well = base.south(6);
+        h.setBlock(well, ModBlocks.WELLHEAD.get());
+        h.runAfterDelay(40, () -> {
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(g);
+            h.assertTrue(pj.rig() != null && pj.rig().b() == 6 && pj.rig().tooShort(), "2-high column with reach 6 should be too short: " + pj.rig());
+            h.assertTrue(wellhead(h, well).pumpRate() == 0, "too-short rig pumped " + wellhead(h, well).pumpRate());
+            for (int y = 2; y < 5; y++) {   // raise the column: move the bearing up
+                h.setBlock(base.above(y), create("industrial_iron_block"));
+            }
+            h.setBlock(base.above(5), ModBlocks.BEAM_BEARING.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.petroleum.BeamBearingBlock.FACING, Direction.SOUTH));
+            h.runAfterDelay(40, () -> h.succeedWhen(() -> {
+                var r = pj.rig();
+                h.assertTrue(r != null && r.h() == 5 && !r.tooShort() && r.stroke() == 6F, "5-high column rig " + r);
+                h.assertTrue(wellhead(h, well).pumpRate() > 0, "tall rig should pump");
+            }));
+        });
     }
 
     @GameTest(template = PLAYGROUND, timeoutTicks = 20)

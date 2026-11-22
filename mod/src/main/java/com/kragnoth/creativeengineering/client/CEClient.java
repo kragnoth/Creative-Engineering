@@ -36,11 +36,11 @@ public final class CEClient {
         // crankshaft: renderer fallback (Create's renderer skips itself when Flywheel instancing is on)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_ENGINE.get(),
                 com.kragnoth.creativeengineering.client.engine.CrankshaftRenderer::new);
-        // pumpjack: gearbox shaft + cranks, and the samson post's beam and linkage (fallbacks; instanced visuals below)
+        // pumpjack: gearbox shaft + cranks, and the beam bearing's beam and linkage (fallbacks; instanced visuals below)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.PUMPJACK.get(),
                 com.kragnoth.creativeengineering.client.petroleum.PumpjackRenderer::new);
-        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.SAMSON_POST.get(),
-                com.kragnoth.creativeengineering.client.petroleum.SamsonPostRenderer::new);
+        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.BEAM_BEARING.get(),
+                com.kragnoth.creativeengineering.client.petroleum.BeamBearingRenderer::new);
         // rocker arms: renderer fallback (skips itself when Flywheel instancing is on)
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_CYLINDER.get(),
                 com.kragnoth.creativeengineering.client.engine.CylinderRenderer::new);
@@ -65,15 +65,15 @@ public final class CEClient {
                 .factory(com.kragnoth.creativeengineering.client.engine.CylinderVisual::new)
                 .skipVanillaRender(be -> false)
                 .apply());
-        // the pumpjack: Create's shaft and the cranks through its gearbox; the nodding beam and linkage on its samson post
+        // the pumpjack: Create's shaft and the cranks through its gearbox; the nodding beam and linkage on its walking beam bearing
         event.enqueueWork(() -> dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
                 .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.PUMPJACK.get())
                 .factory(com.kragnoth.creativeengineering.client.petroleum.PumpjackVisual::new)
                 .skipVanillaRender(be -> false)
                 .apply());
         event.enqueueWork(() -> dev.engine_room.flywheel.lib.visualization.SimpleBlockEntityVisualizer
-                .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.SAMSON_POST.get())
-                .factory(com.kragnoth.creativeengineering.client.petroleum.SamsonPostVisual::new)
+                .builder(com.kragnoth.creativeengineering.registry.ModBlockEntities.BEAM_BEARING.get())
+                .factory(com.kragnoth.creativeengineering.client.petroleum.BeamBearingVisual::new)
                 .skipVanillaRender(be -> false)
                 .apply());
         // the crankshaft spins inside the crankcase like any Create shaft (model built along X)

@@ -384,3 +384,11 @@ Convention (borrowed from Tarbound):
 - [ ] Post 2 blocks from the gearbox and/or well 2 past the post: beam lengthens; goggles show rear arm / reach / stroke; reach 2 doubles draw and stress.
 - [ ] Create pipes meet the Wellhead's four ports square (centred 8 px flanges).
 - [ ] `/test runrefinery` still runs (gearbox, post, wellhead).
+
+## 0.17.0 — Pumpjack on a built girder column
+- [ ] Build: Crank Gearbox, 2-6 Create girders (or industrial iron) 1-3 blocks on, Walking Beam Bearing on top, Wellhead 1-6 past the column. Each piece places, wrenches and breaks on its own.
+- [ ] It animates: cranks turn, beam rocks on the bearing, pitman arms stay on the pins and the equalizer, the rod rides into the stuffing box. Check small (2 / 1 / 1) and field size (5 / 2 / 4) rigs, all four facings, Flywheel on and off.
+- [ ] Bigger build looks bigger: longer beam, heavier section, larger horsehead; goggles show column / rear arm / reach / stroke.
+- [ ] Reach 6 on a 2-high column says "column too short" and doesn't pump; at 5 high it runs (stroke 6x, 48 SU/RPM).
+- [ ] Gearbox empty-hand outline shows the column, bearing and well spots; holding a bearing (column built) or Wellhead places it.
+- [ ] `/test runrefinery` builds the girder version and runs.

@@ -28,7 +28,8 @@ public class PumpjackRenderer extends KineticBlockEntityRenderer<PumpjackBlockEn
             return;
         }
         super.renderSafe(be, pt, ms, buffers, light, overlay);
-        PumpjackPoser.crank(CachedBuffers.partial(CEPartials.PUMPJACK_CRANK, be.getBlockState()), be.facing(), be.crankAngle(pt))
+        PumpjackPoser.crank(CachedBuffers.partial(CEPartials.PUMPJACK_CRANK, be.getBlockState()), be.facing(), be.crankAngle(pt),
+                be.rig() == null ? 4 : be.rig().crankR())
                 .light(light).renderInto(ms, buffers.getBuffer(RenderType.solid()));
     }
 }

@@ -31,11 +31,13 @@ public class PumpjackVisual extends SingleAxisRotatingVisual<PumpjackBlockEntity
 
     private void animate(float pt) {
         float a = blockEntity.crankAngle(pt);
-        if (a == last) {
+        if (a == last && blockEntity.getSpeed() == 0) {
             return;
         }
         last = a;
-        PumpjackPoser.crank(crank.setIdentityTransform().translate(getVisualPosition()), blockEntity.facing(), a).setChanged();
+        var rig = blockEntity.rig();
+        PumpjackPoser.crank(crank.setIdentityTransform().translate(getVisualPosition()), blockEntity.facing(), a,
+                rig == null ? 4 : rig.crankR()).setChanged();
     }
 
     @Override

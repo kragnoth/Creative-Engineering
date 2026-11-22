@@ -9,72 +9,73 @@
     "shaft": "create:block/axis",
     "shaft_end": "create:block/axis_top",
     "steel": "creativeengineering:block/steel_block",
+    "girder": "create:block/girder",
     "particle": "create:block/industrial_iron_block"
   },
   "elements": [
     {
       "from": [
-        6.5,
+        6,
         -1,
         0
       ],
       "to": [
-        9.5,
-        2,
+        10,
+        3,
         16
       ],
       "faces": {
         "north": {
-          "texture": "#iron",
+          "texture": "#dark",
           "uv": [
-            6.5,
+            6,
             0,
-            9.5,
-            3
+            10,
+            4
           ]
         },
         "south": {
-          "texture": "#iron",
+          "texture": "#dark",
           "uv": [
-            6.5,
+            6,
             0,
-            9.5,
-            3
+            10,
+            4
           ]
         },
         "east": {
-          "texture": "#iron",
+          "texture": "#girder",
           "uv": [
             0,
             0,
-            16,
-            3
+            8,
+            4
           ]
         },
         "west": {
-          "texture": "#iron",
+          "texture": "#girder",
           "uv": [
             0,
             0,
-            16,
-            3
+            8,
+            4
           ]
         },
         "up": {
           "texture": "#iron_top",
           "uv": [
-            6.5,
+            6,
             0,
-            9.5,
+            10,
             16
           ]
         },
         "down": {
           "texture": "#iron_top",
           "uv": [
-            6.5,
+            6,
             0,
-            9.5,
+            10,
             16
           ]
         }

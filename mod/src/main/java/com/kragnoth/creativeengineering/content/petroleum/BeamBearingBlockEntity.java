@@ -4,7 +4,6 @@ import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import java.util.List;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -12,9 +11,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/** Samson Post (lower half): no logic of its own; it carries the beam's drawing and a goggle summary of the rig. */
-public class SamsonPostBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
-    public SamsonPostBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+/** Walking Beam Bearing: no logic of its own; it carries the beam's drawing and a goggle summary of the rig. */
+public class BeamBearingBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation {
+    public BeamBearingBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
@@ -22,11 +21,11 @@ public class SamsonPostBlockEntity extends SmartBlockEntity implements IHaveGogg
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
 
     public Direction facing() {
-        return getBlockState().getValue(SamsonPostBlock.FACING);
+        return getBlockState().getValue(BeamBearingBlock.FACING);
     }
 
     public PumpjackRig rig() {
-        return PumpjackRig.fromPost(level, worldPosition, facing());
+        return PumpjackRig.fromBearing(level, worldPosition, facing());
     }
 
     /** The crank angle to draw (radians): the gearbox's, or a level beam with no gearbox. */
@@ -44,6 +43,6 @@ public class SamsonPostBlockEntity extends SmartBlockEntity implements IHaveGogg
 
     @Override
     protected AABB createRenderBoundingBox() {
-        return new AABB(worldPosition).inflate(3, 3, 3);   // the beam reaches up to 2 blocks each way and 3 up
+        return new AABB(worldPosition).inflate(7, 1, 7).expandTowards(0, -PumpjackRig.MAX_H - 1, 0);   // beam ends, cranks, rod
     }
 }

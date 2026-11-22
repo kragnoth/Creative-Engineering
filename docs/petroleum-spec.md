@@ -1,4 +1,4 @@
-# Petroleum: crude, veins, pumpjack, fuels (0.14.0; pumpjack rebuilt from parts 0.15.0-0.16.0)
+# Petroleum: crude, veins, pumpjack, fuels (0.14.0; pumpjack rebuilt from parts 0.15.0-0.17.0)
 
 Kragnoth, 2026-11-22: "a way to get proper diesel, kerosene and gas now. Small pools that spawn in the desert, a way
 to prospect for infinite veins that make it so one can place down a nodding donkey in a chunk and create oil."
@@ -32,40 +32,51 @@ kerosene / gasoline join through the `c:` tags and the optional tier entries.
   rounded to 8 blocks with an 8-way compass direction, or "No oil within 128 blocks".
 - Recipe: electron tube, brass sheet, steel rod (diagonal).
 
-## Pumpjack: Crank Gearbox + Samson Post + Wellhead (0.16.0)
+## Pumpjack: Crank Gearbox + built column + Walking Beam Bearing + Wellhead (0.17.0)
 Kragnoth, 2026-11-22:
 - keep it "Create-centric, not magical multiblock", with no glue or contraptions, true to Create's ethos in each part;
-- then: scale it up so the well's outlets line up with Create pipes (look at Oritech / IE, stay Create).
+- scale it up so the well's outlets line up with Create pipes (look at Oritech / IE, stay Create);
+- use Create-centric looks (girders, industrial iron) at real-life sizes; and it must animate.
 
-0.14.0's one-item, three-block pumpjack is gone. Each part is its own block, placed, wrenched and broken on its own. The
-parts find each other by where they stand (`PumpjackRig`), like Create's steam engine finding its boiler. Nothing
-forms and nothing is hidden.
+Each part is its own block, placed, wrenched and broken on its own. The parts find each other by where they stand
+(`PumpjackRig`), like Create's steam engine finding its boiler. Nothing forms and nothing is hidden. The tall part is
+built by the player out of real Create blocks.
 
-### Layout (in a row along the gearbox's facing)
+### Layout (in a row along the gearbox's facing, all at ground level)
 | Part | Where | Does |
 |---|---|---|
-| Crank Gearbox (`pumpjack`) | the start; faces away from you when placed | Kinetic: shaft on either side, crank and counterweights at 1/4 shaft speed |
-| Samson Post (`samson_post`) | 1 or 2 blocks on (the **rear arm**, a) | 1x2 tall (placed like a door); carries the walking beam, pivot 41 px up |
-| Wellhead (`wellhead`), or any `StrokeDriven` block | 1 or 2 blocks past the post (the **reach**, b) | Brings up its well source while stroked |
+| Crank Gearbox (`pumpjack`) | the start; faces away from you when placed | Kinetic: shaft on either side; counterweighted cranks at 1/4 shaft speed, throw 4 px (6 px from rear arm 2) |
+| Column | 1–3 blocks on (the **rear arm**, a) | 2–6 blocks of anything in `#creativeengineering:pumpjack_column`: Create metal girder, industrial iron, weathered iron, our steel / cast iron blocks |
+| Walking Beam Bearing (`walking_beam_bearing`) | on top of the column (its height, h) | Pillow-block bearing; the beam pivots in it (10 px up); draws the beam and linkage |
+| Wellhead, or any `StrokeDriven` block | 1–6 blocks past the column (the **reach**, b) | Brings up its well source while stroked |
 
-- **Stroke** = b / a, from 0.5 to 2. Draw = well rate x min(1, RPM / 64) x stroke. Stress = 8 SU per RPM per unit of
-  stroke; 2 SU per RPM when no well is on the beam.
-- Bigger build, more out: reach 2 doubles both the draw and the stress, the Create way to scale.
-- **Look:** gearbox in andesite casing on an industrial-iron skid. The post is a four-legged industrial-iron trestle
-  with dark rails and a brass saddle bearing. Beam: industrial iron. Horsehead: steel.
-  - Moving parts are partials posed by `PumpjackRig.pose`:
-    - crank radius 4 px on the shaft;
-    - the beam drawn one 16 px piece per block of a + b;
-    - the equalizer over the crank;
-    - pitman arms stretched pin to equalizer;
-    - polished rod hanging from the horsehead lip into the stuffing box.
-  - Drawn by `PumpjackVisual` (shaft + crank) and `SamsonPostVisual` (beam and linkage), with renderer fallbacks.
-  - Every model stays inside vanilla's -16..32 (`eng()` asserts it; 0.15.0's rod broke this).
+### Rules
+- **Stroke** = (crank throw / a) x b / 4. It is 1 for the smallest rig (2-high column, a 1, b 1) and up to 6 (a 1, b 6).
+  - Draw = well rate x min(1, RPM / 64) x stroke.
+  - Stress = 8 SU per RPM per unit of stroke, or 2 SU per RPM when nothing runs.
+- **Height gates reach.** A longer reach swings the horsehead lower. If its lowest point would come within 6 px of the
+  wellhead's stuffing box, the rig is "too short" and does not run (goggles say so). Raise the column to fix it.
+  - Reach 6 needs a 5-high column.
+  - The field-size preview rig is column 5, a 2, b 4.
+- **Size follows the build.** The beam is drawn one block per block of a + b, as a box girder with Create's girder
+  flange; its section thickens with length (x1 up to x2). The horsehead scales with the reach (x1 at b 1, x2.25 at b 6).
+  - Pitman arms and the polished rod are 16 px segments repeated along their length.
+- **Animation:**
+  - the cranks turn with the shaft (1/4 speed);
+  - the beam rocks on the bearing;
+  - the equalizer rides the rear end and the pitman arms follow pin to equalizer;
+  - the bridle and polished rod ride the horsehead lip down into the stuffing box.
+  - Drawn by `PumpjackVisual` (gearbox: Create's shaft + cranks) and `BeamBearingVisual` (everything else), with
+    renderer fallbacks.
+  - All poses come from `PumpjackRig.pose`; every model stays inside vanilla's -16..32 (`eng()` asserts it).
 - **Oritech-style guidance, no assembly:**
-  - Right-click the gearbox with an empty hand: Create's outliner shows where the post and well go. Green means
+  - Right-click the gearbox with an empty hand: Create's outliner shows the column, bearing and well spots. Green means
     already in place.
-  - Right-click the gearbox holding a Samson Post or Wellhead: it places that part in the next spot (short rig).
-- **Goggles** on the gearbox or the post show which parts are found, a and b with the stroke, and what is stroked.
+  - Right-click the gearbox holding a bearing (with a column already built 1 on) or a Wellhead: it places it in the
+    next spot.
+- **Goggles** on the gearbox or the bearing show the column height, rear arm, reach, stroke, what is stroked, and any
+  missing part or "too short".
+- Preview: `tools/stylekit/render_pumpjack.py [three_quarter|side|front]`.
 
 ### Wellhead
 - A full block. The casing head has a flow cross whose four ports are **Create pipe size** (8 px, centred, flanged),
@@ -101,7 +112,8 @@ Pools are finite. Drain them the Create way: a hose pulley or a pump, or by buck
 
 ## Demo
 `/test runrefinery` (op 2) builds the whole chain in front of you:
-- a Crank Gearbox on a creative motor, a Samson Post and a Wellhead (short rig), with the vein forced to 60 mB/s until restart;
+- a Crank Gearbox on a creative motor, a 2-high Create girder column with the Walking Beam Bearing, and a Wellhead
+  (the smallest rig), with the vein forced to 60 mB/s until restart;
 - Steel Pipe up into a 1x1x4 Distilling Tank on a creative Blaze Burner;
 - three taps into tall Steel Storage Tanks.
 
