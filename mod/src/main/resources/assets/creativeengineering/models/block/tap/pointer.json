@@ -1,0 +1,8 @@
+{
+  "parent": "create:block/fluid_valve/pointer",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "2": "creativeengineering:block/steel_valve",
+    "particle": "creativeengineering:block/steel_valve"
+  }
+}

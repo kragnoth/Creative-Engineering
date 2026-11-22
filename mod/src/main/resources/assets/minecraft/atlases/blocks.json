@@ -46,6 +46,18 @@
         {
           "source": "create:block/pipes_connected",
           "target": "creativeengineering:block/steel_pipes_connected"
+        },
+        {
+          "source": "create:block/fluid_valve",
+          "target": "creativeengineering:block/steel_valve"
+        },
+        {
+          "source": "create:block/valve_open",
+          "target": "creativeengineering:block/steel_valve_open"
+        },
+        {
+          "source": "create:block/valve_closed",
+          "target": "creativeengineering:block/steel_valve_closed"
         }
       ]
     }

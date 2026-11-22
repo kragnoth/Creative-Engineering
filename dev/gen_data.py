@@ -714,7 +714,9 @@ VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_c
             ('create:block/fluid_tank_inner', 'vat_tank_inner'), ('create:block/fluid_tank_inner_connected', 'vat_tank_inner_connected'),
             ('create:block/fluid_tank_window', 'vat_tank_window'), ('create:block/fluid_tank_window_single', 'vat_tank_window_single'),
             # Steel Pipe: Create's pipe sheets
-            ('create:block/pipes', 'steel_pipes'), ('create:block/pipes_connected', 'steel_pipes_connected')]
+            ('create:block/pipes', 'steel_pipes'), ('create:block/pipes_connected', 'steel_pipes_connected'),
+            # Tap: Create's fluid valve sheets
+            ('create:block/fluid_valve', 'steel_valve'), ('create:block/valve_open', 'steel_valve_open'), ('create:block/valve_closed', 'steel_valve_closed')]
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
     'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
@@ -855,25 +857,29 @@ put(R + '/crafting/steel_pipe.json', {'type': 'minecraft:crafting_shapeless', 'c
     'result': {'id': ce('steel_pipe'), 'count': 2}})
 LANG['block.%s.steel_pipe' % MODID] = 'Steel Pipe'
 
-# Tap (content/distilling/TapBlock): brass valve body on a bolted flange (back, on the column), steel spout to the pipe
-# (front, north as built), handwheel on top: square to the pipe when shut, a quarter turn round when open.
-TAP_T = {'brass': CR('brass_block'), 'iron': CR('industrial_iron_block'), 'dark': CR('dark_metal_block'),
-         'pipe': ce('block/steel_pipes'), 'wheel': CR('fluid_valve')}
-_tap = [box([3, 3, 15], [13, 13, 16], 'iron'),                       # flange on the column
-        box([4, 4, 8], [12, 12, 15], 'brass'),                        # valve body
-        box([5.5, 5.5, 0], [10.5, 10.5, 8], 'pipe'),                  # spout to the pipe
-        box([5, 5, 0], [11, 11, 1], 'iron'),                          # spout collar
-        box([7.5, 12, 11], [8.5, 14, 12], 'dark')]                    # stem
-for i, (x0, y0, x1, y1) in enumerate(((3.5, 3.5, 4.5, 4.5), (11.5, 3.5, 12.5, 4.5), (3.5, 11.5, 4.5, 12.5), (11.5, 11.5, 12.5, 12.5))):
-    _tap.append(box([x0, y0, 14.75], [x1, y1, 15], 'dark'))           # flange bolts
-for state, wheel in (('closed', [box([5, 14, 11], [11, 14.75, 12], 'wheel'), box([7.5, 14, 8.5], [8.5, 14.75, 14.5], 'wheel')]),
-                     ('open', [box([5, 14, 11], [11, 14.75, 12], 'wheel', rot={'angle': 45, 'axis': 'y', 'origin': [8, 14, 11.5]}),
-                               box([7.5, 14, 8.5], [8.5, 14.75, 14.5], 'wheel', rot={'angle': 45, 'axis': 'y', 'origin': [8, 14, 11.5]})])):
-    eng('tap_' + state, TAP_T, _tap + wheel)
-put('%s/blockstates/tap.json' % A, {'variants': {'facing=%s,open=%s' % (f, o): {'model': ce('block/tap_' + ('open' if o == 'true' else 'closed')), 'y': rot}
-                                                for f, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270))
-                                                for o in ('true', 'false')}})
-put('%s/models/item/tap.json' % A, {'parent': ce('block/tap_open')})
+# Tap (content/distilling/TapBlock), built from Create's own parts (Kragnoth, 2026-11-22: "follow the theming"):
+# Create's fluid valve housing and its open / closed indicator, Create's pointer lever (along the pipe = open, across
+# = shut, like a ball valve), Create's pipe rim where it meets the column and Create's pipe arm out to the pipe. All of
+# it in the steel of the Steel Pipe (load-time recolour of Create's valve sheets; Create's models re-pointed).
+for st in ('open', 'closed'):
+    put('%s/models/block/tap/body_%s.json' % (A, st), {'parent': 'create:block/fluid_valve/block_horizontal_' + st,
+        'render_type': 'minecraft:cutout_mipped',
+        'textures': {'2': ce('block/steel_valve'), '3': ce('block/steel_valve_' + st), 'particle': ce('block/steel_valve')}})
+put('%s/models/block/tap/pointer.json' % A, {'parent': 'create:block/fluid_valve/pointer', 'render_type': 'minecraft:cutout_mipped',
+    'textures': {'2': ce('block/steel_valve'), 'particle': ce('block/steel_valve')}})
+_tap_parts = []
+for f, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
+    back = {'north': 'south', 'south': 'north', 'east': 'west', 'west': 'east'}[f]
+    for st, o in (('open', 'true'), ('closed', 'false')):
+        # Create's valve model has its pipe along Y and its lever plates on Z: x 90 lays the pipe along the tap and puts
+        # the lever under the ring plate on top (Create's own "shaft up" orientation)
+        _tap_parts.append({'when': {'facing': f, 'open': o}, 'apply': {'model': ce('block/tap/body_' + st), 'x': 90, 'y': rot}})
+        # the pointer (modelled along Z on the top face) lies along the pipe when open, across it when shut
+        _tap_parts.append({'when': {'facing': f, 'open': o}, 'apply': {'model': ce('block/tap/pointer'), 'y': rot if st == 'open' else (rot + 90) % 360}})
+    _tap_parts.append({'when': {'facing': f}, 'apply': {'model': ce('block/steel_pipe/rim/' + back)}})       # flange on the column
+    _tap_parts.append({'when': {'facing': f}, 'apply': {'model': ce('block/steel_pipe/connection/' + f)}})  # arm to the pipe
+put('%s/blockstates/tap.json' % A, {'multipart': _tap_parts})
+put('%s/models/item/tap.json' % A, {'parent': ce('block/tap/body_open')})
 simple_loot('tap')
 shapeless('tap', [item('create:fluid_valve'), item('create:brass_sheet')], ce('tap'))
 LANG['block.%s.tap' % MODID] = 'Tap'

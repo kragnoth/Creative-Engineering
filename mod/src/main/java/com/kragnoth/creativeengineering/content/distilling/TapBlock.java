@@ -29,8 +29,9 @@ import com.mojang.serialization.MapCodec;
 
 /**
  * Tap (Kragnoth, 2026-11-22): goes on the side of a Distilling Tank level (its back on the column, FACING = where the
- * pipe leaves). While OPEN and not powered it gravity-feeds that level's fluid down the attached pipe run into every
- * tank the pipe enters at the tap's height or lower: no pump (TapBlockEntity). Right-click opens / closes; redstone
+ * pipe leaves). Looks like Create's fluid valve in steel: valve housing, open / closed indicator, pointer lever (along
+ * the pipe when open), pipe rim on the column and pipe arm to the line. While OPEN and not powered it gravity-feeds that level's fluid down the attached pipe run into every
+ * tank the pipe enters at the tap's height or lower: no pump (TapBlockEntity). Right-click opens / closes (the lever turns a quarter); redstone
  * closes. FLOWING drives the drips and the trickle.
  */
 public class TapBlock extends HorizontalDirectionalBlock implements IBE<TapBlockEntity>, IWrenchable {
@@ -41,8 +42,8 @@ public class TapBlock extends HorizontalDirectionalBlock implements IBE<TapBlock
 
     static {
         for (Direction d : Direction.Plane.HORIZONTAL) {
-            VoxelShape body = Block.box(4, 4, 6, 12, 15, 16), spout = Block.box(5, 5, 0, 11, 11, 6);
-            SHAPES[d.get2DDataValue()] = rotate(Shapes.or(body, spout), d);
+            VoxelShape body = Block.box(2, 2, 2, 14, 14, 14), pipe = Block.box(4, 4, 0, 12, 12, 16);   // Create valve housing on a pipe
+            SHAPES[d.get2DDataValue()] = rotate(Shapes.or(body, pipe), d);
         }
     }
 

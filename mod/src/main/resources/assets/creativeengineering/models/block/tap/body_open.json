@@ -1,0 +1,9 @@
+{
+  "parent": "create:block/fluid_valve/block_horizontal_open",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "2": "creativeengineering:block/steel_valve",
+    "3": "creativeengineering:block/steel_valve_open",
+    "particle": "creativeengineering:block/steel_valve"
+  }
+}

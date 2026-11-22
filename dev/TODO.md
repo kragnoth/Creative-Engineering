@@ -348,3 +348,6 @@ Convention (borrowed from Tarbound):
 ## 0.13.2 — steel tank / steel pipe render fixes
 - [ ] Steel Storage Tank windows are see-through: empty tanks show the steel inside, filled ones show the fluid (were solid black).
 - [ ] Steel Pipe draws whole: arms to every connected side, rims and drains where it meets tanks / taps (was only core pieces).
+
+## 0.13.3 — Tap restyle
+- [ ] Tap looks like a steel Create fluid valve: pipe through it along the tap, glass dial + lever on top, rim on the column, arm to the pipe; lever along the pipe when open, across when shut; all four facings.

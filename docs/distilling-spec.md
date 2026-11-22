@@ -48,7 +48,8 @@ Op level 2, in any world with cheats. It clears a space a few blocks in front of
 - **Tap** (`creativeengineering:tap`; recipe: Create fluid valve + brass sheet). Placed against a fraction level (its back on the column; the pipe leaves from its front).
   - While open and not powered by redstone, it gravity-feeds that level's fluid down the attached pipe run: 50 mB every 4 ticks (250 mB/s), shared between every tank the pipe enters at the tap's height or lower. Tanks above the tap are skipped.
   - The run is followed by `PipeRuns` (shared with the engine's fuel lines): Create pipes, glass and encased pipes and Steel Pipe, up to Create's pump range; closed valves and pumps end a branch.
-  - Right-click opens or closes it (the handwheel turns a quarter); redstone closes it. Drips and a soft trickle show while it flows.
+  - Look (0.13.3; Kragnoth: "follow the theming" of Create): Create's own fluid valve in the Steel Pipe's steel, laid with its shaft up. The pipe runs through it along the tap, the glass dial and pointer lever are on top, Create's pipe rim sits on the column and Create's pipe arm leads to the line. Models are Create's re-pointed at load-time steel recolours of its valve sheets.
+  - Right-click opens or closes it: the lever lies along the pipe when open and across it when shut, like a ball valve. Redstone closes it. Drips and a soft trickle show while it flows.
   - Its front shows an empty fluid handler so pipes connect. On the boiler level it does nothing (the boiler can't be drained). Against any other container it works as a plain gravity tap.
   - Fluid moves straight from the level into the tanks: no flow animation inside the pipes.
 - **Steel Pipe** (`creativeengineering:steel_pipe`; recipe: 2 Create fluid pipes + iron sheet -> 2). Create's fluid pipe under its own block entity type, re-skinned steel by the load-time recolour.
