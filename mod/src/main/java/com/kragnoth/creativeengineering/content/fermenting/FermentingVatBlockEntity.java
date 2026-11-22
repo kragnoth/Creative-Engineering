@@ -48,7 +48,8 @@ import net.neoforged.neoforge.items.ItemStackHandler;
  *   <li>Batches: one recipe at a time, run as many times at once as the vat has blocks (and ingredients allow).</li>
  * </ul>
  */
-public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, MachineReadout {
+public class FermentingVatBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation, MachineReadout,
+        com.kragnoth.creativeengineering.content.shared.FormedTank {
     public static final int MAX_WIDTH = 3, MAX_HEIGHT = 4, TANK_PER_BLOCK = 2000;
     private static final int CHECK_TICKS = 20;
 

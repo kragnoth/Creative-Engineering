@@ -24,6 +24,31 @@
           "target": "creativeengineering:block/vat_tank_top_connected"
         }
       ]
+    },
+    {
+      "type": "creativeengineering:recolor",
+      "tint": "#F0A47A",
+      "saturation": 0.35,
+      "contrast": 1.1,
+      "brightness": -0.02,
+      "sprites": [
+        {
+          "source": "create:block/fluid_tank",
+          "target": "creativeengineering:block/still_tank"
+        },
+        {
+          "source": "create:block/fluid_tank_connected",
+          "target": "creativeengineering:block/still_tank_connected"
+        },
+        {
+          "source": "create:block/fluid_tank_top",
+          "target": "creativeengineering:block/still_tank_top"
+        },
+        {
+          "source": "create:block/fluid_tank_top_connected",
+          "target": "creativeengineering:block/still_tank_top_connected"
+        }
+      ]
     }
   ]
 }

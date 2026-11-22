@@ -302,3 +302,14 @@ Convention (borrowed from Tarbound):
 
 ## 0.11.4
 - [ ] With Tarbound: tar in a Pitch Cask / tank piped to a crankcase runs the engine at 24,576 SU per cylinder; JEI Engine Fuel shows tar under biodiesel. Without Tarbound: no errors.
+
+## 0.12.0 — Distilling Tank
+- [ ] Craft one; stack 1x1x3 on a campfire / Campfire Stand: copper Create-tank look, connected; gauge on the boiler, taps on levels 1-2, gooseneck valve on top.
+- [ ] 2x2 and 3x3 columns: greebles only on the middle of each outside face; walls inside don't draw.
+- [ ] Bucket / pipe hooch into the bottom: water collects on level 1, vodka on level 2; pipe or bucket them off their levels. Same for wine/ale/cider (brandy, whiskey, applejack) and mead (ethanol).
+- [ ] Level 1+ refuse input; the boiler refuses outputs and non-recipe fluids.
+- [ ] Jade and goggles list every level; reasons: too short, not hot enough, empty, a level full.
+- [ ] With Immersive Petroleum: crude on lit burners in a 5-high column gives 4 fractions + some bitumen (pull from the boiler with a funnel / chute).
+- [ ] JEI Distilling tab; display link status / progress; vapour puffs only while working.
+- [ ] Spirits run the diesel engine at biodiesel level.
+- [ ] `/test runall`: 17 pass (new: distillingTankSplitsHooch).

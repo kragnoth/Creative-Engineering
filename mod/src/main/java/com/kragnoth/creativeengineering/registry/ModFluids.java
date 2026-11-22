@@ -108,6 +108,11 @@ public final class ModFluids {
     public static final Tinted CIDER = new Tinted("cider", 0xE8D9962E, 1010, 1050, MapColor.COLOR_ORANGE);
     public static final Tinted MEAD = new Tinted("mead", 0xF0E3A83A, 1040, 1600, MapColor.GOLD);
     public static final Tinted ALE = new Tinted("ale", 0xF07A4A1E, 1010, 1100, MapColor.COLOR_BROWN);
+    // Spirits: distilled from the drinks in the Distilling Tank (docs/distilling-spec.md); biodiesel-tier engine fuel.
+    public static final Tinted VODKA = new Tinted("vodka", 0x90E6EEF2, 940, 900, MapColor.SNOW);
+    public static final Tinted BRANDY = new Tinted("brandy", 0xE89A4A1C, 950, 950, MapColor.TERRACOTTA_ORANGE);
+    public static final Tinted WHISKEY = new Tinted("whiskey", 0xE8B0621C, 950, 950, MapColor.COLOR_ORANGE);
+    public static final Tinted APPLEJACK = new Tinted("applejack", 0xE8C98A34, 950, 950, MapColor.GOLD);
 
     /** Called from the mod constructor so the holders above are created before registration fires. */
     public static void init() {}

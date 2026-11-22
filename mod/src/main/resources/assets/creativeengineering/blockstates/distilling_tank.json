@@ -1,0 +1,97 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_body"
+      }
+    },
+    {
+      "when": {
+        "valve": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_valve"
+      }
+    },
+    {
+      "when": {
+        "tap_north": "true",
+        "boiler": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_tap",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "tap_north": "true",
+        "boiler": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_gauge",
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "tap_east": "true",
+        "boiler": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_tap",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "tap_east": "true",
+        "boiler": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_gauge",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "tap_south": "true",
+        "boiler": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_tap",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "tap_south": "true",
+        "boiler": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_gauge",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "tap_west": "true",
+        "boiler": "false"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_tap",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "tap_west": "true",
+        "boiler": "true"
+      },
+      "apply": {
+        "model": "creativeengineering:block/distilling_tank_gauge",
+        "y": 270
+      }
+    }
+  ]
+}

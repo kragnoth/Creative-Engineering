@@ -63,6 +63,7 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DRIVE_PULLEY = ITEMS.registerSimpleBlockItem(ModBlocks.DRIVE_PULLEY);
     public static final DeferredItem<com.kragnoth.creativeengineering.content.engine.DriveBeltItem> DRIVE_BELT = ITEMS.register("drive_belt",
             () -> new com.kragnoth.creativeengineering.content.engine.DriveBeltItem(new net.minecraft.world.item.Item.Properties()));
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> DISTILLING_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.DISTILLING_TANK);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> FERMENTING_VAT = ITEMS.registerSimpleBlockItem(ModBlocks.FERMENTING_VAT);
     // Diesel engine
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
@@ -113,11 +114,13 @@ public final class ModItems {
                 com.kragnoth.creativeengineering.registry.ModFluids.ETHANOL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.HOOCH.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.WINE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.CIDER.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.MEAD.bucket, com.kragnoth.creativeengineering.registry.ModFluids.ALE.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.VODKA.bucket, com.kragnoth.creativeengineering.registry.ModFluids.BRANDY.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.WHISKEY.bucket, com.kragnoth.creativeengineering.registry.ModFluids.APPLEJACK.bucket,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
-                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT,
+                DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK,
             ANDESITE_CAMPFIRE_STAND, BRASS_CAMPFIRE_STAND, COPPER_CAMPFIRE_STAND);
     }
 

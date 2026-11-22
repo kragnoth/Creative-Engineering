@@ -16,6 +16,22 @@
     {
       "id": "tarbound:tar",
       "required": false
+    },
+    {
+      "id": "creativeengineering:vodka",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:brandy",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:whiskey",
+      "required": false
+    },
+    {
+      "id": "creativeengineering:applejack",
+      "required": false
     }
   ]
 }

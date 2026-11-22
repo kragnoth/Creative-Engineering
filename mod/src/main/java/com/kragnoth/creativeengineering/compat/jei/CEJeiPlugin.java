@@ -28,7 +28,8 @@ public class CEJeiPlugin implements IModPlugin {
                 new AlloyingCategory(registration.getJeiHelpers().getGuiHelper()),
                 new DiePressingCategory(registration.getJeiHelpers().getGuiHelper()),
                 new EngineFuelCategory(registration.getJeiHelpers().getGuiHelper()),
-                new FermentingCategory(registration.getJeiHelpers().getGuiHelper()));
+                new FermentingCategory(registration.getJeiHelpers().getGuiHelper()),
+                new DistillingCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -42,6 +43,8 @@ public class CEJeiPlugin implements IModPlugin {
         registration.addRecipes(BlastSmeltingCategory.TYPE, level.getRecipeManager()
                 .getAllRecipesFor(ModRecipes.BLAST_SMELTING_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(EngineFuelCategory.TYPE, EngineFuelCategory.entries());
+        registration.addRecipes(DistillingCategory.TYPE, level.getRecipeManager()
+                .getAllRecipesFor(ModRecipes.DISTILLING_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(FermentingCategory.TYPE, level.getRecipeManager()
                 .getAllRecipesFor(ModRecipes.FERMENTING_TYPE.get()).stream().map(RecipeHolder::value).toList());
         registration.addRecipes(DiePressingCategory.TYPE, level.getRecipeManager()
@@ -61,6 +64,7 @@ public class CEJeiPlugin implements IModPlugin {
         registration.addRecipeCatalyst(CokingCategory.createItem("mechanical_press"), DiePressingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.DIESEL_CRANKCASE.get()), EngineFuelCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.FERMENTING_VAT.get()), FermentingCategory.TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.DISTILLING_TANK.get()), DistillingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(net.minecraft.world.item.Items.CAMPFIRE), FermentingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.ANDESITE_CAMPFIRE_STAND.get()), FermentingCategory.TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModItems.BRASS_CAMPFIRE_STAND.get()), FermentingCategory.TYPE);

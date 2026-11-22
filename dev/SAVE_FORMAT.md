@@ -77,3 +77,7 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.11.3
 - Belt wheel BEs store `Chains` (list of relative BlockPos, up to 2). The older `BeltPartner` is still read and migrated.
+
+## 0.12.0
+- New block / BE `distilling_tank` (states valve, working, boiler, tap_north/east/south/west). BE NBT: Controller, Size, Tank, Residue, Speed, Heat, Active, Batches, Progress.
+- New fluids and buckets: vodka, brandy, whiskey, applejack. New recipe type `creativeengineering:distilling`.

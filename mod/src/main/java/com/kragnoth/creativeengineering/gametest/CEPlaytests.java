@@ -405,4 +405,34 @@ public final class CEPlaytests {
             h.assertTrue(in != 0 && out == in * 4, "flywheel " + in + " rpm, relayed sprocket " + out + " rpm");
         }));
     }
+
+    /** A 1x1x3 Distilling Tank on a campfire splits hooch: water collects on level 1, vodka on level 2. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 600)
+    public static void distillingTankSplitsHooch(GameTestHelper h) {
+        open(h);
+        BlockPos base = new BlockPos(5, 2, 5);
+        h.setBlock(base, net.minecraft.world.level.block.Blocks.CAMPFIRE);
+        for (int y = 1; y <= 3; y++) {
+            h.setBlock(base.above(y), ModBlocks.DISTILLING_TANK.get());
+        }
+        BlockPos boiler = base.above(), lvl1 = base.above(2), lvl2 = base.above(3);
+        var hooch = new net.neoforged.neoforge.fluids.FluidStack(com.kragnoth.creativeengineering.registry.ModFluids.HOOCH.source.get(), 1000);
+        h.runAfterDelay(5, () -> {
+            var L = h.getLevel();
+            var in = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(boiler), Direction.NORTH);
+            h.assertTrue(in.fill(hooch, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE) == 1000, "boiler refused hooch");
+            var up = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl2), Direction.NORTH);
+            h.assertTrue(up.fill(hooch, net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE) == 0, "a fraction level took input");
+            h.assertBlockProperty(lvl2, com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock.VALVE, true);
+            h.assertBlockProperty(lvl1, com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock.TAP_NORTH, true);
+        });
+        h.runAfterDelay(30, () -> h.succeedWhen(() -> {
+            var L = h.getLevel();
+            var w = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl1), Direction.NORTH).getFluidInTank(0);
+            var v = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(lvl2), Direction.NORTH).getFluidInTank(0);
+            h.assertTrue(w.getFluid() == net.minecraft.world.level.material.Fluids.WATER && w.getAmount() >= 150, "level 1: " + w.getAmount() + " " + w.getFluid());
+            h.assertTrue(v.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.VODKA.source.get() && v.getAmount() >= 100,
+                    "level 2: " + v.getAmount() + " " + v.getFluid());
+        }));
+    }
 }

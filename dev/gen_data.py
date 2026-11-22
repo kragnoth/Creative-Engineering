@@ -180,6 +180,36 @@ LANG = collections.OrderedDict([
     ('fluid_type.%s.ale' % MODID, 'Ale'),
     ('block.%s.ale' % MODID, 'Ale'),
     ('item.%s.ale_bucket' % MODID, 'Ale Bucket'),
+    ('fluid_type.%s.vodka' % MODID, 'Vodka'),
+    ('block.%s.vodka' % MODID, 'Vodka'),
+    ('item.%s.vodka_bucket' % MODID, 'Vodka Bucket'),
+    ('fluid_type.%s.brandy' % MODID, 'Brandy'),
+    ('block.%s.brandy' % MODID, 'Brandy'),
+    ('item.%s.brandy_bucket' % MODID, 'Brandy Bucket'),
+    ('fluid_type.%s.whiskey' % MODID, 'Whiskey'),
+    ('block.%s.whiskey' % MODID, 'Whiskey'),
+    ('item.%s.whiskey_bucket' % MODID, 'Whiskey Bucket'),
+    ('fluid_type.%s.applejack' % MODID, 'Applejack'),
+    ('block.%s.applejack' % MODID, 'Applejack'),
+    ('item.%s.applejack_bucket' % MODID, 'Applejack Bucket'),
+    ('block.%s.distilling_tank' % MODID, 'Distilling Tank'),
+    ('%s.still.boiler' % MODID, 'Boiler: %2$s %3$s / %4$s mB'),
+    ('%s.still.layer' % MODID, 'Level %1$s: %2$s %3$s / %4$s mB'),
+    ('%s.still.progress' % MODID, 'Distilling %s batch(es): %s%%'),
+    ('%s.still.blocker.too_short' % MODID, 'Stack it at least 2 high: boiler + one level per fraction'),
+    ('%s.still.blocker.empty' % MODID, 'Fill the boiler (bottom level) with something to distil'),
+    ('%s.still.blocker.height' % MODID, 'Too short for this: needs %s levels'),
+    ('%s.still.blocker.cool' % MODID, 'Not hot enough: needs heat x%s under the whole boiler'),
+    ('%s.still.blocker.full' % MODID, 'A level is full or holds another fluid: drain the taps'),
+    ('%s.jei.distilling' % MODID, 'Distilling'),
+    ('%s.jei.distilling.level' % MODID, 'Level %s'),
+    ('%s.jei.distilling.needs' % MODID, '%s+ levels, heat x%s'),
+    ('%s.jei.distilling.time' % MODID, '%ss at heat x1'),
+    ('%s.jei.distilling.tip' % MODID, 'Fluid in at the bottom (boiler); each fraction collects in its own level, lightest at the top. Wider columns run more batches at once.'),
+    ('%s.jade.still_layer' % MODID, 'This level: %s'),
+    ('advancements.%s.distilling.title' % MODID, 'Fractions of a Fraction'),
+    ('advancements.%s.distilling.description' % MODID, 'Make a Distilling Tank'),
+    ('config.jade.plugin_%s.distilling_tank' % MODID, 'Distilling Tank'),
     ('block.%s.fermenting_vat' % MODID, 'Fermenting Vat'),
     ('%s.vat.heat' % MODID, 'Heat: x%s (campfire x1, lit burner x2, superheated x3)'),
     ('%s.vat.tank.0' % MODID, 'In: %s %s / %s mB'),
@@ -277,7 +307,8 @@ put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
 # pack) with our creosote texture masked into it. No bucket texture of our own.
 # Tinted fluids (ModFluids.Tinted): bucket models fill from the fluid at runtime, like creosote's.
 TINTED = [('plant_oil', 'Plant Oil'), ('ethanol', 'Ethanol'), ('hooch', 'Hooch'), ('wine', 'Wine'), ('cider', 'Cider'),
-          ('mead', 'Mead'), ('ale', 'Ale')]
+          ('mead', 'Mead'), ('ale', 'Ale'), ('vodka', 'Vodka'), ('brandy', 'Brandy'), ('whiskey', 'Whiskey'),
+          ('applejack', 'Applejack')]
 for n, _ in TINTED:
     put('%s/models/item/%s_bucket.json' % (A, n), {'parent': 'neoforge:item/bucket_drip', 'loader': 'neoforge:fluid_container', 'fluid': ce(n)})
     put('%s/blockstates/%s.json' % (A, n), {'variants': {'': {'model': ce('block/' + n)}}})
@@ -681,7 +712,10 @@ VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_c
             ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected')]
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
-    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
+    'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]},
+    # Distilling Tank: the same Create tank, shifted to copper (stills are copper)
+    {'type': ce('recolor'), 'tint': '#F0A47A', 'saturation': 0.35, 'contrast': 1.1, 'brightness': -0.02,
+     'sprites': [{'source': src, 'target': ce('block/' + dst.replace('vat_', 'still_'))} for src, dst in VAT_TANK]}]})
 VAT_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'dark': CR('dark_metal_block'), 'brass': CR('brass_block')}
 eng('fermenting_vat_body', VAT_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
     d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
@@ -700,6 +734,72 @@ for e in vat_item['elements']:
         f.pop('cullface', None)
 put('%s/models/item/fermenting_vat.json' % A, vat_item)
 simple_loot('fermenting_vat')
+
+# Distilling Tank (docs/distilling-spec.md): the copper tank body, plus greebles from the formed column (Kragnoth:
+# "something in between" a plain tank and IP's tower): brass taps on fraction levels, a pressure gauge on the boiler,
+# a gooseneck vapour pipe off the relief valve. Greebles point north and are turned for the other faces.
+ST_T = {'side': ce('block/still_tank'), 'top': ce('block/still_tank_top'), 'brass': CR('brass_block'),
+        'dark': CR('dark_metal_block'), 'valve': CR('fluid_valve'), 'dial': CR('boiler_gauge'),
+        'copper': 'minecraft:block/copper_block', 'casing': CR('copper_casing')}
+eng('distilling_tank_body', ST_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'faces': {
+    d: {'texture': '#top' if d in ('up', 'down') else '#side', 'uv': [0, 0, 16, 16], 'cullface': d}
+    for d in ('north', 'south', 'east', 'west', 'up', 'down')}}])
+eng('distilling_tank_tap', ST_T, [box([6.5, 6.5, -1], [9.5, 9.5, 0], 'brass'),                  # flange
+                                  box([7, 7, -3.5], [9, 9, -1], 'brass'),                      # spout
+                                  box([7, 4.5, -4], [9, 7.5, -2], 'brass', {'down': 'dark'}),  # downturned nozzle
+                                  box([7.5, 9, -2.75], [8.5, 11, -1.75], 'dark'),              # handle stem
+                                  box([6, 11, -3], [10, 11.75, -1.5], 'valve')])               # handle
+_g = box([4.5, 4.5, -1.25], [11.5, 11.5, 0], 'brass', {'north': 'dial'})
+_g['faces']['north']['uv'] = [0, 8, 8, 16]                      # just the dial quadrant of Create's boiler_gauge sheet
+eng('distilling_tank_gauge', ST_T, [_g,
+                                    box([7.75, 7.75, -1.5], [8.25, 10.5, -1.25], 'dark'),       # needle
+                                    box([7.5, 11.5, -0.75], [8.5, 13.5, -0.25], 'brass')])      # gauge stem
+eng('distilling_tank_valve', ST_T, [box([7, 16, 7], [9, 18.5, 9], 'brass'),                    # relief valve
+                                    box([5, 18.5, 7.5], [11, 19.25, 8.5], 'dark'), box([7.5, 18.5, 5], [8.5, 19.25, 11], 'dark'),
+                                    box([7.25, 19.25, 7.25], [8.75, 20, 8.75], 'brass'),
+                                    box([9, 16, 6.75], [11.5, 21.5, 9.25], 'copper'),           # gooseneck: riser
+                                    box([11.5, 19.5, 6.75], [14, 22, 9.25], 'copper'),          # elbow
+                                    box([12, 16.5, 7], [14, 19.5, 9], 'copper'),                # downcomer
+                                    box([11.75, 16, 6.75], [14.25, 16.75, 9.25], 'brass')])     # collar
+parts = [{'apply': {'model': ce('block/distilling_tank_body')}},
+         {'when': {'valve': 'true'}, 'apply': {'model': ce('block/distilling_tank_valve')}}]
+for face, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
+    parts.append({'when': {'tap_' + face: 'true', 'boiler': 'false'}, 'apply': {'model': ce('block/distilling_tank_tap'), 'y': rot}})
+    parts.append({'when': {'tap_' + face: 'true', 'boiler': 'true'}, 'apply': {'model': ce('block/distilling_tank_gauge'), 'y': rot}})
+put('%s/blockstates/distilling_tank.json' % A, {'multipart': parts})
+still_item = load_json('%s/models/block/distilling_tank_body.json' % A)
+for extra in ('distilling_tank_valve', 'distilling_tank_tap'):
+    still_item['elements'] += load_json('%s/models/block/%s.json' % (A, extra))['elements']
+for e in still_item['elements']:
+    for f in e['faces'].values():
+        f.pop('cullface', None)
+put('%s/models/item/distilling_tank.json' % A, still_item)
+simple_loot('distilling_tank')
+shaped('distilling_tank', [' V ', 'PTP', 'PBP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
+       'P': tag('c:plates/copper'), 'B': item('create:blaze_burner')}, ce('distilling_tank'), category='misc')
+
+# Distilling recipes. Drinks: water drops out low, the spirit rises (biodiesel-tier fuel: distilling is the upgrade).
+def distil(name, inp, amount, fractions, heat=1, time=200, residue=None, chance=1.0, conditions=None):
+    j = {'type': ce('distilling'), 'input': dict(inp, amount=amount),
+         'fractions': [{'id': f, 'amount': a} for f, a in fractions], 'heat': heat, 'time': time}
+    if residue:
+        j['residue'] = {'id': residue, 'count': 1}
+        j['chance'] = chance
+    if conditions:
+        j['neoforge:conditions'] = conditions
+    put(R + '/distilling/%s.json' % name, j)
+for drink, spirit, keep in (('hooch', 'vodka', 100), ('wine', 'brandy', 80), ('ale', 'whiskey', 80), ('cider', 'applejack', 80)):
+    distil(spirit, {'fluid': ce(drink)}, 250, [('minecraft:water', 250 - keep), (ce(spirit), keep)])
+distil('ethanol_from_mead', {'fluid': ce('mead')}, 250, [('minecraft:water', 170), (ce('ethanol'), 80)])
+# Crude: only with a mod that provides it (our own crude comes with the petroleum phase). Lit Blaze Burner or better.
+mod_loaded = lambda m: [{'type': 'neoforge:mod_loaded', 'modid': m}]
+distil('crude_immersive_petroleum', {'tag': 'c:crude_oil'}, 120, [('immersivepetroleum:lubricant', 20),
+       ('immersivepetroleum:diesel_sulfur', 60), ('immersivepetroleum:kerosene', 40), ('immersivepetroleum:naphtha', 30)],
+       heat=2, time=100, residue='immersivepetroleum:bitumen', chance=0.07, conditions=mod_loaded('immersivepetroleum'))
+distil('crude_create_diesel_generators', {'fluid': 'createdieselgenerators:crude_oil'}, 100,
+       [('createdieselgenerators:diesel', 50), ('createdieselgenerators:gasoline', 50)], heat=2, time=100,
+       conditions=[{'type': 'neoforge:mod_loaded', 'modid': 'createdieselgenerators'},
+                   {'type': 'neoforge:not', 'value': {'type': 'neoforge:mod_loaded', 'modid': 'immersivepetroleum'}}])
 
 # Campfire Stands are fan catalysts (Kragnoth: like Create Connected's): fans blow through them; a lit regular
 # campfire makes the current smoke, a lit soul campfire haunt (mixin/FanCatalyst*Mixin decides per state).
@@ -776,6 +876,10 @@ tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
 tagfile('c', 'fluid', 'ethanol', [ce('ethanol'), ce('flowing_ethanol')])
+tagfile('c', 'fluid', 'vodka', [ce('vodka'), ce('flowing_vodka')])
+tagfile('c', 'fluid', 'brandy', [ce('brandy'), ce('flowing_brandy')])
+tagfile('c', 'fluid', 'whiskey', [ce('whiskey'), ce('flowing_whiskey')])
+tagfile('c', 'fluid', 'applejack', [ce('applejack'), ce('flowing_applejack')])
 # Campfire Stands: fans blow through them (fan catalysts; see the stand section)
 tagfile('create', 'block', 'fan_transparent', [ce(m + '_campfire_stand') for m in ('andesite', 'brass', 'copper')])
 # Fermenting Vat: 250 mB water + produce -> 250 mB, 20 s at passive heat (docs/fermentation-spec.md).
@@ -810,7 +914,8 @@ FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 12288, 2
          ('ethanol', [ce('ethanol'), ce('hooch'), ce('wine'), ce('cider'), ce('mead'), ce('ale'), '#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
                       'immersiveengineering:ethanol'], 18432, 2),
          # Tarbound's tar burns at biodiesel level: "it contains spirits" (Kragnoth, 2026-11-22). Optional entry.
-         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel', 'tarbound:tar'], 24576, 1.5),
+         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel', 'tarbound:tar',
+                        ce('vodka'), ce('brandy'), ce('whiskey'), ce('applejack')], 24576, 1.5),   # spirits: distilled drinks
          ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 30720, 1),
          ('gasoline', ['#c:gasoline', 'createdieselgenerators:gasoline', 'immersivepetroleum:gasoline'], 24576, 2)]
 values = {}
@@ -855,7 +960,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])
@@ -887,6 +992,7 @@ adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'ge
 adv('treated_wood', 'coke_oven', ce('treated_planks'), {n: has(ce(n)) for n in ('treated_planks', 'treated_log', 'treated_wood')})
 adv('diesel_engine', 'press_die', ce('diesel_cylinder'), {'cylinder': has(ce('diesel_cylinder'))}, 'goal')
 adv('fermenting', 'coke_oven', ce('fermenting_vat'), {'vat': has(ce('fermenting_vat'))})
+adv('distilling', 'fermenting', ce('distilling_tank'), {'still': has(ce('distilling_tank'))})
 adv('shear_forged', 'blister_steel', ce('blister_steel_pickaxe'),
     {t: has(ce('blister_steel_' + t)) for t in TOOLS + ARMOR})
 

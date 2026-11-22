@@ -1,0 +1,19 @@
+{
+  "type": "creativeengineering:distilling",
+  "input": {
+    "fluid": "creativeengineering:wine",
+    "amount": 250
+  },
+  "fractions": [
+    {
+      "id": "minecraft:water",
+      "amount": 170
+    },
+    {
+      "id": "creativeengineering:brandy",
+      "amount": 80
+    }
+  ],
+  "heat": 1,
+  "time": 200
+}

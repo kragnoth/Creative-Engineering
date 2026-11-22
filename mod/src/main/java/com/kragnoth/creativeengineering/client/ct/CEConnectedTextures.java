@@ -25,6 +25,7 @@ public final class CEConnectedTextures {
         wrap(event.getModels(), ModBlocks.BLAST_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("blast_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.ALLOY_FURNACE_BRICKS.get(), new FurnaceCTBehaviour("alloy_furnace_bricks"));
         wrap(event.getModels(), ModBlocks.FERMENTING_VAT.get(), new VatCTBehaviour());
+        wrap(event.getModels(), ModBlocks.DISTILLING_TANK.get(), new VatCTBehaviour("still_tank"));
     }
 
     private static void wrap(Map<ModelResourceLocation, BakedModel> models, Block block,

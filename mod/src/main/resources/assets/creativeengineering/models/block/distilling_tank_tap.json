@@ -1,0 +1,356 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "side": "creativeengineering:block/still_tank",
+    "top": "creativeengineering:block/still_tank_top",
+    "brass": "create:block/brass_block",
+    "dark": "create:block/dark_metal_block",
+    "valve": "create:block/fluid_valve",
+    "dial": "create:block/boiler_gauge",
+    "copper": "minecraft:block/copper_block",
+    "casing": "create:block/copper_casing",
+    "particle": "creativeengineering:block/still_tank"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        6.5,
+        -1
+      ],
+      "to": [
+        9.5,
+        9.5,
+        0
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ]
+        },
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            0,
+            6.5,
+            1,
+            9.5
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            15,
+            6.5,
+            16,
+            9.5
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            15,
+            9.5,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            6.5,
+            0,
+            9.5,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        7,
+        -3.5
+      ],
+      "to": [
+        9,
+        9,
+        -1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ]
+        },
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            7,
+            9,
+            9
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            1,
+            7,
+            3.5,
+            9
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            12.5,
+            7,
+            15,
+            9
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            12.5,
+            9,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            1,
+            9,
+            3.5
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        4.5,
+        -4
+      ],
+      "to": [
+        9,
+        7.5,
+        -2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            8.5,
+            9,
+            11.5
+          ]
+        },
+        "south": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            8.5,
+            9,
+            11.5
+          ]
+        },
+        "east": {
+          "texture": "#brass",
+          "uv": [
+            2,
+            8.5,
+            4,
+            11.5
+          ]
+        },
+        "west": {
+          "texture": "#brass",
+          "uv": [
+            12,
+            8.5,
+            14,
+            11.5
+          ]
+        },
+        "up": {
+          "texture": "#brass",
+          "uv": [
+            7,
+            12,
+            9,
+            14
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            7,
+            2,
+            9,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        7.5,
+        9,
+        -2.75
+      ],
+      "to": [
+        8.5,
+        11,
+        -1.75
+      ],
+      "faces": {
+        "north": {
+          "texture": "#dark",
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ]
+        },
+        "south": {
+          "texture": "#dark",
+          "uv": [
+            7.5,
+            5,
+            8.5,
+            7
+          ]
+        },
+        "east": {
+          "texture": "#dark",
+          "uv": [
+            1.75,
+            5,
+            2.75,
+            7
+          ]
+        },
+        "west": {
+          "texture": "#dark",
+          "uv": [
+            13.25,
+            5,
+            14.25,
+            7
+          ]
+        },
+        "up": {
+          "texture": "#dark",
+          "uv": [
+            7.5,
+            13.25,
+            8.5,
+            14.25
+          ]
+        },
+        "down": {
+          "texture": "#dark",
+          "uv": [
+            7.5,
+            1.75,
+            8.5,
+            2.75
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        11,
+        -3
+      ],
+      "to": [
+        10,
+        11.75,
+        -1.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#valve",
+          "uv": [
+            6,
+            4.25,
+            10,
+            5
+          ]
+        },
+        "south": {
+          "texture": "#valve",
+          "uv": [
+            6,
+            4.25,
+            10,
+            5
+          ]
+        },
+        "east": {
+          "texture": "#valve",
+          "uv": [
+            1.5,
+            4.25,
+            3,
+            5
+          ]
+        },
+        "west": {
+          "texture": "#valve",
+          "uv": [
+            13,
+            4.25,
+            14.5,
+            5
+          ]
+        },
+        "up": {
+          "texture": "#valve",
+          "uv": [
+            6,
+            13,
+            10,
+            14.5
+          ]
+        },
+        "down": {
+          "texture": "#valve",
+          "uv": [
+            6,
+            1.5,
+            10,
+            3
+          ]
+        }
+      }
+    }
+  ]
+}

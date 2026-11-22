@@ -39,4 +39,9 @@ public final class ModRecipes {
             TYPES.register("fermenting", () -> RecipeType.simple(CreativeEngineering.id("fermenting")));
     public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.fermenting.FermentingRecipe.Serializer> FERMENTING_SERIALIZER =
             SERIALIZERS.register("fermenting", com.kragnoth.creativeengineering.content.fermenting.FermentingRecipe.Serializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<com.kragnoth.creativeengineering.content.distilling.DistillingRecipe>> DISTILLING_TYPE =
+            TYPES.register("distilling", () -> RecipeType.simple(CreativeEngineering.id("distilling")));
+    public static final DeferredHolder<RecipeSerializer<?>, com.kragnoth.creativeengineering.content.distilling.DistillingRecipe.Serializer> DISTILLING_SERIALIZER =
+            SERIALIZERS.register("distilling", com.kragnoth.creativeengineering.content.distilling.DistillingRecipe.Serializer::new);
 }

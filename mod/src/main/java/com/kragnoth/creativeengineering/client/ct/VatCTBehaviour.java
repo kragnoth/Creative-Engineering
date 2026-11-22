@@ -1,7 +1,7 @@
 package com.kragnoth.creativeengineering.client.ct;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
-import com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity;
+import com.kragnoth.creativeengineering.content.shared.FormedTank;
 import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
@@ -13,12 +13,17 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Fermenting Vat connected textures exactly like Create's fluid tank (HorizontalCTBehaviour, RECTANGLE sheets) on
- * steel-recoloured copies of Create's tank textures (RecolorSpriteSource). Joins only within one formed vat.
+ * Tank-style connected textures exactly like Create's fluid tank (HorizontalCTBehaviour, RECTANGLE sheets) on
+ * recoloured copies of Create's tank textures (RecolorSpriteSource): steel for the Fermenting Vat (vat_tank*), copper
+ * for the Distilling Tank (still_tank*). Joins only within one formed multiblock (same controller).
  */
 public class VatCTBehaviour extends HorizontalCTBehaviour {
     public VatCTBehaviour() {
-        super(shift("vat_tank"), shift("vat_tank_top"));
+        this("vat_tank");
+    }
+
+    public VatCTBehaviour(String prefix) {
+        super(shift(prefix), shift(prefix + "_top"));
     }
 
     private static CTSpriteShiftEntry shift(String tex) {
@@ -35,8 +40,8 @@ public class VatCTBehaviour extends HorizontalCTBehaviour {
     public boolean connectsTo(BlockState state, BlockState other, BlockAndTintGetter reader, BlockPos pos, BlockPos otherPos,
             Direction face) {
         return state.getBlock() == other.getBlock()
-                && reader.getBlockEntity(pos) instanceof FermentingVatBlockEntity a && a.controllerPos() != null
-                && reader.getBlockEntity(otherPos) instanceof FermentingVatBlockEntity b
+                && reader.getBlockEntity(pos) instanceof FormedTank a && a.controllerPos() != null
+                && reader.getBlockEntity(otherPos) instanceof FormedTank b
                 && Objects.equals(a.controllerPos(), b.controllerPos());
     }
 }

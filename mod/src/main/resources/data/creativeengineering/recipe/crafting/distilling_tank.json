@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " V ",
+    "PTP",
+    "PBP"
+  ],
+  "key": {
+    "V": {
+      "item": "create:fluid_valve"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    },
+    "P": {
+      "tag": "c:plates/copper"
+    },
+    "B": {
+      "item": "create:blaze_burner"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:distilling_tank",
+    "count": 1
+  }
+}

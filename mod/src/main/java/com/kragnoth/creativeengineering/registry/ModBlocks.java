@@ -82,6 +82,11 @@ public final class ModBlocks {
                         .lightLevel(com.kragnoth.creativeengineering.content.heat.CampfireStandBlock::light)));
     }
 
+    /** Chemistry: Distilling Tank (docs/distilling-spec.md). */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock> DISTILLING_TANK = BLOCKS.register("distilling_tank",
+            () -> new com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.COPPER).noOcclusion()));
+
     /** Chemistry: Fermenting Vat (docs/fermentation-spec.md). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock> FERMENTING_VAT = BLOCKS.register("fermenting_vat",
             () -> new com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock(BlockBehaviour.Properties.of()

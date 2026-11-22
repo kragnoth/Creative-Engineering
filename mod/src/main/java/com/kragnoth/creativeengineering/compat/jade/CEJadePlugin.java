@@ -16,6 +16,7 @@ public class CEJadePlugin implements IWailaPlugin {
     public void register(IWailaCommonRegistration registration) {
         registration.registerBlockDataProvider(CokeOvenJadeProvider.INSTANCE, CokeOvenBlockEntity.class);
         registration.registerBlockDataProvider(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlockEntity.class);
+        registration.registerBlockDataProvider(DistillingTankJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.distilling.DistillingTankBlockEntity.class);
         registration.registerBlockDataProvider(FermentingVatJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity.class);
         registration.registerBlockDataProvider(DieselEngineJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity.class);
         registration.registerBlockDataProvider(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity.class);
@@ -26,6 +27,7 @@ public class CEJadePlugin implements IWailaPlugin {
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(CokeOvenJadeProvider.INSTANCE, CokeOvenBlock.class);
         registration.registerBlockComponent(BlastFurnaceJadeProvider.INSTANCE, BlastFurnaceBlock.class);
+        registration.registerBlockComponent(DistillingTankJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock.class);
         registration.registerBlockComponent(FermentingVatJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock.class);
         registration.registerBlockComponent(DieselEngineJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.class);
         registration.registerBlockComponent(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlock.class);

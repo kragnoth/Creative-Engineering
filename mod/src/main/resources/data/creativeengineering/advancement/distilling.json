@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:distilling_tank"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.distilling.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.distilling.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "still": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:distilling_tank"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "still"
+    ]
+  ],
+  "parent": "creativeengineering:fermenting"
+}

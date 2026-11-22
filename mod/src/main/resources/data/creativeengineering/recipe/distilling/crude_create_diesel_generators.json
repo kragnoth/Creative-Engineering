@@ -1,0 +1,32 @@
+{
+  "type": "creativeengineering:distilling",
+  "input": {
+    "fluid": "createdieselgenerators:crude_oil",
+    "amount": 100
+  },
+  "fractions": [
+    {
+      "id": "createdieselgenerators:diesel",
+      "amount": 50
+    },
+    {
+      "id": "createdieselgenerators:gasoline",
+      "amount": 50
+    }
+  ],
+  "heat": 2,
+  "time": 100,
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "createdieselgenerators"
+    },
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:mod_loaded",
+        "modid": "immersivepetroleum"
+      }
+    }
+  ]
+}

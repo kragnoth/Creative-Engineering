@@ -135,6 +135,8 @@ public final class CEDisplaySources {
             DisplaySource.BY_BLOCK.add(ModBlocks.COKE_OVEN_BRICKS.get(), CREOSOTE.get());
             DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), STATUS.get());
             DisplaySource.BY_BLOCK.add(ModBlocks.FERMENTING_VAT.get(), STATUS.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.DISTILLING_TANK.get(), STATUS.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.DISTILLING_TANK.get(), PROGRESS.get());
             DisplaySource.BY_BLOCK.add(ModBlocks.FERMENTING_VAT.get(), PROGRESS.get());
             DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), ENGINE_CAPACITY.get());
             DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), ENGINE_FUEL.get());
