@@ -71,4 +71,4 @@ fractions come with the petroleum phase.
 - Drinkable bottles with effects come in the drinks pass.
 
 ## Integrations
-JEI "Distilling" (column layout with levels, minimum height and heat), Jade (every level, highlighting the one looked at, progress, why it's stopped), goggles, display links (status, progress), advancement "Fractions of a Fraction", game test `distillingTankSplitsHooch` (also checks the pump-free outlet into a Create tank and scaffolding becoming catwalk).
+JEI "Distilling" (column layout with levels, minimum height and heat), Jade (every level, highlighting the one looked at, progress, why it's stopped), goggles, display links (status, progress), advancement "Fractions of a Fraction", game test `distillingTankSplitsHooch` (also checks the pump-free outlet into a Steel Storage Tank and the coupling at the join).
