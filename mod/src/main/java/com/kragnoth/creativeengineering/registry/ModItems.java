@@ -63,8 +63,10 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DRIVE_PULLEY = ITEMS.registerSimpleBlockItem(ModBlocks.DRIVE_PULLEY);
     public static final DeferredItem<com.kragnoth.creativeengineering.content.engine.DriveBeltItem> DRIVE_BELT = ITEMS.register("drive_belt",
             () -> new com.kragnoth.creativeengineering.content.engine.DriveBeltItem(new net.minecraft.world.item.Item.Properties()));
-    public static final DeferredItem<net.minecraft.world.item.BlockItem> DISTILLING_TANK = ITEMS.registerSimpleBlockItem(ModBlocks.DISTILLING_TANK);
-    public static final DeferredItem<net.minecraft.world.item.BlockItem> FERMENTING_VAT = ITEMS.registerSimpleBlockItem(ModBlocks.FERMENTING_VAT);
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem> DISTILLING_TANK = ITEMS.register("distilling_tank",
+            () -> new com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem(ModBlocks.DISTILLING_TANK.get(), new net.minecraft.world.item.Item.Properties()));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem> FERMENTING_VAT = ITEMS.register("fermenting_vat",
+            () -> new com.kragnoth.creativeengineering.content.shared.LayerPlacingBlockItem(ModBlocks.FERMENTING_VAT.get(), new net.minecraft.world.item.Item.Properties()));
     // Diesel engine
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CRANKCASE = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CRANKCASE);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> DIESEL_CYLINDER = ITEMS.registerSimpleBlockItem(ModBlocks.DIESEL_CYLINDER);

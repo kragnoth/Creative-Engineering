@@ -313,3 +313,7 @@ Convention (borrowed from Tarbound):
 - [ ] JEI Distilling tab; display link status / progress; vapour puffs only while working.
 - [ ] Spirits run the diesel engine at biodiesel level.
 - [ ] `/test runall`: 17 pass (new: distillingTankSplitsHooch).
+
+## 0.12.1 — tank layer placing
+- [ ] On a formed 2x2 or 3x3 vat (or distilling tank), place one on top (or under it): the whole layer fills in, using that many items; with too few in hand, just the one goes down; sneak places one.
+- [ ] `/test runall`: 18 pass (new: vatPlacesWholeLayer).

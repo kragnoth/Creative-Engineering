@@ -7,4 +7,7 @@ import net.minecraft.core.BlockPos;
 public interface FormedTank {
     @Nullable
     BlockPos controllerPos();
+
+    /** The formed multiblock's size {width x, height, width z} (1, 1, 1 when not formed). */
+    int[] size();
 }

@@ -435,4 +435,31 @@ public final class CEPlaytests {
                     "level 2: " + v.getAmount() + " " + v.getFluid());
         }));
     }
+
+    /** Like Create tanks: placing one vat on top of a 2x2 vat places the whole 2x2 layer (4 items used). */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 60)
+    public static void vatPlacesWholeLayer(GameTestHelper h) {
+        open(h);
+        BlockPos base = new BlockPos(4, 2, 4);
+        for (int x = 0; x < 2; x++) {
+            for (int z = 0; z < 2; z++) {
+                h.setBlock(base.offset(x, 0, z), ModBlocks.FERMENTING_VAT.get());
+            }
+        }
+        h.runAfterDelay(5, () -> {
+            var player = h.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+            var stack = new net.minecraft.world.item.ItemStack(com.kragnoth.creativeengineering.registry.ModItems.FERMENTING_VAT.get(), 8);
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+            BlockPos on = h.absolutePos(base.offset(1, 0, 1));
+            var hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(on).add(0, 0.5, 0), Direction.UP, on, false);
+            stack.useOn(new net.minecraft.world.item.context.UseOnContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, hit));
+            for (int x = 0; x < 2; x++) {
+                for (int z = 0; z < 2; z++) {
+                    h.assertBlockPresent(ModBlocks.FERMENTING_VAT.get(), base.offset(x, 1, z));
+                }
+            }
+            h.assertTrue(player.getMainHandItem().getCount() == 4, "used " + (8 - player.getMainHandItem().getCount()) + " vats, expected 4");
+            h.succeed();
+        });
+    }
 }
