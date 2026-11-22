@@ -5,6 +5,9 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.3-alpha: engine Display Link sources (2026-11-22) - test in game
+- [ ] Display Link on any crankcase offers: Machine Status (Running / why stopped), Engine Stress Capacity ("131,072 SU"), Engine Fuel Level (percent or bar, like Create's fill level). Try a Display Board and a Nixie tube.
+
 ## 0.8.2-alpha: engine Ponder + Jade (2026-11-22) - test in game
 - [ ] Ponder "diesel_engine" (from Crankcase, Cylinder or Flywheel): line of crankcases, cylinders diagonally above, tank on the side, hand crank at the front, flywheel + shaft at the back; rockers and smoke once running.
 - [ ] Jade on ANY crankcase of a line: status (Running / Stopped: turn the front shaft / No cylinders / No fuel), crankcases + cylinders, fuel, and "Stress capacity: N SU at 64 RPM" while running.

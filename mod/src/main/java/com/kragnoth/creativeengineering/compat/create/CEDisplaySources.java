@@ -24,8 +24,9 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Create Display Link sources for the coke oven, blast furnace and alloy furnace: status line, progress (percent or
- * bar), finished output count, and the coke oven's creosote fill. Point a Display Link at any brick.
+ * Create Display Link sources for the coke oven, blast furnace and alloy furnace (status line, progress as percent or
+ * bar, finished output count, coke oven creosote fill) and the diesel engine (status, stress capacity, fuel level).
+ * Point a Display Link at any brick / crankcase.
  */
 public final class CEDisplaySources {
     public static final DeferredRegister<DisplaySource> SOURCES =
@@ -57,6 +58,20 @@ public final class CEDisplaySources {
 
         @Override protected boolean allowsLabeling(DisplayLinkContext context) { return true; }
         @Override protected String getTranslationKey() { return "machine_output"; }
+    });
+
+    public static final DeferredHolder<DisplaySource, DisplaySource> ENGINE_FUEL = SOURCES.register("engine_fuel_level",
+            () -> new Fill("engine_fuel_level", MachineReadout::readoutTank));
+
+    public static final DeferredHolder<DisplaySource, DisplaySource> ENGINE_CAPACITY = SOURCES.register("engine_capacity", () -> new NumericSingleLineDisplaySource() {
+        @Override
+        protected MutableComponent provideLine(DisplayLinkContext context, DisplayTargetStats stats) {
+            MachineReadout r = readout(context);
+            return r == null ? EMPTY_LINE : Component.literal(String.format("%,d SU", r.readoutOutput()));
+        }
+
+        @Override protected boolean allowsLabeling(DisplayLinkContext context) { return true; }
+        @Override protected String getTranslationKey() { return "engine_capacity"; }
     });
 
     /** Percent or progress bar, the same widget Create's own fill-level source uses. */
@@ -118,6 +133,9 @@ public final class CEDisplaySources {
                 DisplaySource.BY_BLOCK.add(block, OUTPUT.get());
             }
             DisplaySource.BY_BLOCK.add(ModBlocks.COKE_OVEN_BRICKS.get(), CREOSOTE.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), STATUS.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), ENGINE_CAPACITY.get());
+            DisplaySource.BY_BLOCK.add(ModBlocks.DIESEL_CRANKCASE.get(), ENGINE_FUEL.get());
         }));
     }
 }

@@ -115,6 +115,8 @@
   "creativeengineering.display_source.machine_progress": "Machine Progress",
   "creativeengineering.display_source.machine_output": "Finished Output",
   "creativeengineering.display_source.creosote_level": "Creosote Level",
+  "creativeengineering.display_source.engine_fuel_level": "Engine Fuel Level",
+  "creativeengineering.display_source.engine_capacity": "Engine Stress Capacity",
   "creativeengineering.readout.working": "Working",
   "creativeengineering.readout.idle": "Idle",
   "advancements.creativeengineering.alloy_furnace.title": "Industrial Alloying",

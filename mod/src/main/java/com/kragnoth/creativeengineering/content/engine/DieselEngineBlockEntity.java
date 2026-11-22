@@ -37,7 +37,8 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
  *       cylinder per second straight from the touching tanks (no pump). Stops when the fuel runs out.</li>
  * </ul>
  */
-public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
+public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity
+        implements com.kragnoth.creativeengineering.content.shared.MachineReadout {
     public static final int MAX_LENGTH = 8;
     public static final float RPM = 64;
     private static final int SCAN_TICKS = 20;
@@ -226,6 +227,48 @@ public class DieselEngineBlockEntity extends GeneratingKineticBlockEntity {
     public float totalCapacity() {
         EngineFuel f = fuelFluid == null ? null : EngineFuel.of(new FluidStack(fuelFluid, 1));
         return running && f != null ? cylinders * f.stress() : 0;
+    }
+
+    /** Fuel in the touching tanks as a fraction of their capacity (0..1), from the controller's last scan. */
+    public float fuelFill() {
+        if (fuelFluid == null) {
+            return 0;
+        }
+        long have = 0, room = 0;
+        for (IFluidHandler h : tanks) {
+            for (int t = 0; t < h.getTanks(); t++) {
+                room += h.getTankCapacity(t);
+                FluidStack fs = h.getFluidInTank(t);
+                if (fs.getFluid() == fuelFluid) {
+                    have += fs.getAmount();
+                }
+            }
+        }
+        return room == 0 ? 0 : (float) have / room;
+    }
+
+    // Display Link readouts (compat/create/CEDisplaySources), from any crankcase of the line
+    @Override
+    public Component readoutStatus() {
+        DieselEngineBlockEntity c = controller();
+        return Component.translatable("creativeengineering.engine.state." + (c == null ? "no_cylinders" : c.statusKey()));
+    }
+
+    @Override
+    public Float readoutProgress() {
+        return null;
+    }
+
+    @Override
+    public int readoutOutput() {
+        DieselEngineBlockEntity c = controller();
+        return c == null ? 0 : (int) c.totalCapacity();
+    }
+
+    @Override
+    public Float readoutTank() {
+        DieselEngineBlockEntity c = controller();
+        return c == null ? 0F : c.fuelFill();
     }
 
     /** Status key: running / needs_start / no_cylinders / no_fuel_state. */

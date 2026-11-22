@@ -147,6 +147,8 @@ LANG = collections.OrderedDict([
     ('%s.display_source.machine_progress' % MODID, 'Machine Progress'),
     ('%s.display_source.machine_output' % MODID, 'Finished Output'),
     ('%s.display_source.creosote_level' % MODID, 'Creosote Level'),
+    ('%s.display_source.engine_fuel_level' % MODID, 'Engine Fuel Level'),
+    ('%s.display_source.engine_capacity' % MODID, 'Engine Stress Capacity'),
     ('%s.readout.working' % MODID, 'Working'),
     ('%s.readout.idle' % MODID, 'Idle'),
     ('advancements.%s.alloy_furnace.title' % MODID, 'Industrial Alloying'),
