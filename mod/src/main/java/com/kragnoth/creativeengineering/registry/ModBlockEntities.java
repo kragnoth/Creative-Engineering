@@ -45,6 +45,12 @@ public final class ModBlockEntities {
                             ModBlocks.DIESEL_CRANKCASE.get())
                     .build(null));
     @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.DieselCylinderBlockEntity>> DIESEL_CYLINDER =
+            BLOCK_ENTITIES.register("diesel_cylinder", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.engine.DieselCylinderBlockEntity(ModBlockEntities.DIESEL_CYLINDER.get(), pos, state),
+                            ModBlocks.DIESEL_CYLINDER.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.simibubi.create.content.kinetics.base.KineticBlockEntity>> DIESEL_FLYWHEEL =
             BLOCK_ENTITIES.register("diesel_flywheel", () -> BlockEntityType.Builder
                     .of((pos, state) -> new com.simibubi.create.content.kinetics.base.KineticBlockEntity(ModBlockEntities.DIESEL_FLYWHEEL.get(), pos, state),

@@ -21,7 +21,8 @@ public final class CreativeEngineering {
     public static final String MODID = "creativeengineering";
     public static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
 
-    public CreativeEngineering(IEventBus modBus) {
+    public CreativeEngineering(IEventBus modBus, net.neoforged.fml.ModContainer container) {
+        container.registerConfig(net.neoforged.fml.config.ModConfig.Type.CLIENT, CEConfig.CLIENT_SPEC);
         ModFluids.init(); // its block and bucket live in the BLOCKS / ITEMS registers below
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);

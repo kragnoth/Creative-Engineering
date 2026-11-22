@@ -21,7 +21,8 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
  * engine sets RUNNING while it fires; that only drives client effects: occasional vanilla campfire smoke off the
  * head and a soft thump (no custom particles, no server cost).
  */
-public class DieselCylinderBlock extends HorizontalDirectionalBlock implements IWrenchable {
+public class DieselCylinderBlock extends HorizontalDirectionalBlock implements IWrenchable,
+        com.simibubi.create.foundation.block.IBE<DieselCylinderBlockEntity> {
     public static final MapCodec<DieselCylinderBlock> CODEC = simpleCodec(DieselCylinderBlock::new);
     public static final BooleanProperty RUNNING = BooleanProperty.create("running");
 
@@ -43,6 +44,16 @@ public class DieselCylinderBlock extends HorizontalDirectionalBlock implements I
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection());
+    }
+
+    @Override
+    public Class<DieselCylinderBlockEntity> getBlockEntityClass() {
+        return DieselCylinderBlockEntity.class;
+    }
+
+    @Override
+    public net.minecraft.world.level.block.entity.BlockEntityType<? extends DieselCylinderBlockEntity> getBlockEntityType() {
+        return com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_CYLINDER.get();
     }
 
     @Override

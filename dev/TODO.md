@@ -5,6 +5,12 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.1-alpha: engine valve gear (2026-11-22) - test in game
+- [ ] Running cylinders: the rocker arm on top of each head nods a few pixels once per firing (~every 2 s), cylinders out of step with each other. Stopped engine: still.
+- [ ] Config `config/creativeengineering-client.toml` → `[visuals] animateEngines = false`: rockers freeze; engine output unchanged.
+- [ ] With Flywheel instancing on (default) the rockers are GPU-instanced; with it off (`/flywheel backend off`) they still draw (renderer fallback). Big farms: FPS should be unaffected either way.
+- [ ] Injector + fuel line moved to the head's corner; valve stems under the rocker ends.
+
 ## 0.8.0-alpha: the diesel engine runs (2026-11-22) - test in game
 - [ ] Craft: Crankcase (steel sheets, steel gear, cast iron, shaft), Cylinder (brass, steel sheets, piston, cast iron, steel rod), Flywheel (cast iron around a shaft).
 - [ ] Place crankcases in a row facing away from you (the back is the output end). Cylinders on the blocks diagonally above, placed facing outward. A Create Fluid Tank of creosote against a crankcase side.

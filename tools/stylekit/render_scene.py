@@ -89,7 +89,7 @@ class Scene:
         self.quads = []          # (corners3 world px-units, uvrect, texture array, shade)
         self.puffs = []
 
-    def add(self, model, pos, yrot=0, zrot=0):
+    def add(self, model, pos, yrot=0, zrot=0, xform=None):
         """Place a model (resource location or dict) at block pos. zrot then yrot (degrees) turn it about the block centre,
         like a blockstate's x / y rotations (zrot 90 lays an upward-facing model on its side, pointing -X)."""
         m = load_model(model) if isinstance(model, str) else model
@@ -112,6 +112,9 @@ class Scene:
                 pts = [np.array(p0, float), np.array(p0, float) + np.array(du) * lu, np.array(p0, float) + np.array(dv) * lv]
                 pts = [_rot(p, rot) for p in pts]
                 nrm = _rot(np.array(n, float) + (rot['origin'] if rot else 0), rot) - (np.array(rot['origin']) if rot else 0)
+                if xform:
+                    pts = [xform(p) for p in pts]
+                    nrm = xform(nrm + 8) - xform(np.array([8.0, 8, 8]))
                 if zrot:
                     zr = {'origin': [8, 8, 8], 'axis': 'z', 'angle': zrot}
                     pts = [_rot(p, zr) for p in pts]

@@ -1,6 +1,6 @@
 # Module 1: Fuels & Engines — the diesel engine (design, 2026-11-20)
 
-Status: **0.8.0: running engine** (look approved through 0.7.1; game test `dieselEngineStartsAndDrivesShaft` passes headless). Still to do: animated pistons/con-rods (partial models, as Create's steam engine), Ponder scene, Jade, display-link sources.
+Status: **0.8.0: running engine** (look approved through 0.7.1; game test `dieselEngineStartsAndDrivesShaft` passes headless). 0.8.1: valve-gear animation done. Still to do: Ponder + Jade (next pass), then display-link sources.
 
 ## Kragnoth's brief (2026-11-20)
 - A **self-contained multiblock in the essence of Create's steam engine**: no fixed shape, built from parts.
@@ -52,3 +52,4 @@ Pistons stroke in time with the crank, exhaust puffs per firing, and a thump tha
 - Fuels: data map `creativeengineering:engine_fuel` keyed by `#creativeengineering:engine_fuels/<fuel>` fluid tags (each lists `#c:` tags and other mods' fluids as optional). Defaults (SU per cylinder / mB per s): creosote 16384/2, plant oil 20480/2, ethanol 24576/2, biodiesel 32768/1.5, diesel 40960/1, gasoline 32768/2. Creosote ~ one boiler level of steam (assumed lava baseline; tune after play).
 - Flywheel: `DieselFlywheelBlock` (Create `HorizontalAxisKineticBlock`), drawn spinning by `KineticBlockEntityRenderer`.
 - Recipes: crankcase = steel sheet, steel gear, cast iron, Create shaft; cylinder = brass, steel sheet, piston, cast iron, steel rod; flywheel = cast iron around a Create shaft. JEI "Diesel Engine Fuel" page.
+- Animation (0.8.1, Kragnoth: "this is working", nothing campy): only the rocker arm on each head moves, nodding up to 7 degrees once per firing (4-stroke at 64 RPM), phase per cylinder. Flywheel instanced visual (`CylinderVisual`, `SimpleBlockEntityVisualizer`) with a renderer fallback (`CylinderRenderer`, skips itself when instancing is on); partial model `block/diesel_cylinder_rocker`. Client config `animateEngines` (default true) freezes it; purely visual. Server load is unaffected by any of this.

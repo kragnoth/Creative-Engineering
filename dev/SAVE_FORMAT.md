@@ -49,3 +49,5 @@ Blocks/items `treated_planks`, `treated_stairs`, `treated_slab`, `treated_log`, 
 
 ## Diesel engine (0.7.0 / 0.8.0)
 Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `diesel_cylinder` (`facing`, `running`), `diesel_flywheel` (`axis`). Block entities `diesel_engine` (Create kinetic NBT + `Running`, `Cylinders`, `Length`, `Fuel` fluid id, `BurnDebt`) and `diesel_flywheel` (plain Create kinetic). Data map `engine_fuel`; fluid tags `engine_fuels/*`. Removed in 0.7.1: `diesel_exhaust`, `diesel_exhaust_stack`; in 0.7.0 pass: `diesel_starter`.
+
+- 0.8.1: block entity `diesel_cylinder` (no saved data; drives the rocker animation). Client config `creativeengineering-client.toml`: `visuals.animateEngines`.

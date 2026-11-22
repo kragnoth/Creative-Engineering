@@ -528,11 +528,18 @@ def cylinder(angle):
     for x, z in ((4, 4), (11, 4), (4, 11), (11, 11)):
         e.append(box([x - 0.75, 17, z - 0.75], [x + 0.75, 18, z + 0.75], 'shaft', {'up': 'shaft_end'}, rot=r))
     e += [box([5, 17, 4.5], [11, 19, 11.5], 'casing', rot=r), box([6, 19, 5.5], [10, 20, 10.5], 'casing', rot=r),
-          box([7.25, 20, 7.25], [8.75, 21.5, 8.75], 'brass', rot=r),
-          box([7.5, 15.5, 11.5], [8.5, 20.5, 12.5], 'brass', rot=r),
+          box([10.5, 17, 10.5], [12, 19.5, 12], 'brass', rot=r),                    # injector at the head's corner
+          box([10.75, 13, 12], [11.75, 18, 13], 'brass', rot=r),                    # its fuel line
+          box([3.75, 18.5, 7.75], [4.75, 20, 8.75], 'shaft', rot=r),                # valve stems under the rocker ends
+          box([11.25, 18.5, 7.75], [12.25, 20, 8.75], 'shaft', rot=r),
           box([12.5, -3, 7.5], [13.5, 17, 8.5], 'shaft', rot=r)]
     return e
 eng('diesel_cylinder', ENG_T, cylinder(45))            # leans toward +Z (south bank)
+# Rocker arm: a PARTIAL model (drawn moving by the cylinder's visual, not baked into the block). Upright model space;
+# the visual leans it 45 deg like the block and nods it about the pivot (8, 20.5, 8.25), axis Z.
+eng('diesel_cylinder_rocker', ENG_T, [box([3, 20, 7.5], [13, 21, 9], 'iron', {'up': 'iron_top'}),
+                                      box([7.25, 19.75, 7], [8.75, 21.25, 9.5], 'shaft', {'east': 'shaft_end', 'west': 'shaft_end'}),
+                                      box([3, 19.5, 7.75], [4.5, 20, 8.75], 'brass'), box([11.5, 19.5, 7.75], [13, 20, 8.75], 'brass')])
 eng('diesel_cylinder_mirrored', ENG_T, cylinder(-45))  # leans toward -Z (north bank)
 
 # Flywheel: 3-block cast-iron wheel on Create's shaft (mates exactly; passes rotation on). Octagonal hub with boss rings,
