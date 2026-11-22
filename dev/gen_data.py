@@ -660,8 +660,12 @@ for metal, label, extra in (('andesite', 'Andesite', 'create:andesite_alloy'), (
                      'side': 'create:block/scaffold/%s_scaffold' % metal, 'casing': 'create:block/%s_casing' % metal,
                      'particle': 'create:block/scaffold/%s_scaffold' % metal}})
     parts = [{'apply': {'model': ce('block/' + name)}}]
-    for fire, lit, model in (('campfire', 'true', 'minecraft:block/campfire'), ('campfire', 'false', 'minecraft:block/campfire_off'),
-                             ('soul', 'true', 'minecraft:block/soul_campfire'), ('soul', 'false', 'minecraft:block/campfire_off')):
+    # vanilla's campfire models carry no render_type, so inside our multipart they'd fall back to solid (black
+    # where the texture is transparent): wrap each one with cutout
+    for vanilla in ('campfire', 'campfire_off', 'soul_campfire'):
+        put('%s/models/block/stand_%s.json' % (A, vanilla), {'parent': 'minecraft:block/' + vanilla, 'render_type': 'minecraft:cutout'})
+    for fire, lit, model in (('campfire', 'true', ce('block/stand_campfire')), ('campfire', 'false', ce('block/stand_campfire_off')),
+                             ('soul', 'true', ce('block/stand_soul_campfire')), ('soul', 'false', ce('block/stand_campfire_off'))):
         parts.append({'when': {'fire': fire, 'lit': lit}, 'apply': {'model': model}})
     put('%s/blockstates/%s.json' % (A, name), {'multipart': parts})
     put('%s/models/item/%s.json' % (A, name), {'parent': ce('block/' + name)})

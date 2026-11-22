@@ -249,3 +249,6 @@ Convention (borrowed from Tarbound):
 - [ ] Flint and steel / fire charge light it; shovel / water bottle douse it (smoke puff).
 - [ ] A vat on a lit stand heats at x1 (Jade); douse it and it stops. A Create boiler on stands counts passive heat.
 - [ ] Light level 15 lit (soul 10), 0 unlit. Smoke vents out of the sides only.
+
+## 0.9.6
+- [ ] Campfire Stand: the campfire inside renders with no black (cutout), lit, unlit and soul.

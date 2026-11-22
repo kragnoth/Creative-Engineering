@@ -11,7 +11,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "minecraft:block/campfire"
+        "model": "creativeengineering:block/stand_campfire"
       }
     },
     {
@@ -20,7 +20,7 @@
         "lit": "false"
       },
       "apply": {
-        "model": "minecraft:block/campfire_off"
+        "model": "creativeengineering:block/stand_campfire_off"
       }
     },
     {
@@ -29,7 +29,7 @@
         "lit": "true"
       },
       "apply": {
-        "model": "minecraft:block/soul_campfire"
+        "model": "creativeengineering:block/stand_soul_campfire"
       }
     },
     {
@@ -38,7 +38,7 @@
         "lit": "false"
       },
       "apply": {
-        "model": "minecraft:block/campfire_off"
+        "model": "creativeengineering:block/stand_campfire_off"
       }
     }
   ]
