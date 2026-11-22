@@ -1,27 +1,27 @@
 {
   "values": {
     "#creativeengineering:engine_fuels/creosote": {
-      "stress": 16384,
+      "stress": 12288,
       "burn": 2
     },
     "#creativeengineering:engine_fuels/plant_oil": {
-      "stress": 20480,
+      "stress": 15360,
       "burn": 2
     },
     "#creativeengineering:engine_fuels/ethanol": {
-      "stress": 24576,
+      "stress": 18432,
       "burn": 2
     },
     "#creativeengineering:engine_fuels/biodiesel": {
-      "stress": 32768,
+      "stress": 24576,
       "burn": 1.5
     },
     "#creativeengineering:engine_fuels/diesel": {
-      "stress": 40960,
+      "stress": 30720,
       "burn": 1
     },
     "#creativeengineering:engine_fuels/gasoline": {
-      "stress": 32768,
+      "stress": 24576,
       "burn": 2
     }
   }

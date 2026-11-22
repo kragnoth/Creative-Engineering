@@ -609,17 +609,18 @@ tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 # Engine fuels (data map creativeengineering:engine_fuel on fluids, keyed by our fuel tags). Each tag lists the common
 # c: tag and other mods' fluids as OPTIONAL entries (Crafts & Additions, Create Diesel Generators, Immersive
 # Engineering / Petroleum), so they work when present and nothing errors when they aren't.
-# stress = SU each cylinder adds; burn = mB per cylinder per second. Creosote (weakest) ~ one boiler level of steam
-# (16384 SU, what a passive lava-heated boiler gives); better fuels scale up from there.
+# stress = SU each cylinder adds; burn = mB per cylinder per second. Baseline (Kragnoth): one Create steam engine on a
+# lava-fed blaze burner = 16384 SU; one creosote cylinder (one crankcase, one cylinder, one fuel) = 3/4 of that =
+# 12288. Better fuels keep their ratios above creosote.
 opt = lambda i: {'id': i, 'required': False}
-FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 16384, 2),
+FUELS = [('creosote', ['#c:creosote', 'immersiveengineering:creosote'], 12288, 2),
          ('plant_oil', ['#c:plantoil', '#c:plant_oil', '#c:seed_oil', 'createaddition:seed_oil', 'createdieselgenerators:plant_oil',
-                        'immersiveengineering:plantoil'], 20480, 2),
+                        'immersiveengineering:plantoil'], 15360, 2),
          ('ethanol', ['#c:ethanol', '#c:bioethanol', 'createaddition:bioethanol', 'createdieselgenerators:ethanol',
-                      'immersiveengineering:ethanol'], 24576, 2),
-         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel'], 32768, 1.5),
-         ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 40960, 1),
-         ('gasoline', ['#c:gasoline', 'createdieselgenerators:gasoline', 'immersivepetroleum:gasoline'], 32768, 2)]
+                      'immersiveengineering:ethanol'], 18432, 2),
+         ('biodiesel', ['#c:biodiesel', 'createdieselgenerators:biodiesel', 'immersiveengineering:biodiesel'], 24576, 1.5),
+         ('diesel', ['#c:diesel', 'createdieselgenerators:diesel', 'immersivepetroleum:diesel', 'immersivepetroleum:diesel_sulfur'], 30720, 1),
+         ('gasoline', ['#c:gasoline', 'createdieselgenerators:gasoline', 'immersivepetroleum:gasoline'], 24576, 2)]
 values = {}
 for name, members, stress, burn in FUELS:
     entries = [ce('creosote')] if name == 'creosote' else []

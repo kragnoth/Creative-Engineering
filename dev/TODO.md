@@ -5,6 +5,10 @@ Convention (borrowed from Tarbound):
 - Add a short in-game test list for the release at the **top** of this file.
 - Kragnoth builds and tests; mark items done when he reports back.
 
+## 0.8.4-alpha: fuel rebalance (2026-11-22) - test in game
+- [ ] One crankcase + one cylinder on creosote = 12,288 SU (3/4 of a lava-fed blaze-burner steam engine, 16,384). V8 (4 crankcases x 2) on creosote = 98,304 SU.
+- [ ] Other fuels per cylinder: plant oil 15,360, ethanol 18,432, biodiesel 24,576, diesel 30,720, gasoline 24,576. JEI fuel page shows the new numbers.
+
 ## 0.8.3-alpha: engine Display Link sources (2026-11-22) - test in game
 - [ ] Display Link on any crankcase offers: Machine Status (Running / why stopped), Engine Stress Capacity ("131,072 SU"), Engine Fuel Level (percent or bar, like Create's fill level). Try a Display Board and a Nixie tube.
 
@@ -22,7 +26,7 @@ Convention (borrowed from Tarbound):
 - [ ] Craft: Crankcase (steel sheets, steel gear, cast iron, shaft), Cylinder (brass, steel sheets, piston, cast iron, steel rod), Flywheel (cast iron around a shaft).
 - [ ] Place crankcases in a row facing away from you (the back is the output end). Cylinders on the blocks diagonally above, placed facing outward. A Create Fluid Tank of creosote against a crankcase side.
 - [ ] Goggles on the back crankcase: crankcases/cylinders, fuel, "Stopped: turn the front shaft". Hand Crank against the front: it fires (sound), then runs on its own at 64 RPM; the crank isn't connected to the output.
-- [ ] Output shaft/flywheel spins; stress capacity = cylinders x 16384 SU for creosote (goggles show it). Overstress behaves like any Create source.
+- [ ] Output shaft/flywheel spins; stress capacity = cylinders x 12288 SU for creosote (0.8.4; goggles show it). Overstress behaves like any Create source.
 - [ ] Smoke puffs off running heads (vanilla campfire smoke, occasional); empty the tank: it stops (fizz) and needs cranking again.
 - [ ] JEI "Diesel Engine Fuel" lists creosote (and other mods' plant oil / ethanol / biodiesel / diesel if installed). Advancement "Compression Ignition".
 - [ ] `/test runall`: 5 tests pass (incl. dieselEngineStartsAndDrivesShaft).
