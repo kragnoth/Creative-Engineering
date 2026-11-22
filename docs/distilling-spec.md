@@ -33,7 +33,7 @@ Kragnoth, 2026-11-22: "work on the distilling tank next". Chosen: **one machine 
 Op level 2, in any world with cheats. It clears a space a few blocks in front of you and builds a running example:
 - **Input:** a Create creative fluid tank of hooch -> pipe -> mechanical pump (cogwheel on a creative motor) -> the boiler.
 - **Column:** 2x2x4 Distilling Tank on four lit copper Campfire Stands.
-- **Outputs:** a Steel Storage Tank against level 1 (water) and a 2-high one against level 2 (vodka), with no output pumps. Signs label each part.
+- **Outputs:** a Tap on level 1 feeds water along Steel Pipe into a Steel Storage Tank at its height; a Tap on level 2 drops vodka down Steel Pipe into a 2-high tank on the floor. No output pumps. Signs label each part.
 - The game test `distillDemoRuns` builds the same thing and checks both storage tanks fill (`DemoCommands.buildDistiller`).
 
 ## Steel Storage Tank (0.13.0; Kragnoth: "work in the extra storage tanks as a new tank type and make it look better when combined")
@@ -43,6 +43,17 @@ Op level 2, in any world with cheats. It clears a space a few blocks in front of
 - Recipe: a Create fluid tank + an iron sheet (shapeless).
 - Joining the column: wherever any fluid container touches a fraction level, the column draws a bolted flange coupling at the join (outlet bits computed on the server, synced, drawn with the rest of the dressing).
 - Catwalks were tried in 0.12.2 and removed in 0.13.0 (Kragnoth: unneeded).
+
+## Tap and Steel Pipe (0.13.1; Kragnoth: "a tap block placed before a pipe ... any tank connected by pipe ... below or same level ... fills automatically")
+- **Tap** (`creativeengineering:tap`; recipe: Create fluid valve + brass sheet). Placed against a fraction level (its back on the column; the pipe leaves from its front).
+  - While open and not powered by redstone, it gravity-feeds that level's fluid down the attached pipe run: 50 mB every 4 ticks (250 mB/s), shared between every tank the pipe enters at the tap's height or lower. Tanks above the tap are skipped.
+  - The run is followed by `PipeRuns` (shared with the engine's fuel lines): Create pipes, glass and encased pipes and Steel Pipe, up to Create's pump range; closed valves and pumps end a branch.
+  - Right-click opens or closes it (the handwheel turns a quarter); redstone closes it. Drips and a soft trickle show while it flows.
+  - Its front shows an empty fluid handler so pipes connect. On the boiler level it does nothing (the boiler can't be drained). Against any other container it works as a plain gravity tap.
+  - Fluid moves straight from the level into the tanks: no flow animation inside the pipes.
+- **Steel Pipe** (`creativeengineering:steel_pipe`; recipe: 2 Create fluid pipes + iron sheet -> 2). Create's fluid pipe under its own block entity type, re-skinned steel by the load-time recolour.
+  - Connects and carries flow exactly like Create's: pumps, valves, taps.
+  - No window form (the wrench does nothing; Kragnoth: these "won't have windows"), and it can't be encased.
 
 ## Getting the fractions out (Kragnoth: "each layer easily pumped and put into storage tanks")
 - **No pump needed:** every fraction level pushes its fluid, as one tank (100 mB every 5 ticks per touching face), into any container touching its outside faces. A Create fluid tank against level 2 fills with level 2's fraction. Another column's boiler counts, so distillations can be chained. The boiler never pushes.

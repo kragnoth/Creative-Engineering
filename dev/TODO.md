@@ -336,3 +336,11 @@ Convention (borrowed from Tarbound):
 - [ ] The Distilling Tank column's connected textures join again (since 0.12.2 every block drew its own frame).
 - [ ] `/test rundistill`: steel tanks (a 2-high one for vodka) with couplings; no catwalk ring.
 - [ ] Catwalks are gone (andesite/brass/copper_catwalk blocks vanish from 0.12.2 worlds).
+
+## 0.13.1 — Tap + Steel Pipe
+- [ ] Tap on a fraction level, Steel Pipe to Steel Storage Tanks: tanks at the tap's height or lower fill without a pump; a tank above doesn't.
+- [ ] Right-click toggles the tap (wheel turns); redstone stops it; drips and a soft trickle only while flowing.
+- [ ] Steel Pipe connects to Create pipes, pumps, valves and tanks; the wrench doesn't make glass; casing doesn't encase it.
+- [ ] A closed Create valve in the line stops the feed.
+- [ ] `/test rundistill`: taps and steel pipes (a level run for water, a drop for vodka).
+- [ ] `/test runall`: 20 pass (new: tapGravityFeeds).

@@ -1,0 +1,7 @@
+{
+  "parent": "create:block/fluid_pipe/item",
+  "textures": {
+    "0": "creativeengineering:block/steel_pipes_connected",
+    "1": "creativeengineering:block/steel_pipes"
+  }
+}

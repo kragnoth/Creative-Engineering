@@ -712,7 +712,9 @@ VAT_TANK = [('create:block/fluid_tank', 'vat_tank'), ('create:block/fluid_tank_c
             ('create:block/fluid_tank_top', 'vat_tank_top'), ('create:block/fluid_tank_top_connected', 'vat_tank_top_connected'),
             # the Steel Storage Tank's window and inner sheets
             ('create:block/fluid_tank_inner', 'vat_tank_inner'), ('create:block/fluid_tank_inner_connected', 'vat_tank_inner_connected'),
-            ('create:block/fluid_tank_window', 'vat_tank_window'), ('create:block/fluid_tank_window_single', 'vat_tank_window_single')]
+            ('create:block/fluid_tank_window', 'vat_tank_window'), ('create:block/fluid_tank_window_single', 'vat_tank_window_single'),
+            # Steel Pipe: Create's pipe sheets
+            ('create:block/pipes', 'steel_pipes'), ('create:block/pipes_connected', 'steel_pipes_connected')]
 put('%s/assets/minecraft/atlases/blocks.json' % RES, {'sources': [{
     'type': ce('recolor'), 'tint': '#C9D3DE', 'saturation': 0.12, 'contrast': 1.1, 'brightness': -0.04,
     'sprites': [{'source': src, 'target': ce('block/' + dst)} for src, dst in VAT_TANK]}]})
@@ -821,6 +823,52 @@ put('%s/models/item/steel_tank.json' % A, {'parent': ce('block/steel_tank/block_
 simple_loot('steel_tank')
 shapeless('steel_tank', [item('create:fluid_tank'), item('create:iron_sheet')], ce('steel_tank'), category='misc')
 LANG['block.%s.steel_tank' % MODID] = 'Steel Storage Tank'
+
+# Steel Pipe (content/storage): Create's generated pipe models re-pointed at the steel sheet; same blockstate. No window.
+if _cjar:
+    with _zip.ZipFile(_cjar[0]) as z:
+        pipe_bs = json.loads(z.read('assets/create/blockstates/fluid_pipe.json'))
+    seen_models = set()
+    for part in pipe_bs['multipart']:
+        apply = part['apply'] if isinstance(part['apply'], list) else [part['apply']]
+        for a in apply:
+            name = a['model'].split('/')[-1]
+            if name not in seen_models:
+                seen_models.add(name)
+                put('%s/models/block/steel_pipe/%s.json' % (A, name), {'parent': 'create:block/fluid_pipe/' + name,
+                    'render_type': 'minecraft:cutout_mipped', 'textures': {'0': ce('block/steel_pipes_connected'), 'particle': ce('block/steel_pipes')}})
+            a['model'] = ce('block/steel_pipe/' + name)
+    put('%s/blockstates/steel_pipe.json' % A, pipe_bs)
+put('%s/models/item/steel_pipe.json' % A, {'parent': 'create:block/fluid_pipe/item', 'textures': {'0': ce('block/steel_pipes_connected'),
+                                                                                                  '1': ce('block/steel_pipes')}})
+simple_loot('steel_pipe')
+put(R + '/crafting/steel_pipe.json', {'type': 'minecraft:crafting_shapeless', 'category': 'misc',
+    'ingredients': [item('create:fluid_pipe'), item('create:fluid_pipe'), item('create:iron_sheet')],
+    'result': {'id': ce('steel_pipe'), 'count': 2}})
+LANG['block.%s.steel_pipe' % MODID] = 'Steel Pipe'
+
+# Tap (content/distilling/TapBlock): brass valve body on a bolted flange (back, on the column), steel spout to the pipe
+# (front, north as built), handwheel on top: square to the pipe when shut, a quarter turn round when open.
+TAP_T = {'brass': CR('brass_block'), 'iron': CR('industrial_iron_block'), 'dark': CR('dark_metal_block'),
+         'pipe': ce('block/steel_pipes'), 'wheel': CR('fluid_valve')}
+_tap = [box([3, 3, 15], [13, 13, 16], 'iron'),                       # flange on the column
+        box([4, 4, 8], [12, 12, 15], 'brass'),                        # valve body
+        box([5.5, 5.5, 0], [10.5, 10.5, 8], 'pipe'),                  # spout to the pipe
+        box([5, 5, 0], [11, 11, 1], 'iron'),                          # spout collar
+        box([7.5, 12, 11], [8.5, 14, 12], 'dark')]                    # stem
+for i, (x0, y0, x1, y1) in enumerate(((3.5, 3.5, 4.5, 4.5), (11.5, 3.5, 12.5, 4.5), (3.5, 11.5, 4.5, 12.5), (11.5, 11.5, 12.5, 12.5))):
+    _tap.append(box([x0, y0, 14.75], [x1, y1, 15], 'dark'))           # flange bolts
+for state, wheel in (('closed', [box([5, 14, 11], [11, 14.75, 12], 'wheel'), box([7.5, 14, 8.5], [8.5, 14.75, 14.5], 'wheel')]),
+                     ('open', [box([5, 14, 11], [11, 14.75, 12], 'wheel', rot={'angle': 45, 'axis': 'y', 'origin': [8, 14, 11.5]}),
+                               box([7.5, 14, 8.5], [8.5, 14.75, 14.5], 'wheel', rot={'angle': 45, 'axis': 'y', 'origin': [8, 14, 11.5]})])):
+    eng('tap_' + state, TAP_T, _tap + wheel)
+put('%s/blockstates/tap.json' % A, {'variants': {'facing=%s,open=%s' % (f, o): {'model': ce('block/tap_' + ('open' if o == 'true' else 'closed')), 'y': rot}
+                                                for f, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270))
+                                                for o in ('true', 'false')}})
+put('%s/models/item/tap.json' % A, {'parent': ce('block/tap_open')})
+simple_loot('tap')
+shapeless('tap', [item('create:fluid_valve'), item('create:brass_sheet')], ce('tap'))
+LANG['block.%s.tap' % MODID] = 'Tap'
 shaped('distilling_tank', [' V ', 'PTP', 'PBP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
        'P': tag('c:plates/copper'), 'B': item('create:blaze_burner')}, ce('distilling_tank'), category='misc')
 
@@ -1006,7 +1054,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
 tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')]
-        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
+        + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'steel_pipe', 'tap', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
 tagfile('minecraft', 'block', 'beacon_base_blocks', [ce('blister_steel_block'), ce('steel_block')])

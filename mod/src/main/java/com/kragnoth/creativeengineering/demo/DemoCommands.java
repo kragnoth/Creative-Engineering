@@ -32,8 +32,8 @@ import net.neoforged.neoforge.fluids.FluidStack;
  *   <li>Input: a Create creative fluid tank of hooch -> pipe -> mechanical pump (powered by a cogwheel on a creative
  *       motor) -> the boiler.</li>
  *   <li>Column: 2x2x4 Distilling Tank on four lit copper Campfire Stands (heat x1).</li>
- *   <li>Outputs, no pumps: a Steel Storage Tank against level 1 fills with water, a 2-high one against level 2 with vodka;
- *       each join gets the column's bolted coupling.</li>
+ *   <li>Outputs, no pumps: a Tap on level 1 feeds water along Steel Pipe into a Steel Storage Tank at its height; a Tap
+ *       on level 2 drops vodka down Steel Pipe into a 2-high tank on the floor.</li>
  * </ul>
  */
 public final class DemoCommands {
@@ -56,20 +56,21 @@ public final class DemoCommands {
         // origin: the build's (-2, 0, -1) corner, a few blocks in front of you
         BlockPos front = BlockPos.containing(p).relative(facing, 6);
         buildDistiller(level, front.offset(-2, 0, -2));
-        src.sendSuccess(() -> Component.literal("Distilling Tank demo built: hooch is pumped into the boiler; water fills the tank on "
-                + "level 1 and vodka the tank on level 2, no output pumps. One batch every 10 s on campfire heat.").withStyle(ChatFormatting.GOLD), true);
+        src.sendSuccess(() -> Component.literal("Distilling Tank demo built: hooch is pumped into the boiler; taps on levels 1 and 2 "
+                + "gravity-feed water and vodka through Steel Pipe into Steel Storage Tanks, no pumps. One batch every 10 s on campfire heat.")
+                .withStyle(ChatFormatting.GOLD), true);
         return 1;
     }
 
     /** Positions (from the origin) of the storage tanks the demo's levels 1 and 2 fill. */
-    public static final BlockPos WATER_TANK = new BlockPos(4, 2, 2), VODKA_TANK = new BlockPos(2, 3, 4);
+    public static final BlockPos WATER_TANK = new BlockPos(6, 2, 2), VODKA_TANK = new BlockPos(2, 2, 6);
 
     /** Builds the whole demo with o as its origin; also used by the game test that keeps it honest. */
     public static void buildDistiller(ServerLevel level, BlockPos o) {
 
         // clear a 9 x 8 x 8 space on a smooth stone floor
-        for (int x = -3; x <= 6; x++) {
-            for (int z = -2; z <= 6; z++) {
+        for (int x = -3; x <= 8; x++) {
+            for (int z = -2; z <= 8; z++) {
                 level.setBlock(o.offset(x, -1, z), Blocks.SMOOTH_STONE.defaultBlockState(), Block.UPDATE_CLIENTS);
                 for (int y = 0; y <= 7; y++) {
                     level.setBlock(o.offset(x, y, z), Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS);
@@ -106,15 +107,34 @@ public final class DemoCommands {
         set(level, o.offset(1, 1, 2), create("mechanical_pump").setValue(BlockStateProperties.FACING, Direction.EAST));
         set(level, o.offset(1, 2, 2), create("cogwheel").setValue(BlockStateProperties.AXIS, Direction.Axis.X));
         set(level, o.offset(0, 2, 2), create("creative_motor").setValue(BlockStateProperties.FACING, Direction.EAST));
-        // outputs, no pumps: storage tanks touching level 1 (east side) and level 2 (south side)
+        // outputs, no pumps: a Tap on each level gravity-feeds a Steel Storage Tank through Steel Pipe
+        //   level 1 (water): tap east, a straight run to a tank at the same height
+        set(level, o.offset(4, 2, 2), tap(Direction.EAST));
+        set(level, o.offset(5, 2, 2), steelPipe(Direction.WEST, Direction.EAST));
         set(level, o.offset(WATER_TANK), ModBlocks.STEEL_TANK.get().defaultBlockState());
+        //   level 2 (vodka): tap south, the pipe drops two blocks to a 2-high tank on the floor
+        set(level, o.offset(2, 3, 4), tap(Direction.SOUTH));
+        set(level, o.offset(2, 3, 5), steelPipe(Direction.NORTH, Direction.DOWN));
+        set(level, o.offset(2, 2, 5), steelPipe(Direction.UP, Direction.SOUTH));
         set(level, o.offset(VODKA_TANK), ModBlocks.STEEL_TANK.get().defaultBlockState());
-        set(level, o.offset(VODKA_TANK).above(), ModBlocks.STEEL_TANK.get().defaultBlockState());   // a 2-high tank: they merge like Create's
+        set(level, o.offset(VODKA_TANK).below(), ModBlocks.STEEL_TANK.get().defaultBlockState());   // 2 high: they merge like Create's
         // labels
         sign(level, o.offset(-2, 1, 2), Direction.WEST, "Hooch in", "(creative tank)");
         sign(level, o.offset(1, 1, 1), Direction.NORTH, "Pump", "into the boiler");
-        sign(level, o.offset(5, 2, 2), Direction.EAST, "Level 1", "water");
-        sign(level, o.offset(2, 3, 5), Direction.SOUTH, "Level 2", "vodka");
+        sign(level, o.offset(7, 2, 2), Direction.EAST, "Level 1 tap", "water");
+        sign(level, o.offset(2, 2, 7), Direction.SOUTH, "Level 2 tap", "vodka");
+    }
+
+    private static BlockState tap(Direction facing) {
+        return ModBlocks.TAP.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.distilling.TapBlock.FACING, facing);
+    }
+
+    private static BlockState steelPipe(Direction... open) {
+        BlockState s = ModBlocks.STEEL_PIPE.get().defaultBlockState();
+        for (Direction d : Direction.values()) {
+            s = s.setValue(net.minecraft.world.level.block.PipeBlock.PROPERTY_BY_DIRECTION.get(d), java.util.List.of(open).contains(d));
+        }
+        return s;
     }
 
     private static void set(ServerLevel level, BlockPos pos, BlockState state) {

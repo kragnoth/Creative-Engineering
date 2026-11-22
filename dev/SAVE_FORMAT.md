@@ -90,3 +90,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - New block / BE `steel_tank` (Create fluid-tank states and NBT).
 - Removed `andesite_catwalk`, `brass_catwalk`, `copper_catwalk` (placed ones disappear).
 - `distilling_tank` BE gains `Outlets` (byte, faces touching containers).
+
+## 0.13.1
+- New blocks / BEs `tap` (states facing, open, powered, flowing) and `steel_pipe` (Create pipe states; Create pipe BE data).

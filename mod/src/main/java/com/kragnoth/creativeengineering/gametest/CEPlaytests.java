@@ -6,6 +6,7 @@ import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlockEntity;
 import com.kragnoth.creativeengineering.registry.ModBlocks;
 import com.kragnoth.creativeengineering.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -495,6 +496,42 @@ public final class CEPlaytests {
             h.assertTrue(w.getFluid() == net.minecraft.world.level.material.Fluids.WATER && w.getAmount() >= 150, "water tank: " + w.getAmount() + " " + w.getFluid() + diag);
             h.assertTrue(v.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.VODKA.source.get() && v.getAmount() >= 100,
                     "vodka tank: " + v.getAmount() + " " + v.getFluid());
+        }));
+    }
+
+    private static BlockState steelPipe(Direction... open) {
+        BlockState s = ModBlocks.STEEL_PIPE.get().defaultBlockState();
+        for (Direction d : Direction.values()) {
+            s = s.setValue(net.minecraft.world.level.block.PipeBlock.PROPERTY_BY_DIRECTION.get(d), java.util.List.of(open).contains(d));
+        }
+        return s;
+    }
+
+    /** A Tap on level 2 gravity-feeds through Steel Pipe: the tank at its height fills, the one above it doesn't. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 600)
+    public static void tapGravityFeeds(GameTestHelper h) {
+        open(h);
+        BlockPos base = new BlockPos(3, 2, 5);
+        h.setBlock(base, net.minecraft.world.level.block.Blocks.CAMPFIRE);
+        for (int y = 1; y <= 3; y++) {
+            h.setBlock(base.above(y), ModBlocks.DISTILLING_TANK.get());
+        }
+        BlockPos lvl2 = base.above(3), tap = lvl2.east(), junction = tap.east(), low = junction.east(), riser = junction.above(), high = riser.above();
+        h.setBlock(tap, ModBlocks.TAP.get().defaultBlockState().setValue(com.kragnoth.creativeengineering.content.distilling.TapBlock.FACING, Direction.EAST));
+        h.setBlock(low, ModBlocks.STEEL_TANK.get());
+        h.setBlock(high, ModBlocks.STEEL_TANK.get());
+        h.setBlock(junction, steelPipe(Direction.WEST, Direction.EAST, Direction.UP));
+        h.setBlock(riser, steelPipe(Direction.DOWN, Direction.UP));
+        h.runAfterDelay(5, () -> h.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(base.above()), Direction.NORTH)
+                .fill(new net.neoforged.neoforge.fluids.FluidStack(com.kragnoth.creativeengineering.registry.ModFluids.HOOCH.source.get(), 1000),
+                        net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE));
+        h.runAfterDelay(30, () -> h.succeedWhen(() -> {
+            var L = h.getLevel();
+            var lo = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(low), Direction.WEST).getFluidInTank(0);
+            var hi = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(high), Direction.DOWN).getFluidInTank(0);
+            h.assertTrue(lo.getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.VODKA.source.get() && lo.getAmount() >= 100,
+                    "tank at the tap's height: " + lo.getAmount() + " " + lo.getFluid());
+            h.assertTrue(hi.isEmpty(), "tank above the tap got " + hi.getAmount() + " " + hi.getFluid());
         }));
     }
 }

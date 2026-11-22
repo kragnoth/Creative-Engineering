@@ -45,6 +45,18 @@ public final class ModBlockEntities {
                             ModBlocks.DIESEL_CRANKCASE.get())
                     .build(null));
     @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity>> STEEL_PIPE =
+            BLOCK_ENTITIES.register("steel_pipe", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.simibubi.create.content.fluids.pipes.FluidPipeBlockEntity(ModBlockEntities.STEEL_PIPE.get(), pos, state),
+                            ModBlocks.STEEL_PIPE.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.distilling.TapBlockEntity>> TAP =
+            BLOCK_ENTITIES.register("tap", () -> BlockEntityType.Builder
+                    .of((pos, state) -> new com.kragnoth.creativeengineering.content.distilling.TapBlockEntity(ModBlockEntities.TAP.get(), pos, state),
+                            ModBlocks.TAP.get())
+                    .build(null));
+    @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.storage.SteelTankBlockEntity>> STEEL_TANK =
             BLOCK_ENTITIES.register("steel_tank", () -> BlockEntityType.Builder
                     .of((pos, state) -> new com.kragnoth.creativeengineering.content.storage.SteelTankBlockEntity(ModBlockEntities.STEEL_TANK.get(), pos, state),
@@ -92,6 +104,7 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationFluids());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DISTILLING_TANK.get(), (be, side) -> be.automationFluids());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, STEEL_TANK.get(), (be, side) -> be.capability());
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, TAP.get(), (be, side) -> be.frontHandler(side));
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DISTILLING_TANK.get(), (be, side) -> be.automationItems());
     }
 }

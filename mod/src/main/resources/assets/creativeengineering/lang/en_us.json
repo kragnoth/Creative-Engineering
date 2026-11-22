@@ -237,6 +237,8 @@
   "creativeengineering.drive_belt.too_far": "Too far: 32 blocks at most",
   "creativeengineering.drive_belt.axis": "Both wheels must turn on the same axis",
   "block.creativeengineering.steel_tank": "Steel Storage Tank",
+  "block.creativeengineering.steel_pipe": "Steel Pipe",
+  "block.creativeengineering.tap": "Tap",
   "block.creativeengineering.andesite_campfire_stand": "Andesite Campfire Stand",
   "block.creativeengineering.brass_campfire_stand": "Brass Campfire Stand",
   "block.creativeengineering.copper_campfire_stand": "Copper Campfire Stand",

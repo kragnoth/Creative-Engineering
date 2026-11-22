@@ -87,6 +87,14 @@ public final class ModBlocks {
             () -> new com.kragnoth.creativeengineering.content.distilling.DistillingTankBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_ORANGE).requiresCorrectToolForDrops().strength(2.5F, 6.0F).sound(SoundType.COPPER).noOcclusion()));
 
+    /** Steel Pipe (Create's pipe, steel, no window) and the Distilling Tank's Tap. */
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.storage.SteelPipeBlock> STEEL_PIPE = BLOCKS.register("steel_pipe",
+            () -> new com.kragnoth.creativeengineering.content.storage.SteelPipeBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.METAL).forceSolidOn().strength(1.5F).sound(SoundType.COPPER).noOcclusion()));
+    public static final DeferredBlock<com.kragnoth.creativeengineering.content.distilling.TapBlock> TAP = BLOCKS.register("tap",
+            () -> new com.kragnoth.creativeengineering.content.distilling.TapBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.GOLD).strength(1.5F).sound(SoundType.COPPER).noOcclusion()));
+
     /** Steel Storage Tank: Create's fluid tank in the Distilling Tank's steel (content/storage). */
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.storage.SteelTankBlock> STEEL_TANK = BLOCKS.register("steel_tank",
             () -> new com.kragnoth.creativeengineering.content.storage.SteelTankBlock(BlockBehaviour.Properties.of()

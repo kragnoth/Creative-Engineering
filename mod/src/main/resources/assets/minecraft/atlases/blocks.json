@@ -38,6 +38,14 @@
         {
           "source": "create:block/fluid_tank_window_single",
           "target": "creativeengineering:block/vat_tank_window_single"
+        },
+        {
+          "source": "create:block/pipes",
+          "target": "creativeengineering:block/steel_pipes"
+        },
+        {
+          "source": "create:block/pipes_connected",
+          "target": "creativeengineering:block/steel_pipes_connected"
         }
       ]
     }
