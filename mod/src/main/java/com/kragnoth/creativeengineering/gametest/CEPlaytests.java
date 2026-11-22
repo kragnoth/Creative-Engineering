@@ -208,4 +208,28 @@ public final class CEPlaytests {
             h.assertTrue(vat.speed() == 0F, "doused stand still gives heat " + vat.speed());
         }));
     }
+
+    /** Stands are fan catalysts: air passes through; lit campfire = smoking, lit soul = haunting, unlit / empty = neither. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 40)
+    public static void campfireStandIsFanCatalyst(GameTestHelper h) {
+        var smoke = com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes.SMOKING;
+        var haunt = com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes.HAUNTING;
+        BlockPos p = new BlockPos(4, 2, 4);
+        var base = ModBlocks.BRASS_CAMPFIRE_STAND.get().defaultBlockState();
+        var FIRE = com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.FIRE;
+        var LIT = com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.LIT;
+        h.assertTrue(com.simibubi.create.AllTags.AllBlockTags.FAN_TRANSPARENT.matches(base), "stand blocks fans");
+        Object[][] cases = {
+                {com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.CAMPFIRE, true, true, false},
+                {com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.SOUL, true, false, true},
+                {com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.CAMPFIRE, false, false, false},
+                {com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire.NONE, false, false, false}};
+        for (Object[] c : cases) {
+            h.setBlock(p, base.setValue(FIRE, (com.kragnoth.creativeengineering.content.heat.CampfireStandBlock.Fire) c[0]).setValue(LIT, (Boolean) c[1]));
+            BlockPos abs = h.absolutePos(p);
+            h.assertTrue(smoke.isValidAt(h.getLevel(), abs) == (Boolean) c[2], "smoking wrong for " + c[0] + " lit=" + c[1]);
+            h.assertTrue(haunt.isValidAt(h.getLevel(), abs) == (Boolean) c[3], "haunting wrong for " + c[0] + " lit=" + c[1]);
+        }
+        h.succeed();
+    }
 }

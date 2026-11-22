@@ -58,4 +58,5 @@ vanilla water textures + tint, runtime bucket model), tagged `c:plantoil`, in th
 - **Effects:** crackle, embers inside, smoke venting out of open sides.
 - **Drops:** itself, plus the fitted campfire item.
 - **Recipe:** shapeless, the matching Create scaffolding + andesite alloy / brass sheet / copper sheet. Shown as fermenting catalysts in JEI.
+- **Fan catalysts (0.9.7, Kragnoth: like Create Connected's catalysts):** stands are `create:fan_transparent`, so an Encased Fan blows straight through them. A lit regular-campfire stand turns the current into **smoking**, and a lit soul-campfire stand into **haunting**. Unlit or empty stands do neither. This allows compact cooking / haunting lines with the heat source in line with the belt. Decided per block state by two optional mixins on Create's `SmokingType` / `HauntingType.isValidAt` (require = 0; other blocks untouched).
 - **Not yet:** connected scaffold textures between adjacent stands (Create's scaffold CT behaviour).

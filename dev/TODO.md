@@ -252,3 +252,8 @@ Convention (borrowed from Tarbound):
 
 ## 0.9.6
 - [ ] Campfire Stand: the campfire inside renders with no black (cutout), lit, unlit and soul.
+
+## 0.9.7 — stands as fan catalysts
+- [ ] Fan -> lit campfire stand -> belt/items: items get smoked (raw beef -> steak). Soul stand: haunting. Unlit / empty: plain air.
+- [ ] The air current visibly continues past the stand, to the fan's normal range.
+- [ ] `/test runall`: 9 pass (new: campfireStandIsFanCatalyst).

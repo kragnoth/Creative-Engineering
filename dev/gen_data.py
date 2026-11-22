@@ -650,6 +650,8 @@ for e in vat_item['elements']:
 put('%s/models/item/fermenting_vat.json' % A, vat_item)
 simple_loot('fermenting_vat')
 
+# Campfire Stands are fan catalysts (Kragnoth: like Create Connected's): fans blow through them; a lit regular
+# campfire makes the current smoke, a lit soul campfire haunt (mixin/FanCatalyst*Mixin decides per state).
 # Campfire Stands: Create's own scaffolding model (parent, referenced) with Create's per-metal textures, and the
 # vanilla campfire / soul campfire model inside. Drops itself, plus the fitted campfire.
 for metal, label, extra in (('andesite', 'Andesite', 'create:andesite_alloy'), ('brass', 'Brass', 'create:brass_sheet'),
@@ -723,6 +725,8 @@ tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
 tagfile('c', 'fluid', 'ethanol', [ce('ethanol'), ce('flowing_ethanol')])
+# Campfire Stands: fans blow through them (fan catalysts; see the stand section)
+tagfile('create', 'block', 'fan_transparent', [ce(m + '_campfire_stand') for m in ('andesite', 'brass', 'copper')])
 # Fermenting Vat: 250 mB water + produce -> 250 mB, 20 s at passive heat (docs/fermentation-spec.md).
 def ferment(name, ingredient, count, result, time=400):
     put(R + '/fermenting/%s.json' % name, {'type': ce('fermenting'), 'ingredients': [dict(ingredient, count=count)],
