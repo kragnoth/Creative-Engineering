@@ -24,22 +24,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#iron"
+          "texture": "#iron",
+          "uv": [
+            3,
+            11,
+            13,
+            12
+          ]
         },
         "south": {
-          "texture": "#iron"
+          "texture": "#iron",
+          "uv": [
+            3,
+            11,
+            13,
+            12
+          ]
         },
         "east": {
-          "texture": "#iron"
+          "texture": "#iron",
+          "uv": [
+            7,
+            11,
+            8.5,
+            12
+          ]
         },
         "west": {
-          "texture": "#iron"
+          "texture": "#iron",
+          "uv": [
+            7.5,
+            11,
+            9,
+            12
+          ]
         },
         "up": {
-          "texture": "#iron_top"
+          "texture": "#iron_top",
+          "uv": [
+            3,
+            7.5,
+            13,
+            9
+          ]
         },
         "down": {
-          "texture": "#iron"
+          "texture": "#iron",
+          "uv": [
+            3,
+            7,
+            13,
+            8.5
+          ]
         }
       }
     },
@@ -56,22 +92,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#shaft"
+          "texture": "#shaft",
+          "uv": [
+            7.25,
+            10.75,
+            8.75,
+            12.25
+          ]
         },
         "south": {
-          "texture": "#shaft"
+          "texture": "#shaft",
+          "uv": [
+            7.25,
+            10.75,
+            8.75,
+            12.25
+          ]
         },
         "east": {
-          "texture": "#shaft_end"
+          "texture": "#shaft_end",
+          "uv": [
+            6.5,
+            10.75,
+            9,
+            12.25
+          ]
         },
         "west": {
-          "texture": "#shaft_end"
+          "texture": "#shaft_end",
+          "uv": [
+            7,
+            10.75,
+            9.5,
+            12.25
+          ]
         },
         "up": {
-          "texture": "#shaft"
+          "texture": "#shaft",
+          "uv": [
+            7.25,
+            7,
+            8.75,
+            9.5
+          ]
         },
         "down": {
-          "texture": "#shaft"
+          "texture": "#shaft",
+          "uv": [
+            7.25,
+            6.5,
+            8.75,
+            9
+          ]
         }
       }
     },
@@ -88,22 +160,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            11.5,
+            12,
+            13,
+            12.5
+          ]
         },
         "south": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            3,
+            12,
+            4.5,
+            12.5
+          ]
         },
         "east": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            7.25,
+            12,
+            8.25,
+            12.5
+          ]
         },
         "west": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            7.75,
+            12,
+            8.75,
+            12.5
+          ]
         },
         "up": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            3,
+            7.75,
+            4.5,
+            8.75
+          ]
         },
         "down": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            3,
+            7.25,
+            4.5,
+            8.25
+          ]
         }
       }
     },
@@ -120,22 +228,58 @@
       ],
       "faces": {
         "north": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            3,
+            12,
+            4.5,
+            12.5
+          ]
         },
         "south": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            11.5,
+            12,
+            13,
+            12.5
+          ]
         },
         "east": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            7.25,
+            12,
+            8.25,
+            12.5
+          ]
         },
         "west": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            7.75,
+            12,
+            8.75,
+            12.5
+          ]
         },
         "up": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            11.5,
+            7.75,
+            13,
+            8.75
+          ]
         },
         "down": {
-          "texture": "#brass"
+          "texture": "#brass",
+          "uv": [
+            11.5,
+            7.25,
+            13,
+            8.25
+          ]
         }
       }
     }

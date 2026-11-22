@@ -507,7 +507,33 @@ shaped('treated_beam', ['T', 'N', 'T'], {'T': tag(ce('treated_logs')), 'N': tag(
 # 2026-11-22): a resource pack that reskins Create reskins the engine too. Starting: any rotation into the crankcase's
 # front shaft (e.g. Create's Hand Crank); there is no starter block.
 CR = lambda t: 'create:block/' + t
+def _auto_uv(e, d):
+    """Vanilla's position-derived UV for face d, moved back inside 0..16. Parts that stick out of the block (flywheel
+    rim, cylinder heads) otherwise sample outside their sprite: black faces with stray specks in game."""
+    (x0, y0, z0), (x1, y1, z1) = e['from'], e['to']
+    uv = {'north': [16 - x1, 16 - y1, 16 - x0, 16 - y0], 'south': [x0, 16 - y1, x1, 16 - y0],
+          'east': [16 - z1, 16 - y1, 16 - z0, 16 - y0], 'west': [z0, 16 - y1, z1, 16 - y0],
+          'up': [x0, z0, x1, z1], 'down': [x0, 16 - z1, x1, 16 - z0]}[d]
+    out = []
+    for lo, hi in ((uv[0], uv[2]), (uv[1], uv[3])):
+        span = hi - lo
+        if span > 16:
+            lo, hi = 0, 16
+        else:
+            while lo < 0:
+                lo, hi = lo + 16, hi + 16
+            while hi > 16:
+                lo, hi = lo - 16, hi - 16
+            if lo < 0:
+                lo, hi = 0, span
+        out.append((round(lo, 4), round(hi, 4)))
+    return [out[0][0], out[1][0], out[0][1], out[1][1]]
+
 def eng(name, textures, elements):
+    for e in elements:
+        for d, f in e['faces'].items():
+            if 'uv' not in f:
+                f['uv'] = _auto_uv(e, d)
     t = dict(textures)
     t.setdefault('particle', t[next(iter(t))])
     put('%s/models/block/%s.json' % (A, name), {'parent': 'minecraft:block/block', 'textures': t, 'elements': elements})

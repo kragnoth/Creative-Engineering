@@ -257,3 +257,7 @@ Convention (borrowed from Tarbound):
 - [ ] Fan -> lit campfire stand -> belt/items: items get smoked (raw beef -> steak). Soul stand: haunting. Unlit / empty: plain air.
 - [ ] The air current visibly continues past the stand, to the fan's normal range.
 - [ ] `/test runall`: 9 pass (new: campfireStandIsFanCatalyst).
+
+## 0.9.8
+- [ ] Flywheel: rim and spokes render with proper textures (no black faces or stray specks), at rest and spinning, on X and Z axes.
+- [ ] Cylinder heads / crankcase shaft stubs: no odd faces either.
