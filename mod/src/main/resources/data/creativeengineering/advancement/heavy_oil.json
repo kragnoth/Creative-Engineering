@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "id": "creativeengineering:asphalt"
+    },
+    "title": {
+      "translate": "advancements.creativeengineering.heavy_oil.title"
+    },
+    "description": {
+      "translate": "advancements.creativeengineering.heavy_oil.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "asphalt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "creativeengineering:asphalt"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "asphalt"
+    ]
+  ],
+  "parent": "creativeengineering:crude_oil"
+}

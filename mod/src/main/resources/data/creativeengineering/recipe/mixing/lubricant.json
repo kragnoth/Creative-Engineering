@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "type": "neoforge:tag",
+      "tag": "c:heavy_oil",
+      "amount": 50
+    },
+    {
+      "type": "neoforge:tag",
+      "tag": "c:kerosene",
+      "amount": 50
+    }
+  ],
+  "results": [
+    {
+      "id": "creativeengineering:lubricant",
+      "amount": 100
+    }
+  ]
+}

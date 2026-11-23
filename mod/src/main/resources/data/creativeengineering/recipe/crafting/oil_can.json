@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " N ",
+    "S S",
+    "SSS"
+  ],
+  "key": {
+    "N": {
+      "tag": "c:nuggets/brass"
+    },
+    "S": {
+      "tag": "c:plates/iron"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:oil_can",
+    "count": 1
+  }
+}

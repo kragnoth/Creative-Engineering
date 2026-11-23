@@ -120,3 +120,9 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 ## 0.18.0 — Drink bottles
 - Items `hooch_bottle`, `wine_bottle`, `cider_bottle`, `mead_bottle`, `ale_bottle`, `vodka_bottle`, `brandy_bottle`, `whiskey_bottle`, `applejack_bottle`.
 - Fluid tags `c:hooch`, `c:wine`, `c:cider`, `c:mead`, `c:ale`. Recipes `filling/*_bottle`, `emptying/*_bottle`, `crafting/*_bottle_from_bucket`. Advancement `drink`.
+
+## 0.19.0 — Heavy oil products
+- Fluids `heavy_oil`, `lubricant` (+ flowing, blocks, buckets; tags `c:heavy_oil`, `c:lubricant`).
+- Blocks / items `asphalt`, `asphalt_slab`, `asphalt_stairs`; items `paraffin_wax`, `oil_can` (data component `creativeengineering:can_fluid`).
+- Every Create KineticBlockEntity may now save `CELubedUntil` (long game time) via mixin.
+- Recipe `distilling/crude_oil` now has 4 fractions (column 5 tall). New `mixing/asphalt`, `mixing/lubricant`, `compacting/paraffin_wax`, `candle_from_paraffin`, `oil_can`, asphalt slab / stairs (crafting + stonecutting).

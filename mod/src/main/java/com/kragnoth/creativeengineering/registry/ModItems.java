@@ -21,6 +21,16 @@ public final class ModItems {
     private ModItems() {}
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreativeEngineering.MODID);
+    public static final DeferredRegister.DataComponents COMPONENTS = DeferredRegister.createDataComponents(net.minecraft.core.registries.Registries.DATA_COMPONENT_TYPE, CreativeEngineering.MODID);
+    /** The fluid an Oil Can holds. */
+    public static final net.neoforged.neoforge.registries.DeferredHolder<net.minecraft.core.component.DataComponentType<?>, net.minecraft.core.component.DataComponentType<net.neoforged.neoforge.fluids.SimpleFluidContent>> CAN_FLUID =
+            COMPONENTS.registerComponentType("can_fluid", b -> b.persistent(net.neoforged.neoforge.fluids.SimpleFluidContent.CODEC)
+                    .networkSynchronized(net.neoforged.neoforge.fluids.SimpleFluidContent.STREAM_CODEC));
+    /** Petroleum byproducts (docs/petroleum-spec.md): paraffin wax (waxes copper like honeycomb, makes candles) and the Oil Can. */
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.petroleum.ParaffinWaxItem> PARAFFIN_WAX = ITEMS.register("paraffin_wax",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.ParaffinWaxItem(new Item.Properties()));
+    public static final DeferredItem<com.kragnoth.creativeengineering.content.petroleum.OilCanItem> OIL_CAN = ITEMS.register("oil_can",
+            () -> new com.kragnoth.creativeengineering.content.petroleum.OilCanItem(new Item.Properties().stacksTo(1)));
 
     // Tier 1: cementation (press iron + carbon in a basin, then bulk-blast it)
     public static final DeferredItem<Item> CARBON_PACKED_IRON = ITEMS.registerSimpleItem("carbon_packed_iron");
@@ -68,6 +78,9 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> PUMPJACK = ITEMS.registerSimpleBlockItem(ModBlocks.PUMPJACK);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> BEAM_BEARING = ITEMS.registerSimpleBlockItem(ModBlocks.BEAM_BEARING);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> WELLHEAD = ITEMS.registerSimpleBlockItem(ModBlocks.WELLHEAD);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> ASPHALT = ITEMS.registerSimpleBlockItem(ModBlocks.ASPHALT);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> ASPHALT_SLAB = ITEMS.registerSimpleBlockItem(ModBlocks.ASPHALT_SLAB);
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> ASPHALT_STAIRS = ITEMS.registerSimpleBlockItem(ModBlocks.ASPHALT_STAIRS);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> STEEL_PIPE = ITEMS.registerSimpleBlockItem(ModBlocks.STEEL_PIPE);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> TAP = ITEMS.registerSimpleBlockItem(ModBlocks.TAP);
     public static final DeferredItem<com.simibubi.create.content.fluids.tank.FluidTankItem> STEEL_TANK = ITEMS.register("steel_tank",
@@ -165,6 +178,8 @@ public final class ModItems {
                 HOOCH_BOTTLE, WINE_BOTTLE, CIDER_BOTTLE, MEAD_BOTTLE, ALE_BOTTLE, VODKA_BOTTLE, BRANDY_BOTTLE, WHISKEY_BOTTLE, APPLEJACK_BOTTLE,
                 com.kragnoth.creativeengineering.registry.ModFluids.CRUDE_OIL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.DIESEL.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.KEROSENE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.bucket,
+                com.kragnoth.creativeengineering.registry.ModFluids.HEAVY_OIL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.LUBRICANT.bucket,
+                PARAFFIN_WAX, OIL_CAN, ASPHALT, ASPHALT_SLAB, ASPHALT_STAIRS,
                 BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
                 STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
                 ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,

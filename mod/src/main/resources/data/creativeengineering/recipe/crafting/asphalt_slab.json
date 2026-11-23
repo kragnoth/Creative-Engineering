@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "creativeengineering:asphalt"
+    }
+  },
+  "result": {
+    "id": "creativeengineering:asphalt_slab",
+    "count": 6
+  }
+}

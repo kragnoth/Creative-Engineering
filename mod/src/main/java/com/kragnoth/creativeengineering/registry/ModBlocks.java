@@ -114,6 +114,19 @@ public final class ModBlocks {
     public static final DeferredBlock<com.kragnoth.creativeengineering.content.petroleum.WellheadBlock> WELLHEAD = BLOCKS.register("wellhead",
             () -> new com.kragnoth.creativeengineering.content.petroleum.WellheadBlock(pumpjackProps()));
 
+    /** Asphalt (heavy oil + gravel + sand, heated mixing): a road surface you move faster on (docs/petroleum-spec.md). */
+    public static final float ASPHALT_SPEED = 1.25F;
+    public static final DeferredBlock<Block> ASPHALT = BLOCKS.register("asphalt", () -> new Block(asphaltProps()));
+    public static final DeferredBlock<net.minecraft.world.level.block.SlabBlock> ASPHALT_SLAB = BLOCKS.register("asphalt_slab",
+            () -> new net.minecraft.world.level.block.SlabBlock(asphaltProps()));
+    public static final DeferredBlock<net.minecraft.world.level.block.StairBlock> ASPHALT_STAIRS = BLOCKS.register("asphalt_stairs",
+            () -> new net.minecraft.world.level.block.StairBlock(ASPHALT.get().defaultBlockState(), asphaltProps()));
+
+    private static BlockBehaviour.Properties asphaltProps() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).requiresCorrectToolForDrops().strength(1.5F, 6.0F)
+                .sound(SoundType.STONE).speedFactor(ASPHALT_SPEED);
+    }
+
     private static BlockBehaviour.Properties pumpjackProps() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.METAL).requiresCorrectToolForDrops().strength(3.5F, 6.0F)
                 .sound(SoundType.NETHERITE_BLOCK).noOcclusion();

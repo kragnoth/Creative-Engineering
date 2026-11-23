@@ -1,0 +1,15 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "type": "neoforge:tag",
+      "tag": "c:heavy_oil",
+      "amount": 100
+    }
+  ],
+  "results": [
+    {
+      "id": "creativeengineering:paraffin_wax"
+    }
+  ]
+}

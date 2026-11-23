@@ -28,6 +28,7 @@ public final class CreativeEngineering {
         ModFluids.init(); // its block and bucket live in the BLOCKS / ITEMS registers below
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
+        ModItems.COMPONENTS.register(modBus);
         ModFluids.TYPES.register(modBus);
         ModFluids.FLUIDS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);

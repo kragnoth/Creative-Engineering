@@ -105,17 +105,40 @@ for later stroke machines (a stamp mill on the block below, bellows for the furn
 Pools are finite. Drain them the Create way: a hose pulley or a pump, or by bucket.
 
 ## Refining
-- Distilling recipe `distilling/crude_oil`: 100 mB of any `c:crude_oil` gives diesel 40 (level 1), kerosene 30
-  (level 2) and gasoline 30 (level 3).
-- Needs heat 2 (a lit Blaze Burner) and a column 4 tall.
+- Distilling recipe `distilling/crude_oil` (0.19.0): 100 mB of any `c:crude_oil` gives four levels, heaviest lowest:
+  heavy oil 20 (level 1), diesel 30, kerosene 25, gasoline 25.
+- Needs heat 2 (a lit Blaze Burner) and a column 5 tall.
 - Replaces the 0.12 conditional IP / CDG crude recipes.
+
+## Heavy oil and its products (0.19.0)
+Kragnoth chose this pass: uses for the fuels' byproducts, namely the heavy fraction and lubricant (gas cap later).
+
+- **Heavy oil** (`heavy_oil`, `c:heavy_oil`): the bottom cut. Not a fuel; it is the feedstock for everything below.
+- **Asphalt** (`asphalt`, `asphalt_slab`, `asphalt_stairs`):
+  - heated Create mixing of 250 mB heavy oil + 2 gravel + 1 sand gives 4 asphalt;
+  - slabs and stairs by crafting or stonecutter;
+  - a road surface: walking on it is faster (block speed factor 1.25).
+  - Texture: drawn tar-black with aggregate (`tools/stylekit/make_petroleum_textures.py`).
+- **Paraffin Wax** (`paraffin_wax`):
+  - Create compacting presses 100 mB heavy oil into 1;
+  - waxes copper exactly like honeycomb, by hand or in a Deployer (`ParaffinWaxItem` extends `HoneycombItem`);
+  - string over wax makes a candle.
+- **Lubricant** (`lubricant`, `c:lubricant`): Create mixing, 50 mB heavy oil + 50 mB kerosene gives 100 mB.
+- **Oil Can** (`oil_can`):
+  - holds 1 B of lubricant; fill it with a Spout, or use it on any tank holding lubricant;
+  - use it on any Create kinetic block, by hand or in a Deployer, to spend a 50 mB dose. The machine is then
+    **lubricated** for a Minecraft day (stacks to 3 days), and its share of the network's stress drops by a quarter.
+  - Goggles show "Lubricated: -25% stress, n min left".
+  - It works on every Create machine: the state lives on `KineticBlockEntity` (`KineticBlockEntityLubeMixin`: saved,
+    synced, expires on its own, goggle line), and the cut is applied where Create sums network stress
+    (`KineticNetworkLubeMixin` on `getActualStressOf`). See `content/petroleum/Lubrication`.
 
 ## Demo
 `/test runrefinery` (op 2) builds the whole chain in front of you:
 - a Crank Gearbox on a creative motor, a 2-high Create girder column with the Walking Beam Bearing, and a Wellhead
   (the smallest rig), with the vein forced to 60 mB/s until restart;
-- Steel Pipe up into a 1x1x4 Distilling Tank on a creative Blaze Burner;
-- three taps into tall Steel Storage Tanks.
+- Steel Pipe up into a 1x1x5 Distilling Tank on a creative Blaze Burner;
+- four taps into Steel Storage Tanks: heavy oil, diesel, kerosene, gasoline.
 
 The game test `refineryDemoRuns` keeps it honest.
 

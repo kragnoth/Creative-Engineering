@@ -118,6 +118,10 @@ public final class ModFluids {
     public static final Tinted DIESEL = new Tinted("diesel", 0xF0C79B34, 850, 1500, MapColor.COLOR_YELLOW);
     public static final Tinted KEROSENE = new Tinted("kerosene", 0xC8D7E7EE, 800, 1100, MapColor.SNOW);
     public static final Tinted GASOLINE = new Tinted("gasoline", 0xD8E3C24A, 740, 900, MapColor.GOLD);
+    /** Crude's bottom cut (docs/petroleum-spec.md): asphalt, paraffin wax, and the base of lubricant. */
+    public static final Tinted HEAVY_OIL = new Tinted("heavy_oil", 0xFF2B2117, 1100, 8000, MapColor.COLOR_BROWN);
+    /** Heavy oil thinned with kerosene: an Oil Can of it eases a Create machine's stress (content/petroleum/Lubrication). */
+    public static final Tinted LUBRICANT = new Tinted("lubricant", 0xE6C99A3C, 900, 3000, MapColor.GOLD);
 
     /** Called from the mod constructor so the holders above are created before registration fires. */
     public static void init() {}

@@ -1,0 +1,26 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    {
+      "type": "neoforge:tag",
+      "tag": "c:heavy_oil",
+      "amount": 250
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "tag": "c:sands"
+    }
+  ],
+  "results": [
+    {
+      "id": "creativeengineering:asphalt",
+      "count": 4
+    }
+  ]
+}

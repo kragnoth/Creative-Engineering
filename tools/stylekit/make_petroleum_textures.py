@@ -28,8 +28,79 @@ def probe():
     return mt.shade([''.join(r) for r in g])
 
 
+mt.RAMPS['A'] = ['#e9dcae', '#f0e5bd', '#f6eecb', '#fbf5d9', '#fffae6', '#fffdf0', '#fffef7', '#ffffff', '#ffffff']   # paraffin
+mt.RAMPS['T'] = ['#1f2125', '#2b2e33', '#383c42', '#474c53', '#575d65', '#6a7179', '#80878f', '#979ea5', '#b0b6bc']   # tin can
+
+
+def paraffin():
+    """A pale block of wax, chamfered, with a pressed groove: honeycomb's industrial cousin."""
+    rows = ['................',
+            '................',
+            '................',
+            '.....AAAAAA.....',
+            '....AAAAAAAA....',
+            '...AAAAAAAAAA...',
+            '...AAAAAAAAAA...',
+            '...AAaaaaaaAA...',
+            '...AAAAAAAAAA...',
+            '...AAAAAAAAAA...',
+            '...aAAAAAAAAa...',
+            '....aaaaaaaa....',
+            '................',
+            '................',
+            '................',
+            '................']
+    return mt.shade(rows)
+
+
+def oil_can():
+    """A tin pump oil can: round body, brass spout reaching up-right, thumb pump on top."""
+    rows = ['..............B.',
+            '.............B..',
+            '............B...',
+            '...........B....',
+            '.....BB...B.....',
+            '.....BB..B......',
+            '....TTTTBB......',
+            '...TTTTTTB......',
+            '..TTTTTTTT......',
+            '..TTTTTTTT......',
+            '..TTTTTTTT......',
+            '..TTTTTTTT......',
+            '..tTTTTTTt......',
+            '...tttttt.......',
+            '................',
+            '................']
+    return mt.shade(rows)
+
+
+def asphalt():
+    """Dark road surface: tar-black base, grey and tan aggregate, a little glint. Tiles seamlessly."""
+    import random
+    rnd = random.Random(1909)
+    img = mt.Image.new('RGBA', (16, 16))
+    px = img.load()
+    for y in range(16):
+        for x in range(16):
+            v = rnd.randint(34, 46)
+            px[x, y] = (v, v, v + 3, 255)
+    for _ in range(26):                      # aggregate stones, 1-2 px
+        x, y = rnd.randrange(16), rnd.randrange(16)
+        g = rnd.choice([(78, 78, 80), (92, 88, 82), (64, 66, 70), (108, 102, 92)])
+        px[x, y] = g + (255,)
+        if rnd.random() < 0.35:
+            px[(x + 1) % 16, y] = tuple(max(0, c - 14) for c in g) + (255,)
+    for _ in range(4):                       # glint
+        x, y = rnd.randrange(16), rnd.randrange(16)
+        px[x, y] = (128, 128, 132, 255)
+    return img
+
+
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(__file__), '..', '..'))
+    for img, rel in ((paraffin(), 'item/paraffin_wax'), (oil_can(), 'item/oil_can'), (asphalt(), 'block/asphalt')):
+        mt.save(img, rel)
+        mt.Image.open('%s/%s.png' % (mt.TEX, rel)).resize((128, 128), mt.Image.NEAREST).save(os.path.join(mt.PREVIEW, rel.split('/')[1] + '_x8.png'))
     path = mt.save(probe(), 'item/seismic_probe')
     big = mt.Image.open(path).resize((256, 256), mt.Image.NEAREST)
     os.makedirs(mt.PREVIEW, exist_ok=True)

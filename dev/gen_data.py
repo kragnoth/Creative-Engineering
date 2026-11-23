@@ -310,7 +310,7 @@ put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
 TINTED = [('plant_oil', 'Plant Oil'), ('ethanol', 'Ethanol'), ('hooch', 'Hooch'), ('wine', 'Wine'), ('cider', 'Cider'),
           ('mead', 'Mead'), ('ale', 'Ale'), ('vodka', 'Vodka'), ('brandy', 'Brandy'), ('whiskey', 'Whiskey'),
           ('applejack', 'Applejack'), ('crude_oil', 'Crude Oil'), ('diesel', 'Diesel'), ('kerosene', 'Kerosene'),
-          ('gasoline', 'Gasoline')]
+          ('gasoline', 'Gasoline'), ('heavy_oil', 'Heavy Oil'), ('lubricant', 'Lubricant')]
 for n, _ in TINTED:
     put('%s/models/item/%s_bucket.json' % (A, n), {'parent': 'neoforge:item/bucket_drip', 'loader': 'neoforge:fluid_container', 'fluid': ce(n)})
     put('%s/blockstates/%s.json' % (A, n), {'variants': {'': {'model': ce('block/' + n)}}})
@@ -912,7 +912,8 @@ distil('ethanol_from_mead', {'fluid': ce('mead')}, 250, [('minecraft:water', 170
 # Crude (docs/petroleum-spec.md): any c:crude_oil (ours from desert pools and pumpjacks, or another mod's) splits into
 # our three fuels, heaviest lowest: diesel, kerosene, gasoline. Three fractions need a column four blocks tall
 # (boiler + three levels). Lit Blaze Burner or better. Replaces the 0.12 IP / CDG conditional recipes.
-distil('crude_oil', {'tag': 'c:crude_oil'}, 100, [(ce('diesel'), 40), (ce('kerosene'), 30), (ce('gasoline'), 30)],
+# 0.19.0: the bottom cut, heavy oil, joins (asphalt, paraffin, lubricant): four fractions, a column five tall.
+distil('crude_oil', {'tag': 'c:crude_oil'}, 100, [(ce('heavy_oil'), 20), (ce('diesel'), 30), (ce('kerosene'), 25), (ce('gasoline'), 25)],
        heat=2, time=100)
 
 # Campfire Stands are fan catalysts (Kragnoth: like Create Connected's): fans blow through them; a lit regular
@@ -987,7 +988,7 @@ tagfile('c', 'item', 'dusts/coal_coke', [ce('coke_dust')])
 tagfile('c', 'item', 'dusts', ['#c:dusts/coal_coke'])
 tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
-for _n in ('crude_oil', 'diesel', 'kerosene', 'gasoline'):
+for _n in ('crude_oil', 'diesel', 'kerosene', 'gasoline', 'heavy_oil', 'lubricant'):
     tagfile('c', 'fluid', _n, [ce(_n), ce('flowing_' + _n)])
 tagfile('c', 'fluid', 'creosote', [ce('creosote'), ce('flowing_creosote')])
 tagfile('c', 'fluid', 'plantoil', [ce('plant_oil'), ce('flowing_plant_oil')])
@@ -1073,6 +1074,8 @@ tagfile('minecraft', 'block', 'planks', [ce('treated_planks')])
 for kind in ('item', 'block'):
     tagfile('minecraft', kind, 'wooden_stairs', [ce('treated_stairs')])
     tagfile('minecraft', kind, 'wooden_slabs', [ce('treated_slab')])
+    tagfile('minecraft', kind, 'slabs', [ce('asphalt_slab')])
+    tagfile('minecraft', kind, 'stairs', [ce('asphalt_stairs')])
 tagfile('minecraft', 'block', 'mineable/axe', [ce(b) for b in ('treated_planks', 'treated_stairs', 'treated_slab', 'treated_log', 'treated_wood', 'treated_beam')])
 # Vanilla: tool/armour tags drive enchanting tables, anvils and other mods' checks.
 for t in TOOLS:
@@ -1081,7 +1084,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')] + [ce('pumpjack'), ce('walking_beam_bearing'), ce('wellhead')]
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')] + [ce('pumpjack'), ce('walking_beam_bearing'), ce('wellhead'), ce('asphalt'), ce('asphalt_slab'), ce('asphalt_stairs')]
         + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'steel_pipe', 'tap', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
@@ -1227,6 +1230,62 @@ shaped('walking_beam_bearing', [' S ', 'B B', 'PPP'], {'S': item('create:shaft')
        ce('walking_beam_bearing'), category='misc')
 shaped('wellhead', [' V ', 'PFP', ' S '], {'V': item('create:fluid_valve'), 'P': item(ce('steel_pipe')), 'F': tag('c:plates/steel'),
        'S': item('create:industrial_iron_block')}, ce('wellhead'), category='misc')
+# Heavy oil products (0.19.0, docs/petroleum-spec.md): asphalt roads, paraffin wax, lubricant + the Oil Can.
+for k, v in (('block.%s.asphalt', 'Asphalt'), ('block.%s.asphalt_slab', 'Asphalt Slab'), ('block.%s.asphalt_stairs', 'Asphalt Stairs'),
+             ('item.%s.paraffin_wax', 'Paraffin Wax'), ('item.%s.oil_can', 'Oil Can'),
+             ('%s.oil_can.amount', 'Lubricant: %s / %s mB'), ('%s.oil_can.doses', '%s doses (use on a Create machine)'),
+             ('%s.oil_can.empty', 'The can is dry: fill it with lubricant (Spout, or use it on a tank)'),
+             ('%s.oil_can.full', 'Already well oiled'), ('%s.lubricated', 'Lubricated: -25%% stress, ~%s min left')):
+    LANG[k % MODID] = v
+AS = ce('block/asphalt')
+put('%s/models/block/asphalt.json' % A, {'parent': 'minecraft:block/cube_all', 'textures': {'all': AS}})
+for n, parent in (('asphalt_stairs', 'stairs'), ('asphalt_stairs_inner', 'inner_stairs'), ('asphalt_stairs_outer', 'outer_stairs'),
+                  ('asphalt_slab', 'slab'), ('asphalt_slab_top', 'slab_top')):
+    put('%s/models/block/%s.json' % (A, n), {'parent': 'minecraft:block/' + parent, 'textures': {'bottom': AS, 'top': AS, 'side': AS}})
+put('%s/blockstates/asphalt.json' % A, {'variants': {'': {'model': AS}}})
+put('%s/blockstates/asphalt_slab.json' % A, {'variants': {'type=bottom': {'model': ce('block/asphalt_slab')},
+    'type=top': {'model': ce('block/asphalt_slab_top')}, 'type=double': {'model': AS}}})
+_st = {}
+for facing, ry in (('east', 0), ('south', 90), ('west', 180), ('north', 270)):
+    for half in ('bottom', 'top'):
+        for shape in ('straight', 'inner_left', 'inner_right', 'outer_left', 'outer_right'):
+            y = ry - (90 if shape in ('inner_left', 'outer_left') and half == 'bottom' else 0) + (90 if shape in ('inner_right', 'outer_right') and half == 'top' else 0)
+            v = {'model': ce('block/asphalt_stairs' + ('_inner' if shape.startswith('inner') else '_outer' if shape.startswith('outer') else ''))}
+            if half == 'top':
+                v['x'] = 180
+            if y % 360:
+                v['y'] = y % 360
+            if half == 'top' or y % 360:
+                v['uvlock'] = True
+            _st['facing=%s,half=%s,shape=%s' % (facing, half, shape)] = v
+put('%s/blockstates/asphalt_stairs.json' % A, {'variants': _st})
+for n in ('asphalt', 'asphalt_slab', 'asphalt_stairs'):
+    put('%s/models/item/%s.json' % (A, n), {'parent': ce('block/' + n)})
+    simple_loot(n, slab=n == 'asphalt_slab')
+for n in ('paraffin_wax', 'oil_can'):
+    put('%s/models/item/%s.json' % (A, n), {'parent': 'minecraft:item/generated', 'textures': {'layer0': ce('item/' + n)}})
+# asphalt: heated mixing of heavy oil with gravel and sand; slabs / stairs by crafting or stonecutter
+put(R + '/mixing/asphalt.json', {'type': 'create:mixing', 'heat_requirement': 'heated', 'ingredients': [
+    {'type': 'neoforge:tag', 'tag': 'c:heavy_oil', 'amount': 250}, item('minecraft:gravel'), item('minecraft:gravel'), tag('c:sands')],
+    'results': [{'id': ce('asphalt'), 'count': 4}]})
+shaped('asphalt_slab', ['###'], {'#': item(ce('asphalt'))}, ce('asphalt_slab'), count=6, category='building')
+shaped('asphalt_stairs', ['#  ', '## ', '###'], {'#': item(ce('asphalt'))}, ce('asphalt_stairs'), count=4, category='building')
+for n, c in (('asphalt_slab', 2), ('asphalt_stairs', 1)):
+    put(R + '/stonecutting/%s.json' % n, {'type': 'minecraft:stonecutting', 'ingredient': item(ce('asphalt')),
+        'result': {'id': ce(n), 'count': c}})
+# paraffin: compact heavy oil; waxes copper like honeycomb (ParaffinWaxItem) and makes candles
+put(R + '/compacting/paraffin_wax.json', {'type': 'create:compacting', 'ingredients': [{'type': 'neoforge:tag', 'tag': 'c:heavy_oil', 'amount': 100}],
+    'results': [{'id': ce('paraffin_wax')}]})
+shaped('candle_from_paraffin', ['S', 'W'], {'S': item('minecraft:string'), 'W': item(ce('paraffin_wax'))}, 'minecraft:candle', category='misc')
+# lubricant: heavy oil thinned with kerosene; the Oil Can carries it to the machines
+put(R + '/mixing/lubricant.json', {'type': 'create:mixing', 'ingredients': [
+    {'type': 'neoforge:tag', 'tag': 'c:heavy_oil', 'amount': 50}, {'type': 'neoforge:tag', 'tag': 'c:kerosene', 'amount': 50}],
+    'results': [{'id': ce('lubricant'), 'amount': 100}]})
+shaped('oil_can', [' N ', 'S S', 'SSS'], {'N': tag('c:nuggets/brass'), 'S': tag('c:plates/iron')}, ce('oil_can'), category='equipment')
+adv('heavy_oil', 'crude_oil', ce('asphalt'), {'asphalt': has(ce('asphalt'))})
+LANG['advancements.%s.heavy_oil.title' % MODID] = 'Paving the Way'
+LANG['advancements.%s.heavy_oil.description' % MODID] = 'Mix heavy oil, gravel and sand into asphalt'
+
 # What a Wellhead brings up (content/petroleum/WellSources): highest priority that applies wins.
 WS = D + '/well_sources'
 put(WS + '/oil_vein.json', {'fluid': ce('crude_oil'), 'oil_vein': True, 'dimension': 'minecraft:overworld', 'priority': 100})

@@ -72,20 +72,22 @@ public final class DemoCommands {
         buildRefinery(level, front.offset(-2, 0, -2));
         src.sendSuccess(() -> Component.literal("Refinery demo built: a Pumpjack on a creative motor draws crude (vein forced to 60 mB/s "
                 + "under its well until restart) and pushes it up Steel Pipe into a Distilling Tank on a creative Blaze Burner; taps "
-                + "drain diesel, kerosene and gasoline into Steel Storage Tanks. Goggles on the gearbox show the vein.")
+                + "drain heavy oil, diesel, kerosene and gasoline into Steel Storage Tanks. Goggles on the gearbox show the vein.")
                 .withStyle(ChatFormatting.GOLD), true);
         return 1;
     }
 
     /** Storage tanks (tops, from the origin) for the refinery demo's diesel, kerosene and gasoline levels. */
-    public static final BlockPos DIESEL_TANK = new BlockPos(5, 2, 2), KEROSENE_TANK = new BlockPos(3, 3, 0), GASOLINE_TANK = new BlockPos(3, 4, 4);
+    public static final BlockPos HEAVY_TANK = new BlockPos(1, 2, 2),   // one block, clear of the crude pipe below
+            DIESEL_TANK = new BlockPos(5, 3, 2), KEROSENE_TANK = new BlockPos(3, 4, 0),
+            GASOLINE_TANK = new BlockPos(3, 5, 4);
 
     /**
      * Pumpjack -> Distilling Tank -> three storage tanks, origin o. Crank Gearbox (0,0,0) facing south with a creative
      * motor east of it, a 2-high Create girder column (0,0..1,1) with the Walking Beam Bearing on top, its horsehead over
      * the Wellhead (0,0,2); Steel Pipe from the wellhead's
-     * east side up into the boiler of a 1x1x4 column at (3,1..4,2) on a creative Blaze Burner. Taps on the three levels
-     * (east, north, south) feed tall Steel Storage Tanks standing on the floor.
+     * east side up into the boiler of a 1x1x5 column at (3,1..5,2) on a creative Blaze Burner. Taps on the four levels
+     * (west, east, north, south) feed tall Steel Storage Tanks.
      */
     public static void buildRefinery(ServerLevel level, BlockPos o) {
         for (int x = -2; x <= 7; x++) {
@@ -114,24 +116,28 @@ public final class DemoCommands {
             b.isCreative = true;
             b.setChanged();
         }
-        for (int y = 1; y <= 4; y++) {
+        for (int y = 1; y <= 5; y++) {
             set(level, o.offset(3, y, 2), ModBlocks.DISTILLING_TANK.get().defaultBlockState());
         }
-        // taps: diesel (level 1) east, kerosene (2) north, gasoline (3) south, each straight into a floor-standing tank
-        set(level, o.offset(4, 2, 2), tap(Direction.EAST));
-        set(level, o.offset(3, 3, 1), tap(Direction.NORTH));
-        set(level, o.offset(3, 4, 3), tap(Direction.SOUTH));
+        // taps, heaviest lowest: heavy oil (level 1) west, diesel (2) east, kerosene (3) north, gasoline (4) south,
+        // each straight into a tank
+        set(level, o.offset(2, 2, 2), tap(Direction.WEST));
+        set(level, o.offset(4, 3, 2), tap(Direction.EAST));
+        set(level, o.offset(3, 4, 1), tap(Direction.NORTH));
+        set(level, o.offset(3, 5, 3), tap(Direction.SOUTH));
+        // heavy oil's tank floats one block over the crude pipe: touching it, Create's pipe would connect and fill it with crude
+        set(level, o.offset(HEAVY_TANK), ModBlocks.STEEL_TANK.get().defaultBlockState());
         for (BlockPos top : new BlockPos[] {DIESEL_TANK, KEROSENE_TANK, GASOLINE_TANK}) {
             for (int y = 0; y <= top.getY(); y++) {
                 set(level, o.offset(top.getX(), y, top.getZ()), ModBlocks.STEEL_TANK.get().defaultBlockState());
             }
         }
         sign(level, o.offset(-1, 0, 2), Direction.WEST, "Wellhead", "crude out");
+        sign(level, o.offset(6, 0, 2), Direction.EAST, "Diesel", "level 2");
+        sign(level, o.offset(3, 0, -1), Direction.NORTH, "Kerosene", "level 3");
+        sign(level, o.offset(3, 0, 5), Direction.SOUTH, "Gasoline", "level 4");
         sign(level, o.offset(-1, 0, 0), Direction.WEST, "Pumpjack", "crank gearbox");
         sign(level, o.offset(-1, 0, 1), Direction.WEST, "Girder column", "beam bearing");
-        sign(level, o.offset(6, 0, 2), Direction.EAST, "Diesel", "level 1");
-        sign(level, o.offset(3, 0, -1), Direction.NORTH, "Kerosene", "level 2");
-        sign(level, o.offset(3, 0, 5), Direction.SOUTH, "Gasoline", "level 3");
     }
 
     /** Positions (from the origin) of the storage tanks the demo's levels 1 and 2 fill. */

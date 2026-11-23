@@ -676,9 +676,9 @@ public final class CEPlaytests {
         open(h);
         var r = h.getLevel().getRecipeManager().byKey(CreativeEngineering.id("distilling/crude_oil")).orElseThrow().value();
         var d = (com.kragnoth.creativeengineering.content.distilling.DistillingRecipe) r;
-        h.assertTrue(d.fractions().size() == 3 && d.minHeight() == 4 && d.heat() == 2, "crude recipe shape");
-        h.assertTrue(d.fractions().get(0).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.DIESEL.source.get()
-                && d.fractions().get(2).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.source.get(), "fraction order");
+        h.assertTrue(d.fractions().size() == 4 && d.minHeight() == 5 && d.heat() == 2, "crude recipe shape");
+        h.assertTrue(d.fractions().get(0).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.HEAVY_OIL.source.get()
+                && d.fractions().get(3).getFluid() == com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.source.get(), "fraction order");
         h.succeed();
     }
 
@@ -703,11 +703,12 @@ public final class CEPlaytests {
                 diag += " | wellhead " + w.yieldRate() + " mB/s, tank " + w.tank().getFluidAmount();
             }
             for (var e : java.util.List.of(
+                    java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.HEAVY_TANK, com.kragnoth.creativeengineering.registry.ModFluids.HEAVY_OIL),
                     java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.DIESEL_TANK, com.kragnoth.creativeengineering.registry.ModFluids.DIESEL),
                     java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.KEROSENE_TANK, com.kragnoth.creativeengineering.registry.ModFluids.KEROSENE),
                     java.util.Map.entry(com.kragnoth.creativeengineering.demo.DemoCommands.GASOLINE_TANK, com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE))) {
                 var f = L.getCapability(Capabilities.FluidHandler.BLOCK, h.absolutePos(o.offset(e.getKey())), Direction.UP).getFluidInTank(0);
-                h.assertTrue(f.getFluid() == e.getValue().source.get() && f.getAmount() >= 30, e.getValue().name + " tank: " + f.getAmount() + " " + f.getFluid() + diag);
+                h.assertTrue(f.getFluid() == e.getValue().source.get() && f.getAmount() >= 20, e.getValue().name + " tank: " + f.getAmount() + " " + f.getFluid() + diag);
             }
             com.kragnoth.creativeengineering.content.petroleum.OilVeins.unforce(new net.minecraft.world.level.ChunkPos(h.absolutePos(o.offset(0, 0, 2))));
         }));
@@ -755,5 +756,29 @@ public final class CEPlaytests {
         h.assertTrue(rm.byKey(CreativeEngineering.id("filling/vodka_bottle")).isPresent() && rm.byKey(CreativeEngineering.id("emptying/wine_bottle")).isPresent(),
                 "spout / drain recipes");
         h.succeed();
+    }
+
+    /** An Oil Can dose on a Create machine cuts its share of the network's stress by a quarter, and asphalt is quick. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 100)
+    public static void oilCanLubricatesMachines(GameTestHelper h) {
+        open(h);
+        BlockPos g = new BlockPos(4, 2, 3);
+        pumpjack(h, g, 1, 2);   // a turning gearbox with nothing to stroke: 2 SU/RPM
+        h.runAfterDelay(20, () -> {
+            var pj = (com.kragnoth.creativeengineering.content.petroleum.PumpjackBlockEntity) h.getBlockEntity(g);
+            float before = pj.getOrCreateNetwork().calculateStress();
+            var player = h.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
+            ItemStack can = com.kragnoth.creativeengineering.content.petroleum.OilCanItem.full();
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, can);
+            var hit = new net.minecraft.world.phys.BlockHitResult(net.minecraft.world.phys.Vec3.atCenterOf(h.absolutePos(g)), Direction.UP, h.absolutePos(g), false);
+            var result = can.useOn(new net.minecraft.world.item.context.UseOnContext(player, net.minecraft.world.InteractionHand.MAIN_HAND, hit));
+            float after = pj.getOrCreateNetwork().calculateStress();
+            h.assertTrue(result.consumesAction(), "oil can use: " + result);
+            h.assertTrue(com.kragnoth.creativeengineering.content.petroleum.Lubrication.isLubricated(pj), "not lubricated");
+            h.assertTrue(before > 0 && Math.abs(after - before * 0.75F) < 0.01F, "stress " + before + " -> " + after);
+            h.assertTrue(com.kragnoth.creativeengineering.content.petroleum.OilCanItem.amount(player.getMainHandItem()) == 950, "can should hold 950 mB");
+            h.assertTrue(ModBlocks.ASPHALT.get().getSpeedFactor() > 1, "asphalt speeds you up");
+            h.succeed();
+        });
     }
 }

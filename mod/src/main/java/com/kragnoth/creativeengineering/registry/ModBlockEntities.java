@@ -128,5 +128,8 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DISTILLING_TANK.get(), (be, side) -> be.automationItems());
         // the Wellhead: drain-only, every face (pipes connect anywhere; it pushes into them by itself)
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, WELLHEAD.get(), (be, side) -> be.output());
+        // the Oil Can holds 1 B of lubricant: a Spout fills it, it can be dipped in any tank
+        event.registerItem(Capabilities.FluidHandler.ITEM, (stack, ctx) -> com.kragnoth.creativeengineering.content.petroleum.OilCanItem.handler(stack),
+                ModItems.OIL_CAN.get());
     }
 }

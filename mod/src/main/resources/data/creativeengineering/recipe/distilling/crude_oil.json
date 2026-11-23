@@ -6,16 +6,20 @@
   },
   "fractions": [
     {
+      "id": "creativeengineering:heavy_oil",
+      "amount": 20
+    },
+    {
       "id": "creativeengineering:diesel",
-      "amount": 40
+      "amount": 30
     },
     {
       "id": "creativeengineering:kerosene",
-      "amount": 30
+      "amount": 25
     },
     {
       "id": "creativeengineering:gasoline",
-      "amount": 30
+      "amount": 25
     }
   ],
   "heat": 2,

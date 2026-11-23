@@ -398,3 +398,10 @@ Convention (borrowed from Tarbound):
 - [ ] Drinking: buff + nausea per docs/fermentation-spec.md, glass bottle back; drinkable when full.
 - [ ] Spout fills a glass bottle from 250 mB of each drink; Item Drain empties it; bucket + 4 bottles crafts 4 (bucket returned). JEI shows all three.
 - [ ] "One for the Road" advancement on the first bottle.
+
+## 0.19.0 — Heavy oil: asphalt, paraffin, lubricant
+- [ ] `/test runrefinery`: 5-tall column, heavy oil fills the floating tank west, diesel / kerosene / gasoline as before.
+- [ ] Heated mixer: heavy oil + 2 gravel + sand gives 4 asphalt; slab / stairs craft and stonecut; walking on asphalt is noticeably quicker.
+- [ ] Press compacts 100 mB heavy oil into paraffin wax; wax waxes copper by hand and by Deployer; string + wax makes a candle.
+- [ ] Mixer: heavy oil + kerosene gives lubricant; Spout fills an Oil Can; using the can on a tank also fills it.
+- [ ] Oil Can on any Create machine: amber puff, -25% of its stress on the network (watch a stressometer), goggles show minutes left; it wears off after a day; a Deployer with a can also lubricates.
