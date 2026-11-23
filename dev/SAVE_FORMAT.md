@@ -135,3 +135,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 
 ## 0.21.1
 - No save changes. Removed client-only models `distilling_tank_pipe_*`.
+
+## 0.21.2
+- No save changes (textures only).

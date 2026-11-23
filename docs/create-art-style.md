@@ -36,3 +36,9 @@ Brass casing, the brass gearbox and the brass block all share the **same** brass
   - A custom spinning part: `SingleAxisRotatingVisual.of(AllPartialModels.X)`.
 - Connected textures go through `AllSpriteShifts`. Shift types: `horizontal`, `vertical`, `OMNIDIRECTIONAL`, `RECTANGLE`.
 - Item data uses data components, not NBT.
+
+## 0.21.2 art pass (Kragnoth: quick consistency sweep)
+Contact sheet of every CE texture against Excalibur and Create. Metals, bricks, coke, asphalt and the blister / steel sets already share Excalibur's value structure (steel is a blued version of the same shading), and treated timber follows Kragnoth's reference photo. Fixed:
+- **Rod / Gear Die:** were a full-tile bevelled face that read as an inventory slot; now a squat 3/4 die block (foreshortened top with the part sunk in, thick bolted front).
+- **Seismic Probe:** was thin and wand-like with saturated cyan glass and a red-shadowed brass ring; now a heavier thumper: broad wooden T-handle, round brass gauge with dull glass, steel collar. Brass ramp's red shadow end swapped for a dark brown.
+- **Steel Gear:** smaller (no longer fills the tile) with a hub ring.

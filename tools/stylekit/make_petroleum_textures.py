@@ -6,25 +6,32 @@ sys.path.insert(0, os.path.dirname(__file__))
 import make_textures as mt
 
 # Brass and steel: Create's brass ramp (docs/create-art-style.md) and a cool steel matched to our Steel Pipe.
-mt.RAMPS['B'] = ['#592424', '#724731', '#9e6947', '#bf8e55', '#cea05a', '#e4b763', '#f7cb6c', '#fbdc7d', '#ffeb8c']
+mt.RAMPS['B'] = ['#3d2a1a', '#724731', '#9e6947', '#bf8e55', '#cea05a', '#e4b763', '#f7cb6c', '#fbdc7d', '#ffeb8c']
 mt.RAMPS['S'] = ['#23272b', '#353a40', '#4a5057', '#5f666e', '#767e87', '#8f98a1', '#a9b2ba', '#c4ccd3', '#dfe5ea']
-mt.RAMPS['G'] = ['#2a4048', '#3c5a63', '#527a84', '#6c9aa3', '#8bb7bf', '#a9d0d6', '#c3e2e6', '#dcf0f2', '#f0fafb']
+mt.RAMPS['G'] = ['#26302c', '#323e39', '#3f4c46', '#4d5b55', '#5d6c65', '#6f7e77', '#83918a', '#99a69f', '#b1bcb6']
 
 
 def probe():
+    """0.21.2 art pass: a heavier thumper that reads as a tool, not a wand: a 2 px steel rod, a broad treated-wood
+    T-handle, a round brass-cased gauge with dull glass, a steel collar and a hardened tip."""
     g = [['.'] * 16 for _ in range(16)]
     def put(x, y, c):
         if 0 <= x < 16 and 0 <= y < 16:
             g[y][x] = c
-    for i in range(11):                      # rod, 2 px, top-right to bottom-left
+    for i in range(12):                      # rod, 2 px, top-right to bottom-left
         put(12 - i, 3 + i, 'S'); put(13 - i, 3 + i, 'S')
-    for k in range(5):                       # T-handle across the top
-        put(11 + k, 0 + k, 'W'); put(12 + k, 0 + k, 'W')
-    for x in range(7, 11):                   # gauge case
-        for y in range(5, 9):
-            put(x, y, 'B')
-    put(8, 6, 'G'); put(9, 6, 'G'); put(8, 7, 'G'); put(9, 7, 'g')   # gauge glass
-    put(1, 14, 's'); put(2, 14, 's'); put(1, 15, 's'); put(0, 15, 's')  # hardened tip
+    for k in range(6):                       # T-handle across the top, 2 px thick
+        put(9 + k, 0 + k, 'W'); put(10 + k, 0 + k, 'W'); put(10 + k, 1 + k, 'W') if k < 5 else None
+    for y in range(6, 11):                   # round gauge case
+        for x in range(5, 10):
+            if (x - 7) ** 2 + (y - 8) ** 2 <= 5:
+                put(x, y, 'B')
+    for x, y in ((6, 7), (7, 7), (6, 8), (7, 8), (8, 8)):
+        put(x, y, 'G')                       # glass
+    put(7, 9, 'g')                           # needle
+    put(10, 9, 'S'); put(11, 8, 'S')         # collar where the gauge clamps on
+    for x, y in ((1, 14), (2, 14), (1, 15), (0, 15), (2, 13)):
+        put(x, y, 's')                       # hardened tip
     return mt.shade([''.join(r) for r in g])
 
 

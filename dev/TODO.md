@@ -427,3 +427,6 @@ Convention (borrowed from Tarbound):
 
 ## 0.21.1
 - [ ] Distilling column: no copper pipes on the sides or the valve; brass collars, gauge, valve and tank couplings still drawn; the item model matches.
+
+## 0.21.2
+- [ ] Rod Die, Gear Die, Seismic Probe and Steel Gear icons look right in the inventory, in hand and in JEI.

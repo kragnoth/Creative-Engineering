@@ -394,9 +394,10 @@ def gear_item(ramp):
             tooth = math.cos(a * 8) > 0.35
             if d < 1.8:
                 continue                                    # axle hole
-            if d <= 4.9 or (tooth and d <= 7.3):
+            if d <= 4.4 or (tooth and d <= 6.6):
                 lit = (-dx - dy) / 10.6
-                img.putpixel((x, y), r[max(1, min(7, int(4.5 + lit * 3 - (d > 5.2) * 0.5)))])
+                ring = 1 if 2.6 < d < 3.6 else 0             # hub ring
+                img.putpixel((x, y), r[max(1, min(7, int(4.5 + lit * 3.5 - (d > 4.6) - ring)))])
     outline(img, ramp)
     return img
 
@@ -413,7 +414,7 @@ def rod_item(ramp):
     outline(img, ramp)
     return img
 
-def cavity_mask(product, size=10, sample=Image.BOX):
+def cavity_mask(product, size=10, sample=Image.BOX, squash=1.0, cy=7):
     """The product's silhouette (alpha), shrunk to size x size and centred: the shape cut into the die."""
     m = product.getchannel('A').point(lambda a: 255 if a > 0 else 0)
     box = m.getbbox()
@@ -422,9 +423,9 @@ def cavity_mask(product, size=10, sample=Image.BOX):
     m = m.crop(box)
     w, h = m.size
     k = size / max(w, h)
-    m = m.resize((max(1, round(w * k)), max(1, round(h * k))), sample).point(lambda a: 255 if a > 110 else 0)
+    m = m.resize((max(1, round(w * k)), max(1, round(h * k * squash))), sample).point(lambda a: 255 if a > 110 else 0)
     out = set()
-    ox, oy = 8 - m.width // 2, 7 - m.height // 2
+    ox, oy = 8 - m.width // 2, cy - m.height // 2
     for y in range(m.height):
         for x in range(m.width):
             if m.getpixel((x, y)):
@@ -432,35 +433,30 @@ def cavity_mask(product, size=10, sample=Image.BOX):
     return out
 
 def die_mold(product, size=10, sample=Image.BOX):
-    """A steel die seen from above at a slight tilt, with the product's shape sunk into its face: press metal in,
-    that part comes out. Light from the top-left, so inside the cavity the top/left walls are in shadow and the
-    bottom/right walls catch the light."""
+    """A squat steel die block seen at 3/4 (0.21.2 art pass: the old full-tile face read as an inventory slot): a
+    foreshortened top face with the product's shape sunk into it, a thick front face with two bolts, and the soft
+    Excalibur-style outline. Light from the top-left: inside the cavity the far / left walls are shadowed and the
+    near / right walls catch the light."""
     st = [hexrgb(h) for h in RAMPS['S']]
     img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
-    for y in range(1, 13):                                  # top face, bevelled
+    for y in range(3, 11):                                  # top face, foreshortened
         for x in range(1, 15):
-            edge_tl = x == 1 or y == 1
-            edge_br = x == 14 or y == 12
-            img.putpixel((x, y), st[7] if edge_tl else st[4] if edge_br else st[6] if (x + y) % 9 else st[5])
-    for y in (13, 14):                                      # front face (thickness)
+            edge_tl = y == 3 or x == 1
+            img.putpixel((x, y), st[7] if edge_tl else st[5] if x == 14 else st[6] if (x * 3 + y) % 11 else st[5])
+    for y in range(11, 15):                                 # front face (thickness)
         for x in range(1, 15):
-            img.putpixel((x, y), st[3] if y == 13 else st[2])
-    img.putpixel((2, 14), st[6]); img.putpixel((13, 14), st[6])  # bolts
-    cav = cavity_mask(product, size, sample)
+            img.putpixel((x, y), st[4] if y == 11 else st[3] if y < 14 else st[2])
+    for bx in (3, 12):                                      # bolts
+        img.putpixel((bx, 12), st[6]); img.putpixel((bx, 13), st[2])
+    cav = cavity_mask(product, size, sample, squash=0.7, cy=7)
     for (x, y) in cav:
         up, left = (x, y - 1) not in cav, (x - 1, y) not in cav
         down, right = (x, y + 1) not in cav, (x + 1, y) not in cav
-        if up or left:
-            c = st[0]                                       # shadowed wall
-        elif down or right:
-            c = st[5]                                       # lit wall
-        else:
-            c = st[2]                                       # cavity floor
-        img.putpixel((x, y), c)
+        img.putpixel((x, y), st[1] if (up or left) else st[4] if (down or right) else st[2])
     for (x, y) in cav:                                      # bright lip where the face meets the lit wall
-        for q in ((x + 1, y + 1),):
-            if q not in cav and 1 <= q[0] <= 14 and 1 <= q[1] <= 12:
-                img.putpixel(q, st[8])
+        q = (x + 1, y + 1)
+        if q not in cav and 2 <= q[0] <= 13 and 4 <= q[1] <= 10:
+            img.putpixel(q, st[8])
     outline(img, 'S')
     return img
 
