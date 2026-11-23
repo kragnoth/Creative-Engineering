@@ -424,3 +424,6 @@ Convention (borrowed from Tarbound):
 - [ ] Crushing Wheel: slag gives gravel (+ sometimes an iron nugget); heated mixer makes asphalt from slag as well as gravel.
 - [ ] Distilling Tank crafts from copper sheets + Fluid Tank + Fluid Valve; Tap from Fluid Valve + copper sheet.
 - [ ] Hold Shift over Blast Furnace Bricks: heated burners + coke, fan for steel, slag; over Slag: its uses.
+
+## 0.21.1
+- [ ] Distilling column: no copper pipes on the sides or the valve; brass collars, gauge, valve and tank couplings still drawn; the item model matches.

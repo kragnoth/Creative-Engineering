@@ -701,41 +701,11 @@ for e in vat_item['elements']:
 put('%s/models/item/fermenting_vat.json' % A, vat_item)
 simple_loot('fermenting_vat')
 
-# Distilling Tank (docs/distilling-spec.md, 0.12.1): the vat's steel Create tank, plus industrial plumbing greebles
+# Distilling Tank (docs/distilling-spec.md, 0.12.1): the vat's steel Create tank, plus brass collars, a gauge and a relief valve (pipe greebles removed 0.21.1)
 # picked per column (Plumbing.java): vertical steel pipe lanes against the left / right edge of a face block, bending
 # into the wall at the boiler and over the roof edge at the top, header pipes across a face, a relief valve with a
 # gooseneck top-middle. Greebles are modelled on the north face and turned for the others.
-ST_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'pipe': CR('pipes'),   # Create's own copper pipes
-        'brass': CR('brass_block'), 'dark': CR('dark_metal_block'), 'iron': CR('industrial_iron_block')}
-PIPE_SIDE, PIPE_END = [0, 0, 4, 8], [1, 11, 6, 16]   # Create's pipe sheet: straight body / end disc
-def pipe_box(frm, to, along):
-    """A steel pipe segment; 'along' is its axis (y, x or z) so the body texture runs the right way."""
-    faces = {}
-    for d in ('north', 'south', 'east', 'west', 'up', 'down'):
-        end = (along == 'y' and d in ('up', 'down')) or (along == 'x' and d in ('east', 'west')) or (along == 'z' and d in ('north', 'south'))
-        f = {'texture': '#pipe', 'uv': PIPE_END if end else PIPE_SIDE}
-        if not end and (along == 'x' or (along == 'z' and d in ('up', 'down'))):
-            f['rotation'] = 90
-        faces[d] = f
-    return {'from': frm, 'to': to, 'faces': faces}
-def clamp(x0, y, x1):   # pipe bracket bolted to the wall
-    return box([x0, y, -1], [x1, y + 1, 0], 'dark')
-LANES = {'left': (2, 5), 'right': (11, 14)}
-for lane, (x0, x1) in LANES.items():
-    eng('distilling_tank_pipe_%s' % lane, ST_T, [pipe_box([x0, 0, -3.5], [x1, 16, -0.5], 'y'),
-                                                 clamp(x0 - 0.5, 5, x1 + 0.5), clamp(x0 - 0.5, 12, x1 + 0.5)])
-    eng('distilling_tank_pipe_%s_top' % lane, ST_T, [pipe_box([x0, 0, -3.5], [x1, 15.5, -0.5], 'y'),
-                                                     pipe_box([x0 - 0.25, 15.5, -3.75], [x1 + 0.25, 18.5, -0.25], 'y'),   # elbow
-                                                     pipe_box([x0, 15.5, -0.25], [x1, 18.5, 4], 'z'),                     # over the edge
-                                                     pipe_box([x0 - 0.5, 15.75, 4], [x1 + 0.5, 16.75, 5], 'y'),            # roof flange
-                                                     clamp(x0 - 0.5, 6, x1 + 0.5)])
-    eng('distilling_tank_pipe_%s_boiler' % lane, ST_T, [pipe_box([x0, 7, -3.5], [x1, 16, -0.5], 'y'),
-                                                        pipe_box([x0 - 0.25, 4, -3.75], [x1 + 0.25, 7, -0.25], 'y'),     # elbow
-                                                        pipe_box([x0, 4.25, -0.25], [x1, 6.75, 0], 'z'),
-                                                        box([x0 - 1, 3.5, -0.75], [x1 + 1, 7.5, 0], 'iron'),               # wall flange
-                                                        clamp(x0 - 0.5, 12, x1 + 0.5)])
-eng('distilling_tank_pipe_band', ST_T, [pipe_box([0, 9, -4], [16, 12.5, -0.5], 'x'),
-                                        box([3.5, 8.5, -1], [5, 13, 0], 'dark'), box([11, 8.5, -1], [12.5, 13, 0], 'dark')])
+ST_T = {'side': ce('block/vat_tank'), 'top': ce('block/vat_tank_top'), 'brass': CR('brass_block'), 'dark': CR('dark_metal_block'), 'iron': CR('industrial_iron_block')}
 # brass collar band round the column every few levels, and one gauge high up (as in Kragnoth's reference picture)
 eng('distilling_tank_collar', ST_T, [box([0, 6, -0.75], [16, 10, 0], 'brass'),
                                      box([3.5, 7.5, -1], [4.5, 8.5, -0.75], 'dark'), box([11.5, 7.5, -1], [12.5, 8.5, -0.75], 'dark')])
@@ -751,17 +721,13 @@ eng('distilling_tank_body', ST_T, [{'from': [0, 0, 0], 'to': [16, 16, 16], 'face
     for d in ('north', 'south', 'east', 'west', 'up', 'down')}}])
 eng('distilling_tank_valve', ST_T, [box([7, 16, 7], [9, 18.5, 9], 'brass'),                    # relief valve
                                     box([5, 18.5, 7.5], [11, 19.25, 8.5], 'dark'), box([7.5, 18.5, 5], [8.5, 19.25, 11], 'dark'),
-                                    box([7.25, 19.25, 7.25], [8.75, 20, 8.75], 'brass'),
-                                    pipe_box([9, 16, 6.75], [11.5, 21.5, 9.25], 'y'),          # gooseneck: riser
-                                    pipe_box([11.5, 19.5, 6.75], [14, 22, 9.25], 'x'),         # elbow
-                                    pipe_box([12, 16.5, 7], [14, 19.5, 9], 'y'),               # downcomer
-                                    box([11.75, 16, 6.75], [14.25, 16.75, 9.25], 'iron')])     # collar
+                                    box([7.25, 19.25, 7.25], [8.75, 20, 8.75], 'brass')])
 # The dressing is drawn by the client from Plumbing.java (block states would need ~65k combinations): the block
 # itself is just the connected steel body.
 parts = [{'apply': {'model': ce('block/distilling_tank_body')}}]
 put('%s/blockstates/distilling_tank.json' % A, {'multipart': parts})
 still_item = load_json('%s/models/block/distilling_tank_body.json' % A)
-for extra in ('distilling_tank_valve', 'distilling_tank_pipe_left', 'distilling_tank_pipe_band'):
+for extra in ('distilling_tank_valve', 'distilling_tank_collar'):
     still_item['elements'] += load_json('%s/models/block/%s.json' % (A, extra))['elements']
 for e in still_item['elements']:
     for f in e['faces'].values():

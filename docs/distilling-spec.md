@@ -89,3 +89,4 @@ JEI "Distilling" (column layout with levels, minimum height and heat), Jade (eve
 ## 0.21.0 polish
 - Distilling Tank recipe: copper sheets, a Fluid Tank and a Fluid Valve; no Blaze Burner, so drinks distil early on campfire heat. Crude oil still needs a lit Blaze Burner under the column.
 - Tap recipe: Fluid Valve + copper sheet (was brass), the same copper tier as the column.
+- 0.21.1: the copper pipe lanes, header bands and the valve gooseneck are gone (Kragnoth: they looked silly). The column keeps its brass collars, the gauge, the relief valve and the bolted couplings at the fraction tanks.

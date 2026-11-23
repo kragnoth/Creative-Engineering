@@ -132,3 +132,6 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - Removed tags: `c:rods/copper`, `c:rods/iron`, `c:gears/iron`, `c:wires/*`, `c:wires`, `c:plates/cast_iron`, `c:dusts/coal_coke`, `c:dusts`. Removed recipes: `alloying/*`, `milling/coke_dust`, `pressing/cast_iron_sheet`, `die_pressing/{copper_rod,iron_rod,iron_gear}`.
 - New: recipe `crushing/slag`; item tag `creativeengineering:asphalt_aggregate` (gravel, slag) used by `mixing/asphalt`.
 - Changed recipes: `distilling_tank` (no Blaze Burner), `tap` (copper sheet instead of brass).
+
+## 0.21.1
+- No save changes. Removed client-only models `distilling_tank_pipe_*`.
