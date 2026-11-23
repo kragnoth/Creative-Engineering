@@ -85,3 +85,7 @@ fractions come with the petroleum phase.
 
 ## Integrations
 JEI "Distilling" (column layout with levels, minimum height and heat), Jade (every level, highlighting the one looked at, progress, why it's stopped), goggles, display links (status, progress), advancement "Fractions of a Fraction", game test `distillingTankSplitsHooch` (also checks the pump-free outlet into a Steel Storage Tank and the coupling at the join).
+
+## 0.21.0 polish
+- Distilling Tank recipe: copper sheets, a Fluid Tank and a Fluid Valve; no Blaze Burner, so drinks distil early on campfire heat. Crude oil still needs a lit Blaze Burner under the column.
+- Tap recipe: Fluid Valve + copper sheet (was brass), the same copper tier as the column.

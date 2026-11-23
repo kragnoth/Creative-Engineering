@@ -781,4 +781,24 @@ public final class CEPlaytests {
             h.succeed();
         });
     }
+
+    /** 0.21.0 polish: slag crushes into gravel, asphalt takes slag, and the distilling kit needs no Blaze Burner or brass. */
+    @GameTest(template = PLAYGROUND, timeoutTicks = 20)
+    public static void polishedRecipesLoad(GameTestHelper h) {
+        open(h);
+        var rm = h.getLevel().getRecipeManager();
+        h.assertTrue(rm.byKey(CreativeEngineering.id("crushing/slag")).isPresent(), "slag crushing recipe");
+        h.assertTrue(new ItemStack(ModItems.SLAG.get()).is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM,
+                CreativeEngineering.id("asphalt_aggregate"))), "slag is asphalt aggregate");
+        for (String id : new String[] {"crafting/distilling_tank", "crafting/tap"}) {
+            var r = rm.byKey(CreativeEngineering.id(id)).orElseThrow().value();
+            for (var ing : r.getIngredients()) {
+                for (ItemStack st : ing.getItems()) {
+                    h.assertTrue(!st.is(Items.AIR) && !net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem()).getPath().contains("blaze_burner")
+                            && !net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(st.getItem()).getPath().contains("brass"), id + " still needs " + st);
+                }
+            }
+        }
+        h.succeed();
+    }
 }

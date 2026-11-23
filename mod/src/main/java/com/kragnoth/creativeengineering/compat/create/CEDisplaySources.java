@@ -24,7 +24,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Create Display Link sources for the coke oven, blast furnace and alloy furnace (status line, progress as percent or
+ * Create Display Link sources for the coke oven and blast furnace (status line, progress as percent or
  * bar, finished output count, coke oven creosote fill) and the diesel engine (status, stress capacity, fuel level).
  * Point a Display Link at any brick / crankcase.
  */
@@ -127,7 +127,7 @@ public final class CEDisplaySources {
         SOURCES.register(modBus);
         modBus.addListener(FMLCommonSetupEvent.class, e -> e.enqueueWork(() -> {
             for (var block : new net.minecraft.world.level.block.Block[]{ModBlocks.COKE_OVEN_BRICKS.get(),
-                    ModBlocks.BLAST_FURNACE_BRICKS.get(), ModBlocks.ALLOY_FURNACE_BRICKS.get()}) {
+                    ModBlocks.BLAST_FURNACE_BRICKS.get()}) {
                 DisplaySource.BY_BLOCK.add(block, STATUS.get());
                 DisplaySource.BY_BLOCK.add(block, PROGRESS.get());
                 DisplaySource.BY_BLOCK.add(block, OUTPUT.get());

@@ -8,10 +8,10 @@
       "amount": 250
     },
     {
-      "item": "minecraft:gravel"
+      "tag": "creativeengineering:asphalt_aggregate"
     },
     {
-      "item": "minecraft:gravel"
+      "tag": "creativeengineering:asphalt_aggregate"
     },
     {
       "tag": "c:sands"

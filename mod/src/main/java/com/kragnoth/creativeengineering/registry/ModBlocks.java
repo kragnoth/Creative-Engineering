@@ -1,7 +1,6 @@
 package com.kragnoth.creativeengineering.registry;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
-import com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlock;
 import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlock;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlock;
 import net.minecraft.world.level.block.Block;
@@ -37,10 +36,6 @@ public final class ModBlocks {
     public static final DeferredBlock<BlastFurnaceBlock> BLAST_FURNACE_BRICKS = BLOCKS.register("blast_furnace_bricks",
             () -> new BlastFurnaceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY)
                     .requiresCorrectToolForDrops().strength(3.0F, 6.0F).sound(SoundType.DEEPSLATE_BRICKS)));
-    /** Tier 4: any solid box of these, 2..4 per side, is one bulk alloy furnace. */
-    public static final DeferredBlock<AlloyFurnaceBlock> ALLOY_FURNACE_BRICKS = BLOCKS.register("alloy_furnace_bricks",
-            () -> new AlloyFurnaceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN)
-                    .requiresCorrectToolForDrops().strength(3.5F, 8.0F).sound(SoundType.NETHER_BRICKS)));
     // Creosote-treated timber (coke-oven creosote, applied with a Spout or a bucket)
     public static final DeferredBlock<Block> TREATED_PLANKS = BLOCKS.registerSimpleBlock("treated_planks",
             BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).strength(2.5F, 4.0F).sound(SoundType.WOOD));

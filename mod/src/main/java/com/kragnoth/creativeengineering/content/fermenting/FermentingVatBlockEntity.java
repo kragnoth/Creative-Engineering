@@ -38,7 +38,7 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 /**
  * One Fermenting Vat block (docs/fermentation-spec.md). Any box of vats 1..3 wide and 1..4 tall forms one vat (own
- * flood-fill forming, as the alloy furnace); the min corner is the controller and runs it.
+ * flood-fill forming, like the blast furnace); the min corner is the controller and runs it.
  * <ul>
  *   <li>Storage stays in each block (nothing to merge or lose when a vat is split): one ingredient slot, an input tank
  *       and a product tank. Automation and buckets see the whole vat as one: 1 item slot (insert) and 2 tanks

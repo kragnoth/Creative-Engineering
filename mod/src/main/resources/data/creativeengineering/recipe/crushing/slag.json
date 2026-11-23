@@ -1,0 +1,18 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "creativeengineering:slag"
+    }
+  ],
+  "processing_time": 150,
+  "results": [
+    {
+      "id": "minecraft:gravel"
+    },
+    {
+      "id": "minecraft:iron_nugget",
+      "chance": 0.25
+    }
+  ]
+}

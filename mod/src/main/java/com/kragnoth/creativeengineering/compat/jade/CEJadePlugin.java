@@ -20,7 +20,6 @@ public class CEJadePlugin implements IWailaPlugin {
         registration.registerBlockDataProvider(FermentingVatJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlockEntity.class);
         registration.registerBlockDataProvider(DieselEngineJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity.class);
         registration.registerBlockDataProvider(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity.class);
-        registration.registerBlockDataProvider(AlloyFurnaceJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity.class);
     }
 
     @Override
@@ -31,6 +30,5 @@ public class CEJadePlugin implements IWailaPlugin {
         registration.registerBlockComponent(FermentingVatJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.fermenting.FermentingVatBlock.class);
         registration.registerBlockComponent(DieselEngineJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.engine.DieselCrankcaseBlock.class);
         registration.registerBlockComponent(PressDieJadeProvider.INSTANCE, com.simibubi.create.content.kinetics.press.MechanicalPressBlock.class);
-        registration.registerBlockComponent(AlloyFurnaceJadeProvider.INSTANCE, com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlock.class);
     }
 }

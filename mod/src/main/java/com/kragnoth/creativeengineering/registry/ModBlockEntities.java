@@ -1,7 +1,6 @@
 package com.kragnoth.creativeengineering.registry;
 
 import com.kragnoth.creativeengineering.CreativeEngineering;
-import com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity;
 import com.kragnoth.creativeengineering.content.blastfurnace.BlastFurnaceBlockEntity;
 import com.kragnoth.creativeengineering.content.cokeoven.CokeOvenBlockEntity;
 import net.minecraft.core.registries.Registries;
@@ -31,12 +30,6 @@ public final class ModBlockEntities {
                             ModBlocks.BLAST_FURNACE_BRICKS.get())
                     .build(null));
 
-    @SuppressWarnings("DataFlowIssue")
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlloyFurnaceBlockEntity>> ALLOY_FURNACE =
-            BLOCK_ENTITIES.register("alloy_furnace", () -> BlockEntityType.Builder
-                    .of((pos, state) -> new AlloyFurnaceBlockEntity(ModBlockEntities.ALLOY_FURNACE.get(), pos, state),
-                            ModBlocks.ALLOY_FURNACE_BRICKS.get())
-                    .build(null));
 
     @SuppressWarnings("DataFlowIssue")
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<com.kragnoth.creativeengineering.content.engine.DieselEngineBlockEntity>> DIESEL_ENGINE =
@@ -118,7 +111,6 @@ public final class ModBlockEntities {
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, COKE_OVEN.get(), (be, side) -> be.automationFluids());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, BLAST_FURNACE.get(), (be, side) -> be.automationItems());
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, ALLOY_FURNACE.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationItems());
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, DIESEL_ENGINE.get(), (be, side) -> be.sideFluids(side));
         event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, FERMENTING_VAT.get(), (be, side) -> be.automationFluids());

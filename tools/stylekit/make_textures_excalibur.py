@@ -224,7 +224,6 @@ def creosote_bucket():
 def tier2(made):
     made.append(save(coke_oven_bricks(False), 'block/coke_oven_bricks'))
     made.append(save(coke_item(ITEM + 'coal.png', lift=2.3), 'item/coal_coke'))
-    made.append(save(coke_item(ITEM + 'gunpowder.png'), 'item/coke_dust'))
     made.append(save(coke_item(BLOCK + 'coal_block.png', lift=1.9), 'block/coke_block'))
     import shutil
     for name in ('still', 'flow'):
@@ -250,7 +249,8 @@ def tier3(made):
         made.append(save(img, 'item/%s_nugget' % name))
         img, _ = recolour(BLOCK + 'iron_block.png', metal=metal, lift=1.0)
         made.append(save(img, 'block/%s_block' % name))
-        made.append(save(sheet_plate(metal, fleck=False), 'item/%s_sheet' % name))
+        if name == 'steel':   # the cast iron sheet was removed in 0.21.0
+            made.append(save(sheet_plate(metal, fleck=False), 'item/%s_sheet' % name))
     made.append(save(recolour_all(ITEM + 'flint.png', 'G', lift=1.2), 'item/slag'))
 
 # ---------------------------------------------------------------------------------------- connected textures
@@ -346,9 +346,6 @@ def connected(made):
     ct_set(made, 'coke_oven_bricks', coke, recolour_all(coke, 'B', lift=0.75), 'M')
     blast = recolour_all(BLOCK + 'deepslate_bricks.png', 'F', lift=1.25)
     ct_set(made, 'blast_furnace_bricks', blast, recolour_all(blast, 'F', lift=0.8), 'S')
-    # Alloy furnace: dark ochre refractory brick (Excalibur's blackstone bricks), steel-strapped: it's built of steel
-    alloy = recolour_all(BLOCK + 'polished_blackstone_bricks.png', 'R', lift=1.3)
-    ct_set(made, 'alloy_furnace_bricks', alloy, recolour_all(alloy, 'R', lift=0.8), 'S')
 
 
 # ---------------------------------------------------------------------------------------- metalworking
@@ -481,12 +478,9 @@ def metalworking(made):
                 gear.putpixel((x, y), (255, 255, 255, 255))
     for d, product, size, sample in (('rod', rod, 10, Image.NEAREST), ('gear', gear, 10, Image.NEAREST)):
         made.append(save(die_mold(product, size, sample), 'item/%s_die' % d))
-    made.append(save(rod_item('U'), 'item/copper_rod'))
-    for metal, ramp in (('iron', 'I'), ('steel', 'S')):
-        made.append(save(rod_item(ramp), 'item/%s_rod' % metal))
-        made.append(save(gear_item(ramp), 'item/%s_gear' % metal))
-    for metal, ramp in (('copper', 'U'), ('steel', 'S')):
-        made.append(save(recolour_all(ITEM + 'string.png', ramp, lift=1.1), 'item/%s_wire' % metal))
+    # 0.21.0: steel only; copper / iron rods, the iron gear and the wires were removed (no use in play)
+    made.append(save(rod_item('S'), 'item/steel_rod'))
+    made.append(save(gear_item('S'), 'item/steel_gear'))
 
 # ---------------------------------------------------------------------------------------- treated timber
 # Creosote-soaked wood (Kragnoth's reference photo): near-black end grain, deep oxblood-brown faces, warm orange

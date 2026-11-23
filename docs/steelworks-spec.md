@@ -142,7 +142,9 @@ Three real-world materials. Each one is useful the moment you have it, and each 
 
 **Visuals:** a lit window band glows by heat level, flame and smoke at the top, and a hot-metal glow on the output side when steel is being made.
 
-## 4b. Tier 4: alloy furnace (planned 0.4.0; decided with Kragnoth 2026-11-18)
+## 4b. Tier 4: alloy furnace (REMOVED in 0.21.0)
+> Kragnoth's 0.21.0 polish pass: in a Create playthrough it only remade blister steel after steel was available, and Create's heated mixer covers alloys. Block, recipe type, JEI / Jade / Ponder / Display Link / Arm support and recipes are gone. The section below is history.
+
 **Why:** Create's mixer does one batch per basin. That's fine early on, but it doesn't scale. This is the industrial bulk route. It is expensive to build and run, so it's an upgrade, not a cheap replacement (rule 11).
 
 **Build:** steel sheets + blast furnace bricks, so it comes after tier 3. It forms a stack like the blast furnace: 1×1 to 3×3 footprint, 2–6 tall. Every brick adds parallel batch slots.
@@ -294,3 +296,9 @@ The later rail module will register a Create `TrackMaterial` that uses that tag.
 - 2026-11-18 (0.5.2, Kragnoth): wire is not stamped: the Wire Die became the Extrusion Die (rod pushed through a hole into wire, 1:1). Copper rods added. A rotation-driven draw bench stays an option if wire rope grows important.
 - 2026-11-18 (0.5.3, Kragnoth): no wire die at all. Wire items and art stay, without recipes, for later (wire rope for the petroleum rigs).
 - 2026-11-18 (0.6.6, Kragnoth): the alloy furnace has no fuel; Blaze Burners under every column are its running cost (Create's Basin model). The blast furnace keeps burning coke (Kragnoth, 2026-11-20): coke is its fuel and carbon, and the coke oven's main payoff.
+
+## 0.21.0 polish pass (Kragnoth, 2026-11-22: trim dead ends, integrate with Create progression)
+- Removed: Alloy Furnace (block, `alloying` recipes, JEI / Jade / Ponder / Display Link / Arm point), copper and iron rods, the iron gear, copper and steel wire, cast iron sheet, coke dust (and their `c:` tags).
+- Dies now make only steel rods and steel gears: the parts the diesel engine, pumpjack and probe use.
+- Slag has jobs: Create crushing gives gravel + 25% iron nugget; it stands in for gravel in asphalt (`#creativeengineering:asphalt_aggregate`).
+- Blister steel's role: the bootstrap steel. Coke Oven Bricks and Blast Furnace Bricks need its sheets, its tools and armour bridge iron and diamond, and the blast furnace refines it into steel.

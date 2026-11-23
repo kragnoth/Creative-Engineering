@@ -60,10 +60,6 @@ public class FurnaceCTBehaviour extends ConnectedTextureBehaviour.Base {
         if (state.getBlock() != other.getBlock()) {
             return false;
         }
-        if (reader.getBlockEntity(pos) instanceof com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity a) {
-            return a.isFormed() && reader.getBlockEntity(otherPos) instanceof com.kragnoth.creativeengineering.content.alloyfurnace.AlloyFurnaceBlockEntity b
-                    && a.controllerPos().equals(b.controllerPos());
-        }
         return ConnectivityHandler.isConnected(reader, pos, otherPos);
     }
 }

@@ -4,7 +4,7 @@
   "pattern": [
     " V ",
     "PTP",
-    "PBP"
+    "PPP"
   ],
   "key": {
     "V": {
@@ -15,9 +15,6 @@
     },
     "P": {
       "tag": "c:plates/copper"
-    },
-    "B": {
-      "item": "create:blaze_burner"
     }
   },
   "result": {

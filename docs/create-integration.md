@@ -9,7 +9,6 @@ to Create players.
 | cementation | Carbon-Packed Iron, Blister Steel | press packing, bulk blasting |
 | coke_oven | Coke Oven Bricks, Coal Coke | forming, heat, funnels |
 | blast_furnace | Blast Furnace Bricks, Steel, Cast Iron | the furnace |
-| alloy_furnace | Alloy Furnace Bricks | the furnace |
 | press_dies | Rod / Gear Die | dies in a press |
 | diesel_engine | Crankcase, Cylinder, Flywheel | building and starting |
 | campfire_stand (0.20) | all three stands | fitting a campfire, passive heat, smoking / haunting fan catalyst |
@@ -33,7 +32,7 @@ to Create players.
 - Plain materials (ingots, nuggets, sheets) have none, as in Create.
 
 ## Goggles
-- Have goggle lines: Coke Oven, Blast Furnace, Alloy Furnace, Diesel Engine, Fermenting Vat, Distilling Tank,
+- Have goggle lines: Coke Oven, Blast Furnace, Diesel Engine, Fermenting Vat, Distilling Tank,
   Pumpjack and Walking Beam Bearing (rig, stroke, missing parts), Wellhead (source, rate, tank), any lubricated Create
   machine.
 - Tap (0.20): open / closed / held by redstone, what it pours, or why it doesn't.

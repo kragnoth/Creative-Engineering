@@ -26,8 +26,6 @@ public class CEPonderPlugin implements PonderPlugin {
                 .addStoryBoard("press_dies", CEScenes::pressDies);
         helper.forComponents(ModItems.DIESEL_CRANKCASE.getId(), ModItems.DIESEL_CYLINDER.getId(), ModItems.DIESEL_FLYWHEEL.getId())
                 .addStoryBoard("diesel_engine", CEScenes::dieselEngine);
-        helper.forComponents(ModItems.ALLOY_FURNACE_BRICKS.getId())
-                .addStoryBoard("alloy_furnace", CEScenes::alloyFurnace);
         helper.forComponents(ModItems.ANDESITE_CAMPFIRE_STAND.getId(), ModItems.BRASS_CAMPFIRE_STAND.getId(), ModItems.COPPER_CAMPFIRE_STAND.getId())
                 .addStoryBoard("campfire_stand", CEScenes::campfireStand);
         helper.forComponents(ModItems.FERMENTING_VAT.getId())
@@ -58,7 +56,6 @@ public class CEPonderPlugin implements PonderPlugin {
                 .add(ModItems.COAL_COKE.getId())
                 .add(ModItems.BLAST_FURNACE_BRICKS.getId())
                 .add(ModItems.STEEL_INGOT.getId())
-                .add(ModItems.ALLOY_FURNACE_BRICKS.getId())
                 .add(ModItems.ROD_DIE.getId())
                 .add(ModItems.DIESEL_CRANKCASE.getId())
                 .add(ModItems.DRIVE_BELT.getId())

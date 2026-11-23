@@ -417,3 +417,10 @@ Convention (borrowed from Tarbound):
 - [ ] Holding Shift over machines, tools and building blocks shows Create-style descriptions (summary, conditions, controls); kinetic ones also show stress.
 - [ ] Goggles on a Tap: open / closed / held by redstone; pouring <fluid>; or "nothing to pour" / "no tank down the pipe".
 - [ ] The Creative Engineering Ponder tag lists the new items.
+
+## 0.21.0 — Polish pass
+- [ ] No Alloy Furnace anywhere (creative tab, JEI, Ponder index, Jade, display links); old furnaces in a world are gone without a crash.
+- [ ] Creative tab has no copper / iron rods, iron gear, wires, cast iron sheet, coke dust.
+- [ ] Crushing Wheel: slag gives gravel (+ sometimes an iron nugget); heated mixer makes asphalt from slag as well as gravel.
+- [ ] Distilling Tank crafts from copper sheets + Fluid Tank + Fluid Valve; Tap from Fluid Valve + copper sheet.
+- [ ] Hold Shift over Blast Furnace Bricks: heated burners + coke, fan for steel, slag; over Slag: its uses.

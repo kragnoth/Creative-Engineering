@@ -126,3 +126,9 @@ Blocks `diesel_crankcase` (`facing` = output end, 0.8.0; was `axis` in 0.7.x), `
 - Blocks / items `asphalt`, `asphalt_slab`, `asphalt_stairs`; items `paraffin_wax`, `oil_can` (data component `creativeengineering:can_fluid`).
 - Every Create KineticBlockEntity may now save `CELubedUntil` (long game time) via mixin.
 - Recipe `distilling/crude_oil` now has 4 fractions (column 5 tall). New `mixing/asphalt`, `mixing/lubricant`, `compacting/paraffin_wax`, `candle_from_paraffin`, `oil_can`, asphalt slab / stairs (crafting + stonecutting).
+
+## 0.21.0 — Polish pass (removals)
+- **Removed** (vanish from existing worlds): block / item / BE `alloy_furnace_bricks` (+ BE `alloy_furnace`, recipe type and serializer `alloying`, arm point `alloy_furnace`, advancement `alloy_furnace`); items `copper_rod`, `iron_rod`, `iron_gear`, `copper_wire`, `steel_wire`, `cast_iron_sheet`, `coke_dust`.
+- Removed tags: `c:rods/copper`, `c:rods/iron`, `c:gears/iron`, `c:wires/*`, `c:wires`, `c:plates/cast_iron`, `c:dusts/coal_coke`, `c:dusts`. Removed recipes: `alloying/*`, `milling/coke_dust`, `pressing/cast_iron_sheet`, `die_pressing/{copper_rod,iron_rod,iron_gear}`.
+- New: recipe `crushing/slag`; item tag `creativeengineering:asphalt_aggregate` (gravel, slag) used by `mixing/asphalt`.
+- Changed recipes: `distilling_tank` (no Blaze Burner), `tap` (copper sheet instead of brass).

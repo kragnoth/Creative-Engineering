@@ -115,7 +115,7 @@ Kragnoth chose this pass: uses for the fuels' byproducts, namely the heavy fract
 
 - **Heavy oil** (`heavy_oil`, `c:heavy_oil`): the bottom cut. Not a fuel; it is the feedstock for everything below.
 - **Asphalt** (`asphalt`, `asphalt_slab`, `asphalt_stairs`):
-  - heated Create mixing of 250 mB heavy oil + 2 gravel + 1 sand gives 4 asphalt;
+  - heated Create mixing of 250 mB heavy oil + 2 gravel (or blast-furnace slag, 0.21.0) + 1 sand gives 4 asphalt;
   - slabs and stairs by crafting or stonecutter;
   - a road surface: walking on it is faster (block speed factor 1.25).
   - Texture: drawn tar-black with aggregate (`tools/stylekit/make_petroleum_textures.py`).

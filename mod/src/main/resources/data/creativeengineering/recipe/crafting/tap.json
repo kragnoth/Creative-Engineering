@@ -6,7 +6,7 @@
       "item": "create:fluid_valve"
     },
     {
-      "item": "create:brass_sheet"
+      "tag": "c:plates/copper"
     }
   ],
   "result": {

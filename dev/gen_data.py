@@ -27,9 +27,9 @@ def tag(t): return {'tag': t}
 
 # ---------------------------------------------------------------------------------------- content
 SIMPLE_ITEMS = ['carbon_packed_iron', 'blister_steel_ingot', 'blister_steel_nugget', 'blister_steel_sheet',
-                'coal_coke', 'coke_dust', 'cast_iron_ingot', 'cast_iron_nugget', 'cast_iron_sheet',
+                'coal_coke', 'cast_iron_ingot', 'cast_iron_nugget',
                 'steel_ingot', 'steel_nugget', 'steel_sheet', 'slag',
-                'rod_die', 'gear_die', 'copper_rod', 'iron_rod', 'steel_rod', 'iron_gear', 'steel_gear', 'copper_wire', 'steel_wire']
+                'rod_die', 'gear_die', 'steel_rod', 'steel_gear']   # 0.21.0: dead ends removed (Kragnoth's polish pass)
 TOOLS = ['sword', 'pickaxe', 'axe', 'shovel', 'hoe']
 ARMOR = ['helmet', 'chestplate', 'leggings', 'boots']
 BLOCKS = ['blister_steel_block', 'coke_block', 'cast_iron_block', 'steel_block']
@@ -51,11 +51,9 @@ LANG = collections.OrderedDict([
     ('advancements.%s.shear_forged.title' % MODID, 'Shear-Forged'),
     ('advancements.%s.shear_forged.description' % MODID, 'Make a blister steel tool or piece of armour'),
     ('item.%s.coal_coke' % MODID, 'Coal Coke'),
-    ('item.%s.coke_dust' % MODID, 'Coke Dust'),
     ('block.%s.blast_furnace_bricks' % MODID, 'Blast Furnace Bricks'),
     ('item.%s.cast_iron_ingot' % MODID, 'Cast Iron Ingot'),
     ('item.%s.cast_iron_nugget' % MODID, 'Cast Iron Nugget'),
-    ('item.%s.cast_iron_sheet' % MODID, 'Cast Iron Sheet'),
     ('block.%s.cast_iron_block' % MODID, 'Block of Cast Iron'),
     ('item.%s.steel_ingot' % MODID, 'Steel Ingot'),
     ('item.%s.steel_nugget' % MODID, 'Steel Nugget'),
@@ -84,7 +82,6 @@ LANG = collections.OrderedDict([
     ('advancements.%s.blast_furnace.title' % MODID, 'Pig Iron and Air'),
     ('advancements.%s.blast_furnace.description' % MODID, 'Cast iron in a Blast Furnace'),
     ('advancements.%s.steel.title' % MODID, 'Proper Steel'),
-    ('block.%s.alloy_furnace_bricks' % MODID, 'Alloy Furnace Bricks'),
     ('item.%s.rod_die' % MODID, 'Rod Die'),
     ('block.%s.diesel_crankcase' % MODID, 'Diesel Crankcase'),
     ('block.%s.diesel_cylinder' % MODID, 'Diesel Cylinder'),
@@ -114,13 +111,8 @@ LANG = collections.OrderedDict([
     ('advancements.%s.treated_wood.title' % MODID, 'Smells Like a Railway'),
     ('advancements.%s.treated_wood.description' % MODID, 'Treat wood with creosote'),
     ('item.%s.gear_die' % MODID, 'Gear Die'),
-    ('item.%s.copper_rod' % MODID, 'Copper Rod'),
-    ('item.%s.iron_rod' % MODID, 'Iron Rod'),
     ('item.%s.steel_rod' % MODID, 'Steel Rod'),
-    ('item.%s.iron_gear' % MODID, 'Iron Gear'),
     ('item.%s.steel_gear' % MODID, 'Steel Gear'),
-    ('item.%s.copper_wire' % MODID, 'Copper Wire'),
-    ('item.%s.steel_wire' % MODID, 'Steel Wire'),
     ('%s.die.fitted' % MODID, '%s fitted'),
     ('%s.die.removed' % MODID, 'Die removed'),
     ('%s.jade.die' % MODID, 'Die: %s'),
@@ -131,22 +123,6 @@ LANG = collections.OrderedDict([
     ('config.jade.plugin_%s.press_die' % MODID, 'Press Die'),
     ('advancements.%s.press_die.title' % MODID, 'Die Cast'),
     ('advancements.%s.press_die.description' % MODID, 'Make a press die'),
-    ('%s.alloy_furnace.heat.0' % MODID, 'Heat: not every column (needs a heated Blaze Burner under each)'),
-    ('%s.alloy_furnace.heat.1' % MODID, 'Heat: heated'),
-    ('%s.alloy_furnace.heat.2' % MODID, 'Heat: superheated'),
-    ('%s.alloy_furnace.fans' % MODID, 'Fans: %s (+25%% speed each, max 4)'),
-    ('%s.alloy_furnace.batches' % MODID, 'Batches: %s / %s'),
-    ('%s.alloy_furnace.filtered' % MODID, 'Recipe filter: %s output hatch(es)'),
-    ('%s.alloy_furnace.blocker.loose' % MODID, 'Not formed: build a solid box, 2 to 4 blocks on each side'),
-    ('%s.alloy_furnace.blocker.no_heat' % MODID, 'No heat: a heated Blaze Burner under every column'),
-    ('%s.jade.alloy_items' % MODID, 'Ingredients: %s  Output: %s'),
-    ('%s.jei.alloying' % MODID, 'Alloy Furnace'),
-    ('%s.jei.alloy.heat.1' % MODID, 'Heated'),
-    ('%s.jei.alloy.heat.2' % MODID, 'Superheated'),
-    ('%s.jei.alloy.time' % MODID, '%ss per batch'),
-    ('%s.jei.alloy.inherited' % MODID, 'from %s'),
-    ('%s.jei.alloy.needs_tip' % MODID, 'A heated (or superheated) Blaze Burner under every column. Fans blowing into the bottom layer: +25%% speed each. No fuel: the burners are the running cost. Runs half its brick count of batches at once. To pick between alloys that share ingredients, wrench a brick to an output hatch and set its filter.'),
-    ('config.jade.plugin_%s.alloy_furnace' % MODID, 'Alloy Furnace'),
     ('%s.display_source.machine_status' % MODID, 'Machine Status'),
     ('%s.display_source.machine_progress' % MODID, 'Machine Progress'),
     ('%s.display_source.machine_output' % MODID, 'Finished Output'),
@@ -155,8 +131,6 @@ LANG = collections.OrderedDict([
     ('%s.display_source.engine_capacity' % MODID, 'Engine Stress Capacity'),
     ('%s.readout.working' % MODID, 'Working'),
     ('%s.readout.idle' % MODID, 'Idle'),
-    ('advancements.%s.alloy_furnace.title' % MODID, 'Industrial Alloying'),
-    ('advancements.%s.alloy_furnace.description' % MODID, 'Make Alloy Furnace Bricks'),
     ('advancements.%s.steel.description' % MODID, 'Blow air into a Blast Furnace to make steel'),
     ('item.%s.creosote_bucket' % MODID, 'Creosote Bucket'),
     ('fluid_type.%s.plant_oil' % MODID, 'Plant Oil'),
@@ -288,17 +262,11 @@ def furnace_models(n):
         for p, sfx in (('bricks', ''), ('input', '_input'), ('output', '_output'))]})
 furnace_models('coke_oven_bricks')
 furnace_models('blast_furnace_bricks')
-furnace_models('alloy_furnace_bricks')
 put('%s/loot_table/blocks/coke_oven_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('coke_oven_bricks')}],
                'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
     'random_sequence': ce('blocks/coke_oven_bricks')})
-put('%s/loot_table/blocks/alloy_furnace_bricks.json' % D, {
-    'type': 'minecraft:block',
-    'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('alloy_furnace_bricks')}],
-               'conditions': [{'condition': 'minecraft:survives_explosion'}]}],
-    'random_sequence': ce('blocks/alloy_furnace_bricks')})
 put('%s/loot_table/blocks/blast_furnace_bricks.json' % D, {
     'type': 'minecraft:block',
     'pools': [{'rolls': 1, 'bonus_rolls': 0, 'entries': [{'type': 'minecraft:item', 'name': ce('blast_furnace_bricks')}],
@@ -372,8 +340,6 @@ put(R + '/coking/coke_block.json', {'type': ce('coking'), 'ingredient': item('mi
     'result': {'id': ce('coke_block'), 'count': 1}, 'creosote': 2250, 'time': 3600})
 put(R + '/coking/charcoal.json', {'type': ce('coking'), 'ingredient': tag('minecraft:logs_that_burn'),
     'result': {'id': 'minecraft:charcoal', 'count': 1}, 'creosote': 100, 'time': 400})
-put(R + '/milling/coke_dust.json', {'type': 'create:milling', 'ingredients': [tag('c:coal_coke')],
-    'processing_time': 100, 'results': [{'id': ce('coke_dust')}]})
 shaped('coke_oven_bricks', ['BBB', 'BSB', 'BBB'], {'B': item('minecraft:brick'), 'S': tag('c:plates/blister_steel')},
        ce('coke_oven_bricks'), count=2, category='building')
 shaped('coke_block', ['###', '###', '###'], {'#': item(ce('coal_coke'))}, ce('coke_block'), category='building')
@@ -395,9 +361,9 @@ blast('iron_block', tag('c:storage_blocks/iron'), ce('cast_iron_block'), ce('ste
 put('%s/data/%s/data_maps/item/blast_furnace_fuel.json' % (RES, MODID), {'values': {
     '#c:coal_coke': {'iron_units': 2}, ce('coke_block'): {'iron_units': 18},
     'minecraft:charcoal': {'iron_units': 1}, 'minecraft:coal': {'iron_units': 0.5}}})
+put(R + '/pressing/steel_sheet.json', {'type': 'create:pressing', 'ingredients': [tag('c:ingots/steel')],
+    'results': [{'id': ce('steel_sheet')}]})   # cast iron sheet removed in 0.21.0: nothing used it
 for metal in ('cast_iron', 'steel'):
-    put(R + '/pressing/%s_sheet.json' % metal, {'type': 'create:pressing', 'ingredients': [tag('c:ingots/' + metal)],
-        'results': [{'id': ce(metal + '_sheet')}]})
     shaped(metal + '_block', ['###', '###', '###'], {'#': tag('c:ingots/' + metal)}, ce(metal + '_block'), category='building')
     shapeless(metal + '_ingot_from_block', [item(ce(metal + '_block'))], ce(metal + '_ingot'), 9)
     shaped(metal + '_ingot_from_nuggets', ['###', '###', '###'], {'#': tag('c:nuggets/' + metal)}, ce(metal + '_ingot'), category='misc')
@@ -405,33 +371,19 @@ for metal in ('cast_iron', 'steel'):
 shaped('blast_furnace_bricks', ['NBN', 'BSB', 'NBN'], {'B': item('minecraft:bricks'), 'N': item('minecraft:nether_brick'),
        'S': tag('c:plates/blister_steel')}, ce('blast_furnace_bricks'), count=2, category='building')
 
-# Tier 4: alloying (docs/steelworks-spec.md 4b). Ingredients use the flat form Ender IO uses ({"tag": ..., "count": n}).
-# Create's heated mixing alloys (brass...) and Ender IO's alloy_smelting ingots (base + Evolution) are read at runtime,
-# so they need no JSON here. These are optional extras for other mods' metals, loaded only with that mod.
-def alloy(name, ingredients, result, count, mod, heat=1, time=200):
-    put(R + '/alloying/%s.json' % name, {'neoforge:conditions': [{'type': 'neoforge:mod_loaded', 'modid': mod}],
-        'type': ce('alloying'), 'ingredients': [dict(i, count=n) for i, n in ingredients],
-        'result': {'id': result, 'count': count}, 'heat': heat, 'time': time})
-# Our own: bulk cementation. Same ratio as compacting with coke (2 iron + 1 coke -> 2 carbon-packed iron -> 2
-# blister steel), in one step: the furnace does the baking the fan would.
-put(R + '/alloying/blister_steel.json', {'type': ce('alloying'),
-    'ingredients': [dict(tag('c:ingots/iron'), count=2), dict(tag('c:coal_coke'), count=1)],
-    'result': {'id': ce('blister_steel_ingot'), 'count': 2}, 'heat': 1, 'time': 200})
-alloy('ie_electrum', [(tag('c:ingots/gold'), 1), (tag('c:ingots/silver'), 1)], 'immersiveengineering:ingot_electrum', 2, 'immersiveengineering')
-alloy('ie_constantan', [(tag('c:ingots/copper'), 1), (tag('c:ingots/nickel'), 1)], 'immersiveengineering:ingot_constantan', 2, 'immersiveengineering')
-shaped('alloy_furnace_bricks', ['SBS', 'BFB', 'SBS'], {'S': tag('c:plates/steel'), 'B': item(ce('blast_furnace_bricks')),
-       'F': item('minecraft:blast_furnace')}, ce('alloy_furnace_bricks'), count=4, category='building')
+# Slag (0.21.0, polish pass): Create crushing breaks it into gravel with a chance of an iron nugget, and it can stand in
+# for gravel in asphalt (#creativeengineering:asphalt_aggregate): the blast furnace's byproduct paves the oil field.
+put(R + '/crushing/slag.json', {'type': 'create:crushing', 'ingredients': [item(ce('slag'))], 'processing_time': 150,
+    'results': [{'id': 'minecraft:gravel'}, {'id': 'minecraft:iron_nugget', 'chance': 0.25}]})
 
 # Metalworking: press dies. A die fitted in a Mechanical Press makes it run only these recipes (results in Create's
 # output format). Dies are one-time steel work and never wear out.
 def die_press(name, die, ingredient, result, count):
     put(R + '/die_pressing/%s.json' % name, {'type': ce('die_pressing'), 'die': item(ce(die)), 'ingredient': ingredient,
         'results': [{'id': ce(result), 'count': count}]})
-for metal in ('copper', 'iron', 'steel'):
-    die_press(metal + '_rod', 'rod_die', tag('c:ingots/' + metal), metal + '_rod', 2)
-for metal in ('iron', 'steel'):
-    die_press(metal + '_gear', 'gear_die', tag('c:plates/' + metal), metal + '_gear', 1)
-# Copper and steel wire items exist (art + c:wires tags) but have no recipe yet: kept for later modules (wire rope).
+# Steel only (0.21.0): copper / iron rods, the iron gear and the wires had no use in a Create playthrough.
+die_press('steel_rod', 'rod_die', tag('c:ingots/steel'), 'steel_rod', 2)
+die_press('steel_gear', 'gear_die', tag('c:plates/steel'), 'steel_gear', 1)
 for d, core in (('rod_die', item('minecraft:stick')), ('gear_die', item('create:cogwheel'))):
     shaped(d, ['SSS', 'S#S', 'SSS'], {'S': tag('c:plates/steel'), '#': core}, ce(d), category='equipment')
 
@@ -891,10 +843,11 @@ for f, rot in (('north', 0), ('east', 90), ('south', 180), ('west', 270)):
 put('%s/blockstates/tap.json' % A, {'multipart': _tap_parts})
 put('%s/models/item/tap.json' % A, {'parent': ce('block/tap/body_open')})
 simple_loot('tap')
-shapeless('tap', [item('create:fluid_valve'), item('create:brass_sheet')], ce('tap'))
+shapeless('tap', [item('create:fluid_valve'), tag('c:plates/copper')], ce('tap'))   # copper tier, with the column (0.21.0)
 LANG['block.%s.tap' % MODID] = 'Tap'
-shaped('distilling_tank', [' V ', 'PTP', 'PBP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
-       'P': tag('c:plates/copper'), 'B': item('create:blaze_burner')}, ce('distilling_tank'), category='misc')
+# 0.21.0: no Blaze Burner in the recipe; drinks distil on campfire heat early, crude still needs a lit burner under it
+shaped('distilling_tank', [' V ', 'PTP', 'PPP'], {'V': item('create:fluid_valve'), 'T': item('create:fluid_tank'),
+       'P': tag('c:plates/copper')}, ce('distilling_tank'), category='misc')
 
 # Distilling recipes. Drinks: water drops out low, the spirit rises (biodiesel-tier fuel: distilling is the upgrade).
 def distil(name, inp, amount, fractions, heat=1, time=200, residue=None, chance=1.0, conditions=None):
@@ -984,8 +937,6 @@ tagfile('c', 'item', 'plates', ['#c:plates/blister_steel'])
 tagfile('c', 'item', 'storage_blocks', ['#c:storage_blocks/blister_steel', '#c:storage_blocks/coal_coke', '#c:storage_blocks/cast_iron', '#c:storage_blocks/steel'])
 tagfile('c', 'block', 'storage_blocks', ['#c:storage_blocks/blister_steel', '#c:storage_blocks/coal_coke', '#c:storage_blocks/cast_iron', '#c:storage_blocks/steel'])
 tagfile('c', 'item', 'coal_coke', [ce('coal_coke')])
-tagfile('c', 'item', 'dusts/coal_coke', [ce('coke_dust')])
-tagfile('c', 'item', 'dusts', ['#c:dusts/coal_coke'])
 tagfile('c', 'item', 'storage_blocks/coal_coke', [ce('coke_block')])
 tagfile('c', 'block', 'storage_blocks/coal_coke', [ce('coke_block')])
 for _n in ('crude_oil', 'diesel', 'kerosene', 'gasoline', 'heavy_oil', 'lubricant'):
@@ -1053,15 +1004,17 @@ put('%s/data/tarbound/tags/item/pool_fuel.json' % RES, {'replace': False, 'value
 for metal in ('cast_iron', 'steel'):
     tagfile('c', 'item', 'ingots/' + metal, [ce(metal + '_ingot')])
     tagfile('c', 'item', 'nuggets/' + metal, [ce(metal + '_nugget')])
-    tagfile('c', 'item', 'plates/' + metal, [ce(metal + '_sheet')])
+    if metal == 'steel':
+        tagfile('c', 'item', 'plates/' + metal, [ce(metal + '_sheet')])
     tagfile('c', 'item', 'storage_blocks/' + metal, [ce(metal + '_block')])
     tagfile('c', 'block', 'storage_blocks/' + metal, [ce(metal + '_block')])
 tagfile('c', 'item', 'ingots', ['#c:ingots/blister_steel', '#c:ingots/cast_iron', '#c:ingots/steel'])
 tagfile('c', 'item', 'nuggets', ['#c:nuggets/blister_steel', '#c:nuggets/cast_iron', '#c:nuggets/steel'])
-tagfile('c', 'item', 'plates', ['#c:plates/blister_steel', '#c:plates/cast_iron', '#c:plates/steel'])
+tagfile('c', 'item', 'plates', ['#c:plates/blister_steel', '#c:plates/steel'])
 tagfile('c', 'item', 'slag', [ce('slag')])
+tagfile(MODID, 'item', 'asphalt_aggregate', ['minecraft:gravel', ce('slag')])   # slag paves too (0.21.0)
 tagfile(MODID, 'item', 'dies', [ce('rod_die'), ce('gear_die')])
-for kind, metals in (('rods', ('copper', 'iron', 'steel')), ('gears', ('iron', 'steel')), ('wires', ('copper', 'steel'))):
+for kind, metals in (('rods', ('steel',)), ('gears', ('steel',))):
     for m in metals:
         tagfile('c', 'item', '%s/%s' % (kind, m), [ce('%s_%s' % (m, kind[:-1]))])
     tagfile('c', 'item', kind, ['#c:%s/%s' % (kind, m) for m in metals])
@@ -1084,7 +1037,7 @@ for a, slot in zip(ARMOR, ['head', 'chest', 'leg', 'foot']):
     tagfile('minecraft', 'item', slot + '_armor', [ce('blister_steel_' + a)])
 tagfile('minecraft', 'item', 'trimmable_armor', [ce('blister_steel_' + a) for a in ARMOR])
 tagfile('minecraft', 'item', 'beacon_payment_items', [ce('blister_steel_ingot'), ce('steel_ingot')])
-tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks'), ce('alloy_furnace_bricks')] + [ce('pumpjack'), ce('walking_beam_bearing'), ce('wellhead'), ce('asphalt'), ce('asphalt_slab'), ce('asphalt_stairs')]
+tagfile('minecraft', 'block', 'mineable/pickaxe', [ce(b) for b in BLOCKS] + [ce('coke_oven_bricks'), ce('blast_furnace_bricks')] + [ce('pumpjack'), ce('walking_beam_bearing'), ce('wellhead'), ce('asphalt'), ce('asphalt_slab'), ce('asphalt_stairs')]
         + [ce(n) for n in ('diesel_crankcase', 'diesel_cylinder', 'diesel_flywheel', 'drive_pulley', 'fermenting_vat', 'distilling_tank', 'steel_tank', 'steel_pipe', 'tap', 'andesite_campfire_stand', 'brass_campfire_stand', 'copper_campfire_stand')])
 tagfile('minecraft', 'block', 'needs_stone_tool', [ce('blister_steel_block'), ce('cast_iron_block')])
 tagfile('minecraft', 'block', 'needs_iron_tool', [ce('steel_block')])
@@ -1112,7 +1065,6 @@ adv('blister_steel', 'carbon_packed_iron', ce('blister_steel_ingot'), {'blister'
 adv('coke_oven', 'blister_steel', ce('coal_coke'), {'coke': has(ce('coal_coke'))})
 adv('blast_furnace', 'coke_oven', ce('cast_iron_ingot'), {'cast': has(ce('cast_iron_ingot'))})
 adv('steel', 'blast_furnace', ce('steel_ingot'), {'steel': has(ce('steel_ingot'))}, 'goal')
-adv('alloy_furnace', 'steel', ce('alloy_furnace_bricks'), {'bricks': has(ce('alloy_furnace_bricks'))})
 adv('press_die', 'steel', ce('rod_die'), {d: has(ce(d)) for d in ('rod_die', 'gear_die')})
 adv('treated_wood', 'coke_oven', ce('treated_planks'), {n: has(ce(n)) for n in ('treated_planks', 'treated_log', 'treated_wood')})
 adv('diesel_engine', 'press_die', ce('diesel_cylinder'), {'cylinder': has(ce('diesel_cylinder'))}, 'goal')
@@ -1266,7 +1218,7 @@ for n in ('paraffin_wax', 'oil_can'):
     put('%s/models/item/%s.json' % (A, n), {'parent': 'minecraft:item/generated', 'textures': {'layer0': ce('item/' + n)}})
 # asphalt: heated mixing of heavy oil with gravel and sand; slabs / stairs by crafting or stonecutter
 put(R + '/mixing/asphalt.json', {'type': 'create:mixing', 'heat_requirement': 'heated', 'ingredients': [
-    {'type': 'neoforge:tag', 'tag': 'c:heavy_oil', 'amount': 250}, item('minecraft:gravel'), item('minecraft:gravel'), tag('c:sands')],
+    {'type': 'neoforge:tag', 'tag': 'c:heavy_oil', 'amount': 250}, tag(ce('asphalt_aggregate')), tag(ce('asphalt_aggregate')), tag('c:sands')],
     'results': [{'id': ce('asphalt'), 'count': 4}]})
 shaped('asphalt_slab', ['###'], {'#': item(ce('asphalt'))}, ce('asphalt_slab'), count=6, category='building')
 shaped('asphalt_stairs', ['#  ', '## ', '###'], {'#': item(ce('asphalt'))}, ce('asphalt_stairs'), count=4, category='building')
@@ -1349,9 +1301,13 @@ TIPS = {
         [('With heat under every column', 'Cokes coal. Fire or magma is half speed, a lit Blaze Burner full speed, superheated double.'),
          ('Each brick', 'Adds four coking slots: bigger ovens coke more at once.')],
         [('Funnels and pipes', 'Feed coal in, take coke and creosote out from any side.')]),
-    'block:blast_furnace_bricks': ('Placed together, bricks form a _Blast Furnace_ that turns iron and coke into _steel_ or _cast iron_.',
-        [('With hot air blown in', 'Smelts. A bigger furnace holds more and works faster.')], []),
-    'block:alloy_furnace_bricks': ('Placed together, bricks form an _Alloy Furnace_ for mixing metals.', [], []),
+    'block:blast_furnace_bricks': ('Placed together, bricks form a _Blast Furnace_ (1-3 wide, up to 6 tall) that smelts iron with _coke_.',
+        [('On heated Blaze Burners', 'Burns coke and makes _cast iron_. Every column needs a lit burner under it.'),
+         ('With an Encased Fan blowing in', 'The air blast makes _steel_ instead, and each fan adds speed.'),
+         ('Raw or crushed iron', 'Sometimes leaves _slag_: crush it for gravel and iron, or pave asphalt with it.')],
+        [('Funnels on the top', 'Charge it with iron and coke. Metal and slag come out of any side.')]),
+    'item:slag': ('The blast furnace\'s _byproduct_.', [('In a Crushing Wheel', 'Breaks into gravel, sometimes with an iron nugget.'),
+        ('In a heated mixer', 'Stands in for gravel in asphalt.')], []),
     'item:rod_die': ('A die for the _Mechanical Press_.', [('Fitted to a press', 'The press shapes _rods_ instead of plates. Dies never wear out.')],
         [('Right-click a press', 'Fit the die. Empty hand to take it back.')]),
     'item:gear_die': ('A die for the _Mechanical Press_.', [('Fitted to a press', 'The press shapes _gears_ instead of plates. Dies never wear out.')],

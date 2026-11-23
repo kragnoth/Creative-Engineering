@@ -46,7 +46,6 @@ def put(blocks, pos, block):
 # Palette
 COKE = MODID + ':coke_oven_bricks'
 BLAST = MODID + ':blast_furnace_bricks'
-ALLOY = MODID + ':alloy_furnace_bricks'
 def burner(level='kindled'): return ('create:blaze_burner', {'blaze': level, 'facing': 'north'})
 def fan(facing): return ('create:encased_fan', {'facing': facing})
 def funnel(facing, extracting=False): return ('create:andesite_funnel', {'facing': facing, 'extracting': str(extracting).lower(), 'powered': 'false'})
@@ -88,19 +87,6 @@ def blast_furnace():
     put(b, (1, 2, 2), fan('east'))              # air blast into the bottom layer
     put(b, (3, 2, 2), funnel('east', True))     # steel and slag out
     return structure((5, 6, 5), b)
-
-def alloy_furnace():
-    """Tier 4: a 2x2x2 alloy furnace on four burners; fan into the bottom layer; funnels in (top) and out (side)."""
-    b = plate(6)
-    for x in (2, 3):
-        for z in (2, 3):
-            put(b, (x, 1, z), burner('kindled'))
-            for y in (2, 3):
-                put(b, (x, y, z), ALLOY)
-    put(b, (2, 4, 2), funnel('up'))
-    put(b, (1, 2, 2), fan('east'))
-    put(b, (4, 2, 3), funnel('east', True))
-    return structure((6, 5, 6), b)
 
 def press_dies():
     """Metalworking: a Mechanical Press over a Depot, driven by a shaft from the south."""
@@ -207,7 +193,7 @@ def lubrication():
     put(b, (3, 1, 2), DEPOT)
     return structure((5, 4, 5), b)
 
-SCENES = [cementation, coke_oven, blast_furnace, alloy_furnace, press_dies, diesel_engine,
+SCENES = [cementation, coke_oven, blast_furnace, press_dies, diesel_engine,
           campfire_stand, fermenting_vat, distilling, drive_chain, pumpjack, lubrication]
 
 if __name__ == '__main__':

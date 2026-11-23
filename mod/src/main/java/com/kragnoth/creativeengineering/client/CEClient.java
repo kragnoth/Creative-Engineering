@@ -19,8 +19,6 @@ public final class CEClient {
     /** Create draws filter slots (and their items) through SmartBlockEntityRenderer; without one they're invisible. */
     @SubscribeEvent
     static void renderers(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.ALLOY_FURNACE.get(),
-                com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer::new);
         // the flywheel is drawn spinning about its shaft, like any Create kinetic block
         event.registerBlockEntityRenderer(com.kragnoth.creativeengineering.registry.ModBlockEntities.DIESEL_FLYWHEEL.get(),
                 com.kragnoth.creativeengineering.client.engine.DriveBeltRenderer::new);

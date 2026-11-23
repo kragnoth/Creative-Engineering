@@ -23,7 +23,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 /**
  * {@code creativeengineering:fermenting} (docs/fermentation-spec.md): counted item ingredients (flat form, like
- * alloying) + a fluid (e.g. 250 mB of water) -> a fluid, over {@code time} ticks at passive heat (x1).
+ * the old alloy furnace) + a fluid (e.g. 250 mB of water) -> a fluid, over {@code time} ticks at passive heat (x1).
  * {@code {"ingredients":[{"tag":"c:crops/potato","count":4}], "fluid":{"fluid":"minecraft:water","amount":250},
  * "result":{"id":"creativeengineering:hooch","amount":250}, "time":400}}
  */

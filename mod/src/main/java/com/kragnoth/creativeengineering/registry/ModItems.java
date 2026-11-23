@@ -42,7 +42,6 @@ public final class ModItems {
 
     // Tier 2: coking
     public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
-    public static final DeferredItem<Item> COKE_DUST = ITEMS.registerSimpleItem("coke_dust");
     public static final DeferredItem<net.minecraft.world.item.BlockItem> COKE_OVEN_BRICKS =
             ITEMS.registerSimpleBlockItem(ModBlocks.COKE_OVEN_BRICKS);
     public static final DeferredItem<net.minecraft.world.item.BlockItem> COKE_BLOCK =
@@ -52,7 +51,6 @@ public final class ModItems {
     public static final DeferredItem<net.minecraft.world.item.BlockItem> BLAST_FURNACE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.BLAST_FURNACE_BRICKS);
     public static final DeferredItem<Item> CAST_IRON_INGOT = ITEMS.registerSimpleItem("cast_iron_ingot");
     public static final DeferredItem<Item> CAST_IRON_NUGGET = ITEMS.registerSimpleItem("cast_iron_nugget");
-    public static final DeferredItem<Item> CAST_IRON_SHEET = ITEMS.registerSimpleItem("cast_iron_sheet");
     public static final DeferredItem<net.minecraft.world.item.BlockItem> CAST_IRON_BLOCK = ITEMS.registerSimpleBlockItem(ModBlocks.CAST_IRON_BLOCK);
     public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
     public static final DeferredItem<Item> STEEL_NUGGET = ITEMS.registerSimpleItem("steel_nugget");
@@ -97,15 +95,8 @@ public final class ModItems {
     // Metalworking: press dies and what they make
     public static final DeferredItem<Item> ROD_DIE = ITEMS.registerSimpleItem("rod_die", new Item.Properties().stacksTo(16));
     public static final DeferredItem<Item> GEAR_DIE = ITEMS.registerSimpleItem("gear_die", new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> COPPER_ROD = ITEMS.registerSimpleItem("copper_rod");
-    public static final DeferredItem<Item> IRON_ROD = ITEMS.registerSimpleItem("iron_rod");
     public static final DeferredItem<Item> STEEL_ROD = ITEMS.registerSimpleItem("steel_rod");
-    public static final DeferredItem<Item> IRON_GEAR = ITEMS.registerSimpleItem("iron_gear");
     public static final DeferredItem<Item> STEEL_GEAR = ITEMS.registerSimpleItem("steel_gear");
-    public static final DeferredItem<Item> COPPER_WIRE = ITEMS.registerSimpleItem("copper_wire");
-    public static final DeferredItem<Item> STEEL_WIRE = ITEMS.registerSimpleItem("steel_wire");
-    // Tier 4: alloy furnace
-    public static final DeferredItem<net.minecraft.world.item.BlockItem> ALLOY_FURNACE_BRICKS = ITEMS.registerSimpleBlockItem(ModBlocks.ALLOY_FURNACE_BRICKS);
 
     // Blister steel gear: iron < blister steel < diamond. Attack values follow vanilla's iron set.
     public static final DeferredItem<SwordItem> BLISTER_STEEL_SWORD = ITEMS.register("blister_steel_sword",
@@ -169,7 +160,7 @@ public final class ModItems {
         return List.of(CARBON_PACKED_IRON, BLISTER_STEEL_NUGGET, BLISTER_STEEL_INGOT, BLISTER_STEEL_SHEET, BLISTER_STEEL_BLOCK,
                 BLISTER_STEEL_SWORD, BLISTER_STEEL_PICKAXE, BLISTER_STEEL_AXE, BLISTER_STEEL_SHOVEL, BLISTER_STEEL_HOE,
                 BLISTER_STEEL_HELMET, BLISTER_STEEL_CHESTPLATE, BLISTER_STEEL_LEGGINGS, BLISTER_STEEL_BOOTS,
-                COKE_OVEN_BRICKS, COAL_COKE, COKE_DUST, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET, com.kragnoth.creativeengineering.registry.ModFluids.PLANT_OIL.bucket,
+                COKE_OVEN_BRICKS, COAL_COKE, COKE_BLOCK, com.kragnoth.creativeengineering.registry.ModFluids.CREOSOTE_BUCKET, com.kragnoth.creativeengineering.registry.ModFluids.PLANT_OIL.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.ETHANOL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.HOOCH.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.WINE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.CIDER.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.MEAD.bucket, com.kragnoth.creativeengineering.registry.ModFluids.ALE.bucket,
@@ -180,9 +171,9 @@ public final class ModItems {
                 com.kragnoth.creativeengineering.registry.ModFluids.KEROSENE.bucket, com.kragnoth.creativeengineering.registry.ModFluids.GASOLINE.bucket,
                 com.kragnoth.creativeengineering.registry.ModFluids.HEAVY_OIL.bucket, com.kragnoth.creativeengineering.registry.ModFluids.LUBRICANT.bucket,
                 PARAFFIN_WAX, OIL_CAN, ASPHALT, ASPHALT_SLAB, ASPHALT_STAIRS,
-                BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_SHEET, CAST_IRON_BLOCK,
-                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG, ALLOY_FURNACE_BRICKS,
-                ROD_DIE, GEAR_DIE, COPPER_ROD, IRON_ROD, STEEL_ROD, IRON_GEAR, STEEL_GEAR, COPPER_WIRE, STEEL_WIRE,
+                BLAST_FURNACE_BRICKS, CAST_IRON_NUGGET, CAST_IRON_INGOT, CAST_IRON_BLOCK,
+                STEEL_NUGGET, STEEL_INGOT, STEEL_SHEET, STEEL_BLOCK, SLAG,
+                ROD_DIE, GEAR_DIE, STEEL_ROD, STEEL_GEAR,
                 TREATED_LOG, TREATED_WOOD, TREATED_PLANKS, TREATED_STAIRS, TREATED_SLAB, TREATED_BEAM,
                 DIESEL_CRANKCASE, DIESEL_CYLINDER, DIESEL_FLYWHEEL, DRIVE_PULLEY, DRIVE_BELT, FERMENTING_VAT, DISTILLING_TANK, TAP, STEEL_PIPE, STEEL_TANK, SEISMIC_PROBE, PUMPJACK, BEAM_BEARING, WELLHEAD,
             ANDESITE_CAMPFIRE_STAND, BRASS_CAMPFIRE_STAND, COPPER_CAMPFIRE_STAND);
