@@ -98,7 +98,8 @@ def asphalt():
 
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(__file__), '..', '..'))
-    for img, rel in ((paraffin(), 'item/paraffin_wax'), (oil_can(), 'item/oil_can'), (asphalt(), 'block/asphalt')):
+    # paraffin wax and the oil can now come from Excalibur art: make_excalibur_derived.py
+    for img, rel in ((asphalt(), 'block/asphalt'),):
         mt.save(img, rel)
         mt.Image.open('%s/%s.png' % (mt.TEX, rel)).resize((128, 128), mt.Image.NEAREST).save(os.path.join(mt.PREVIEW, rel.split('/')[1] + '_x8.png'))
     path = mt.save(probe(), 'item/seismic_probe')

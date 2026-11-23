@@ -405,3 +405,6 @@ Convention (borrowed from Tarbound):
 - [ ] Press compacts 100 mB heavy oil into paraffin wax; wax waxes copper by hand and by Deployer; string + wax makes a candle.
 - [ ] Mixer: heavy oil + kerosene gives lubricant; Spout fills an Oil Can; using the can on a tank also fills it.
 - [ ] Oil Can on any Create machine: amber puff, -25% of its stress on the network (watch a stressometer), goggles show minutes left; it wears off after a day; a Deployer with a can also lubricates.
+
+## 0.19.1 — Excalibur-based wax and can
+- [ ] Paraffin Wax (cream resin-brick block) and Oil Can (lidded Excalibur bucket, brass pump and spout) read well in hand, in the tab and on the ground.
