@@ -73,6 +73,16 @@ public final class CEClient {
 
     @SubscribeEvent
     static void clientSetup(FMLClientSetupEvent event) {
+        // Create's "Hold [Shift]" item descriptions (lang: <id>.tooltip.summary / conditionN / behaviourN / controlN /
+        // actionN) for every item of ours, plus Create's stress / capacity lines on kinetic blocks
+        event.enqueueWork(() -> {
+            for (var holder : com.kragnoth.creativeengineering.registry.ModItems.ITEMS.getEntries()) {
+                net.minecraft.world.item.Item item = holder.get();
+                com.simibubi.create.foundation.item.TooltipModifier.REGISTRY.register(item,
+                        new com.simibubi.create.foundation.item.ItemDescription.Modifier(item, net.createmod.catnip.lang.FontHelper.Palette.STANDARD_CREATE)
+                                .andThen(com.simibubi.create.foundation.item.TooltipModifier.mapNull(com.simibubi.create.foundation.item.KineticStats.create(item))));
+            }
+        });
         // Ponder ships with Create; PonderCompat is only touched behind this check (same pattern as Tarbound).
         if (ModList.get().isLoaded("ponder")) {
             event.enqueueWork(com.kragnoth.creativeengineering.compat.ponder.PonderCompat::init);

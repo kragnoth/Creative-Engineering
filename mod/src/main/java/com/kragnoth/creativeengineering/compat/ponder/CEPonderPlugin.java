@@ -28,6 +28,18 @@ public class CEPonderPlugin implements PonderPlugin {
                 .addStoryBoard("diesel_engine", CEScenes::dieselEngine);
         helper.forComponents(ModItems.ALLOY_FURNACE_BRICKS.getId())
                 .addStoryBoard("alloy_furnace", CEScenes::alloyFurnace);
+        helper.forComponents(ModItems.ANDESITE_CAMPFIRE_STAND.getId(), ModItems.BRASS_CAMPFIRE_STAND.getId(), ModItems.COPPER_CAMPFIRE_STAND.getId())
+                .addStoryBoard("campfire_stand", CEScenes::campfireStand);
+        helper.forComponents(ModItems.FERMENTING_VAT.getId())
+                .addStoryBoard("fermenting_vat", CEScenes::fermentingVat);
+        helper.forComponents(ModItems.DISTILLING_TANK.getId(), ModItems.TAP.getId(), ModItems.STEEL_PIPE.getId(), ModItems.STEEL_TANK.getId())
+                .addStoryBoard("distilling", CEScenes::distilling);
+        helper.forComponents(ModItems.DRIVE_BELT.getId(), ModItems.DRIVE_PULLEY.getId(), ModItems.DIESEL_FLYWHEEL.getId())
+                .addStoryBoard("drive_chain", CEScenes::driveChain);
+        helper.forComponents(ModItems.PUMPJACK.getId(), ModItems.BEAM_BEARING.getId(), ModItems.WELLHEAD.getId(), ModItems.SEISMIC_PROBE.getId())
+                .addStoryBoard("pumpjack", CEScenes::pumpjack);
+        helper.forComponents(ModItems.OIL_CAN.getId())
+                .addStoryBoard("lubrication", CEScenes::lubrication);
     }
 
     @Override
@@ -37,7 +49,7 @@ public class CEPonderPlugin implements PonderPlugin {
                 .addToIndex()
                 .item(ModItems.BLISTER_STEEL_INGOT.get(), true, false)
                 .title("Creative Engineering")
-                .description("Steel and heavy industry, the Create way")
+                .description("Steel, engines, brewing, distilling and oil, the Create way")
                 .register();
         helper.addToTag(tag)
                 .add(ModItems.CARBON_PACKED_IRON.getId())
@@ -48,6 +60,15 @@ public class CEPonderPlugin implements PonderPlugin {
                 .add(ModItems.STEEL_INGOT.getId())
                 .add(ModItems.ALLOY_FURNACE_BRICKS.getId())
                 .add(ModItems.ROD_DIE.getId())
-                .add(ModItems.DIESEL_CRANKCASE.getId());
+                .add(ModItems.DIESEL_CRANKCASE.getId())
+                .add(ModItems.DRIVE_BELT.getId())
+                .add(ModItems.ANDESITE_CAMPFIRE_STAND.getId())
+                .add(ModItems.FERMENTING_VAT.getId())
+                .add(ModItems.DISTILLING_TANK.getId())
+                .add(ModItems.TAP.getId())
+                .add(ModItems.PUMPJACK.getId())
+                .add(ModItems.WELLHEAD.getId())
+                .add(ModItems.SEISMIC_PROBE.getId())
+                .add(ModItems.OIL_CAN.getId());
     }
 }

@@ -366,4 +366,233 @@ public final class CEScenes {
         scene.idle(110);
         scene.markAsFinished();
     }
+
+    // ---------------------------------------------------------------------------------------------- 0.20.0
+    private static void show(SceneBuilder scene, Selection sel, Direction from, int wait) {
+        scene.world().showSection(sel, from);
+        scene.idle(wait);
+    }
+
+    /** "campfire_stand" (5x5): fan (1,1,2) east through a lit stand (2,1,2) onto a depot (3,1,2); soul stand (2,1,4). */
+    public static void campfireStand(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("campfire_stand", "Campfire Stands: Heat and Fan Catalysts");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.idle(10);
+        show(scene, util.select().position(2, 1, 2), Direction.DOWN, 15);
+        scene.overlay().showControls(util.vector().topOf(2, 1, 2), Pointing.DOWN, 40).withItem(new ItemStack(Items.CAMPFIRE));
+        scene.overlay().showText(90)
+                .text("A Campfire Stand holds a campfire under your machines. Right-click it with a campfire to fit one")
+                .pointAt(util.vector().topOf(2, 1, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showText(90)
+                .text("Lit, it gives passive heat to a Fermenting Vat, a Distilling Tank or a Create boiler above it")
+                .pointAt(util.vector().centerOf(2, 1, 2)).placeNearTarget();
+        scene.idle(100);
+        show(scene, util.select().position(1, 1, 2), Direction.EAST, 5);
+        show(scene, util.select().position(3, 1, 2), Direction.DOWN, 15);
+        scene.overlay().showOutline(PonderPalette.WHITE, "smoke", util.select().fromTo(2, 1, 2, 3, 1, 2), 80);
+        scene.overlay().showText(90)
+                .text("Air blows straight through a stand. Through a lit campfire, a fan's stream smokes the items it reaches")
+                .pointAt(util.vector().topOf(3, 1, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().position(2, 1, 4), Direction.DOWN, 15);
+        scene.overlay().showText(80)
+                .text("With a soul campfire the same stream haunts them instead")
+                .pointAt(util.vector().topOf(2, 1, 4)).placeNearTarget();
+        scene.idle(90);
+        scene.markAsFinished();
+    }
+
+    /** "fermenting_vat" (6x6): stands (2..3,1,2..3), vat (2..3,2..3,2..3), funnel (1,3,2), pipe (4,2,3), tank (5,1..2,3). */
+    public static void fermentingVat(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("fermenting_vat", "Fermenting Drinks in a Vat");
+        scene.configureBasePlate(0, 0, 6);
+        scene.showBasePlate();
+        scene.idle(10);
+        show(scene, util.select().fromTo(2, 2, 2, 3, 3, 3), Direction.DOWN, 15);
+        scene.overlay().showText(90)
+                .text("Fermenting Vats placed together form one vat, up to 3 wide and 4 tall, like a Create tank")
+                .pointAt(util.vector().topOf(3, 3, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().fromTo(2, 1, 2, 3, 1, 3), Direction.UP, 15);
+        scene.overlay().showText(90)
+                .text("It needs heat underneath. A lit Campfire Stand is enough; a lit Blaze Burner is twice as fast, superheated three times")
+                .pointAt(util.vector().centerOf(2, 1, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().position(1, 3, 2), Direction.EAST, 15);
+        scene.overlay().showControls(util.vector().topOf(1, 3, 2), Pointing.DOWN, 50).withItem(new ItemStack(Items.APPLE, 4));
+        scene.overlay().showText(90)
+                .text("Add water and the ingredients by pipe, funnel or hand: apples make cider, berries wine, honey mead, wheat ale, potatoes hooch")
+                .pointAt(util.vector().topOf(1, 3, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().fromTo(4, 1, 3, 5, 2, 3), Direction.WEST, 15);
+        scene.overlay().showText(90)
+                .text("Pipe the finished drink out of any side, or bucket it. Bottle it with a Spout to drink it")
+                .pointAt(util.vector().centerOf(4, 2, 3)).placeNearTarget();
+        scene.idle(100);
+        scene.markAsFinished();
+    }
+
+    /** "distilling" (7x7): stand (3,1,3), column (3,2..4,3), taps (4,3,3) east and (2,4,3) west, pipes, tanks (5,..) and (1,..). */
+    public static void distilling(SceneBuilder scene, SceneBuildingUtil util) {
+        scene.title("distilling", "Distilling with a Column and Taps");
+        scene.configureBasePlate(0, 0, 7);
+        scene.showBasePlate();
+        scene.idle(10);
+        show(scene, util.select().position(3, 1, 3), Direction.DOWN, 5);
+        show(scene, util.select().fromTo(3, 2, 3, 3, 4, 3), Direction.DOWN, 15);
+        scene.overlay().showText(90)
+                .text("Distilling Tanks stacked on heat form a column, 1 to 3 wide and up to 8 tall")
+                .pointAt(util.vector().topOf(3, 4, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showOutline(PonderPalette.RED, "boiler", util.select().position(3, 2, 3), 80);
+        scene.overlay().showText(90)
+                .text("The bottom is the boiler: pipe the brew in there. Each level above collects one fraction, the heaviest lowest")
+                .pointAt(util.vector().centerOf(3, 2, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().position(4, 3, 3), Direction.WEST, 15);
+        scene.overlay().showControls(util.vector().topOf(4, 3, 3), Pointing.DOWN, 40).rightClick();
+        scene.overlay().showText(90)
+                .text("A Tap on a level drains it. Right-click to open or close it; redstone holds it shut")
+                .pointAt(util.vector().centerOf(4, 3, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        show(scene, util.select().fromTo(5, 1, 3, 5, 3, 3), Direction.WEST, 15);
+        scene.overlay().showText(100)
+                .text("It pours down Steel Pipe into any tank at its own height or lower: gravity does the work, no pump needed")
+                .pointAt(util.vector().centerOf(5, 2, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        show(scene, util.select().fromTo(1, 1, 3, 2, 4, 3), Direction.EAST, 15);
+        scene.overlay().showText(90)
+                .text("One Tap per level splits the run: hooch gives vodka and ethanol; crude oil, on a Blaze Burner, gives four fuels")
+                .pointAt(util.vector().centerOf(2, 4, 3)).placeNearTarget();
+        scene.idle(100);
+        scene.markAsFinished();
+    }
+
+    /** "drive_chain" (7x7): motor (1,1,3) east, shaft (2,1,3), flywheel (3,1,3); sprocket (3,4,3), shaft (4,4,3), cog (5,4,3). */
+    public static void driveChain(SceneBuilder builder, SceneBuildingUtil util) {
+        com.simibubi.create.foundation.ponder.CreateSceneBuilder scene = new com.simibubi.create.foundation.ponder.CreateSceneBuilder(builder);
+        scene.title("drive_chain", "Drive Chains: Flywheels and Sprockets");
+        scene.configureBasePlate(0, 0, 7);
+        scene.showBasePlate();
+        scene.idle(10);
+        scene.world().showSection(util.select().fromTo(1, 1, 3, 3, 1, 3), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().fromTo(1, 1, 3, 3, 1, 3), 16);
+        scene.idle(15);
+        scene.world().showSection(util.select().fromTo(3, 4, 3, 5, 4, 3), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(90)
+                .text("A Drive Chain links a Flywheel and a Drive Sprocket on parallel shafts, 2 to 8 blocks apart")
+                .pointAt(util.vector().centerOf(3, 4, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showControls(util.vector().centerOf(3, 1, 3), Pointing.LEFT, 30).rightClick().withItem(new ItemStack(ModItems.DRIVE_BELT.get()));
+        scene.idle(35);
+        scene.overlay().showControls(util.vector().centerOf(3, 4, 3), Pointing.LEFT, 30).rightClick().withItem(new ItemStack(ModItems.DRIVE_BELT.get()));
+        scene.idle(30);
+        scene.world().modifyBlockEntityNBT(util.select().position(3, 1, 3), com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.class, nbt -> {
+            net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();
+            l.add(net.minecraft.nbt.NbtUtils.writeBlockPos(new BlockPos(0, 3, 0)));
+            nbt.put("Chains", l);
+        });
+        scene.world().modifyBlockEntityNBT(util.select().position(3, 4, 3), com.kragnoth.creativeengineering.content.engine.BeltWheelBlockEntity.class, nbt -> {
+            net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();
+            l.add(net.minecraft.nbt.NbtUtils.writeBlockPos(new BlockPos(0, -3, 0)));
+            nbt.put("Chains", l);
+        });
+        scene.world().setKineticSpeed(util.select().fromTo(3, 4, 3, 5, 4, 3), 64);
+        scene.overlay().showText(90)
+                .text("Right-click one wheel with the chain, then the other. Flywheel to sprocket steps speed up four times")
+                .pointAt(util.vector().centerOf(3, 4, 3)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showText(90)
+                .text("It is a real kinetic link: stress passes along it. A sprocket can take a second chain to relay power on")
+                .pointAt(util.vector().centerOf(5, 4, 3)).placeNearTarget();
+        scene.idle(100);
+        scene.markAsFinished();
+    }
+
+    /** "pumpjack" (9x9): gearbox (2,1,1) south, motor (3,1,1); girders (2,1..2,2), bearing (2,3,2); Wellhead (2,1,4); pipe (3,1,4); tank (4,1..2,4). */
+    public static void pumpjack(SceneBuilder builder, SceneBuildingUtil util) {
+        com.simibubi.create.foundation.ponder.CreateSceneBuilder scene = new com.simibubi.create.foundation.ponder.CreateSceneBuilder(builder);
+        scene.title("pumpjack", "Prospecting and Pumping Oil");
+        scene.configureBasePlate(0, 0, 9);
+        scene.showBasePlate();
+        scene.idle(10);
+        scene.overlay().showControls(util.vector().topOf(6, 0, 6), Pointing.DOWN, 50).rightClick().withItem(new ItemStack(ModItems.SEISMIC_PROBE.get()));
+        scene.overlay().showText(90)
+                .text("Use a Seismic Probe on the ground: it hears an oil vein in this chunk, or tells you roughly where the nearest one is")
+                .pointAt(util.vector().topOf(6, 0, 6)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().position(2, 1, 1), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(90)
+                .text("On a vein chunk, start with a Crank Gearbox. It faces away from you and takes a shaft on either side")
+                .pointAt(util.vector().topOf(2, 1, 1)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().fromTo(2, 1, 2, 2, 2, 2), Direction.DOWN);
+        scene.idle(10);
+        scene.world().showSection(util.select().position(2, 3, 2), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(100)
+                .text("Build a column of 2 to 6 girders or industrial iron 1 to 3 blocks ahead, and put a Walking Beam Bearing on top")
+                .pointAt(util.vector().topOf(2, 3, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.world().showSection(util.select().position(2, 1, 4), Direction.DOWN);
+        scene.idle(15);
+        scene.overlay().showText(100)
+                .text("A Wellhead goes 1 to 6 blocks past the column. A longer reach strokes deeper, for more oil and more stress")
+                .pointAt(util.vector().topOf(2, 1, 4)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.overlay().showText(80)
+                .text("A long reach swings the horsehead low: it needs a taller column to clear the well")
+                .pointAt(util.vector().topOf(2, 3, 2)).placeNearTarget();
+        scene.idle(90);
+        scene.world().showSection(util.select().position(3, 1, 1), Direction.WEST);
+        scene.idle(10);
+        scene.world().setKineticSpeed(util.select().fromTo(2, 1, 1, 3, 1, 1), 64);
+        scene.idle(20);
+        scene.overlay().showText(90)
+                .text("Turn the gearbox and the beam nods. Full stroke at 64 RPM; nothing is formed, every part is its own block")
+                .pointAt(util.vector().centerOf(2, 1, 1)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.world().showSection(util.select().fromTo(3, 1, 4, 4, 2, 4), Direction.WEST);
+        scene.idle(15);
+        scene.overlay().showText(100)
+                .text("The Wellhead pushes into pipes on any side, no pump needed. Off a vein it brings up water, in the Nether lava")
+                .pointAt(util.vector().centerOf(3, 1, 4)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.overlay().showControls(util.vector().topOf(2, 1, 1), Pointing.DOWN, 40).rightClick();
+        scene.overlay().showText(80)
+                .text("Right-click the gearbox with an empty hand to outline where the parts go")
+                .pointAt(util.vector().topOf(2, 1, 1)).placeNearTarget();
+        scene.idle(90);
+        scene.markAsFinished();
+    }
+
+    /** "lubrication" (5x5): creative motor (1,2,2) east, shaft (2,2,2), press (3,2,2) over a depot (3,1,2). */
+    public static void lubrication(SceneBuilder builder, SceneBuildingUtil util) {
+        com.simibubi.create.foundation.ponder.CreateSceneBuilder scene = new com.simibubi.create.foundation.ponder.CreateSceneBuilder(builder);
+        scene.title("lubrication", "Lubricating Create Machines");
+        scene.configureBasePlate(0, 0, 5);
+        scene.showBasePlate();
+        scene.idle(10);
+        scene.world().showSection(util.select().fromTo(1, 1, 2, 3, 2, 2), Direction.DOWN);
+        scene.world().setKineticSpeed(util.select().fromTo(1, 2, 2, 3, 2, 2), 32);
+        scene.idle(15);
+        scene.overlay().showControls(util.vector().topOf(3, 2, 2), Pointing.DOWN, 50).rightClick().withItem(new ItemStack(ModItems.OIL_CAN.get()));
+        scene.overlay().showText(90)
+                .text("Use an Oil Can of lubricant on any Create machine to oil it")
+                .pointAt(util.vector().topOf(3, 2, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(100);
+        scene.overlay().showText(100)
+                .text("For a Minecraft day it weighs a quarter less on its network: more machines on the same power. Goggles show the time left")
+                .pointAt(util.vector().centerOf(3, 2, 2)).placeNearTarget().attachKeyFrame();
+        scene.idle(110);
+        scene.overlay().showText(90)
+                .text("Lubricant is heavy oil mixed with kerosene. Fill the can with a Spout, or use it on a tank; a Deployer can use it too")
+                .pointAt(util.vector().centerOf(1, 2, 2)).placeNearTarget();
+        scene.idle(100);
+        scene.markAsFinished();
+    }
 }

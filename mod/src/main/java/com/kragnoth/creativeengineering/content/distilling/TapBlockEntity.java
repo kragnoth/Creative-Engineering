@@ -20,7 +20,7 @@ import net.neoforged.neoforge.fluids.capability.templates.EmptyFluidHandler;
  * the level behind it (that level's drain-only handler) into the run's tanks that the pipe enters at the tap's height
  * or lower, shared out between them. Its front face shows an empty fluid handler so Create pipes connect to it.
  */
-public class TapBlockEntity extends SmartBlockEntity {
+public class TapBlockEntity extends SmartBlockEntity implements com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation {
     public static final int TICKS = 4, RATE = 50;   // 50 mB every 4 ticks: 250 mB/s per tap
     private static final int RESCAN = 40;
     private final List<PipeRuns.Endpoint> targets = new ArrayList<>();
@@ -32,6 +32,33 @@ public class TapBlockEntity extends SmartBlockEntity {
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {}
+
+    /** Goggles: open / shut / held by redstone, and what it's pouring (or why it isn't). */
+    @Override
+    public boolean addToGoggleTooltip(java.util.List<net.minecraft.network.chat.Component> tooltip, boolean sneaking) {
+        BlockState s = getBlockState();
+        tooltip.add(net.minecraft.network.chat.Component.literal("    ").append(net.minecraft.network.chat.Component.translatable("block.creativeengineering.tap"))
+                .withStyle(net.minecraft.ChatFormatting.WHITE));
+        String state = s.getValue(TapBlock.POWERED) ? "powered" : s.getValue(TapBlock.OPEN) ? "open" : "closed";
+        tooltip.add(line(net.minecraft.network.chat.Component.translatable("creativeengineering.tap." + state),
+                state.equals("open") ? net.minecraft.ChatFormatting.GREEN : net.minecraft.ChatFormatting.RED));
+        if (state.equals("open")) {
+            Direction out = s.getValue(TapBlock.FACING);
+            IFluidHandler source = level == null ? null : level.getCapability(Capabilities.FluidHandler.BLOCK, worldPosition.relative(out.getOpposite()), out);
+            FluidStack behind = source == null ? FluidStack.EMPTY : source.drain(RATE, IFluidHandler.FluidAction.SIMULATE);
+            if (s.getValue(TapBlock.FLOWING) && !behind.isEmpty()) {
+                tooltip.add(line(net.minecraft.network.chat.Component.translatable("creativeengineering.tap.pouring", behind.getHoverName()), net.minecraft.ChatFormatting.AQUA));
+            } else {
+                tooltip.add(line(net.minecraft.network.chat.Component.translatable(behind.isEmpty() ? "creativeengineering.tap.dry" : "creativeengineering.tap.no_target"),
+                        net.minecraft.ChatFormatting.GRAY));
+            }
+        }
+        return true;
+    }
+
+    private static net.minecraft.network.chat.Component line(net.minecraft.network.chat.Component c, net.minecraft.ChatFormatting style) {
+        return net.minecraft.network.chat.Component.literal("     ").append(c).withStyle(style);
+    }
 
     /** What pipes see on the front: a connection point, nothing to pull or push (the tap does the moving). */
     public IFluidHandler frontHandler(Direction side) {

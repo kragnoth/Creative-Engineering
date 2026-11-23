@@ -411,3 +411,9 @@ Convention (borrowed from Tarbound):
 
 ## 0.19.2 — Dome oiler
 - [ ] Oil Can reads as a dome-bottom oiler (steel dome, brass collar, long bent spout) in hand, tab and on the ground.
+
+## 0.20.0 — Ponder, Shift descriptions, Tap goggles (docs/create-integration.md)
+- [ ] Ponder opens and plays through for: Campfire Stand, Fermenting Vat, Distilling Tank / Tap / Steel Pipe / Steel Tank, Drive Chain / Sprocket / Flywheel, Pumpjack / Bearing / Wellhead / Seismic Probe, Oil Can. Blocks sit right, text points at the right spots, kinetic parts turn (pumpjack nods, chain shows after fitting).
+- [ ] Holding Shift over machines, tools and building blocks shows Create-style descriptions (summary, conditions, controls); kinetic ones also show stress.
+- [ ] Goggles on a Tap: open / closed / held by redstone; pouring <fluid>; or "nothing to pour" / "no tank down the pipe".
+- [ ] The Creative Engineering Ponder tag lists the new items.

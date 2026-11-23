@@ -1333,6 +1333,109 @@ adv('drink', 'fermenting', ce('wine_bottle'), {n: {'trigger': 'minecraft:consume
 LANG['advancements.%s.drink.title' % MODID] = 'One for the Road'
 LANG['advancements.%s.drink.description' % MODID] = 'Drink a bottle of something you brewed'
 
+for k, v in (('%s.tap.open', 'Open'), ('%s.tap.closed', 'Closed'), ('%s.tap.powered', 'Held shut by redstone'),
+             ('%s.tap.pouring', 'Pouring %s'), ('%s.tap.dry', 'Nothing to pour from the level behind'),
+             ('%s.tap.no_target', 'No tank down the pipe at this height or lower')):
+    LANG[k % MODID] = v
+# ---------------------------------------------------------------------------------------- Create item descriptions
+# Create's "Hold [Shift]" tooltips (ItemDescription): <descriptionId>.tooltip.summary, .conditionN/.behaviourN,
+# .controlN/.actionN. _Underscored_ words are highlighted in Create's palette. Registered for every item of ours in
+# CEClient (with Create's kinetic stats where the block is kinetic).
+TIPS = {
+    # steelworks
+    'item:carbon_packed_iron': ('Iron packed in carbon, ready to be _baked into blister steel_.',
+        [('In a Bulk Blasting fan stream', 'Turns into _Blister Steel_. A vanilla Blast Furnace works too, one at a time.')], []),
+    'block:coke_oven_bricks': ('Placed together, bricks form a _Coke Oven_ up to 3x3x3 that cooks coal into _coke_ and _creosote_.',
+        [('With heat under every column', 'Cokes coal. Fire or magma is half speed, a lit Blaze Burner full speed, superheated double.'),
+         ('Each brick', 'Adds four coking slots: bigger ovens coke more at once.')],
+        [('Funnels and pipes', 'Feed coal in, take coke and creosote out from any side.')]),
+    'block:blast_furnace_bricks': ('Placed together, bricks form a _Blast Furnace_ that turns iron and coke into _steel_ or _cast iron_.',
+        [('With hot air blown in', 'Smelts. A bigger furnace holds more and works faster.')], []),
+    'block:alloy_furnace_bricks': ('Placed together, bricks form an _Alloy Furnace_ for mixing metals.', [], []),
+    'item:rod_die': ('A die for the _Mechanical Press_.', [('Fitted to a press', 'The press shapes _rods_ instead of plates. Dies never wear out.')],
+        [('Right-click a press', 'Fit the die. Empty hand to take it back.')]),
+    'item:gear_die': ('A die for the _Mechanical Press_.', [('Fitted to a press', 'The press shapes _gears_ instead of plates. Dies never wear out.')],
+        [('Right-click a press', 'Fit the die. Empty hand to take it back.')]),
+    'block:treated_planks': ('Wood soaked in _creosote_: weather-proof timber for industrial builds.', [], []),
+    'block:treated_beam': ('A heavy _treated timber beam_ that joins up with its neighbours.', [], []),
+    # engines
+    'block:diesel_crankcase': ('The heart of a _Diesel Engine_. Crankcases in a line facing the same way form one engine.',
+        [('With cylinders and fuel', 'Runs at _64 RPM_ once started. More cylinders and better fuel give more stress capacity.'),
+         ('A tank or pipe at its side', 'Pulls fuel straight in, no pump needed.')],
+        [('Turn the front', 'Starts it: a Hand Crank works. The front never joins the output.')]),
+    'block:diesel_cylinder': ('A _cylinder_ for a Diesel Engine. Up to two per crankcase, leaning out above it.',
+        [('On a running engine', 'Adds stress capacity, puffs exhaust and thumps in time.')], []),
+    'block:diesel_flywheel': ('A heavy _flywheel_ for the engine\'s output shaft.',
+        [('With a Drive Chain to a sprocket', 'Steps speed up _4x_ (or down, from the sprocket side).')], []),
+    'block:drive_pulley': ('A small _Drive Sprocket_ on a shaft, for _Drive Chains_.',
+        [('Chained to a flywheel', 'Turns _4x faster_ than the flywheel; sprocket to sprocket is 1:1.')], []),
+    'item:drive_belt': ('A _Drive Chain_ links a flywheel and a sprocket, or two sprockets, on parallel shafts.',
+        [('Between 2 and 8 blocks apart', 'Carries rotation and stress like a Create chain drive.')],
+        [('Right-click two wheels', 'Fit the chain: first one wheel, then the other.')]),
+    # heat, fermenting, distilling, storage
+    'block:andesite_campfire_stand': ('A stand that _holds a campfire_ under machines.',
+        [('With a campfire in it', 'Gives _passive heat_ to Fermenting Vats, Distilling Tanks and Create boilers.'),
+         ('A fan blowing through it', 'Lit: the air stream _smokes_ items. Soul fire _haunts_ them.')],
+        [('Right-click with a campfire', 'Fit it. Flint and steel lights it, a shovel puts it out.')]),
+    'block:fermenting_vat': ('A lidded vat that _ferments_ fruit, grain and honey into drinks.',
+        [('Placed together', 'Forms one vat up to 3x3x4, like a Create tank.'),
+         ('With heat below', 'Ferments. A campfire works; a lit Blaze Burner is twice as fast, superheated three times.')],
+        [('Pipes, funnels and buckets', 'Water and ingredients in, the drink out, from any side.')]),
+    'block:distilling_tank': ('A column that _splits liquids by boiling point_: spirits from brews, fuels from crude oil.',
+        [('Stacked 2 to 8 high on heat', 'The bottom is the _boiler_; each level above collects one fraction.'),
+         ('Heavier fractions', 'Settle lower. Each level holds 1 B per block until drained.')],
+        [('Taps or pipes on a level', 'Draw that level off into storage.')]),
+    'block:tap': ('A _valve-tap_ for a Distilling Tank level.',
+        [('Open, on a tank level', 'Pours that level down any Steel Pipe run into tanks _at its height or lower_, no pump.'),
+         ('Powered by redstone', 'Closes.')],
+        [('Right-click', 'Open or close it.')]),
+    'block:steel_tank': ('A _steel storage tank_ that joins with its neighbours like a Create tank.', [], []),
+    'block:steel_pipe': ('Heavy _steel pipe_. Works like a Create pipe, without windows.',
+        [('From a Tap or a Wellhead', 'Carries their flow without a pump.')], []),
+    # petroleum
+    'item:seismic_probe': ('A thumper that listens for _oil veins_ under the ground.',
+        [('Used on the ground', 'Reports a vein in this chunk and its rate, or the nearest one\'s rough distance and direction.')],
+        [('Right-click the ground', 'Thump it.')]),
+    'block:pumpjack': ('The _Crank Gearbox_ of a Pumpjack: turns a shaft\'s rotation into a pumping stroke.',
+        [('Build in a row ahead of it', 'A column of _2-6 girders or industrial iron_ 1-3 blocks on, a _Walking Beam Bearing_ on top, a _Wellhead_ 1-6 past it.'),
+         ('A longer reach', 'Strokes deeper: more out, more stress. It needs a taller column so the horsehead clears the well.')],
+        [('Right-click, empty hand', 'Outline where the parts go.'), ('Right-click with a part', 'Place the bearing or Wellhead in the next spot.')]),
+    'block:walking_beam_bearing': ('The pillow-block bearing that carries a Pumpjack\'s _walking beam_.',
+        [('On top of a girder column', 'The beam, horsehead and linkage appear, sized to the rig.')], []),
+    'block:wellhead': ('A _well_ casing head. It brings up whatever lies below while a _Pumpjack_ strokes it.',
+        [('On an oil vein', 'Draws _crude oil_ (use a Seismic Probe to find one).'),
+         ('Anywhere else', 'Water in the Overworld, lava in the Nether.'),
+         ('Its four ports', 'Push into pipes on any side, no pump needed.')], []),
+    'block:asphalt': ('A tar-and-gravel _road surface_.', [('Walking on it', 'You move noticeably _faster_.')], []),
+    'item:paraffin_wax': ('Wax pressed from _heavy oil_.', [('On copper', 'Waxes it, just like honeycomb.')],
+        [('Right-click copper', 'Wax it.')]),
+    'item:oil_can': ('A pump oiler of _lubricant_ for Create machines.',
+        [('Used on a machine', 'Lubricates it for a day: its stress on the network drops by a _quarter_.')],
+        [('Right-click a machine', 'Spend a 50 mB dose.'), ('Right-click a tank', 'Fill the can with lubricant.')]),
+}
+for spec, (summary, behaviours, controls) in TIPS.items():
+    kind, name = spec.split(':')
+    base = '%s.%s.%s.tooltip' % (kind, MODID, name)
+    LANG[base + '.summary'] = summary
+    for n, (c, b) in enumerate(behaviours, 1):
+        LANG['%s.condition%d' % (base, n)] = c
+        LANG['%s.behaviour%d' % (base, n)] = b
+    for n, (c, a) in enumerate(controls, 1):
+        LANG['%s.control%d' % (base, n)] = c
+        LANG['%s.action%d' % (base, n)] = a
+# the other campfire stands, asphalt shapes and bottles share a description
+for n in ('brass_campfire_stand', 'copper_campfire_stand'):
+    for k in [k for k in list(LANG) if k.startswith('block.%s.andesite_campfire_stand.tooltip.' % MODID)]:
+        LANG[k.replace('andesite_campfire_stand', n)] = LANG[k]
+for n in ('asphalt_slab', 'asphalt_stairs'):
+    for k in [k for k in list(LANG) if k.startswith('block.%s.asphalt.tooltip.' % MODID)]:
+        LANG[k.replace('asphalt.tooltip', n + '.tooltip')] = LANG[k]
+for n, _ in DRINKS:
+    base = 'item.%s.%s_bottle.tooltip' % (MODID, n)
+    LANG[base + '.summary'] = 'A bottle of _%s_: drink it for a buff, with a little nausea. Spirits hit harder.' % n
+    LANG[base + '.condition1'] = 'A Spout and an Item Drain'
+    LANG[base + '.behaviour1'] = 'Fill and empty bottles, 250 mB each.'
+
 # ---------------------------------------------------------------------------------------- lang
 lang_path = '%s/lang/en_us.json' % A
 lang = collections.OrderedDict()
