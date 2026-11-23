@@ -408,3 +408,6 @@ Convention (borrowed from Tarbound):
 
 ## 0.19.1 — Excalibur-based wax and can
 - [ ] Paraffin Wax (cream resin-brick block) and Oil Can (lidded Excalibur bucket, brass pump and spout) read well in hand, in the tab and on the ground.
+
+## 0.19.2 — Dome oiler
+- [ ] Oil Can reads as a dome-bottom oiler (steel dome, brass collar, long bent spout) in hand, tab and on the ground.

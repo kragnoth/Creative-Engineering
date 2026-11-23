@@ -119,8 +119,10 @@ Kragnoth chose this pass: uses for the fuels' byproducts, namely the heavy fract
   - slabs and stairs by crafting or stonecutter;
   - a road surface: walking on it is faster (block speed factor 1.25).
   - Texture: drawn tar-black with aggregate (`tools/stylekit/make_petroleum_textures.py`).
-- **Textures (0.19.1):** Paraffin Wax and the Oil Can are altered Excalibur art (resin brick; bucket with lantern
-  brass), by `tools/stylekit/make_excalibur_derived.py` (CREDITS.md).
+- **Textures:**
+  - Paraffin Wax is altered Excalibur art (resin brick, `tools/stylekit/make_excalibur_derived.py`).
+  - The Oil Can (0.19.2) is a classic dome-bottom oiler after Kragnoth's reference photo: steel dome, knurled brass
+    collar, long bent spout. Drawn in Excalibur's palettes (`tools/stylekit/make_oil_can.py`).
 - **Paraffin Wax** (`paraffin_wax`):
   - Create compacting presses 100 mB heavy oil into 1;
   - waxes copper exactly like honeycomb, by hand or in a Deployer (`ParaffinWaxItem` extends `HoneycombItem`);

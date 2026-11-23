@@ -1,8 +1,7 @@
 """Item textures derived from Excalibur art (used with Maffhew's permission; see CREDITS.md). Reads the pack from
 ~/ref/excalibur (tools/setup_refs.sh; never committed) and writes our altered versions into the mod:
   - paraffin_wax: Excalibur's resin brick, its shading remapped onto a soft waxy cream ramp;
-  - oil_can: Excalibur's bucket with its open top closed into a domed lid, plus a brass thumb pump and a long spout
-    (brass taken from Excalibur's lantern).
+  - (oil_can, 0.19.1 only: Excalibur's bucket with a lid and spout; replaced by make_oil_can.py's dome oiler.)
 Run from the repo root: python3 tools/stylekit/make_excalibur_derived.py"""
 import os
 from PIL import Image
@@ -59,7 +58,7 @@ def oil_can():
 
 if __name__ == '__main__':
     os.makedirs(PREVIEW, exist_ok=True)
-    made = {'paraffin_wax': paraffin(), 'oil_can': oil_can()}
+    made = {'paraffin_wax': paraffin()}   # the Oil Can moved to make_oil_can.py (dome oiler, 0.19.2)
     sheet = Image.new('RGBA', (16 * len(made) + 2 * (len(made) + 1), 20), (44, 48, 54, 255))
     for i, (name, img) in enumerate(made.items()):
         img.save(OUT + name + '.png')
